@@ -17,4 +17,11 @@ export default async function decorate(block) {
   while (fragment.firstElementChild) footer.append(fragment.firstElementChild);
 
   block.append(footer);
+
+  const iconPar = block.querySelectorAll('p');
+  iconPar.forEach((p) => {
+    if (p.querySelector('span.icon-map')) {
+      p.classList.add('parBtn');
+    }
+  });
 }

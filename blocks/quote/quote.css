@@ -1,0 +1,68 @@
+.quote blockquote {
+    margin: 0 auto;
+    padding: var(--space-46) 0;
+    max-width: 700px;
+  }
+  
+  .quote blockquote .quote-quotation {
+    font-size: 120%;
+    border-top: 1px solid var(--color-gold);
+    padding: var(--space-26) var(--space-16);
+    position: relative;
+  }
+
+  .quote blockquote .quote-quotation::before {
+    content: '';
+    background-image: url('../../icons/double-quote-64.svg');
+    background-repeat: no-repeat;
+    background-size: 32px 32px;
+    width: 32px;
+    height: 32px;
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: var(--space-8);
+    margin-inline: auto;
+  }
+
+@media (width >= 900px) {
+  .quote blockquote .quote-quotation {
+    border-left: 1px solid var(--color-gold);
+    border-top: none;
+    padding: var(--space-16);
+
+  }
+  
+  .quote blockquote .quote-quotation::before {
+    background-size: 48px 48px;
+    width: 46px;
+    height: 46px;
+    margin: 0;
+    left: -4rem;
+  }
+}
+
+.quote blockquote .quote-quotation > :first-child {
+  text-indent: -0.6ch;
+}
+
+.quote blockquote .quote-quotation > :first-child::before,
+.quote blockquote .quote-quotation > :last-child::after {
+  line-height: 0;
+}
+
+.quote blockquote .quote-quotation > :first-child::before {
+  content: "“";
+}
+
+.quote blockquote .quote-quotation > :last-child::after {
+  content: "”";
+}
+
+.quote blockquote .quote-attribution {
+  text-align: right;
+}
+
+.quote blockquote .quote-attribution > :first-child::before {
+  content: "—";
+}

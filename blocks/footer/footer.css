@@ -1,20 +1,70 @@
 footer {
-  background-color: var(--light-color);
-  font-size: var(--body-font-size-xs);
+  background-color: var(--color-dark-blue);
+  color: var(--color-white);
+  border-top: 1px solid var(--color-gold);
+}
+
+footer .footer {
+  max-width: 1440px;
+  margin: auto;
+  padding: 45px 75px 0;
+  background-color: #283048;
+  border-top: 1px solid var(--color-gold);
 }
 
 footer .footer > div {
-  margin: auto;
-  max-width: 1200px;
-  padding: 40px 24px 24px;
+  display: grid;
+  grid-template-columns: repeat(1, 1fr);
+  gap: var(--space-26);
 }
 
-footer .footer p {
+footer .section:last-child {
+  min-width: 100%;
+  border-top: 1px solid var(--color-blue);
+  padding: var(--space-16) 0;
+  grid-column: 1 / -1;
+}
+
+footer h4 {
+  margin: 0 0 0.5rem;
+}
+
+footer a {
+  display: inline-block;
+}
+
+footer .icon {
+  margin-inline-end: var(--space-16);
+}
+
+footer svg {
+  width: 24px;
+  height: 24px;
+}
+
+footer p {
+  margin: 0 0 var(--space-16);
+}
+
+.parbtn {
+  background-color: var(--color-black, 90%);
+  display: inline-flex;
+  padding: var(--space-8) var(--space-16);
+}
+
+footer .button-container a.button {
+  background-color: transparent;
+  padding: 0;
   margin: 0;
+  border: none;
+  font-weight: normal;
+  color: var(--color-gold); 
 }
 
 @media (width >= 900px) {
   footer .footer > div {
-    padding: 40px 32px 24px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-36);
   }
 }

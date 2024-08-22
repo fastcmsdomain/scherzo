@@ -1,0 +1,24 @@
+{
+  "total": 1,
+  "offset": 0,
+  "limit": 1,
+  "data": [
+    {
+      "Item": "$system:trackingscript$",
+      "Value": "https://assets.adobedtm.com/xxxxxxxxx/xxxxxxxxxxxxxx/launch-xxxxxxxx-development.min.js"
+    },
+    {
+      "Item": "$meta:enableprofilevariables$",
+      "Value": "n - but make it y if you want author bio config"
+    },
+    {
+      "Item": "$meta:enablecontentops$",
+      "Value": "n but make it y if you want content operations"
+    },
+    {
+      "Item": "$meta:enabledublincore$",
+      "Value": "n but make it y if you want dublin core"
+    }
+  ],
+  ":type": "fallback"
+}

@@ -130,10 +130,6 @@ export function decorateMain(main) {
 async function loadEager(doc) {
   window.cmsplus.debug('loadEager');
   document.documentElement.lang = 'en';
-  decorateTemplateAndTheme();
-  if (getMetadata('breadcrumbs').toLowerCase() === 'true') {
-    document.body.classList.add('breadcrumbs-enabled');
-  }
   // Add below snippet early in the eager phase
   if (getMetadata('experiment') ||
     Object.keys(getAllMetadata('campaign')).length ||

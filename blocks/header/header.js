@@ -282,8 +282,8 @@ export default async function decorate(block) {
         });
       });
       schizoMenu.menusWrap.querySelector('.menu.two').addEventListener('click', (e) => {
-        e.preventDefault();
         if (e.target.parentNode.classList.contains('has-children')) {
+          e.preventDefault();
           schizoMenu.copyMenuThirdLvl(e);
           schizoMenu.slideInThirdLvl();
         }

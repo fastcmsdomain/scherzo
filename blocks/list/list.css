@@ -62,8 +62,8 @@ main .list-container {
 /* Quick links Block */
 .quick-links ul {
     position: fixed;
+    bottom: 0;
     left: 0;
-    top: 0;
     width: 100%;
     justify-content: space-around;
     margin: 0;
@@ -98,6 +98,7 @@ main .list-container {
     .quick-links ul {
         flex-direction: row;
         right: -2rem;
+        bottom: inherit;
         top: 1rem;
         position: relative;
         padding: 1rem

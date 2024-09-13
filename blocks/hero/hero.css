@@ -34,13 +34,13 @@ main .hero-container {
 
 .hero h1 {
   position: relative;
-  font-size: var(--heading-font-size-xxxl);
+  font-size: var(--heading-font-size-xxl);
   line-height: 1;
-  max-width: 1200px;
-  margin-left: auto;
-  margin-right: auto;
-  color: white;
+  max-width: 900px;
+  margin: 0 auto;
+  color: var(--color-white);
   align-self: flex-end;
+  text-align: center;
   z-index: 1;
 }
 

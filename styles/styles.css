@@ -29,9 +29,9 @@
   --heading-font-family: 'Caveat-Bold';
 
   /* body sizes */
-  --body-font-size-m: 18px;
-  --body-font-size-s: 16px;
-  --body-font-size-xs: 14px;
+  --body-font-size-m: 20px;
+  --body-font-size-s: 18px;
+  --body-font-size-xs: 16px;
 
   /* heading sizes */
   --heading-font-size-xxxl: 60px;
@@ -104,15 +104,15 @@ h4, h5, h6 {
 }
 
 h1 { 
-  font-size: var(--heading-font-size-xxl);
-}
-
-h2 {
   font-size: var(--heading-font-size-xl);
 }
 
-h3 {
+h2 {
   font-size: var(--heading-font-size-l);
+}
+
+h3 {
+  font-size: var(--heading-font-size-m);
 }
 
 h4 { 

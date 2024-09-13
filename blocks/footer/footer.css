@@ -44,13 +44,23 @@ footer svg {
 
 footer p {
   margin: 0 0 var(--space-16);
+  font-size: var(--body-font-size-xs);
 }
 
-.parbtn {
-  background-color: var(--color-black, 90%);
-  display: inline-flex;
-  padding: var(--space-8) var(--space-16);
+.parBtn {
+  display: flex;
+  align-items: center;
 }
+
+.parBtn .icon {
+    margin: 0;
+}
+
+
+.parBtn img {
+    width: auto;
+}
+
 
 footer .button-container a.button {
   background-color: transparent;

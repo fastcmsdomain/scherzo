@@ -111,6 +111,6 @@ main .list-container {
 
     .quick-links ul li,
     .quick-links ul li a {
-        font-size: var(--body-font-size-m);
+        font-size: var(--body-font-size-xs);
     }
 }

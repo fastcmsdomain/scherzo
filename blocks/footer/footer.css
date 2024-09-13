@@ -1,5 +1,5 @@
 footer {
-  background-color: var(--color-dark-blue);
+  background-color: var(--color-darker-blue);
   color: var(--color-white);
   border-top: 1px solid var(--color-gold);
 }
@@ -8,8 +8,6 @@ footer .footer {
   max-width: 1440px;
   margin: auto;
   padding: 45px 75px 0;
-  background-color: #283048;
-  border-top: 1px solid var(--color-gold);
 }
 
 footer .footer > div {

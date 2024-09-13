@@ -208,9 +208,9 @@ export default async function decorate(block) {
 
   const heroWrapper = document.querySelector('.hero-wrapper');
 
-  // if (getMetadata('breadcrumbs').toLowerCase() === 'true') {
-  //   heroWrapper.append(await buildBreadcrumbs());
-  // }
+  if (getMetadata('breadcrumbs').toLowerCase() === 'true') {
+    heroWrapper.append(await buildBreadcrumbs());
+  }
 
   // ===== START: add slide-in navigation effect
   function getWindowWidth() {

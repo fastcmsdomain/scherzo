@@ -60,18 +60,15 @@ main .list-container {
 }
 
 /* Quick links Block */
+
 .quick-links ul {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    width: 100%;
     justify-content: space-around;
     margin: 0;
-    padding: 1rem 0;
+    padding: 1rem;
     display: inline-flex;
     flex-direction: row;
     gap: 0.9rem;
-    background: var(--color-dark-blue);
+    background: var(--color-darker-blue);
 }
 
 
@@ -97,10 +94,7 @@ main .list-container {
 @media (width >= 900px) {
     .quick-links ul {
         flex-direction: row;
-        right: -2rem;
         bottom: inherit;
-        top: 1rem;
-        position: relative;
         padding: 1rem
     }
 

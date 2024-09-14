@@ -2,10 +2,10 @@
 
 /* header and nav layout */
 header .nav-wrapper {
-  /* background-color: var(--background-color); */
   width: 100%;
   z-index: 2;
   position: fixed;
+  top: 0;
 }
 
 header nav {
@@ -52,7 +52,7 @@ header nav a:any-link {
 /* hamburger */
 header nav .nav-hamburger {
   grid-area: hamburger;
-  background-color: var(--color-dark-blue);
+  background-color: var(--color-darker-blue);
   height: 15px;
   padding: 1rem;
   display: flex;
@@ -155,7 +155,7 @@ header nav .nav-sections {
   transition-property: overlay display opacity;
   transition-duration: 1s;
   transition-behavior: allow-discrete;
-  height: 90vh;
+  height: 85vh;
 }
 
 header nav[aria-expanded="true"] .nav-sections {
@@ -276,6 +276,18 @@ header nav .nav-sections ul > li > ul > li {
 /* tools */
 header nav .nav-tools {
   grid-area: tools;
+  position: fixed;
+  right: 0;
+  bottom: 0;
+  background: var(--color-darker-blue);
+}
+  
+@media (width >= 900px) {
+  header nav .nav-tools {
+    top: 2rem;
+    right: 2rem;
+    bottom: inherit;
+  }
 }
 
 /*

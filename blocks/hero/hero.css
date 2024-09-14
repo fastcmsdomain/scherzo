@@ -8,6 +8,9 @@ main .hero-container > div {
   
 main .hero-container {
   padding: 0;
+  position: fixed;
+  top: 0;
+  min-width: 100%;
 }
 
 .hero {

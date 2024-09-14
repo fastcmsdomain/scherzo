@@ -281,6 +281,9 @@ header nav .nav-tools {
   bottom: 0;
   background: var(--color-darker-blue);
   width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
   
 @media (width >= 900px) {

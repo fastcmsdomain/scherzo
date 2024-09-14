@@ -275,7 +275,7 @@ main .section {
   .section.content {
     width: 100vw;
     background: var(--color-dark-blue);
-    margin-top: 48rem;
+    margin-top: 760px;
     padding: 4rem 0;
   }
 }

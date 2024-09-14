@@ -62,6 +62,13 @@ main .hero-container {
   align-self: flex-end;
   text-align: center;
   z-index: 1;
+  padding: 0 1rem;
+}
+
+@media (width >= 900px) {
+  .hero h1 {
+    padding: 0;
+  }
 }
 
 .hero picture {

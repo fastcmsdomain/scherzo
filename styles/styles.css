@@ -105,15 +105,19 @@ h4, h5, h6 {
 }
 
 h1 { 
-  font-size: var(--heading-font-size-xl);
+  font-size: var(--heading-font-size-xxl);
 }
 
 h2 {
-  font-size: var(--heading-font-size-l);
+  font-size: var(--heading-font-size-xl);
+  line-height: 1;
+  margin-top: .5em;
+
+
 }
 
 h3 {
-  font-size: var(--heading-font-size-m);
+  font-size: var(--heading-font-size-l);
 }
 
 h4 { 
@@ -123,7 +127,7 @@ h4 {
 
 h5 { 
   font-family: var(--heading-font-family);
-  font-size: var(--heading-font-size-s);
+  font-size: var(--heading-font-size-m);
 }
 
 h6 { font-size: var(--heading-font-size-xs);}
@@ -131,6 +135,10 @@ h6 { font-size: var(--heading-font-size-xs);}
 p, dl, ol, ul, pre, blockquote {
   margin-top: 1em;
   margin-bottom: 1em;
+}
+
+b, strong {
+  font-family: var(--body-bold-family);
 }
 
 code, pre {
@@ -168,7 +176,7 @@ a:hover {
 /* buttons */
 a.button:any-link, button {
   font-family: var(--body-font-family);
-  font-size: var(--body-font-size-xs);
+  font-size: var(--body-font-size-s);
   display: inline-block;
   box-sizing: border-box;
   text-decoration: none;
@@ -188,8 +196,9 @@ a.button:any-link, button {
 }
 
 a.button:hover, a.button:focus, button:hover, button:focus  {
-  background-color: var(--link-hover-color);
+  background-color: var(--color-gold);
   cursor: pointer;
+  color: var(--color-dark-blue);
 }
 
 .button-container{

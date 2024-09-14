@@ -58,10 +58,6 @@ main .hero-container {
   height: 100%;
 }
 
-.breadcrumbs {
-  transform: translateY(-4rem);
-}
-
 .breadcrumbs ol {
   list-style: none;
   gap: 1rem;

@@ -29,9 +29,6 @@ footer h4 {
 
 footer a {
   display: inline-block;
-}
-
-footer .icon {
   margin-inline-end: var(--space-16);
 }
 

@@ -1,22 +1,28 @@
-.hero > div  {
-  height: 100%;
-}
-
 main .hero-container > div {
   max-width: unset;
 }
+
+main .hero-container .hero > div {
+    margin-bottom: 4rem;
+}
+
   
 main .hero-container {
   padding: 0;
-  position: fixed;
-  top: 0;
   min-width: 100%;
 }
 
+@media (width >= 900px) {
+    main .hero-container {
+        position: fixed;
+        top: 0;
+    }
+}
+
 .hero {
-  position: relative;
-  padding: 32px;
-  height: 700px;
+  display: flex;
+  align-items: end;
+  height: 100vh;
 
   &::before {
     content: "";
@@ -26,6 +32,17 @@ main .hero-container {
     height: 300px;
     width: 100%;
     background: linear-gradient(0deg, rgba(0, 0, 0, 0.9) 0%, rgba(0, 0, 0, 0.7) 50%, rgba(0, 0, 0, 0) 100%)
+  }
+}
+
+@media (width >= 900px) {
+  .hero {
+    height: 700px;
+    justify-content: center;
+    align-items: end;
+  }
+  main .hero-container .hero > div {
+    margin: 0;
   }
 }
 
@@ -63,15 +80,45 @@ main .hero-container {
 
 .breadcrumbs ol {
   list-style: none;
-  gap: 1rem;
+  gap: 0.2rem;
   display: flex;
   flex-direction: row;
   justify-content: center;
+  padding: 0;
 }
 
 .breadcrumbs ol li {
   &:not(:last-child)::after {
     content: '-';
-    margin: 0 0 0 1rem;
+    margin: 0 0 0 0.2rem;
+    color: var(--color-white);
   }
 }
+
+.breadcrumbs ol li,
+.breadcrumbs ol li a {
+    font-size: var(--body-font-size-xxs);
+}
+
+@media (width >= 900px) {
+  .breadcrumbs {
+    z-index: 1;
+    position: relative;
+  }
+
+  .breadcrumbs ol {
+    gap: 1rem;
+  }
+
+  .breadcrumbs ol li,
+  .breadcrumbs ol li a {
+    font-size: var(--body-font-size-s);
+  }
+
+  .breadcrumbs ol li {
+    &:not(:last-child)::after {
+      margin: 0 0  0 1rem;
+    }
+  }
+}
+

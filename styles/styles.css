@@ -33,6 +33,7 @@
   --body-font-size-m: 20px;
   --body-font-size-s: 18px;
   --body-font-size-xs: 16px;
+  --body-font-size-xxs: 14px;
 
   /* heading sizes */
   --heading-font-size-xxxl: 60px;
@@ -262,13 +263,19 @@ main .section {
   }
 }
 
+.section.content {
+    background: var(--color-dark-blue);
+    z-index: 1;
+    position: relative;
+    padding: 0 1rem;
+}
+
 @media (width >= 900px) {
   .section.content {
     width: 100vw;
     background: var(--color-dark-blue);
-    margin-top: 55rem;
-    z-index: 1;
-    position: relative;
+    margin-top: 48rem;
+    padding: 4rem 0;
   }
 }
     

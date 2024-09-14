@@ -280,6 +280,7 @@ header nav .nav-tools {
   right: 0;
   bottom: 0;
   background: var(--color-darker-blue);
+  width: 100%;
 }
   
 @media (width >= 900px) {
@@ -287,6 +288,7 @@ header nav .nav-tools {
     top: 2rem;
     right: 2rem;
     bottom: inherit;
+    width: auto;
   }
 }
 

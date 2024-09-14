@@ -9,7 +9,7 @@ footer {
 footer .footer {
   max-width: 1440px;
   margin: auto;
-  padding: 45px 75px 0;
+  padding: 4rem 2rem;
 }
 
 footer .footer > div {
@@ -69,6 +69,10 @@ footer .button-container a.button {
 }
 
 @media (width >= 900px) {
+    footer .footer {
+        padding: 4rem 7.5rem 0;
+    }
+
   footer .footer > div {
     display: grid;
     grid-template-columns: repeat(3, 1fr);

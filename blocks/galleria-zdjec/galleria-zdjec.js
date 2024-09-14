@@ -1,36 +1,37 @@
 import { createOptimizedPicture } from '../../scripts/aem.js';
 
 const MAX_IMAGES = 16;
-const MOBILE_BREAKPOINT = 600;
-const TABLET_BREAKPOINT = 1200;
 
 async function createGalleriaZdjec(block) {
-  const table = block.querySelector('table');
-  if (!table) return;
+  const imageContainers = block.querySelectorAll(':scope > div');
+  if (imageContainers.length === 0) return;
 
   const gallery = document.createElement('div');
-  gallery.className = 'galleria-zdjec';
+  gallery.className = 'galleria-zdjec-gallery';
   const thumbnails = document.createElement('div');
   thumbnails.className = 'galleria-zdjec-thumbnails';
 
-  const images = Array.from(table.querySelectorAll('img'));
-  await Promise.all(images.slice(0, MAX_IMAGES).map(async (img, index) => {
-    const thumbnail = await createThumbnail(img, index);
-    thumbnails.appendChild(thumbnail);
+  const images = Array.from(imageContainers).slice(0, MAX_IMAGES);
+  await Promise.all(images.map(async (container, index) => {
+    const img = container.querySelector('img');
+    if (img) {
+      const thumbnail = await createThumbnail(img, index);
+      thumbnails.appendChild(thumbnail);
+    }
   }));
 
   gallery.appendChild(thumbnails);
   block.innerHTML = '';
   block.appendChild(gallery);
 
-  if (images.length > MAX_IMAGES) {
-    implementLazyLoading(thumbnails, images.slice(MAX_IMAGES));
+  if (imageContainers.length > MAX_IMAGES) {
+    implementLazyLoading(thumbnails, Array.from(imageContainers).slice(MAX_IMAGES));
   }
 
   createModal();
 }
 
-async function createThumbnail(img, index) {
+async function createThumbnail(img) {
   const thumbnail = document.createElement('div');
   thumbnail.className = 'galleria-zdjec-thumbnail';
   const optimizedImg = await createOptimizedPicture(img.src, img.alt, false, [{ width: 250, height: 250 }]);
@@ -81,9 +82,12 @@ function implementLazyLoading(container, remainingImages) {
 
   loadMore.addEventListener('click', async () => {
     const nextBatch = remainingImages.splice(0, MAX_IMAGES);
-    await Promise.all(nextBatch.map(async (img, index) => {
-      const thumbnail = await createThumbnail(img, index + container.children.length);
-      container.appendChild(thumbnail);
+    await Promise.all(nextBatch.map(async (imageContainer) => {
+      const img = imageContainer.querySelector('img');
+      if (img) {
+        const thumbnail = await createThumbnail(img);
+        container.appendChild(thumbnail);
+      }
     }));
 
     if (remainingImages.length === 0) {

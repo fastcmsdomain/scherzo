@@ -263,7 +263,7 @@ main .section {
   }
 }
 
-main > .section {
+.section.content {
     background: var(--color-dark-blue);
     z-index: 1;
     position: relative;
@@ -271,7 +271,7 @@ main > .section {
 }
 
 @media (width >= 900px) {
-  main > .section {
+  .section.content {
     width: 100vw;
     background: var(--color-dark-blue);
     margin-top: 48rem;

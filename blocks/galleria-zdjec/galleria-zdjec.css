@@ -1,0 +1,109 @@
+:root {
+  --galleria-zdjec-max-width: 900px;
+  --galleria-zdjec-thumbnail-size: 250px;
+  --galleria-zdjec-border-radius: 25px;
+  --galleria-zdjec-hover-opacity: 0.8;
+  --galleria-zdjec-modal-bg: rgba(0, 0, 0, 0.8);
+  --galleria-zdjec-button-bg: #007bff;
+  --galleria-zdjec-button-color: white;
+}
+
+.galleria-zdjec {
+  max-width: var(--galleria-zdjec-max-width);
+  margin: 0 auto;
+}
+
+.galleria-zdjec-thumbnails {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(var(--galleria-zdjec-thumbnail-size), 1fr));
+  gap: 20px;
+  justify-content: center;
+}
+
+.galleria-zdjec-thumbnail {
+  width: var(--galleria-zdjec-thumbnail-size);
+  height: var(--galleria-zdjec-thumbnail-size);
+  border-radius: var(--galleria-zdjec-border-radius);
+  overflow: hidden;
+  cursor: pointer;
+  transition: opacity 0.3s ease;
+}
+
+.galleria-zdjec-thumbnail:hover {
+  opacity: var(--galleria-zdjec-hover-opacity);
+}
+
+.galleria-zdjec-thumbnail img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.galleria-zdjec-modal {
+  display: none;
+  position: fixed;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: var(--galleria-zdjec-modal-bg);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.galleria-zdjec-modal.open {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  opacity: 1;
+}
+
+.galleria-zdjec-modal-content {
+  position: relative;
+  max-width: 90%;
+  max-height: 90%;
+  border-radius: var(--galleria-zdjec-border-radius);
+  overflow: hidden;
+}
+
+.galleria-zdjec-modal-content img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.galleria-zdjec-close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  font-size: 30px;
+  color: var(--galleria-zdjec-button-color);
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.galleria-zdjec-load-more {
+  display: block;
+  margin: 20px auto;
+  padding: 10px 20px;
+  background-color: var(--galleria-zdjec-button-bg);
+  color: var(--galleria-zdjec-button-color);
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+@media (max-width: 1200px) {
+  .galleria-zdjec-thumbnails {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 600px) {
+  .galleria-zdjec-thumbnails {
+    grid-template-columns: 1fr;
+  }
+}

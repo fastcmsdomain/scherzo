@@ -1,6 +1,6 @@
 # Cytat Block
 
-The Cytat block is a custom Helix/Franklin/Edge Delivery Service block designed to display quotations with an optional author attribution.
+The Cytat block is a custom Helix/Franklin/Edge Delivery Service block designed to display quotations.
 
 ## Usage
 

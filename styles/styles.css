@@ -236,6 +236,7 @@ a.button.secondary, button.secondary {
 }
 
 main img {
+  margin: 2rem 0;
   max-width: 100%;
   width: auto;
   height: auto;

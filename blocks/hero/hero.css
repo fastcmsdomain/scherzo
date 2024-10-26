@@ -113,7 +113,7 @@ main .hero-container {
 @media (width >= 900px) {
   .breadcrumbs {
     position: relative;
-    transform: translateY(0);
+    transform: translateY(-1rem);
     z-index: 1;
   }
 

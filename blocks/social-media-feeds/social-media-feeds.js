@@ -4,8 +4,8 @@ const config = {
   itemWidth: 300,
   youtubeApiKey: 'AIzaSyCWyexvg44ePgSFHVjQhk8mNrhLBv_UbF8',
   youtubeChannelId: 'UCxtLxK0Wg6ouftRItp8gWNQ',
-  facebookAccessToken: 'YOUR_FACEBOOK_ACCESS_TOKEN',
-  facebookPageId: 'YOUR_FACEBOOK_PAGE_ID',
+  facebookAccessToken: 'EAA13ZCNJPLfkBOy7NMBWFk1CFyt8FQ2aleiQMzWZBV8phZBIKTZCXZAJwBAw86PXqWVuudkXjyKZCpIvrSZAMo7zW2opVRZAS6vj27ABRfBP1lFKlXd8GHRmVhBPGCyZBstbkjpAZB6iEk7Vz9FGNngNvPDiKIel8Y5tUfVIec9rEMl4uoiVip21XDxl0u18ScOhlAT1Q3kda7kO1Sx8bqvriSIRIYUho96mv1T6iYcXFGSxbVntDA1kjFdhhJNH1dBgZDZD',
+  facebookPageId: '122125711652460715',
 };
 
 /**

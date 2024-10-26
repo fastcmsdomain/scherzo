@@ -284,7 +284,7 @@ main .section {
 @media (width >= 900px) {
   .section.content {
     background: var(--color-dark-blue);
-    margin-top: 760px;
+    margin-top: 745px;
     padding: 4rem 0;
     width: 100vw;
   }
@@ -299,4 +299,9 @@ main .section {
 main .section.light,
 main .section.highlight {
   background-color: var(--light-color);
+}
+
+.section.content {
+    padding-bottom: 2px;
+    padding-top: 2rem;
 }

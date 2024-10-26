@@ -1,3 +1,19 @@
+.footer-wrapper {
+  bottom: 0;
+  left: 0;
+  opacity: 0;
+  pointer-events: none;
+  position: relative;
+  transition: opacity 0.3s ease-in-out;
+  width: 100%;
+  z-index: 2;
+}
+
+body.show-footer .footer-wrapper {
+  opacity: 1;
+  pointer-events: auto;
+}
+
 footer {
   background-color: var(--color-darker-blue);
   border-top: 1px solid var(--color-gold);
@@ -76,20 +92,4 @@ footer .button-container a.button {
     gap: var(--space-36);
     grid-template-columns: repeat(3, 1fr);
   }
-}
-
-.footer-wrapper {
-  bottom: 0;
-  left: 0;
-  opacity: 0;
-  pointer-events: none;
-  position: relative;
-  transition: opacity 0.3s ease-in-out;
-  width: 100%;
-  z-index: 2;
-}
-
-.footer-wrapper.visible {
-  opacity: 1;
-  pointer-events: auto;
 }

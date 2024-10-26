@@ -1,3 +1,7 @@
+main .section.slide-builder-container {
+    padding: 0;
+}
+
 .slide-builder {
   height: auto;
   left: 0;

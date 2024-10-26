@@ -100,7 +100,6 @@ export default async function decorate(block) {
     return;
   }
 
-  let currentScrollPosition = 0;
   const slideHeight = window.innerHeight;
   const footerWrapper = document.querySelector('.footer-wrapper');
 
@@ -112,27 +111,14 @@ export default async function decorate(block) {
 
   function updateSlidePositions() {
     const slideItems = container.querySelectorAll('.slide-builder-item');
-    slideItems.forEach((slideItem, index) => {
-      const rect = slideItem.getBoundingClientRect();
-      const progress = 1 - (rect.bottom / window.innerHeight);
-
-      if (progress >= 0 && progress <= 1) {
-        const opacity = 1 - progress;
-        slideItem.style.opacity = opacity;
-      } else if (progress > 1) {
-        slideItem.style.opacity = 0;
-      } else {
-        slideItem.style.opacity = 1;
-      }
-    });
-
-    // Check if user has scrolled past all slides
     const lastSlide = slideItems[slideItems.length - 1];
     const lastSlideRect = lastSlide.getBoundingClientRect();
+
+    // Check if user has scrolled past all slides
     if (lastSlideRect.bottom <= window.innerHeight) {
-      footerWrapper.classList.add('visible');
+      document.body.classList.add('show-footer');
     } else {
-      footerWrapper.classList.remove('visible');
+      document.body.classList.remove('show-footer');
     }
   }
 

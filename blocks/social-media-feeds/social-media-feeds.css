@@ -1,5 +1,4 @@
 .social-media-feed-container {
-    margin-top: 4rem;
   display: grid;
   gap: 20px;
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
@@ -17,11 +16,13 @@
   transition: transform 0.2s ease-in-out;
 }
 
+.social-media-feed-item:hover  {
+  transform: translateY(-5px);
+}
+
 .social-media-feed-item:hover * {
   text-decoration: none;
 }
-
-.social-media-feed-item:hover {
 
 
 .image-wrapper {

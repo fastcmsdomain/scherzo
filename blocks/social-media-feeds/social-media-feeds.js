@@ -47,7 +47,11 @@ function createFeedItem(item) {
   const imageWrapper = document.createElement('div');
   imageWrapper.classList.add('image-wrapper');
 
-  const image = createOptimizedPicture(item.image, item.title, false, [{ width: config.itemWidth }]);
+  // Use the original YouTube thumbnail URL directly
+  const image = document.createElement('img');
+  image.src = item.image;
+  image.alt = item.title;
+  image.width = config.itemWidth;
   imageWrapper.appendChild(image);
 
   const logo = document.createElement('img');

@@ -102,6 +102,7 @@ export default async function decorate(block) {
 
   let currentScrollPosition = 0;
   const slideHeight = window.innerHeight;
+  const footerWrapper = document.querySelector('.footer-wrapper');
 
   slides.forEach((slide, index) => {
     const slideItem = createSlideItem(slide);
@@ -112,20 +113,30 @@ export default async function decorate(block) {
   function updateSlidePositions() {
     const slideItems = container.querySelectorAll('.slide-builder-item');
     slideItems.forEach((slideItem, index) => {
-      const offset = (index * slideHeight) - currentScrollPosition;
-      const progress = offset / slideHeight;
+      const rect = slideItem.getBoundingClientRect();
+      const progress = 1 - (rect.bottom / window.innerHeight);
 
-      // Keep the original translation calculation
-      const translateY = Math.max(0, Math.min(100, progress * 100));
-
-      slideItem.style.transform = `translateY(${translateY}%)`;
-      // Correct the z-index calculation
-      slideItem.style.zIndex = index;
+      if (progress >= 0 && progress <= 1) {
+        const opacity = 1 - progress;
+        slideItem.style.opacity = opacity;
+      } else if (progress > 1) {
+        slideItem.style.opacity = 0;
+      } else {
+        slideItem.style.opacity = 1;
+      }
     });
+
+    // Check if user has scrolled past all slides
+    const lastSlide = slideItems[slideItems.length - 1];
+    const lastSlideRect = lastSlide.getBoundingClientRect();
+    if (lastSlideRect.bottom <= window.innerHeight) {
+      footerWrapper.classList.add('visible');
+    } else {
+      footerWrapper.classList.remove('visible');
+    }
   }
 
   function handleScroll() {
-    currentScrollPosition = window.scrollY;
     window.requestAnimationFrame(updateSlidePositions);
   }
 
@@ -135,7 +146,7 @@ export default async function decorate(block) {
   updateSlidePositions();
 
   // Set the height of the body to accommodate all slides
-  document.body.style.height = `${slides.length * 100}vh`;
+  document.body.style.height = 'auto';
 
   renderExpressions(document.querySelector('.slide-builder'));
 }

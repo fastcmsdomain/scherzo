@@ -44,14 +44,19 @@ function createFeedItem(item) {
   feedItem.target = '_blank';
   feedItem.rel = 'noopener noreferrer';
 
+  const imageWrapper = document.createElement('div');
+  imageWrapper.classList.add('image-wrapper');
+
   const image = createOptimizedPicture(item.image, item.title, false, [{ width: config.itemWidth }]);
-  feedItem.appendChild(image);
+  imageWrapper.appendChild(image);
 
   const logo = document.createElement('img');
   logo.classList.add('social-media-logo');
   logo.src = '/blocks/social-media-feeds/youtube-logo.png';
   logo.alt = 'YouTube logo';
-  feedItem.appendChild(logo);
+  imageWrapper.appendChild(logo);
+
+  feedItem.appendChild(imageWrapper);
 
   const title = document.createElement('h3');
   title.textContent = item.title;

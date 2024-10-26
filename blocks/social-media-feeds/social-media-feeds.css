@@ -20,7 +20,7 @@
   transform: translateY(-5px);
 }
 
-.social-media-feed-item picture {
+.image-wrapper {
   height: 0;
   overflow: hidden;
   padding-bottom: 56.25%; /* 16:9 aspect ratio */
@@ -28,12 +28,17 @@
   width: 100%;
 }
 
-.social-media-feed-item img {
+.image-wrapper picture {
   height: 100%;
   left: 0;
-  object-fit: cover;
   position: absolute;
   top: 0;
+  width: 100%;
+}
+
+.image-wrapper img {
+  height: 100%;
+  object-fit: cover;
   width: 100%;
 }
 

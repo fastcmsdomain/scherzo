@@ -1,15 +1,13 @@
 // Import the createOptimizedPicture function from the lib-franklin module
 // Note: Ensure the path is correct and the module exists
-import { createOptimizedPicture } from '../../scripts/aem.js';
+import { createOptimizedPicture } from '../../scripts/lib-franklin.js';
 
 // Configuration object for social media feeds
 const config = {
   itemsPerRow: 4,
   itemWidth: 300,
-  youtubeApiKey: 'AIzaSyCWyexvg44ePgSFHVjQhk8mNrhLBv_UbF8',
-  facebookApiKey: 'YOUR_FACEBOOK_API_KEY',
-  youtubeChannelId: 'UCxtLxK0Wg6ouftRItp8gWNQ',
-  facebookPageId: 'YOUR_FACEBOOK_PAGE_ID',
+  youtubeApiKey: 'YOUR_YOUTUBE_API_KEY',
+  youtubeChannelId: 'YOUR_YOUTUBE_CHANNEL_ID',
 };
 
 /**
@@ -23,7 +21,6 @@ async function fetchYouTubeFeed() {
     const response = await fetch(url);
     const data = await response.json();
     return data.items.map((item) => ({
-      type: 'youtube',
       title: item.snippet.title,
       image: item.snippet.thumbnails.medium.url,
       date: new Date(item.snippet.publishedAt),
@@ -31,29 +28,6 @@ async function fetchYouTubeFeed() {
     }));
   } catch (error) {
     console.error('Error fetching YouTube feed:', error);
-    return [];
-  }
-}
-
-/**
- * Fetches Facebook feed
- * @returns {Promise<Array>} Array of Facebook feed items
- */
-async function fetchFacebookFeed() {
-  const url = `https://graph.facebook.com/v12.0/${config.facebookPageId}/posts?fields=id,message,full_picture,created_time&access_token=${config.facebookApiKey}`;
-  
-  try {
-    const response = await fetch(url);
-    const data = await response.json();
-    return data.data.map((item) => ({
-      type: 'facebook',
-      title: item.message ? item.message.substring(0, 100) : 'No message',
-      image: item.full_picture,
-      date: new Date(item.created_time),
-      link: `https://www.facebook.com/${config.facebookPageId}/posts/${item.id}`,
-    }));
-  } catch (error) {
-    console.error('Error fetching Facebook feed:', error);
     return [];
   }
 }
@@ -75,8 +49,8 @@ function createFeedItem(item) {
 
   const logo = document.createElement('img');
   logo.classList.add('social-media-logo');
-  logo.src = `/blocks/social-media-feeds/${item.type}-logo.png`;
-  logo.alt = `${item.type} logo`;
+  logo.src = '/blocks/social-media-feeds/youtube-logo.png';
+  logo.alt = 'YouTube logo';
   feedItem.appendChild(logo);
 
   const title = document.createElement('h3');
@@ -99,16 +73,9 @@ export default async function decorate(block) {
   feedContainer.classList.add('social-media-feed-container');
   block.appendChild(feedContainer);
 
-  const [youtubeFeed, facebookFeed] = await Promise.all([
-    fetchYouTubeFeed(),
-    fetchFacebookFeed(),
-  ]);
+  const youtubeFeed = await fetchYouTubeFeed();
 
-  const combinedFeed = [...youtubeFeed, ...facebookFeed]
-    .sort((a, b) => b.date - a.date)
-    .slice(0, 20);
-
-  combinedFeed.forEach((item) => {
+  youtubeFeed.forEach((item) => {
     const feedItem = createFeedItem(item);
     feedContainer.appendChild(feedItem);
   });

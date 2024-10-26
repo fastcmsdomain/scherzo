@@ -7,9 +7,9 @@ const config = {
   itemsPerRow: 4,
   itemWidth: 300,
   youtubeApiKey: 'AIzaSyCWyexvg44ePgSFHVjQhk8mNrhLBv_UbF8',
-  // facebookApiKey: 'YOUR_FACEBOOK_API_KEY',
+  facebookApiKey: 'YOUR_FACEBOOK_API_KEY',
   youtubeChannelId: 'UCxtLxK0Wg6ouftRItp8gWNQ',
-  // facebookPageId: 'YOUR_FACEBOOK_PAGE_ID',
+  facebookPageId: 'YOUR_FACEBOOK_PAGE_ID',
 };
 
 /**
@@ -39,24 +39,24 @@ async function fetchYouTubeFeed() {
  * Fetches Facebook feed
  * @returns {Promise<Array>} Array of Facebook feed items
  */
-// async function fetchFacebookFeed() {
-//   const url = `https://graph.facebook.com/v12.0/${config.facebookPageId}/posts?fields=id,message,full_picture,created_time&access_token=${config.facebookApiKey}`;
+async function fetchFacebookFeed() {
+  const url = `https://graph.facebook.com/v12.0/${config.facebookPageId}/posts?fields=id,message,full_picture,created_time&access_token=${config.facebookApiKey}`;
   
-//   try {
-//     const response = await fetch(url);
-//     const data = await response.json();
-//     return data.data.map((item) => ({
-//       type: 'facebook',
-//       title: item.message ? item.message.substring(0, 100) : 'No message',
-//       image: item.full_picture,
-//       date: new Date(item.created_time),
-//       link: `https://www.facebook.com/${config.facebookPageId}/posts/${item.id}`,
-//     }));
-//   } catch (error) {
-//     console.error('Error fetching Facebook feed:', error);
-//     return [];
-//   }
-// }
+  try {
+    const response = await fetch(url);
+    const data = await response.json();
+    return data.data.map((item) => ({
+      type: 'facebook',
+      title: item.message ? item.message.substring(0, 100) : 'No message',
+      image: item.full_picture,
+      date: new Date(item.created_time),
+      link: `https://www.facebook.com/${config.facebookPageId}/posts/${item.id}`,
+    }));
+  } catch (error) {
+    console.error('Error fetching Facebook feed:', error);
+    return [];
+  }
+}
 
 /**
  * Creates a feed item element

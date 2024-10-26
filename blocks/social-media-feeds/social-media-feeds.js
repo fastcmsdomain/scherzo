@@ -1,5 +1,8 @@
-import { createOptimizedPicture } from '../../scripts/lib-franklin.js';
+// Import the createOptimizedPicture function from the lib-franklin module
+// Note: Ensure the path is correct and the module exists
+import { createOptimizedPicture } from '../../scripts/aem.js';
 
+// Configuration object for social media feeds
 const config = {
   itemsPerRow: 4,
   itemWidth: 300,

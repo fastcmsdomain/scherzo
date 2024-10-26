@@ -77,6 +77,9 @@ export default async function decorate(block) {
   feedContainer.classList.add('social-media-feed-container');
   block.appendChild(feedContainer);
 
+  // Add 'social-media-page' class to the body
+  document.body.classList.add('social-media-page');
+
   const youtubeFeed = await fetchYouTubeFeed();
 
   youtubeFeed.forEach((item) => {

@@ -1,3 +1,9 @@
+body.social-media-page::before {
+    content: '';
+    display: block;
+    height: 10rem;
+}
+
 .social-media-feed-container {
   display: grid;
   gap: 20px;
@@ -18,13 +24,9 @@
 }
 
 .social-media-feed-item:hover  {
+  text-decoration: none;
   transform: translateY(-5px);
 }
-
-.social-media-feed-item:hover * {
-  text-decoration: none;
-}
-
 
 .image-wrapper {
   height: 0;

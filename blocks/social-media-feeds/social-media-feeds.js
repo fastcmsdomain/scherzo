@@ -1,5 +1,3 @@
-import { createOptimizedPicture } from '../../scripts/aem.js';
-
 // Configuration object for social media feeds
 const config = {
   itemsPerRow: 4,
@@ -16,7 +14,6 @@ const config = {
  */
 async function fetchYouTubeFeed() {
   const url = `https://www.googleapis.com/youtube/v3/search?key=${config.youtubeApiKey}&channelId=${config.youtubeChannelId}&part=snippet,id&order=date&maxResults=10`;
-  
   try {
     const response = await fetch(url);
     const data = await response.json();
@@ -39,7 +36,6 @@ async function fetchYouTubeFeed() {
  */
 async function fetchFacebookFeed() {
   const url = `https://graph.facebook.com/v12.0/${config.facebookPageId}/posts?fields=id,message,full_picture,created_time&access_token=${config.facebookAccessToken}&limit=10`;
-  
   try {
     const response = await fetch(url);
     const data = await response.json();

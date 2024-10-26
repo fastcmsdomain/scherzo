@@ -76,3 +76,13 @@ body.social-media-page::before {
   font-size: 14px;
   margin: 0 10px 10px;
 }
+
+.social-media-feed-item[href*="youtube.com"] {
+  /* Styles specific to YouTube items */
+  border-left: 3px solid #ff0000;
+}
+
+.social-media-feed-item[href*="facebook.com"] {
+  /* Styles specific to Facebook items */
+  border-left: 3px solid #3b5998;
+}

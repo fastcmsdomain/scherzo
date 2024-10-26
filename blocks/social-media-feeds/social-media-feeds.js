@@ -4,8 +4,6 @@ const config = {
   itemWidth: 300,
   youtubeApiKey: 'AIzaSyCWyexvg44ePgSFHVjQhk8mNrhLBv_UbF8',
   youtubeChannelId: 'UCxtLxK0Wg6ouftRItp8gWNQ',
-  facebookAccessToken: 'EAA13ZCNJPLfkBOy7NMBWFk1CFyt8FQ2aleiQMzWZBV8phZBIKTZCXZAJwBAw86PXqWVuudkXjyKZCpIvrSZAMo7zW2opVRZAS6vj27ABRfBP1lFKlXd8GHRmVhBPGCyZBstbkjpAZB6iEk7Vz9FGNngNvPDiKIel8Y5tUfVIec9rEMl4uoiVip21XDxl0u18ScOhlAT1Q3kda7kO1Sx8bqvriSIRIYUho96mv1T6iYcXFGSxbVntDA1kjFdhhJNH1dBgZDZD',
-  facebookPageId: '61563821452922',
 };
 
 /**
@@ -13,12 +11,11 @@ const config = {
  * @returns {Promise<Array>} Array of YouTube feed items
  */
 async function fetchYouTubeFeed() {
-  const url = `https://www.googleapis.com/youtube/v3/search?key=${config.youtubeApiKey}&channelId=${config.youtubeChannelId}&part=snippet,id&order=date&maxResults=10`;
+  const url = `https://www.googleapis.com/youtube/v3/search?key=${config.youtubeApiKey}&channelId=${config.youtubeChannelId}&part=snippet,id&order=date&maxResults=20`; 
   try {
     const response = await fetch(url);
     const data = await response.json();
     return data.items.map((item) => ({
-      type: 'youtube',
       title: item.snippet.title,
       image: item.snippet.thumbnails.medium.url,
       date: new Date(item.snippet.publishedAt),
@@ -26,28 +23,6 @@ async function fetchYouTubeFeed() {
     }));
   } catch (error) {
     console.error('Error fetching YouTube feed:', error);
-    return [];
-  }
-}
-
-/**
- * Fetches Facebook feed
- * @returns {Promise<Array>} Array of Facebook feed items
- */
-async function fetchFacebookFeed() {
-  const url = `https://graph.facebook.com/v12.0/${config.facebookPageId}/posts?fields=id,message,full_picture,created_time&access_token=${config.facebookAccessToken}&limit=10`;
-  try {
-    const response = await fetch(url);
-    const data = await response.json();
-    return data.data.map((item) => ({
-      type: 'facebook',
-      title: item.message ? item.message.substring(0, 100) : 'No message',
-      image: item.full_picture,
-      date: new Date(item.created_time),
-      link: `https://www.facebook.com/${config.facebookPageId}/posts/${item.id}`,
-    }));
-  } catch (error) {
-    console.error('Error fetching Facebook feed:', error);
     return [];
   }
 }
@@ -67,6 +42,7 @@ function createFeedItem(item) {
   const imageWrapper = document.createElement('div');
   imageWrapper.classList.add('image-wrapper');
 
+  // Use the original YouTube thumbnail URL directly
   const image = document.createElement('img');
   image.src = item.image;
   image.alt = item.title;
@@ -75,8 +51,8 @@ function createFeedItem(item) {
 
   const logo = document.createElement('img');
   logo.classList.add('social-media-logo');
-  logo.src = `/blocks/social-media-feeds/${item.type}-logo.png`;
-  logo.alt = `${item.type} logo`;
+  logo.src = '/blocks/social-media-feeds/youtube-logo.png';
+  logo.alt = 'YouTube logo';
   imageWrapper.appendChild(logo);
 
   feedItem.appendChild(imageWrapper);
@@ -104,16 +80,9 @@ export default async function decorate(block) {
   // Add 'social-media-page' class to the body
   document.body.classList.add('social-media-page');
 
-  const [youtubeFeed, facebookFeed] = await Promise.all([
-    fetchYouTubeFeed(),
-    fetchFacebookFeed(),
-  ]);
+  const youtubeFeed = await fetchYouTubeFeed();
 
-  const combinedFeed = [...youtubeFeed, ...facebookFeed]
-    .sort((a, b) => b.date - a.date)
-    .slice(0, 20);
-
-  combinedFeed.forEach((item) => {
+  youtubeFeed.forEach((item) => {
     const feedItem = createFeedItem(item);
     feedContainer.appendChild(feedItem);
   });

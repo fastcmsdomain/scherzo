@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 // Import the createOptimizedPicture function from the lib-franklin module
 // Note: Ensure the path is correct and the module exists
 import { createOptimizedPicture } from '../../scripts/aem.js';
@@ -6,8 +7,8 @@ import { createOptimizedPicture } from '../../scripts/aem.js';
 const config = {
   itemsPerRow: 4,
   itemWidth: 300,
-  youtubeApiKey: 'YOUR_YOUTUBE_API_KEY',
-  youtubeChannelId: 'YOUR_YOUTUBE_CHANNEL_ID',
+  youtubeApiKey: 'AIzaSyCWyexvg44ePgSFHVjQhk8mNrhLBv_UbF8',
+  youtubeChannelId: 'UCxtLxK0Wg6ouftRItp8gWNQ',
 };
 
 /**
@@ -15,8 +16,7 @@ const config = {
  * @returns {Promise<Array>} Array of YouTube feed items
  */
 async function fetchYouTubeFeed() {
-  const url = `https://www.googleapis.com/youtube/v3/search?key=${config.youtubeApiKey}&channelId=${config.youtubeChannelId}&part=snippet,id&order=date&maxResults=20`;
-  
+  const url = `https://www.googleapis.com/youtube/v3/search?key=${config.youtubeApiKey}&channelId=${config.youtubeChannelId}&part=snippet,id&order=date&maxResults=20`; 
   try {
     const response = await fetch(url);
     const data = await response.json();

@@ -59,8 +59,9 @@ header nav .nav-hamburger {
   display: flex;
   grid-area: hamburger;
   height: 15px;
+  left: 2rem;
   padding: 1rem;
-  position: relative;
+  position: fixed;
   top: 1rem;
 }
 
@@ -209,7 +210,12 @@ header nav .nav-sections a:focus {
 }
 
 header nav .nav-sections ul li.has-children::after {
+  background: var(--color-gold);
   content: '>';
+  mask-image: url('/icons/icons/arrow.svg');
+  mask-position: center;
+  mask-repeat: no-repeat;
+  mask-size: 10px;
 }
 
 header nav .nav-sections ul > li > ul {

@@ -206,10 +206,15 @@ export default async function decorate(block) {
   navWrapper.append(nav);
   block.append(navWrapper);
 
-  const heroWrapper = document.querySelector('.hero-wrapper');
-
-  if (getMetadata('breadcrumbs').toLowerCase() === 'true') {
-    heroWrapper.append(await buildBreadcrumbs());
+  // Check if breadcrumbs are enabled AND we're not on the home page
+  const isHomePage = window.location.pathname === '/' || window.location.pathname === '/index.html';
+  const isBreadcrumbsEnabled = getMetadata('breadcrumbs').toLowerCase() === 'true';
+  
+  if (isBreadcrumbsEnabled && !isHomePage) {
+    const heroWrapper = document.querySelector('.hero-wrapper');
+    if (heroWrapper) {
+      heroWrapper.append(await buildBreadcrumbs());
+    }
   }
 
   // ===== START: add slide-in navigation effect

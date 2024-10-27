@@ -1,20 +1,25 @@
 /* eslint-disable no-console */
 export async function readVariables(configUrl) {
+  if (!configUrl || !(configUrl instanceof URL)) {
+    throw new Error('Invalid config URL');
+  }
+
   try {
     const response = await fetch(configUrl);
     if (!response.ok) {
-      console.log(
-        `Failed to fetch config: ${response.status} ${response.statusText}`,
-      );
-    } else {
-      const jsonData = await response.json();
-      // eslint-disable-next-line no-restricted-syntax
-      for (const entry of jsonData.data) {
-        window.siteConfig[entry.Item] = entry.Value;
-      }
+      throw new Error(`Failed to fetch config: ${response.status} ${response.statusText}`);
+    }
+    
+    const jsonData = await response.json();
+    if (jsonData?.data) {
+      jsonData.data.forEach(entry => {
+        if (entry.Item && entry.Value !== undefined) {
+          window.siteConfig[entry.Item] = entry.Value;
+        }
+      });
     }
   } catch (error) {
-    console.log(`unable to read config: ${error.message}`);
+    console.warn(`Unable to read config from ${configUrl}:`, error);
   }
 }
 
@@ -97,34 +102,38 @@ export function convertToISODate(input) {
 export async function constructGlobal() {
   window.cmsplus.debug('constructGlobal');
   window.siteConfig = {};
+  
   if (window.fetchVariables) {
-    await readVariables(
-      new URL('/config/defaults.json', window.location.origin),
-    );
-    await readVariables(
-      new URL('/config/variables.json', window.location.origin),
-    );
-    if (['preview', 'live'].includes(window.cmsplus.environment)) {
-      await readVariables(
-        new URL(
-          `/config/variables-${window.cmsplus.environment}.json`,
-          window.location.origin,
-        ),
-      );
-    }
-    if (
-      ['local', 'dev', 'preprod', 'prod', 'stage'].includes(
-        window.cmsplus.locality,
-      )
-    ) {
-      await readVariables(
-        new URL(
-          `/config/variables-${window.cmsplus.locality}.json`,
-          window.location.origin,
-        ),
-      );
+    try {
+      // Get base URL with fallback
+      const baseUrl = window.location.origin || 'http://localhost';
+      
+      // Helper function to safely fetch config
+      const safeReadVariables = async (configPath) => {
+        try {
+          const configUrl = new URL(configPath, baseUrl);
+          await readVariables(configUrl);
+        } catch (error) {
+          console.warn(`Failed to load config from ${configPath}:`, error);
+        }
+      };
+
+      // Load configs in sequence with proper error handling
+      await safeReadVariables('/config/defaults.json');
+      await safeReadVariables('/config/variables.json');
+
+      if (['preview', 'live'].includes(window.cmsplus.environment)) {
+        await safeReadVariables(`/config/variables-${window.cmsplus.environment}.json`);
+      }
+
+      if (['local', 'dev', 'preprod', 'prod', 'stage'].includes(window.cmsplus.locality)) {
+        await safeReadVariables(`/config/variables-${window.cmsplus.locality}.json`);
+      }
+    } catch (error) {
+      console.error('Error loading configurations:', error);
     }
   }
+
   try {
     const now = new Date().toISOString();
     let href = '';

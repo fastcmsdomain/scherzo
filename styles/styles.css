@@ -313,3 +313,13 @@ body.post main .section > div  {
     margin-inline: auto;
     max-width: 900px;
 }
+
+body.podstrona footer.footer-wrapper {
+  bottom: 0;
+  position: fixed;
+  width: 100%;
+}
+
+body.podstrona main {
+    margin-right: 400px;
+}

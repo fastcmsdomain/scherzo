@@ -1,18 +1,18 @@
-main .banner-container > div {
+.banner-container > div {
   max-width: unset;
 }
 
-main .banner-container .banner > div {
+.banner-container .banner > div {
     margin-bottom: 4rem;
 }
 
   
-main .banner-container {
+.banner-container {
   min-width: 100%;
   padding: 0;
 }
 
-main .banner-container::before {
+.banner-container::before {
   background: linear-gradient(
     0deg,
     rgb(0 0 0 / 90%) 0%,
@@ -26,7 +26,7 @@ main .banner-container::before {
 }
 
 @media (width >= 900px) {
-    main .banner-container {
+    .banner-container {
         min-height: 745px;
         position: fixed;
         top: 0;
@@ -54,7 +54,7 @@ main .banner-container::before {
     height: 700px;
     justify-content: center;
   }
-  main .banner-container .banner > div {
+  .banner-container .banner > div {
     margin: 0;
   }
 }

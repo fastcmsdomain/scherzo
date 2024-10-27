@@ -1,5 +1,4 @@
-
-/* eslint-disable no-unused-vars */
+/* esint-disable no-unused-vars */
 /* eslint-disable prefer-destructuring */
 /* eslint-disable import/no-unresolved */
 /* eslint-disable import/no-absolute-path */

@@ -53,6 +53,37 @@ async function fetchFacebookFeed() {
 }
 
 /**
+ * Creates a search input field with a magnifying glass button
+ * @param {function} onSearch - The search event handler
+ * @returns {HTMLElement} The search container element
+ */
+function createSearchField(onSearch) {
+  const searchContainer = document.createElement('div');
+  searchContainer.classList.add('search-container');
+
+  const searchInput = document.createElement('input');
+  searchInput.type = 'text';
+  searchInput.placeholder = 'Search feeds...';
+  searchInput.classList.add('search-input');
+
+  const searchButton = document.createElement('button');
+  searchButton.classList.add('search-button');
+  searchButton.innerHTML = '🔍'; // Magnifying glass emoji
+
+  searchButton.addEventListener('click', () => onSearch(searchInput.value));
+  searchInput.addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') {
+      onSearch(searchInput.value);
+    }
+  });
+
+  searchContainer.appendChild(searchInput);
+  searchContainer.appendChild(searchButton);
+
+  return searchContainer;
+}
+
+/**
  * Creates a filter button
  * @param {string} type - The type of feed ('all', 'youtube', or 'facebook')
  * @param {function} onClick - The click event handler
@@ -160,10 +191,25 @@ export default async function decorate(block) {
     };
   }
 
+  function handleSearch(keyword) {
+    const searchTerm = keyword.toLowerCase();
+    const filteredFeed = combinedFeed.filter((item) => 
+      item.title.toLowerCase().includes(searchTerm)
+    );
+    renderFeed(filteredFeed);
+
+    // Reset active state on filter buttons
+    filterContainer.querySelectorAll('.filter-button').forEach((btn) => {
+      btn.classList.remove('active');
+    });
+  }
+
+  const searchField = createSearchField(handleSearch);
   const allButton = createFilterButton('all', createFilterHandler('all'));
   const youtubeButton = createFilterButton('youtube', createFilterHandler('youtube'));
   const facebookButton = createFilterButton('facebook', createFilterHandler('facebook'));
 
+  filterContainer.appendChild(searchField);
   filterContainer.appendChild(allButton);
   filterContainer.appendChild(youtubeButton);
   filterContainer.appendChild(facebookButton);

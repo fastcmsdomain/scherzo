@@ -1,3 +1,7 @@
+.social-media-feeds {
+    margin-top: 10rem;
+}
+
 body.social-media-page::before {
     content: '';
     display: block;
@@ -8,7 +12,6 @@ body.social-media-page::before {
   display: grid;
   gap: 20px;
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  margin-top: 10rem;
   padding: 20px;
 }
 
@@ -85,4 +88,40 @@ body.social-media-page::before {
 .social-media-feed-item[href*="facebook.com"] {
   /* Styles specific to Facebook items */
   border-left: 3px solid #3b5998;
+}
+
+.filter-container {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.filter-button {
+  align-items: center;
+  background-color: var(--color-darker-blue); /* Golden color */
+  border: none;
+  border-radius: 20px;
+  color: var(--color-white);
+  cursor: pointer;
+  display: flex;
+  font-size: 16px;
+  margin: 0 10px;
+  padding: 20px 30px;
+  transition: background-color 0.3s ease;
+}
+
+.filter-button:hover,
+.filter-button.active {
+  background-color: #ffcc00;
+}
+
+.filter-logo {
+  height: 20px;
+  margin: 0;;
+  margin-right: 10px;
+  width: 20px;
+}
+
+.filter-all .filter-logo {
+  display: none;
 }

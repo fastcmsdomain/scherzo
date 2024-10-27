@@ -53,6 +53,32 @@ async function fetchFacebookFeed() {
 }
 
 /**
+ * Creates a filter button
+ * @param {string} type - The type of feed ('all', 'youtube', or 'facebook')
+ * @param {function} onClick - The click event handler
+ * @returns {HTMLElement} The filter button element
+ */
+function createFilterButton(type, onClick) {
+  const button = document.createElement('button');
+  button.classList.add('filter-button', `filter-${type}`);
+  button.addEventListener('click', onClick);
+
+  if (type !== 'all') {
+    const logo = document.createElement('img');
+    logo.src = `/blocks/social-media-feeds/${type}-logo.png`;
+    logo.alt = `${type} logo`;
+    logo.classList.add('filter-logo');
+    button.appendChild(logo);
+  }
+
+  const text = document.createElement('span');
+  text.textContent = type.charAt(0).toUpperCase() + type.slice(1);
+  button.appendChild(text);
+
+  return button;
+}
+
+/**
  * Creates a feed item element
  * @param {Object} item - Feed item data
  * @returns {HTMLElement} Feed item element
@@ -99,10 +125,9 @@ function createFeedItem(item) {
 export default async function decorate(block) {
   const feedContainer = document.createElement('div');
   feedContainer.classList.add('social-media-feed-container');
-  block.appendChild(feedContainer);
 
-  // Add 'social-media-page' class to the body
-  document.body.classList.add('social-media-page');
+  const filterContainer = document.createElement('div');
+  filterContainer.classList.add('filter-container');
 
   const [youtubeFeed, facebookFeed] = await Promise.all([
     fetchYouTubeFeed(),
@@ -113,8 +138,43 @@ export default async function decorate(block) {
     .sort((a, b) => b.date - a.date)
     .slice(0, 20);
 
-  combinedFeed.forEach((item) => {
-    const feedItem = createFeedItem(item);
-    feedContainer.appendChild(feedItem);
-  });
+  function renderFeed(feed) {
+    feedContainer.innerHTML = '';
+    feed.forEach((item) => {
+      const feedItem = createFeedItem(item);
+      feedContainer.appendChild(feedItem);
+    });
+  }
+
+  function createFilterHandler(type) {
+    return () => {
+      const filteredFeed = type === 'all'
+        ? combinedFeed
+        : combinedFeed.filter((item) => item.type === type);
+      renderFeed(filteredFeed);
+
+      // Update active button
+      filterContainer.querySelectorAll('.filter-button').forEach((btn) => {
+        btn.classList.toggle('active', btn.classList.contains(`filter-${type}`));
+      });
+    };
+  }
+
+  const allButton = createFilterButton('all', createFilterHandler('all'));
+  const youtubeButton = createFilterButton('youtube', createFilterHandler('youtube'));
+  const facebookButton = createFilterButton('facebook', createFilterHandler('facebook'));
+
+  filterContainer.appendChild(allButton);
+  filterContainer.appendChild(youtubeButton);
+  filterContainer.appendChild(facebookButton);
+
+  block.appendChild(filterContainer);
+  block.appendChild(feedContainer);
+
+  // Initially render all feeds and set 'all' button as active
+  renderFeed(combinedFeed);
+  allButton.classList.add('active');
+
+  // Add 'social-media-page' class to the body
+  document.body.classList.add('social-media-page');
 }

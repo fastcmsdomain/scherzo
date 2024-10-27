@@ -53,34 +53,43 @@ async function fetchFacebookFeed() {
 }
 
 /**
- * Creates a search input field with a magnifying glass button
+ * Creates a search form with input field and a magnifying glass button
  * @param {function} onSearch - The search event handler
- * @returns {HTMLElement} The search container element
+ * @returns {HTMLElement} The search form element
  */
 function createSearchField(onSearch) {
-  const searchContainer = document.createElement('div');
-  searchContainer.classList.add('search-container');
+  const searchForm = document.createElement('form');
+  searchForm.classList.add('search-form');
+  searchForm.setAttribute('role', 'search');
+
+  const searchLabel = document.createElement('label');
+  searchLabel.textContent = 'Szukaj';
+  searchLabel.htmlFor = 'social-media-search';
+  searchLabel.classList.add('search-label');
 
   const searchInput = document.createElement('input');
   searchInput.type = 'text';
+  searchInput.id = 'social-media-search';
+  searchInput.name = 'social-media-search';
   searchInput.placeholder = 'Search feeds...';
   searchInput.classList.add('search-input');
 
   const searchButton = document.createElement('button');
+  searchButton.type = 'submit';
   searchButton.classList.add('search-button');
   searchButton.innerHTML = '🔍'; // Magnifying glass emoji
+  searchButton.setAttribute('aria-label', 'Search');
 
-  searchButton.addEventListener('click', () => onSearch(searchInput.value));
-  searchInput.addEventListener('keypress', (e) => {
-    if (e.key === 'Enter') {
-      onSearch(searchInput.value);
-    }
+  searchForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    onSearch(searchInput.value);
   });
 
-  searchContainer.appendChild(searchInput);
-  searchContainer.appendChild(searchButton);
+  searchForm.appendChild(searchLabel);
+  searchForm.appendChild(searchInput);
+  searchForm.appendChild(searchButton);
 
-  return searchContainer;
+  return searchForm;
 }
 
 /**

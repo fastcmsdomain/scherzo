@@ -1,59 +1,60 @@
-.cards-wrapper {
+.cytaty-zdjecia-wrapper {
   margin: var(--space-36) 0;
 }
 
-.cards > ul {
+.cytaty-zdjecia > ul {
+  grid-gap: 16px;
+  display: grid;
+  grid-template-columns: repeat(1fr, 4);
   list-style: none;
   margin: 0;
   padding: 0;
-  display: grid;
-  grid-template-columns: repeat(1fr, 4);
-  grid-gap: 16px;
 }
 
-.cards > ul > li {
+.cytaty-zdjecia > ul > li {
   border: 1px solid var(--dark-color);
 }
 
-.cards .cards-card-body {
+.cytaty-zdjecia .cytaty-zdjecia-card-body {
   margin: 16px;
 }
 
-.cards .cards-card-image {
+.cytaty-zdjecia .cytaty-zdjecia-card-image {
   line-height: 0;
 }
 
-.cards .cards-card-body > *:first-child {
+.cytaty-zdjecia .cytaty-zdjecia-card-body > *:first-child {
   margin-top: 0;
 }
 
-.cards > ul > li img {
-  width: 100%;
+.cytaty-zdjecia > ul > li img {
   aspect-ratio: 4 / 3;
   object-fit: cover;
+  width: 100%;
 }
 
 
 
 /* Feedback wrapper */
 .feedback ul {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 2rem;
-  justify-content: center;
   align-items: center;
+  display: grid;
+  gap: 2rem;
+  grid-template-columns: repeat(2, 1fr);
+  justify-content: center;
 }
 
 .feedback ul li {
-  display: grid;
   border: none;
-  border-top: 1px solid gold;
+  border-top: 1px solid var(--color-gold);
+  box-shadow: var(--box-shadow);
+  display: grid;
 }
 
 .feedback .card-image {
   grid-area: 1/1;
-  position: relative;
   min-height: 250px;
+  position: relative;
 
   & img {
     aspect-ratio: 1 / 1;
@@ -65,8 +66,8 @@
 .feedback .card-title {
   grid-area: 1 / 1;
   margin-top: auto;
-  text-align: center;
   position: relative;
+  text-align: center;
 }
 
 .feedback .card-title h3,
@@ -86,7 +87,8 @@
 }
 
 .feedback .card-body {
-  margin: 1rem 1rem 0;
+  background-color: var(--color-blue-dark);
+  padding: 1rem;
   text-align: center;
 
   & p {
@@ -95,15 +97,15 @@
 }
 
 .feedback .card-image::before {
-  content: "";
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  width: 100%;
-  min-height: 100px;
   background: rgb(0 0 0);
   background: linear-gradient(0deg, rgba(0, 0, 0, 0.9) 0%, rgba(0, 0, 0, 0.7) 50%, rgba(0, 0, 0, 0) 100%);
+  bottom: 0;
+  content: "";
+  left: 0;
+  min-height: 100px;
+  position: absolute;
+  right: 0;
+  width: 100%;
 }
 
 @media (width >= 900px) {

@@ -82,6 +82,16 @@ footer .button-container a.button {
   padding: 0; 
 }
 
+.parBtn {
+  align-items: center;
+  display: flex;
+  gap: var(--space-4);
+}
+
+.parBtn img {
+  width: 16px;
+}
+
 @media (width >= 900px) {
     footer .footer {
         padding: 4rem 7.5rem 0;

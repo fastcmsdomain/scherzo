@@ -164,55 +164,68 @@ function markCurrentPageInMenu(nav) {
 }
 
 function openMenuToCurrentItem(schizoMenu) {
-  // Find the deepest current item
+  // Find all current items in the menu
   const currentItems = schizoMenu.menusWrap.querySelectorAll('.current');
   if (!currentItems.length) return;
-  
-  // Get the deepest current item (last one in the hierarchy)
-  const currentItem = currentItems[currentItems.length - 1];
 
-  // Find the path to the current item
-  const path = [];
-  let parent = currentItem;
+  // Build the complete path from the deepest current item to root
+  const menuPath = [];
+  let currentItem = currentItems[currentItems.length - 1];
   
-  // Build the path from current item to root
-  while (parent) {
-    if (parent.tagName === 'LI') {
-      path.unshift(parent);
+  while (currentItem) {
+    if (currentItem.tagName === 'LI') {
+      menuPath.unshift({
+        element: currentItem,
+        level: getMenuLevel(currentItem),
+        link: currentItem.querySelector(':scope > a')
+      });
     }
-    parent = parent.parentElement.closest('li');
+    currentItem = currentItem.parentElement.closest('li');
   }
 
-  // If we have a path with multiple levels
-  if (path.length > 1) {
-    // Get first level parent and trigger second level
-    const firstLevelItem = path[0];
-    const firstLevelLink = firstLevelItem.querySelector(':scope > a');
-    
-    // Open second level with a delay to ensure proper initialization
-    setTimeout(() => {
-      schizoMenu.copyMenuSecondLvl({ 
-        target: firstLevelLink,
-        parentNode: firstLevelItem 
+  // Process menu levels sequentially with proper delays
+  const processMenuLevels = async () => {
+    // First level (if exists)
+    if (menuPath[0] && menuPath[0].level === 1) {
+      const firstLevel = menuPath[0];
+      schizoMenu.copyMenuSecondLvl({
+        target: firstLevel.link,
+        parentNode: firstLevel.element
       });
       schizoMenu.slideInSecondLvl();
+      
+      // Wait for second level animation
+      await new Promise(resolve => setTimeout(resolve, 300));
+    }
 
-      // If we have a third level
-      if (path.length > 2) {
-        // Additional delay for third level to ensure second level is ready
-        setTimeout(() => {
-          const secondLevelItem = path[1];
-          const secondLevelLink = secondLevelItem.querySelector(':scope > a');
-          
-          schizoMenu.copyMenuThirdLvl({ 
-            target: secondLevelLink,
-            parentNode: secondLevelItem 
-          });
-          schizoMenu.slideInThirdLvl();
-        }, 150);
-      }
-    }, 100);
+    // Second level (if exists)
+    if (menuPath[1] && menuPath[1].level === 2) {
+      const secondLevel = menuPath[1];
+      schizoMenu.copyMenuThirdLvl({
+        target: secondLevel.link,
+        parentNode: secondLevel.element
+      });
+      schizoMenu.slideInThirdLvl();
+    }
+  };
+
+  // Start processing with initial delay
+  setTimeout(() => {
+    processMenuLevels();
+  }, 100);
+}
+
+// Helper function to determine menu level
+function getMenuLevel(element) {
+  let level = 1;
+  let parent = element.closest('ul');
+  
+  while (parent && !parent.closest('.nav-sections')) {
+    level += 1;
+    parent = parent.parentElement.closest('ul');
   }
+  
+  return level;
 }
 
 /**
@@ -384,22 +397,25 @@ export default async function decorate(block) {
     openMenu: () => {
       schizoMenu.menuBtn.classList.add('isActive');
       
-      // Reset menu state before opening to current item
-      schizoMenu.menusWrap.querySelector('.menu.one').classList.remove('slide-in');
-      schizoMenu.menusWrap.querySelector('.menu.two').classList.remove('slide-in');
-      schizoMenu.menusWrap.querySelector('.menu.three').classList.remove('slide-in');
-      
-      // Clear any existing content in second and third levels
-      const secondLevelMenu = schizoMenu.menusWrap.querySelector('.menu.two ul');
-      if (secondLevelMenu) secondLevelMenu.remove();
-      
-      const thirdLevelMenu = schizoMenu.menusWrap.querySelector('.menu.three ul');
-      if (thirdLevelMenu) thirdLevelMenu.remove();
+      // Reset menu state
+      const resetMenuState = () => {
+        // Remove slide-in classes
+        schizoMenu.menusWrap.querySelectorAll('.menu').forEach(menu => {
+          menu.classList.remove('slide-in');
+          menu.classList.remove('hide');
+        });
 
-      // Ensure menu structure is ready before opening to current item
-      setTimeout(() => {
-        openMenuToCurrentItem(schizoMenu);
-      }, 50);
+        // Clear existing menus
+        const secondLevel = schizoMenu.menusWrap.querySelector('.menu.two ul');
+        const thirdLevel = schizoMenu.menusWrap.querySelector('.menu.three ul');
+        
+        if (secondLevel) secondLevel.remove();
+        if (thirdLevel) thirdLevel.remove();
+      };
+
+      // Reset and open to current item
+      resetMenuState();
+      openMenuToCurrentItem(schizoMenu);
     },
     slideInSecondLvl: () => {
       schizoMenu.menusWrap.querySelector('.menu.one').classList.add('slide-in');

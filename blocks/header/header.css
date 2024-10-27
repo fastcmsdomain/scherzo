@@ -123,6 +123,7 @@ header nav[aria-expanded="true"] .nav-hamburger-icon {
 header nav[aria-expanded="true"] .nav-hamburger-icon::before,
 header nav[aria-expanded="true"] .nav-hamburger-icon::after {
   border-radius: 2px;
+  color: var(--color-blue);
   height: 2px;
   left: 1px;
   top: 3px;

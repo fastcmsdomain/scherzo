@@ -12,8 +12,22 @@ main .hero-container {
   padding: 0;
 }
 
+main .hero-container::before {
+  background: linear-gradient(
+    0deg,
+    rgb(0 0 0 / 90%) 0%,
+    rgb(0 0 0 / 70%) 50%,
+    rgb(0 0 0 / 0%) 100%
+) ;
+    content: '';
+    height: 100%;
+    position: absolute;
+    width: 100%;
+}
+
 @media (width >= 900px) {
     main .hero-container {
+        min-height: 745px;
         position: fixed;
         top: 0;
     }
@@ -25,14 +39,14 @@ main .hero-container {
   height: 100vh;
 }
 
-.hero-wrapper {
+/* .hero-wrapper {
     background: linear-gradient(
         0deg,
         rgb(0 0 0 / 90%) 0%,
         rgb(0 0 0 / 70%) 50%,
         rgb(0 0 0 / 0%) 100%
     );
-}
+} */
 
 @media (width >= 900px) {
   .hero {
@@ -80,6 +94,7 @@ main .hero-container {
 
 .hero img {
   height: 100%;
+  margin: 0;
   object-fit: cover;
   width: 100%;
 }

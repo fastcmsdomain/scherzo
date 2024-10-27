@@ -251,7 +251,7 @@ a.button.secondary, button.secondary {
 
 main img {
   height: auto;
-  margin: 2rem 0;
+  margin: 0;
   max-width: 100%;
   width: auto;
 }
@@ -302,4 +302,14 @@ main .section {
 main .section.light,
 main .section.highlight {
   background-color: var(--light-color);
+}
+
+body.post main .hero-container {
+  margin-top: 0;
+  position: relative;
+}
+
+body.post main .section > div  {
+    margin-inline: auto;
+    max-width: 900px;
 }

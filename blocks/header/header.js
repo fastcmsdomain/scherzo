@@ -141,23 +141,43 @@ async function buildBreadcrumbs() {
 }
 
 /**
- * Marks the current page's menu item with a 'current' class
+ * Marks the current page's menu item with a 'current' class and stores the path
  * @param {Element} nav The navigation element
+ * @param {string} currentPath - Optional path to mark
  */
-function markCurrentPageInMenu(nav) {
-  // Clear any existing current markers first
+function markCurrentPageInMenu(nav, currentPath = null) {
+  // Clear existing current markers
   nav.querySelectorAll('.current').forEach(item => item.classList.remove('current'));
   
-  const currentUrl = window.location.pathname;
+  const pathToMark = currentPath || window.location.pathname;
   const menuItems = nav.querySelectorAll('.nav-sections a');
   
   menuItems.forEach((link) => {
-    if (link.pathname === currentUrl) {
+    if (link.pathname === pathToMark) {
       const menuItem = link.closest('li');
       if (menuItem) {
-        menuItem.classList.add('current');
+        // Store the path information
+        const pathInfo = [];
+        let currentElement = menuItem;
         
-        // Mark parent menu items as current
+        while (currentElement) {
+          if (currentElement.tagName === 'LI') {
+            const linkElement = currentElement.querySelector(':scope > a');
+            if (linkElement) {
+              pathInfo.unshift({
+                path: linkElement.pathname,
+                text: linkElement.textContent
+              });
+            }
+          }
+          currentElement = currentElement.closest('ul')?.closest('li');
+        }
+        
+        // Store path info in localStorage
+        localStorage.setItem('currentMenuPath', JSON.stringify(pathInfo));
+        
+        // Mark current and parent items
+        menuItem.classList.add('current');
         let parentLi = menuItem.closest('ul')?.closest('li');
         while (parentLi) {
           parentLi.classList.add('current');
@@ -363,25 +383,28 @@ export default async function decorate(block) {
 
       // Add click event listeners to all menu links
       schizoMenu.menusWrap.querySelectorAll('.menu a').forEach(link => {
-        link.addEventListener('click', () => {
-          // Mark current page before navigation
-          const menuItem = link.closest('li');
-          if (menuItem) {
-            // Clear existing current items
-            schizoMenu.menusWrap.querySelectorAll('.current').forEach(item => 
-              item.classList.remove('current')
-            );
-            
-            // Mark new current path
-            menuItem.classList.add('current');
-            let parentLi = menuItem.closest('ul')?.closest('li');
-            while (parentLi) {
-              parentLi.classList.add('current');
-              parentLi = parentLi.closest('ul')?.closest('li');
-            }
+        link.addEventListener('click', (e) => {
+          if (!link.closest('li')?.classList.contains('has-children')) {
+            // Store the clicked path before navigation
+            const pathInfo = {
+              path: link.pathname,
+              timestamp: Date.now()
+            };
+            sessionStorage.setItem('lastClickedPath', JSON.stringify(pathInfo));
           }
         });
       });
+
+      // Check for stored path on page load
+      const storedPath = sessionStorage.getItem('lastClickedPath');
+      if (storedPath) {
+        const pathInfo = JSON.parse(storedPath);
+        // Only use stored path if it's recent (within last 5 seconds)
+        if (Date.now() - pathInfo.timestamp < 5000) {
+          markCurrentPageInMenu(schizoMenu.menusWrap, pathInfo.path);
+          sessionStorage.removeItem('lastClickedPath'); // Clear after use
+        }
+      }
 
       schizoMenu.registerEvents();
     },
@@ -403,8 +426,14 @@ export default async function decorate(block) {
         if (e.target.classList.contains('isActive')) {
           schizoMenu.closeMenu();
         } else {
-          // Ensure current page is marked before opening menu
-          markCurrentPageInMenu(schizoMenu.menusWrap);
+          // Try to restore path from storage first
+          const storedPath = localStorage.getItem('currentMenuPath');
+          if (storedPath) {
+            const pathInfo = JSON.parse(storedPath);
+            markCurrentPageInMenu(schizoMenu.menusWrap, pathInfo[pathInfo.length - 1].path);
+          } else {
+            markCurrentPageInMenu(schizoMenu.menusWrap);
+          }
           schizoMenu.openMenu();
         }
       });
@@ -444,7 +473,6 @@ export default async function decorate(block) {
     openMenu: () => {
       schizoMenu.menuBtn.classList.add('isActive');
       
-      // Thorough reset of menu state
       const resetMenuState = () => {
         schizoMenu.menusWrap.querySelectorAll('.menu').forEach(menu => {
           menu.classList.remove('slide-in');
@@ -460,8 +488,15 @@ export default async function decorate(block) {
 
       resetMenuState();
       
-      // Ensure current page is marked before opening to current item
-      markCurrentPageInMenu(schizoMenu.menusWrap);
+      // Try to restore path from storage
+      const storedPath = localStorage.getItem('currentMenuPath');
+      if (storedPath) {
+        const pathInfo = JSON.parse(storedPath);
+        markCurrentPageInMenu(schizoMenu.menusWrap, pathInfo[pathInfo.length - 1].path);
+      } else {
+        markCurrentPageInMenu(schizoMenu.menusWrap);
+      }
+      
       openMenuToCurrentItem(schizoMenu);
     },
     slideInSecondLvl: () => {
@@ -522,3 +557,24 @@ export default async function decorate(block) {
   schizoMenu.init();
   // ===== END: add slide-in navigation effect
 }
+
+// Add page unload handler
+window.addEventListener('beforeunload', () => {
+  const currentItems = document.querySelectorAll('.current');
+  if (currentItems.length) {
+    const pathInfo = [];
+    currentItems.forEach(item => {
+      const link = item.querySelector('a');
+      if (link) {
+        pathInfo.push({
+          path: link.pathname,
+          text: link.textContent
+        });
+      }
+    });
+    sessionStorage.setItem('lastClickedPath', JSON.stringify({
+      path: window.location.pathname,
+      timestamp: Date.now()
+    }));
+  }
+});

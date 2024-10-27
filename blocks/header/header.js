@@ -145,87 +145,109 @@ async function buildBreadcrumbs() {
  * @param {Element} nav The navigation element
  */
 function markCurrentPageInMenu(nav) {
+  // Clear any existing current markers first
+  nav.querySelectorAll('.current').forEach(item => item.classList.remove('current'));
+  
   const currentUrl = window.location.pathname;
   const menuItems = nav.querySelectorAll('.nav-sections a');
   
   menuItems.forEach((link) => {
-    const menuItem = link.closest('li');
     if (link.pathname === currentUrl) {
-      menuItem.classList.add('current');
-      
-      // Also mark parent menu items as current
-      let parentLi = menuItem.closest('ul')?.closest('li');
-      while (parentLi) {
-        parentLi.classList.add('current');
-        parentLi = parentLi.closest('ul')?.closest('li');
+      const menuItem = link.closest('li');
+      if (menuItem) {
+        menuItem.classList.add('current');
+        
+        // Mark parent menu items as current
+        let parentLi = menuItem.closest('ul')?.closest('li');
+        while (parentLi) {
+          parentLi.classList.add('current');
+          parentLi = parentLi.closest('ul')?.closest('li');
+        }
       }
     }
   });
 }
 
 function openMenuToCurrentItem(schizoMenu) {
-  // Find all current items in the menu
-  const currentItems = schizoMenu.menusWrap.querySelectorAll('.current');
+  // Find the deepest current item first
+  const currentItems = Array.from(schizoMenu.menusWrap.querySelectorAll('.current'));
   if (!currentItems.length) return;
 
-  // Build the complete path from the deepest current item to root
-  const menuPath = [];
-  let currentItem = currentItems[currentItems.length - 1];
-  
-  while (currentItem) {
-    if (currentItem.tagName === 'LI') {
-      menuPath.unshift({
-        element: currentItem,
-        level: getMenuLevel(currentItem),
-        link: currentItem.querySelector(':scope > a')
-      });
-    }
-    currentItem = currentItem.parentElement.closest('li');
-  }
+  // Sort items by depth to get the deepest one first
+  const sortedItems = currentItems.sort((a, b) => {
+    const depthA = getElementDepth(a);
+    const depthB = getElementDepth(b);
+    return depthB - depthA;
+  });
 
-  // Process menu levels sequentially with proper delays
-  const processMenuLevels = async () => {
-    // First level (if exists)
-    if (menuPath[0] && menuPath[0].level === 1) {
-      const firstLevel = menuPath[0];
-      schizoMenu.copyMenuSecondLvl({
-        target: firstLevel.link,
-        parentNode: firstLevel.element
-      });
-      schizoMenu.slideInSecondLvl();
-      
-      // Wait for second level animation
-      await new Promise(resolve => setTimeout(resolve, 300));
-    }
+  const deepestItem = sortedItems[0];
+  const menuPath = buildMenuPath(deepestItem);
 
-    // Second level (if exists)
-    if (menuPath[1] && menuPath[1].level === 2) {
-      const secondLevel = menuPath[1];
-      schizoMenu.copyMenuThirdLvl({
-        target: secondLevel.link,
-        parentNode: secondLevel.element
-      });
-      schizoMenu.slideInThirdLvl();
+  // Function to handle menu opening sequence
+  const openMenuSequence = async () => {
+    try {
+      // If we have a first level item with children
+      if (menuPath[0]) {
+        const firstLevelLink = menuPath[0].querySelector(':scope > a');
+        await new Promise(resolve => {
+          schizoMenu.copyMenuSecondLvl({ 
+            target: firstLevelLink,
+            parentNode: menuPath[0]
+          });
+          schizoMenu.slideInSecondLvl();
+          setTimeout(resolve, 300);
+        });
+      }
+
+      // If we have a second level item with children
+      if (menuPath[1]) {
+        const secondLevelLink = menuPath[1].querySelector(':scope > a');
+        await new Promise(resolve => {
+          schizoMenu.copyMenuThirdLvl({ 
+            target: secondLevelLink,
+            parentNode: menuPath[1]
+          });
+          schizoMenu.slideInThirdLvl();
+          setTimeout(resolve, 300);
+        });
+      }
+    } catch (error) {
+      console.error('Error in menu sequence:', error);
     }
   };
 
-  // Start processing with initial delay
+  // Start the sequence with a slight initial delay
   setTimeout(() => {
-    processMenuLevels();
+    openMenuSequence();
   }, 100);
 }
 
-// Helper function to determine menu level
-function getMenuLevel(element) {
-  let level = 1;
-  let parent = element.closest('ul');
-  
-  while (parent && !parent.closest('.nav-sections')) {
-    level += 1;
-    parent = parent.parentElement.closest('ul');
+// Helper function to get element depth in DOM
+function getElementDepth(element) {
+  let depth = 0;
+  let current = element;
+
+  while (current.parentElement) {
+    depth++;
+    current = current.parentElement;
   }
-  
-  return level;
+  return depth;
+}
+
+// Helper function to build menu path
+function buildMenuPath(element) {
+  const path = [];
+  let current = element;
+
+  // Walk up the DOM tree to build the path
+  while (current) {
+    if (current.tagName === 'LI' && current.classList.contains('has-children')) {
+      path.unshift(current);
+    }
+    current = current.parentElement?.closest('li');
+  }
+
+  return path;
 }
 
 /**
@@ -332,13 +354,36 @@ export default async function decorate(block) {
         schizoMenu.menusWrap.append(menuDiv);
       }
 
+      // Mark menu items that have children
       schizoMenu.menusWrap.querySelectorAll('.menu ul > li').forEach((item) => {
         if (item.querySelectorAll('ul').length) {
           item.classList.add('has-children');
         }
       });
+
+      // Add click event listeners to all menu links
+      schizoMenu.menusWrap.querySelectorAll('.menu a').forEach(link => {
+        link.addEventListener('click', () => {
+          // Mark current page before navigation
+          const menuItem = link.closest('li');
+          if (menuItem) {
+            // Clear existing current items
+            schizoMenu.menusWrap.querySelectorAll('.current').forEach(item => 
+              item.classList.remove('current')
+            );
+            
+            // Mark new current path
+            menuItem.classList.add('current');
+            let parentLi = menuItem.closest('ul')?.closest('li');
+            while (parentLi) {
+              parentLi.classList.add('current');
+              parentLi = parentLi.closest('ul')?.closest('li');
+            }
+          }
+        });
+      });
+
       schizoMenu.registerEvents();
-      schizoMenu.openSubmenus();
     },
     openSubmenus: () => {
       const e = schizoMenu.menusWrap.querySelectorAll('.menu.one ul > li.active > a:not([href="/"])');
@@ -358,6 +403,8 @@ export default async function decorate(block) {
         if (e.target.classList.contains('isActive')) {
           schizoMenu.closeMenu();
         } else {
+          // Ensure current page is marked before opening menu
+          markCurrentPageInMenu(schizoMenu.menusWrap);
           schizoMenu.openMenu();
         }
       });
@@ -397,15 +444,13 @@ export default async function decorate(block) {
     openMenu: () => {
       schizoMenu.menuBtn.classList.add('isActive');
       
-      // Reset menu state
+      // Thorough reset of menu state
       const resetMenuState = () => {
-        // Remove slide-in classes
         schizoMenu.menusWrap.querySelectorAll('.menu').forEach(menu => {
           menu.classList.remove('slide-in');
           menu.classList.remove('hide');
         });
 
-        // Clear existing menus
         const secondLevel = schizoMenu.menusWrap.querySelector('.menu.two ul');
         const thirdLevel = schizoMenu.menusWrap.querySelector('.menu.three ul');
         
@@ -413,8 +458,10 @@ export default async function decorate(block) {
         if (thirdLevel) thirdLevel.remove();
       };
 
-      // Reset and open to current item
       resetMenuState();
+      
+      // Ensure current page is marked before opening to current item
+      markCurrentPageInMenu(schizoMenu.menusWrap);
       openMenuToCurrentItem(schizoMenu);
     },
     slideInSecondLvl: () => {
@@ -434,12 +481,16 @@ export default async function decorate(block) {
       if (secondLevelMenu) secondLevelMenu.remove();
       
       const parentNode = e.parentNode || e.target.parentNode;
+      if (!parentNode) return;
+
       const ulToClone = parentNode.querySelector('ul');
       if (ulToClone) {
         const clonedMenu = ulToClone.cloneNode(true);
         schizoMenu.menusWrap.querySelector('.menu.two').append(clonedMenu);
-        schizoMenu.menusWrap.querySelector('.menu.two .back a').textContent = 
-          parentNode.querySelector(':scope > a').textContent;
+        const backLink = schizoMenu.menusWrap.querySelector('.menu.two .back a');
+        if (backLink) {
+          backLink.textContent = parentNode.querySelector(':scope > a')?.textContent || '';
+        }
       }
     },
     slideInThirdLvl: () => {
@@ -455,12 +506,16 @@ export default async function decorate(block) {
       if (thirdLevelMenu) thirdLevelMenu.remove();
       
       const parentNode = e.parentNode || e.target.parentNode;
+      if (!parentNode) return;
+
       const ulToClone = parentNode.querySelector('ul');
       if (ulToClone) {
         const clonedMenu = ulToClone.cloneNode(true);
         schizoMenu.menusWrap.querySelector('.menu.three').append(clonedMenu);
-        schizoMenu.menusWrap.querySelector('.menu.three .back a').textContent = 
-          parentNode.querySelector(':scope > a').textContent;
+        const backLink = schizoMenu.menusWrap.querySelector('.menu.three .back a');
+        if (backLink) {
+          backLink.textContent = parentNode.querySelector(':scope > a')?.textContent || '';
+        }
       }
     },
   };

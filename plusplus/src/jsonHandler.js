@@ -211,40 +211,63 @@ export async function createJSON() {
 
 export async function handleMetadataJsonLd() {
   window.cmsplus.debug('handleMetadataJsonLd');
-  // assume we have an url, if not we have a role -  construct url on the fly
-  let content = window.siteConfig['$meta:json-ld$'];
-  try {
-    // Attempt to parse the content as a URL
-    // eslint-disable-next-line no-new
-    new URL(content);
-  } catch (error) {
-    // Content is not a URL, construct the JSON-LD URL based on content and current domain
-    content = `${window.location.origin}/config/json-ld/${content}.json`;
+  
+  // Get content from config with fallback
+  let content = window.siteConfig['$meta:json-ld$'] || 'owner';
+  
+  // Skip if content is explicitly set to 'none'
+  if (content.toLowerCase() === 'none') {
+    window.cmsplus.debug('JSON-LD processing skipped - content set to none');
+    return;
   }
 
   try {
-    const resp = await fetch(content);
-    if (!resp.ok) {
-      throw new Error(`Failed to fetch JSON-LD content: ${resp.status}`);
+    // Check if content is a URL
+    let jsonLdUrl;
+    try {
+      jsonLdUrl = new URL(content);
+    } catch {
+      // Content is not a URL, construct the JSON-LD URL
+      jsonLdUrl = new URL(`/config/json-ld/${content}.json`, window.location.origin);
     }
+
+    const resp = await fetch(jsonLdUrl.href);
+    if (!resp.ok) {
+      // If file not found, try fallback to owner.json
+      if (content !== 'owner') {
+        window.cmsplus.debug(`JSON-LD file ${content} not found, trying owner.json`);
+        const fallbackResp = await fetch(`${window.location.origin}/config/json-ld/owner.json`);
+        if (!fallbackResp.ok) {
+          window.cmsplus.debug('Fallback JSON-LD file not found, skipping');
+          return;
+        }
+        resp = fallbackResp;
+      } else {
+        window.cmsplus.debug('JSON-LD file not found, skipping');
+        return;
+      }
+    }
+
     let json = await resp.json();
     json = extractJsonLd(json);
     let jsonString = JSON.stringify(json, null, '\t');
     jsonString = replaceTokens(window.siteConfig, jsonString);
-    // Create and append a new script element with the processed JSON-LD data
+
     const script = document.createElement('script');
     script.type = 'application/ld+json';
-    script.setAttribute('data-role', content.split('/').pop().split('.')[0]); // Set role based on the final URL
+    script.setAttribute('data-role', content.split('/').pop().split('.')[0]);
     script.setAttribute('id', 'ldMeta');
     script.textContent = jsonString;
     document.head.appendChild(script);
+
     document
       .querySelectorAll('meta[name="longdescription"]')
       .forEach((section) => section.remove());
+
   } catch (error) {
-    // no schema.org for your content, just use the content as is
-    // eslint-disable-next-line no-console
-    console.log('Error processing ld+json metadata:', error);
+    window.cmsplus.debug(`Error processing JSON-LD metadata: ${error.message}`);
+    // Don't throw error, just log and continue
   }
-  window.cmsplus.debug('complete handleMetadataJsonLd');
+  
+  window.cmsplus.debug('handleMetadataJsonLd complete');
 }

@@ -45,7 +45,7 @@ header nav p {
 
 header nav a:any-link {
   color: currentcolor;
-  font-size: var(--heading-font-size-xs);
+  font-size: var(--body-font-size-s);
   text-transform: uppercase;
 }
 
@@ -212,11 +212,11 @@ header nav .nav-sections a:focus {
 header nav .nav-sections ul li.has-children::after {
   background: var(--color-white);
   content: '>';
-  margin-left: var(--space-8);
-  mask-image: url('/icons/arrow-right.svg');
+  margin-left: var(--space-4);
+  mask-image: url('/icons/arrow_right.svg');
   mask-position: center;
   mask-repeat: no-repeat;
-  mask-size: 10px;
+  mask-size: 20px;
 }
 
 header nav .nav-sections ul li.has-children.current::after {
@@ -370,13 +370,11 @@ header nav .back a::before {
   background: var(--color-white);
   content: '>';
   left: -1rem;
-  margin-left: var(--space-8);
-  mask-image: url('/icons/arrow-left.svg');
+  margin-right: var(--space-8);
+  mask-image: url('/icons/arrow_left.svg');
   mask-position: center;
   mask-repeat: no-repeat;
-  mask-size: 10px;
-  position: absolute;
-  
+  mask-size: 20px; 
 }
 
 header nav .nav-sections .menu.three {

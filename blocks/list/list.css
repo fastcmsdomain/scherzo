@@ -63,7 +63,7 @@ main .list-container {
 
 .quick-links ul {
     background: var(--color-darker-blue);
-    box-shadow: var(--box-shadow);
+    box-shadow: none;
     display: inline-flex;
     flex-direction: row;
     gap: 0.9rem;
@@ -95,6 +95,7 @@ main .list-container {
 @media (width >= 900px) {
     .quick-links ul {
         bottom: inherit;
+        box-shadow: var(--box-shadow);
         flex-direction: row;
         padding: 1rem
     }

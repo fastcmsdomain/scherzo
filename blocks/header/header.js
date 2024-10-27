@@ -141,6 +141,29 @@ async function buildBreadcrumbs() {
 }
 
 /**
+ * Marks the current page's menu item with a 'current' class
+ * @param {Element} nav The navigation element
+ */
+function markCurrentPageInMenu(nav) {
+  const currentUrl = window.location.pathname;
+  const menuItems = nav.querySelectorAll('.nav-sections a');
+  
+  menuItems.forEach((link) => {
+    const menuItem = link.closest('li');
+    if (link.pathname === currentUrl) {
+      menuItem.classList.add('current');
+      
+      // Also mark parent menu items as current
+      let parentLi = menuItem.closest('ul')?.closest('li');
+      while (parentLi) {
+        parentLi.classList.add('current');
+        parentLi = parentLi.closest('ul')?.closest('li');
+      }
+    }
+  });
+}
+
+/**
  * loads and decorates the header, mainly the nav
  * @param {Element} block The header block element
  */
@@ -191,6 +214,9 @@ export default async function decorate(block) {
   fadeNavBrandOnScroll();
 
   const navSections = nav.querySelector('.nav-sections');
+  // Add current page marker
+  markCurrentPageInMenu(nav);
+
   // hamburger for all viewports
   const hamburger = document.createElement('div');
   hamburger.classList.add('nav-hamburger');

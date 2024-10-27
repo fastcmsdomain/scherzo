@@ -210,12 +210,17 @@ header nav .nav-sections a:focus {
 }
 
 header nav .nav-sections ul li.has-children::after {
-  background: var(--color-gold);
+  background: var(--color-white);
   content: '>';
-  mask-image: url('/icons/icons/arrow.svg');
+  margin-left: var(--space-8);
+  mask-image: url('/icons/arrow-right.svg');
   mask-position: center;
   mask-repeat: no-repeat;
   mask-size: 10px;
+}
+
+header nav .nav-sections ul li.has-children.current::after {
+  background: var(--color-gold);
 }
 
 header nav .nav-sections ul > li > ul {
@@ -362,8 +367,14 @@ header nav .back a {
 }
 
 header nav .back a::before {
-  content: '<';
+  background: var(--color-white);
+  content: '>';
   left: -1rem;
+  margin-left: var(--space-8);
+  mask-image: url('/icons/arrow-left.svg');
+  mask-position: center;
+  mask-repeat: no-repeat;
+  mask-size: 10px;
   position: absolute;
   
 }
@@ -393,4 +404,21 @@ header nav .nav-sections .menu ul>li ul {
   }
 
   
+}
+
+/* Add these styles to your existing CSS */
+
+/* Current menu item styling */
+header nav .nav-sections .menu ul > li.current > a {
+  color: var(--color-blue);
+  font-weight: 600;
+}
+
+header nav .nav-sections .menu ul > li.current {
+  position: relative;
+}
+
+/* Adjust for mobile view */
+header nav .nav-sections .menu ul > li.current::before {
+    left: 0;
 }

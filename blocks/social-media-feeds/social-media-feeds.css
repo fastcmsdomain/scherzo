@@ -208,3 +208,8 @@ form.search-form {
     margin-bottom: var(--space-16);
   }
 }
+
+.load-more-button {
+  display: block;
+  margin: var(--space-26) auto;
+}

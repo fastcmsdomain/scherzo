@@ -159,6 +159,19 @@ function createFeedItem(item) {
 }
 
 /**
+ * Creates a load more button
+ * @param {function} onClick - The click event handler
+ * @returns {HTMLElement} The load more button element
+ */
+function createLoadMoreButton(onClick) {
+  const button = document.createElement('button');
+  button.classList.add('filter-button', 'load-more-button');
+  button.textContent = 'Load More';
+  button.addEventListener('click', onClick);
+  return button;
+}
+
+/**
  * Decorates the social media feeds block
  * @param {Element} block The social media feeds block element
  */
@@ -174,16 +187,36 @@ export default async function decorate(block) {
     fetchFacebookFeed(),
   ]);
 
-  const combinedFeed = [...youtubeFeed, ...facebookFeed]
-    .sort((a, b) => b.date - a.date)
-    .slice(0, 20);
+  const combinedFeed = [...youtubeFeed, ...facebookFeed].sort((a, b) => b.date - a.date);
 
-  function renderFeed(feed) {
-    feedContainer.innerHTML = '';
-    feed.forEach((item) => {
+  let currentFeedIndex = 0;
+  const feedsPerPage = 18;
+
+  function renderFeed(feed, append = false) {
+    if (!append) {
+      feedContainer.innerHTML = '';
+      currentFeedIndex = 0;
+    }
+
+    const feedsToRender = feed.slice(currentFeedIndex, currentFeedIndex + feedsPerPage);
+    feedsToRender.forEach((item) => {
       const feedItem = createFeedItem(item);
       feedContainer.appendChild(feedItem);
     });
+
+    currentFeedIndex += feedsToRender.length;
+
+    // Remove existing load more button if any
+    const existingLoadMoreButton = block.querySelector('.load-more-button');
+    if (existingLoadMoreButton) {
+      existingLoadMoreButton.remove();
+    }
+
+    // Add load more button if there are more feeds to show
+    if (currentFeedIndex < feed.length) {
+      const loadMoreButton = createLoadMoreButton(() => renderFeed(feed, true));
+      block.appendChild(loadMoreButton);
+    }
   }
 
   function createFilterHandler(type) {

@@ -185,32 +185,33 @@ function openMenuToCurrentItem(schizoMenu) {
 
   // If we have a path with multiple levels
   if (path.length > 1) {
-    // Get first level parent
+    // Get first level parent and trigger second level
     const firstLevelItem = path[0];
     const firstLevelLink = firstLevelItem.querySelector(':scope > a');
     
-    // Open second level
-    schizoMenu.copyMenuSecondLvl({ 
-      target: firstLevelLink,
-      parentNode: firstLevelItem 
-    });
-    schizoMenu.slideInSecondLvl();
+    // Open second level with a delay to ensure proper initialization
+    setTimeout(() => {
+      schizoMenu.copyMenuSecondLvl({ 
+        target: firstLevelLink,
+        parentNode: firstLevelItem 
+      });
+      schizoMenu.slideInSecondLvl();
 
-    // If we have a third level
-    if (path.length > 2) {
-      // Small delay to ensure second level is properly loaded
-      setTimeout(() => {
-        const secondLevelItem = path[1];
-        const secondLevelLink = secondLevelItem.querySelector(':scope > a');
-        
-        // Open third level
-        schizoMenu.copyMenuThirdLvl({ 
-          target: secondLevelLink,
-          parentNode: secondLevelItem 
-        });
-        schizoMenu.slideInThirdLvl();
-      }, 100);
-    }
+      // If we have a third level
+      if (path.length > 2) {
+        // Additional delay for third level to ensure second level is ready
+        setTimeout(() => {
+          const secondLevelItem = path[1];
+          const secondLevelLink = secondLevelItem.querySelector(':scope > a');
+          
+          schizoMenu.copyMenuThirdLvl({ 
+            target: secondLevelLink,
+            parentNode: secondLevelItem 
+          });
+          schizoMenu.slideInThirdLvl();
+        }, 150);
+      }
+    }, 100);
   }
 }
 
@@ -382,6 +383,19 @@ export default async function decorate(block) {
     },
     openMenu: () => {
       schizoMenu.menuBtn.classList.add('isActive');
+      
+      // Reset menu state before opening to current item
+      schizoMenu.menusWrap.querySelector('.menu.one').classList.remove('slide-in');
+      schizoMenu.menusWrap.querySelector('.menu.two').classList.remove('slide-in');
+      schizoMenu.menusWrap.querySelector('.menu.three').classList.remove('slide-in');
+      
+      // Clear any existing content in second and third levels
+      const secondLevelMenu = schizoMenu.menusWrap.querySelector('.menu.two ul');
+      if (secondLevelMenu) secondLevelMenu.remove();
+      
+      const thirdLevelMenu = schizoMenu.menusWrap.querySelector('.menu.three ul');
+      if (thirdLevelMenu) thirdLevelMenu.remove();
+
       // Ensure menu structure is ready before opening to current item
       setTimeout(() => {
         openMenuToCurrentItem(schizoMenu);
@@ -406,7 +420,8 @@ export default async function decorate(block) {
       const parentNode = e.parentNode || e.target.parentNode;
       const ulToClone = parentNode.querySelector('ul');
       if (ulToClone) {
-        schizoMenu.menusWrap.querySelector('.menu.two').append(ulToClone.cloneNode(true));
+        const clonedMenu = ulToClone.cloneNode(true);
+        schizoMenu.menusWrap.querySelector('.menu.two').append(clonedMenu);
         schizoMenu.menusWrap.querySelector('.menu.two .back a').textContent = 
           parentNode.querySelector(':scope > a').textContent;
       }
@@ -426,7 +441,8 @@ export default async function decorate(block) {
       const parentNode = e.parentNode || e.target.parentNode;
       const ulToClone = parentNode.querySelector('ul');
       if (ulToClone) {
-        schizoMenu.menusWrap.querySelector('.menu.three').append(ulToClone.cloneNode(true));
+        const clonedMenu = ulToClone.cloneNode(true);
+        schizoMenu.menusWrap.querySelector('.menu.three').append(clonedMenu);
         schizoMenu.menusWrap.querySelector('.menu.three .back a').textContent = 
           parentNode.querySelector(':scope > a').textContent;
       }

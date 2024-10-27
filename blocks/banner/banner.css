@@ -1,0 +1,161 @@
+main .hero-container > div {
+  max-width: unset;
+}
+
+main .hero-container .hero > div {
+    margin-bottom: 4rem;
+}
+
+  
+main .hero-container {
+  min-width: 100%;
+  padding: 0;
+}
+
+main .hero-container::before {
+  background: linear-gradient(
+    0deg,
+    rgb(0 0 0 / 90%) 0%,
+    rgb(0 0 0 / 70%) 50%,
+    rgb(0 0 0 / 0%) 100%
+) ;
+    content: '';
+    height: 100%;
+    position: absolute;
+    width: 100%;
+}
+
+@media (width >= 900px) {
+    main .hero-container {
+        min-height: 745px;
+        position: fixed;
+        top: 0;
+    }
+}
+
+.hero {
+  align-items: center;
+  display: flex;
+  height: 100vh;
+}
+
+/* .hero-wrapper {
+    background: linear-gradient(
+        0deg,
+        rgb(0 0 0 / 90%) 0%,
+        rgb(0 0 0 / 70%) 50%,
+        rgb(0 0 0 / 0%) 100%
+    );
+} */
+
+@media (width >= 900px) {
+  .hero {
+    align-items: end;
+    height: 700px;
+    justify-content: center;
+  }
+  main .hero-container .hero > div {
+    margin: 0;
+  }
+}
+
+.hero > div > div {
+  align-items: end;
+  display: flex;
+  height: 100%;
+}
+
+.hero h1 {
+  align-self: flex-end;
+  color: var(--color-white);
+  font-size: var(--heading-font-size-xxl);
+  line-height: 1;
+  margin: 0 auto;
+  max-width: 900px;
+  padding: 0 1rem;
+  position: relative;
+  text-align: center;
+  z-index: 1;
+}
+
+@media (width >= 900px) {
+  .hero h1 {
+    padding: 0;
+  }
+}
+
+.hero picture {
+  box-sizing: border-box;
+  inset: 0;
+  object-fit: cover;
+  position: absolute;
+  z-index: -1;
+}
+
+.hero img {
+  height: 100%;
+  margin: 0;
+  object-fit: cover;
+  width: 100%;
+}
+
+.breadcrumbs {
+    transform: translateY(-7rem);
+}
+
+.breadcrumbs ol {
+  display: flex;
+  flex-direction: row;
+  gap: 0.2rem;
+  justify-content: center;
+  list-style: none;
+  padding: 0;
+}
+
+.breadcrumbs ol li {
+  &:not(:last-child)::after {
+    color: var(--color-white);
+    content: '-';
+    margin: 0 0 0 0.2rem;
+  }
+}
+
+.breadcrumbs ol li,
+.breadcrumbs ol li a {
+    font-size: var(--body-font-size-xs);
+}
+
+@media (width >= 900px) {
+  .breadcrumbs {
+    position: relative;
+    transform: translateY(-1rem);
+    z-index: 1;
+  }
+
+  .breadcrumbs ol {
+    gap: 1rem;
+  }
+
+  .breadcrumbs ol li,
+  .breadcrumbs ol li a {
+    font-size: var(--body-font-size-s);
+  }
+
+  .breadcrumbs ol li {
+    &:not(:last-child)::after {
+      margin: 0 0  0 1rem;
+    }
+  }
+}
+
+@media (width >= 900px) {
+    .hero {
+  align-items: end;
+
+        &::before {
+            background: linear-gradient(0deg, rgba(0, 0, 0, 0.9) 0%, rgba(0, 0, 0, 0.7) 50%, rgba(0, 0, 0, 0) 100%);
+            height: 300px;
+        }
+    }
+}
+

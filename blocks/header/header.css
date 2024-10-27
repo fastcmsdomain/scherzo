@@ -53,6 +53,9 @@ header nav a:any-link {
 header nav .nav-hamburger {
   align-items: center;
   background-color: var(--color-darker-blue);
+  border: var(--border-darker-blue);
+  box-shadow: var(--box-shadow);
+  cursor: pointer;
   display: flex;
   grid-area: hamburger;
   height: 15px;
@@ -60,6 +63,12 @@ header nav .nav-hamburger {
   position: relative;
   top: 1rem;
 }
+
+header nav .nav-hamburger:hover,
+header nav .nav-hamburger:focus {
+    border: var(--border-gold);
+}
+
 
 header nav .nav-hamburger button {
   background: transparent;
@@ -162,6 +171,7 @@ header nav[aria-expanded="true"] .nav-sections {
   align-items: center;
   background-color: #283048;
   border-top: 1px solid var(--color-gold);
+  box-shadow: var(--box-shadow);
   display: flex;
   justify-content: center;
   opacity: 1;
@@ -290,7 +300,7 @@ header nav .nav-tools {
   header nav .nav-tools {
     bottom: inherit;
     right: 2rem;
-    top: 2rem;
+    top: 1.4rem;
     width: auto;
   }
 }

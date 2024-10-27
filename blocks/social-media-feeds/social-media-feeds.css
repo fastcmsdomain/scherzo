@@ -17,7 +17,7 @@ body.social-media-page::before {
 
 .social-media-feed-item {
   background-color: var(--color-darker-blue);
-  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.6);
+  box-shadow: var(--box-shadow);
   color: inherit;
   display: flex;
   flex-direction: column;
@@ -171,7 +171,7 @@ form.search-form {
   color: var(--color-gold);
   font-family: var(--body-font-family);
   font-size: var(--body-font-size-s);
-  padding: var(--space-16) var(--space-36);
+  padding: var(--space-16) var(--space-16);
 }
 
 .search-input::placeholder {

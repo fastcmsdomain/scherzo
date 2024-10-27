@@ -56,7 +56,11 @@
 
   /* nav height */
   --nav-height: 64px;
-
+  
+  /* box-shadow */
+  --box-shadow: 0 0 10px 0 rgb(0 0 0 / 50%);
+  --border-gold: 1px solid var(--color-gold);
+  --border-darker-blue: 1px solid var(--color-darker-blue);
 
   /* Spaces */
   --space-66: 66px;
@@ -100,8 +104,8 @@ body {
 body::before {
   background: linear-gradient(
     180deg,
-    rgb(0 0 0 / 90%) 0%,
-    rgb(0 0 0 / 70%) 50%,
+    rgb(0 0 0 / 70%) 0%,
+    rgb(0 0 0 / 50%) 50%,
     rgb(0 0 0 / 0%) 100%
   );
   content: "";
@@ -259,7 +263,6 @@ main img {
 }
 
 .icon img {
-  height: 100%;
   width: 100%;
 }
 
@@ -299,9 +302,4 @@ main .section {
 main .section.light,
 main .section.highlight {
   background-color: var(--light-color);
-}
-
-.section.content {
-    padding-bottom: 2px;
-    padding-top: 2rem;
 }

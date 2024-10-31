@@ -8,12 +8,13 @@
 }
 
 .accordion details summary {
-  position: relative;
-  padding: 0 16px;
-  padding-right: 48px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.6);
   cursor: pointer;
   list-style: none;
   overflow: auto;
+  padding: 0 16px;
+  padding-right: 48px;
+  position: relative;
   transition: background-color 0.2s;
 }
 
@@ -31,16 +32,16 @@
 }
 
 .accordion details summary::after {
-  content: "";
-  position: absolute;
-  top: 50%;
-  right: 18px;
-  transform: translateY(-50%) rotate(135deg);
-  width: 9px;
-  height: 9px;
   border: 2px solid;
   border-width: 2px 2px 0 0;
+  content: "";
+  height: 9px;
+  position: absolute;
+  right: 18px;
+  top: 50%;
+  transform: translateY(-50%) rotate(135deg);
   transition: transform 0.2s;
+  width: 9px;
 }
 
 .accordion details[open] summary::after {
@@ -52,6 +53,11 @@
 }
 
 .accordion details[open] .accordion-item-body {
+  background-color: var(--color-darker-blue);
   border-top: 1px solid var(--dark-color);
-  background-color: var(--background-color);
+}
+
+.accordion details.accordion-item {
+    background-color: var(--color-darker-blue);
+    border-bottom: 1px solid var(--color-white);
 }

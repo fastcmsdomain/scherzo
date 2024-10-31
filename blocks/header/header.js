@@ -147,11 +147,11 @@ async function buildBreadcrumbs() {
  */
 function markCurrentPageInMenu(nav, currentPath = null) {
   // Clear existing current markers
-  nav.querySelectorAll('.current').forEach(item => item.classList.remove('current'));
-  
+  nav.querySelectorAll('.current').forEach((item) => item.classList.remove('current'));
+
   const pathToMark = currentPath || window.location.pathname;
   const menuItems = nav.querySelectorAll('.nav-sections a');
-  
+
   menuItems.forEach((link) => {
     if (link.pathname === pathToMark) {
       const menuItem = link.closest('li');
@@ -159,23 +159,23 @@ function markCurrentPageInMenu(nav, currentPath = null) {
         // Store the path information
         const pathInfo = [];
         let currentElement = menuItem;
-        
+
         while (currentElement) {
           if (currentElement.tagName === 'LI') {
             const linkElement = currentElement.querySelector(':scope > a');
             if (linkElement) {
               pathInfo.unshift({
                 path: linkElement.pathname,
-                text: linkElement.textContent
+                text: linkElement.textContent,
               });
             }
           }
           currentElement = currentElement.closest('ul')?.closest('li');
         }
-        
+
         // Store path info in localStorage
         localStorage.setItem('currentMenuPath', JSON.stringify(pathInfo));
-        
+
         // Mark current and parent items
         menuItem.classList.add('current');
         let parentLi = menuItem.closest('ul')?.closest('li');
@@ -209,10 +209,10 @@ function openMenuToCurrentItem(schizoMenu) {
       // If we have a first level item with children
       if (menuPath[0]) {
         const firstLevelLink = menuPath[0].querySelector(':scope > a');
-        await new Promise(resolve => {
-          schizoMenu.copyMenuSecondLvl({ 
+        await new Promise((resolve) => {
+          schizoMenu.copyMenuSecondLvl({
             target: firstLevelLink,
-            parentNode: menuPath[0]
+            parentNode: menuPath[0],
           });
           schizoMenu.slideInSecondLvl();
           setTimeout(resolve, 300);
@@ -222,10 +222,10 @@ function openMenuToCurrentItem(schizoMenu) {
       // If we have a second level item with children
       if (menuPath[1]) {
         const secondLevelLink = menuPath[1].querySelector(':scope > a');
-        await new Promise(resolve => {
-          schizoMenu.copyMenuThirdLvl({ 
+        await new Promise((resolve) => {
+          schizoMenu.copyMenuThirdLvl({
             target: secondLevelLink,
-            parentNode: menuPath[1]
+            parentNode: menuPath[1],
           });
           schizoMenu.slideInThirdLvl();
           setTimeout(resolve, 300);
@@ -342,7 +342,7 @@ export default async function decorate(block) {
   // Check if breadcrumbs are enabled AND we're not on the home page
   const isHomePage = window.location.pathname === '/' || window.location.pathname === '/index.html';
   const isBreadcrumbsEnabled = getMetadata('breadcrumbs').toLowerCase() === 'true';
-  
+
   if (isBreadcrumbsEnabled && !isHomePage) {
     const heroWrapper = document.querySelector('.hero-wrapper');
     if (heroWrapper) {
@@ -382,13 +382,13 @@ export default async function decorate(block) {
       });
 
       // Add click event listeners to all menu links
-      schizoMenu.menusWrap.querySelectorAll('.menu a').forEach(link => {
+      schizoMenu.menusWrap.querySelectorAll('.menu a').forEach((link) => {
         link.addEventListener('click', (e) => {
           if (!link.closest('li')?.classList.contains('has-children')) {
             // Store the clicked path before navigation
             const pathInfo = {
               path: link.pathname,
-              timestamp: Date.now()
+              timestamp: Date.now(),
             };
             sessionStorage.setItem('lastClickedPath', JSON.stringify(pathInfo));
           }
@@ -472,22 +472,22 @@ export default async function decorate(block) {
     },
     openMenu: () => {
       schizoMenu.menuBtn.classList.add('isActive');
-      
+
       const resetMenuState = () => {
-        schizoMenu.menusWrap.querySelectorAll('.menu').forEach(menu => {
+        schizoMenu.menusWrap.querySelectorAll('.menu').forEach((menu) => {
           menu.classList.remove('slide-in');
           menu.classList.remove('hide');
         });
 
         const secondLevel = schizoMenu.menusWrap.querySelector('.menu.two ul');
         const thirdLevel = schizoMenu.menusWrap.querySelector('.menu.three ul');
-        
+
         if (secondLevel) secondLevel.remove();
         if (thirdLevel) thirdLevel.remove();
       };
 
       resetMenuState();
-      
+
       // Try to restore path from storage
       const storedPath = localStorage.getItem('currentMenuPath');
       if (storedPath) {
@@ -496,7 +496,7 @@ export default async function decorate(block) {
       } else {
         markCurrentPageInMenu(schizoMenu.menusWrap);
       }
-      
+
       openMenuToCurrentItem(schizoMenu);
     },
     slideInSecondLvl: () => {
@@ -514,7 +514,7 @@ export default async function decorate(block) {
     copyMenuSecondLvl: (e) => {
       const secondLevelMenu = schizoMenu.menusWrap.querySelector('.menu.two ul');
       if (secondLevelMenu) secondLevelMenu.remove();
-      
+
       const parentNode = e.parentNode || e.target.parentNode;
       if (!parentNode) return;
 
@@ -539,7 +539,7 @@ export default async function decorate(block) {
     copyMenuThirdLvl: (e) => {
       const thirdLevelMenu = schizoMenu.menusWrap.querySelector('.menu.three ul');
       if (thirdLevelMenu) thirdLevelMenu.remove();
-      
+
       const parentNode = e.parentNode || e.target.parentNode;
       if (!parentNode) return;
 
@@ -563,18 +563,18 @@ window.addEventListener('beforeunload', () => {
   const currentItems = document.querySelectorAll('.current');
   if (currentItems.length) {
     const pathInfo = [];
-    currentItems.forEach(item => {
+    currentItems.forEach((item) => {
       const link = item.querySelector('a');
       if (link) {
         pathInfo.push({
           path: link.pathname,
-          text: link.textContent
+          text: link.textContent,
         });
       }
     });
     sessionStorage.setItem('lastClickedPath', JSON.stringify({
       path: window.location.pathname,
-      timestamp: Date.now()
+      timestamp: Date.now(),
     }));
   }
 });

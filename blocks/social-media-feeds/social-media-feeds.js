@@ -235,9 +235,7 @@ export default async function decorate(block) {
 
   function handleSearch(keyword) {
     const searchTerm = keyword.toLowerCase();
-    const filteredFeed = combinedFeed.filter((item) => 
-      item.title.toLowerCase().includes(searchTerm)
-    );
+    const filteredFeed = combinedFeed.filter((item) => item.title.toLowerCase().includes(searchTerm));
     renderFeed(filteredFeed);
 
     // Reset active state on filter buttons

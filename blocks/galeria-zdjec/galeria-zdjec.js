@@ -58,7 +58,7 @@ class GalleryModal {
     // Keyboard navigation
     document.addEventListener('keydown', (e) => {
       if (!this.isOpen) return;
-      
+
       switch (e.key) {
         case GALLERY_CONFIG.KEYS.ESCAPE:
           this.close();
@@ -115,13 +115,13 @@ export default async function decorate(block) {
   block.querySelectorAll('picture').forEach((picture) => {
     const img = picture.querySelector('img');
     const caption = picture.nextElementSibling;
-    
+
     const galleryItem = document.createElement('div');
     galleryItem.className = 'galeria-zdjec-item';
-    
+
     const thumbnail = img.cloneNode(true);
     thumbnail.className = 'galeria-zdjec-thumbnail';
-    
+
     if (caption) {
       const captionElement = document.createElement('p');
       captionElement.className = 'galeria-zdjec-caption';
@@ -154,4 +154,4 @@ export default async function decorate(block) {
   // Replace block content with gallery
   block.textContent = '';
   block.appendChild(content);
-} 
+}

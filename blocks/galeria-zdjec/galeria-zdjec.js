@@ -47,6 +47,14 @@ class GalleryModal {
     this.modal.querySelector('.galeria-zdjec-modal-prev').addEventListener('click', () => this.showPrevious());
     this.modal.querySelector('.galeria-zdjec-modal-next').addEventListener('click', () => this.showNext());
 
+    // Close modal when clicking outside
+    this.modal.addEventListener('click', (e) => {
+      // Check if click is outside the modal content
+      if (e.target === this.modal) {
+        this.close();
+      }
+    });
+
     // Keyboard navigation
     document.addEventListener('keydown', (e) => {
       if (!this.isOpen) return;
@@ -98,9 +106,9 @@ class GalleryModal {
 }
 
 export default async function decorate(block) {
-  // Create container for gallery items
-  const container = document.createElement('div');
-  container.className = 'galeria-zdjec-container';
+  // Create content for gallery items
+  const content = document.createElement('div');
+  content.className = 'galeria-zdjec-content';
 
   // Process all images in the block
   const images = [];
@@ -125,14 +133,14 @@ export default async function decorate(block) {
     }
 
     images.push(img);
-    container.appendChild(galleryItem);
+    content.appendChild(galleryItem);
   });
 
   // Initialize modal
   const modal = new GalleryModal(images);
 
   // Add click and keyboard event listeners to thumbnails
-  container.querySelectorAll('.galeria-zdjec-item').forEach((item, index) => {
+  content.querySelectorAll('.galeria-zdjec-item').forEach((item, index) => {
     item.addEventListener('click', () => modal.open(index));
     item.addEventListener('keydown', (e) => {
       if (e.key === GALLERY_CONFIG.KEYS.ENTER) {
@@ -145,5 +153,5 @@ export default async function decorate(block) {
 
   // Replace block content with gallery
   block.textContent = '';
-  block.appendChild(container);
+  block.appendChild(content);
 } 

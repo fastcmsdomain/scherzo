@@ -1,0 +1,115 @@
+/* Gallery configuration */
+.galeria-zdjec {
+  --gallery-gap: 2rem;
+  --thumbnail-width: 300px;
+  --thumbnail-height: 250px;
+  --shadow-color: rgba(0, 0, 0, 0.2);
+  --transition-duration: 0.3s;
+  --modal-bg: rgba(0, 0, 0, 0.9);
+  --modal-control-size: 40px;
+  --modal-control-color: #fff;
+}
+
+/* Gallery grid layout */
+.galeria-zdjec-container {
+  display: grid;
+  gap: var(--gallery-gap);
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  padding: var(--gallery-gap);
+}
+
+/* Thumbnail styles */
+.galeria-zdjec-item {
+  cursor: pointer;
+  position: relative;
+  transition: transform var(--transition-duration) ease;
+}
+
+.galeria-zdjec-item:hover,
+.galeria-zdjec-item:focus-within {
+  transform: scale(1.05);
+}
+
+.galeria-zdjec-thumbnail {
+  box-shadow: 0 4px 8px var(--shadow-color);
+  height: var(--thumbnail-height);
+  object-fit: cover;
+  width: 100%;
+}
+
+.galeria-zdjec-caption {
+  font-size: 0.9rem;
+  margin-top: 0.5rem;
+  text-align: center;
+}
+
+/* Modal styles */
+.galeria-zdjec-modal {
+  background: var(--modal-bg);
+  display: none;
+  height: 100%;
+  left: 0;
+  padding: 2rem;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 1000;
+}
+
+.galeria-zdjec-modal.active {
+  align-items: center;
+  display: flex;
+  justify-content: center;
+}
+
+.galeria-zdjec-modal-content {
+  max-height: 90vh;
+  max-width: 90vw;
+  position: relative;
+}
+
+.galeria-zdjec-modal-image {
+  max-height: 90vh;
+  max-width: 100%;
+  object-fit: contain;
+}
+
+/* Modal controls */
+.galeria-zdjec-modal-close,
+.galeria-zdjec-modal-prev,
+.galeria-zdjec-modal-next {
+  align-items: center;
+  background: transparent;
+  border: none;
+  color: var(--modal-control-color);
+  cursor: pointer;
+  display: flex;
+  height: var(--modal-control-size);
+  justify-content: center;
+  position: absolute;
+  transition: opacity var(--transition-duration) ease;
+  width: var(--modal-control-size);
+}
+
+.galeria-zdjec-modal-close:hover,
+.galeria-zdjec-modal-prev:hover,
+.galeria-zdjec-modal-next:hover {
+  opacity: 0.8;
+}
+
+.galeria-zdjec-modal-close {
+  right: 1rem;
+  top: 1rem;
+}
+
+.galeria-zdjec-modal-prev {
+  left: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.galeria-zdjec-modal-next {
+  right: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+} 

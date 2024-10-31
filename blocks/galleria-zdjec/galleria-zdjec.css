@@ -1,3 +1,8 @@
+.full-content {
+    margin-top: 14rem;
+}
+
+
 :root {
   --galleria-zdjec-max-width: 900px;
   --galleria-zdjec-thumbnail-size: 250px;
@@ -9,24 +14,24 @@
 }
 
 .galleria-zdjec {
-  max-width: var(--galleria-zdjec-max-width);
   margin: 0 auto;
+  max-width: var(--galleria-zdjec-max-width);
 }
 
 .galleria-zdjec-thumbnails {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(var(--galleria-zdjec-thumbnail-size), 1fr));
   gap: 20px;
+  grid-template-columns: repeat(auto-fill, minmax(var(--galleria-zdjec-thumbnail-size), 1fr));
   justify-content: center;
 }
 
 .galleria-zdjec-thumbnail {
-  width: var(--galleria-zdjec-thumbnail-size);
-  height: var(--galleria-zdjec-thumbnail-size);
   border-radius: var(--galleria-zdjec-border-radius);
-  overflow: hidden;
   cursor: pointer;
+  height: var(--galleria-zdjec-thumbnail-size);
+  overflow: hidden;
   transition: opacity 0.3s ease;
+  width: var(--galleria-zdjec-thumbnail-size);
 }
 
 .galleria-zdjec-thumbnail:hover {
@@ -34,66 +39,66 @@
 }
 
 .galleria-zdjec-thumbnail img {
-  width: 100%;
   height: 100%;
   object-fit: cover;
+  width: 100%;
 }
 
 .galleria-zdjec-modal {
-  display: none;
-  position: fixed;
-  z-index: 1000;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
   background-color: var(--galleria-zdjec-modal-bg);
+  display: none;
+  height: 100%;
+  left: 0;
   opacity: 0;
+  position: fixed;
+  top: 0;
   transition: opacity 0.3s ease;
+  width: 100%;
+  z-index: 1000;
 }
 
 .galleria-zdjec-modal.open {
+  align-items: center;
   display: flex;
   justify-content: center;
-  align-items: center;
   opacity: 1;
 }
 
 .galleria-zdjec-modal-content {
-  position: relative;
-  max-width: 90%;
-  max-height: 90%;
   border-radius: var(--galleria-zdjec-border-radius);
+  max-height: 90%;
+  max-width: 90%;
   overflow: hidden;
+  position: relative;
 }
 
 .galleria-zdjec-modal-content img {
   display: block;
-  width: 100%;
   height: 100%;
   object-fit: contain;
+  width: 100%;
 }
 
 .galleria-zdjec-close {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  font-size: 30px;
-  color: var(--galleria-zdjec-button-color);
   background: none;
   border: none;
+  color: var(--galleria-zdjec-button-color);
   cursor: pointer;
+  font-size: 30px;
+  position: absolute;
+  right: 10px;
+  top: 10px;
 }
 
 .galleria-zdjec-load-more {
+  background-color: var(--galleria-zdjec-button-bg);
+  border: none;
+  border-radius: 5px;
+  color: var(--galleria-zdjec-button-color);
+  cursor: pointer;
   display: block;
   margin: 20px auto;
   padding: 10px 20px;
-  background-color: var(--galleria-zdjec-button-bg);
-  color: var(--galleria-zdjec-button-color);
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
 }
 
 @media (max-width: 1200px) {

@@ -81,7 +81,6 @@
 .galeria-zdjec-modal-image {
   max-height: 100vh;
   max-width: 100%;
-  min-width: 1200px;
   object-fit: contain;
 }
 

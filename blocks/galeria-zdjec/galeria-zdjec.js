@@ -10,9 +10,9 @@ const GALLERY_CONFIG = {
   },
   ARIA: {
     LABELS: {
-      CLOSE: 'Close gallery',
-      PREVIOUS: 'Previous image',
-      NEXT: 'Next image',
+      CLOSE: 'Zamknij galerię',
+      PREVIOUS: 'Poprzednie obraz',
+      NEXT: 'Następny obraz',
     },
   },
 };

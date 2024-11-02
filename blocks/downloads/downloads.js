@@ -1,7 +1,7 @@
 // Configuration constants
 const DOWNLOAD_CONFIG = {
   ARIA_LABELS: {
-    BUTTON: 'Download document',
+    BUTTON: 'Download',
     SIZE: 'File size',
   },
   CLASSES: {
@@ -9,6 +9,7 @@ const DOWNLOAD_CONFIG = {
     ICON: 'download-icon',
     INFO: 'download-info',
     SIZE: 'download-size',
+    FILENAME: 'download-filename',
   },
   PATTERNS: {
     GOOGLE_DRIVE: /^https:\/\/drive\.google\.com\/file\/d\/([a-zA-Z0-9_-]+)\/view\?usp=sharing$/,
@@ -49,12 +50,12 @@ function formatFileSize(bytes) {
   const units = ['B', 'KB', 'MB', 'GB'];
   let size = bytes;
   let unitIndex = 0;
-  
+
   while (size >= 1024 && unitIndex < units.length - 1) {
     size /= 1024;
     unitIndex++;
   }
-  
+
   return `${Math.round(size * 10) / 10} ${units[unitIndex]}`;
 }
 
@@ -71,6 +72,7 @@ function createDownloadButton(url, filename, size) {
   button.className = DOWNLOAD_CONFIG.CLASSES.BUTTON;
   button.setAttribute('role', 'button');
   button.setAttribute('aria-label', `${DOWNLOAD_CONFIG.ARIA_LABELS.BUTTON} ${filename}`);
+  button.setAttribute('download', '');
   button.setAttribute('target', '_blank');
   button.setAttribute('rel', 'noopener noreferrer');
 
@@ -78,12 +80,17 @@ function createDownloadButton(url, filename, size) {
   const icon = document.createElement('span');
   icon.className = DOWNLOAD_CONFIG.CLASSES.ICON;
   icon.innerHTML = DOWNLOAD_CONFIG.ICONS.PDF;
-  
-  // Add filename and size info
+
+  // Add filename as a link
+  const filenameLink = document.createElement('span');
+  filenameLink.className = DOWNLOAD_CONFIG.CLASSES.FILENAME;
+  filenameLink.textContent = filename;
+
+  // Add info container
   const info = document.createElement('span');
   info.className = DOWNLOAD_CONFIG.CLASSES.INFO;
-  info.textContent = filename;
-  
+  info.appendChild(filenameLink);
+
   if (size) {
     const sizeElement = document.createElement('span');
     sizeElement.className = DOWNLOAD_CONFIG.CLASSES.SIZE;
@@ -94,7 +101,7 @@ function createDownloadButton(url, filename, size) {
 
   button.appendChild(icon);
   button.appendChild(info);
-  
+
   return button;
 }
 
@@ -105,24 +112,24 @@ function createDownloadButton(url, filename, size) {
 export default async function decorate(block) {
   // Get file information from the block content
   const rows = [...block.children];
-  
+
   // Process each row as a download item
   rows.forEach((row) => {
     const cells = [...row.children];
     let fileUrl = cells[0]?.textContent?.trim() || '';
     const fileName = cells[1]?.textContent?.trim() || '';
     const fileSize = cells[2]?.textContent?.trim() || '';
-    
+
     if (fileUrl) {
       // Convert Google Drive URL if necessary
       fileUrl = convertGoogleDriveUrl(fileUrl);
-      
+
       const downloadButton = createDownloadButton(
         fileUrl,
         fileName || fileUrl.split('/').pop(),
-        formatFileSize(parseInt(fileSize, 10))
+        formatFileSize(parseInt(fileSize, 10)),
       );
-      
+
       // Replace row content with download button
       row.innerHTML = '';
       row.appendChild(downloadButton);

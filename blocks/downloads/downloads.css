@@ -1,7 +1,7 @@
 .download {
     --download-primary-color: var(--link-color, #2558ef);
     --download-hover-color: var(--link-hover-color, #1a3fa0);
-    --download-background: var(--background-color, #ffffff);
+    --download-background: var(--background-color, #fff);
     --download-border-color: var(--border-color, #e5e7eb);
     --download-border-radius: var(--border-radius-medium, 8px);
     --download-spacing: var(--spacing-small, 1rem);
@@ -53,8 +53,14 @@
   }
   
   /* Responsive adjustments */
-  @media (max-width: 768px) {
+  @media (width <= 768px) {
     .download-button {
       padding: calc(var(--download-spacing) * 0.75);
     }
+  }
+  
+  .download-filename {
+    color: inherit;
+    font-weight: 500;
+    text-decoration: none;
   }

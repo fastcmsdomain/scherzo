@@ -1,0 +1,60 @@
+.download {
+    --download-primary-color: var(--link-color, #2558ef);
+    --download-hover-color: var(--link-hover-color, #1a3fa0);
+    --download-background: var(--background-color, #ffffff);
+    --download-border-color: var(--border-color, #e5e7eb);
+    --download-border-radius: var(--border-radius-medium, 8px);
+    --download-spacing: var(--spacing-small, 1rem);
+  }
+  
+  .download > div {
+    margin-bottom: var(--download-spacing);
+  }
+  
+  .download-button {
+    align-items: center;
+    background: var(--download-background);
+    border: 1px solid var(--download-border-color);
+    border-radius: var(--download-border-radius);
+    color: var(--download-primary-color);
+    display: flex;
+    gap: var(--download-spacing);
+    padding: var(--download-spacing);
+    text-decoration: none;
+    transition: all 0.3s ease;
+  }
+  
+  .download-button:hover,
+  .download-button:focus {
+    background: var(--download-primary-color);
+    border-color: var(--download-primary-color);
+    color: var(--download-background);
+  }
+  
+  .download-icon {
+    flex-shrink: 0;
+  }
+  
+  .download-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+  
+  .download-size {
+    font-size: 0.875rem;
+    opacity: 0.8;
+  }
+  
+  /* Focus styles for accessibility */
+  .download-button:focus-visible {
+    outline: 2px solid var(--download-primary-color);
+    outline-offset: 2px;
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .download-button {
+      padding: calc(var(--download-spacing) * 0.75);
+    }
+  }

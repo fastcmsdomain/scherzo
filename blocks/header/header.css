@@ -52,36 +52,38 @@ header nav a:any-link {
 /* hamburger */
 header nav .nav-hamburger {
   align-items: center;
-  background-color: var(--color-darker-blue);
-  border: var(--border-darker-blue);
-  box-shadow: var(--box-shadow);
+  border: 0;
   cursor: pointer;
   display: flex;
   grid-area: hamburger;
   height: 15px;
+  justify-content: center;
   left: 2rem;
-  padding: 1rem;
   position: fixed;
-  top: 1rem;
+  top: 2.4rem;
+  z-index: 1;
 }
-
-header nav .nav-hamburger:hover,
-header nav .nav-hamburger:focus {
-    border: var(--border-gold);
-}
-
 
 header nav .nav-hamburger button {
-  background: transparent;
-  border: 0;
+  align-items: center;
+  background-color: var(--color-darker-blue);
+  border: 1px solid var(--color-darker-blue);
   border-radius: 0;
+  border-top: 1px solid var(--color-gold);
+  box-shadow: var(--box-shadow);
   color: inherit;
+  display: flex;
   height: 22px;
+  justify-content: center;
   margin: 0;
   overflow: initial;
-  padding: 0;
+  padding: 1.4rem 1rem ;
   text-overflow: initial;
   white-space: initial;
+}
+
+header nav .nav-hamburger button:hover {
+  border: 1px solid var(--color-gold);
 }
 
 header nav .nav-hamburger-icon,
@@ -144,7 +146,9 @@ header .nav-brand {
   justify-self: center;
   position: absolute;
   top: 2rem;
+  transition: opacity .3s ease;
   z-index: 0;
+  
 }
 
 header nav .nav-brand a {
@@ -169,6 +173,7 @@ header nav .nav-brand a:focus {
   text-decoration: none;
   transform: scale(1.02);
 }
+
 
 
 /* sections */
@@ -319,6 +324,7 @@ header nav .nav-sections ul > li > ul > li {
 header nav .nav-tools {
   align-items: center;
   background: var(--color-darker-blue);
+  border-top: 1px solid var(--color-gold);
   bottom: 0;
   display: flex;
   grid-area: tools;
@@ -330,10 +336,16 @@ header nav .nav-tools {
   
 @media (width >= 900px) {
   header nav .nav-tools {
+    border: 1px solid var(--color-darker-blue);
+    border-top: 1px solid var(--color-gold);
     bottom: inherit;
     right: 2rem;
     top: 1.4rem;
     width: auto;
+  }
+
+  header nav .nav-tools:hover {
+    border: 1px solid var(--color-gold);
   }
 }
 

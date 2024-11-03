@@ -53,7 +53,7 @@ function formatFileSize(bytes) {
 
   while (size >= 1024 && unitIndex < units.length - 1) {
     size /= 1024;
-    unitIndex++;
+    unitIndex += 1;
   }
 
   return `${Math.round(size * 10) / 10} ${units[unitIndex]}`;
@@ -81,10 +81,10 @@ function createDownloadButton(url, filename, size) {
   icon.className = DOWNLOAD_CONFIG.CLASSES.ICON;
   icon.innerHTML = DOWNLOAD_CONFIG.ICONS.PDF;
 
-  // Add filename as a link
+  // Add filename with size in brackets
   const filenameLink = document.createElement('span');
   filenameLink.className = DOWNLOAD_CONFIG.CLASSES.FILENAME;
-  filenameLink.textContent = filename;
+  filenameLink.textContent = size ? `${filename} (${size})` : filename;
 
   // Add info container
   const info = document.createElement('span');

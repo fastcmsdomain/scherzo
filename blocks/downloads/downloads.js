@@ -12,6 +12,7 @@ const DOWNLOAD_CONFIG = {
     FILENAME: 'download-filename',
     LINK: 'downloads-link',
     NAME: 'downloads-name',
+    SIZE_CLASS: 'downloads-size',
   },
   PATTERNS: {
     GOOGLE_DRIVE: /^https:\/\/drive\.google\.com\/file\/d\/([a-zA-Z0-9_-]+)\/view\?usp=sharing$/,
@@ -83,28 +84,41 @@ function createDownloadButton(url, filename, size) {
   icon.className = DOWNLOAD_CONFIG.CLASSES.ICON;
   icon.innerHTML = DOWNLOAD_CONFIG.ICONS.PDF;
 
-  // Add filename as a link
+  // Add filename with size in brackets
   const filenameLink = document.createElement('span');
   filenameLink.className = DOWNLOAD_CONFIG.CLASSES.FILENAME;
-  filenameLink.textContent = filename;
+  filenameLink.textContent = size ? `${filename} (${size})` : filename;
 
   // Add info container
   const info = document.createElement('span');
   info.className = DOWNLOAD_CONFIG.CLASSES.INFO;
   info.appendChild(filenameLink);
 
-  if (size) {
-    const sizeElement = document.createElement('span');
-    sizeElement.className = DOWNLOAD_CONFIG.CLASSES.SIZE;
-    sizeElement.setAttribute('aria-label', `${DOWNLOAD_CONFIG.ARIA_LABELS.SIZE}: ${size}`);
-    sizeElement.textContent = size;
-    info.appendChild(sizeElement);
-  }
-
   button.appendChild(icon);
   button.appendChild(info);
 
   return button;
+}
+
+/**
+ * Fetches the file size from the URL
+ * @param {string} url - URL of the file
+ * @returns {Promise<number>} File size in bytes
+ */
+async function getFileSize(url) {
+  try {
+    const response = await fetch(url, { method: 'HEAD' });
+    if (!response.ok) {
+      // eslint-disable-next-line no-console
+      console.error('Error fetching file size:', response.statusText);
+      return 0;
+    }
+    return parseInt(response.headers.get('content-length'), 10) || 0;
+  } catch (error) {
+    // eslint-disable-next-line no-console
+    console.error('Error fetching file size:', error);
+    return 0;
+  }
 }
 
 /**
@@ -116,24 +130,27 @@ export default async function decorate(block) {
   const rows = [...block.children];
 
   // Process each row as a download item
-  rows.forEach((row) => {
+  await Promise.all(rows.map(async (row, index) => {
     const cells = [...row.children];
-    
-    // Add classes to cells
-    if (cells[0]) {
-      cells[0].className = DOWNLOAD_CONFIG.CLASSES.LINK;
-    }
-    if (cells[1]) {
-      cells[1].className = DOWNLOAD_CONFIG.CLASSES.NAME;
-    }
+
+    // Add classes to the row div based on position
+    if (index === 0) row.className = DOWNLOAD_CONFIG.CLASSES.LINK;
+    if (index === 1) row.className = DOWNLOAD_CONFIG.CLASSES.NAME;
+    if (index === 2) row.className = DOWNLOAD_CONFIG.CLASSES.SIZE_CLASS;
 
     let fileUrl = cells[0]?.textContent?.trim() || '';
     const fileName = cells[1]?.textContent?.trim() || '';
-    const fileSize = cells[2]?.textContent?.trim() || '';
+    let fileSize = cells[2]?.textContent?.trim() || '';
 
     if (fileUrl) {
       // Convert Google Drive URL if necessary
       fileUrl = convertGoogleDriveUrl(fileUrl);
+
+      // Fetch file size if not provided
+      if (!fileSize) {
+        const size = await getFileSize(fileUrl);
+        fileSize = size.toString();
+      }
 
       const downloadButton = createDownloadButton(
         fileUrl,
@@ -141,9 +158,11 @@ export default async function decorate(block) {
         formatFileSize(parseInt(fileSize, 10)),
       );
 
-      // Replace row content with download button
+      // Use object destructuring for className
+      const { className } = row;
       row.innerHTML = '';
+      row.className = className;
       row.appendChild(downloadButton);
     }
-  });
+  }));
 }

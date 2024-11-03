@@ -9,6 +9,19 @@ body.home .footer-wrapper {
   z-index: 2;
 }
 
+.footer-wrapper::before {
+    background-image: url('/images/school.jpeg');
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    bottom: 0;
+    content: '';
+    height: 100%;
+    left: 0;
+    position: absolute;
+    width: 100%;
+}
+
 body.show-footer .footer-wrapper {
   opacity: 1;
   pointer-events: auto;

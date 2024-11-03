@@ -101,51 +101,6 @@ function createDownloadButton(url, filename, size) {
 }
 
 /**
- * Fetches the file size from the URL with fallback options
- * @param {string} url - URL of the file
- * @returns {Promise<number>} File size in bytes
- */
-async function getFileSize(url) {
-  // Skip size check for Google Drive URLs as they require authentication
-  if (url.includes('drive.google.com')) {
-    return 0;
-  }
-
-  try {
-    // Try HEAD request first
-    const response = await fetch(url, {
-      method: 'HEAD',
-      mode: 'cors',
-      credentials: 'same-origin',
-    });
-
-    if (response.ok) {
-      return parseInt(response.headers.get('content-length'), 10) || 0;
-    }
-
-    // If HEAD fails, try a range request
-    const rangeResponse = await fetch(url, {
-      method: 'GET',
-      headers: { Range: 'bytes=0-0' },
-      mode: 'cors',
-      credentials: 'same-origin',
-    });
-
-    if (rangeResponse.ok && rangeResponse.headers.get('content-range')) {
-      const range = rangeResponse.headers.get('content-range');
-      const size = range.split('/')[1];
-      return parseInt(size, 10) || 0;
-    }
-
-    return 0;
-  } catch (error) {
-    // eslint-disable-next-line no-console
-    console.warn('File size fetch failed:', error.message);
-    return 0;
-  }
-}
-
-/**
  * Decorates the download block
  * @param {HTMLElement} block - The block element to decorate
  */
@@ -154,7 +109,7 @@ export default async function decorate(block) {
   const rows = [...block.children];
 
   // Process each row as a download item
-  await Promise.all(rows.map(async (row, index) => {
+  rows.forEach((row, index) => {
     const cells = [...row.children];
 
     // Add classes to the row div based on position
@@ -164,17 +119,11 @@ export default async function decorate(block) {
 
     let fileUrl = cells[0]?.textContent?.trim() || '';
     const fileName = cells[1]?.textContent?.trim() || '';
-    let fileSize = cells[2]?.textContent?.trim() || '';
+    const fileSize = cells[2]?.textContent?.trim() || '';
 
     if (fileUrl) {
       // Convert Google Drive URL if necessary
       fileUrl = convertGoogleDriveUrl(fileUrl);
-
-      // Only fetch file size if not provided and URL is from same origin
-      if (!fileSize && (new URL(fileUrl, window.location.href).origin === window.location.origin)) {
-        const size = await getFileSize(fileUrl);
-        fileSize = size.toString();
-      }
 
       const downloadButton = createDownloadButton(
         fileUrl,
@@ -188,5 +137,5 @@ export default async function decorate(block) {
       row.className = className;
       row.appendChild(downloadButton);
     }
-  }));
+  });
 }

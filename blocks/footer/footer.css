@@ -9,19 +9,6 @@ body.home .footer-wrapper {
   z-index: 2;
 }
 
-.footer-wrapper::before {
-    background-image: url('/images/school.jpeg');
-    background-position: center;
-    background-repeat: no-repeat;
-    background-size: cover;
-    bottom: 0;
-    content: '';
-    height: 100%;
-    left: 0;
-    position: absolute;
-    width: 100%;
-}
-
 body.show-footer .footer-wrapper {
   opacity: 1;
   pointer-events: auto;
@@ -37,7 +24,6 @@ footer {
 
 footer .footer {
   margin: auto;
-  max-width: 1440px;
   padding: 4rem 2rem;
 }
 
@@ -106,13 +92,39 @@ footer .button-container a.button {
 }
 
 @media (width >= 900px) {
-    footer .footer {
-        padding: 4rem 7.5rem 0;
+    footer {
+        border-top: none;
     }
 
-  footer .footer > div {
-    display: grid;
-    gap: var(--space-36);
-    grid-template-columns: repeat(3, 1fr);
-  }
+    footer .footer {
+        background-color: hsl(225deg 29% 22% / 90%);
+        padding: 25rem 2rem 0;
+        position: relative;
+        z-index: 1;
+    }
+
+    .footer-wrapper::before {
+        background-image: url('/images/school.jpeg');
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: cover;
+        bottom: 0;
+        content: '';
+        height: 100%;
+        left: 0;
+        position: absolute;
+        width: 100%;
+    }
+
+    footer .footer > div {
+        background-color: var(--color-darker-blue);
+        border: 1px solid var(--color-gold);
+        border-bottom: none;
+        display: grid;
+        gap: var(--space-36);
+        grid-template-columns: repeat(3, 1fr);
+        padding: 2rem 2rem 0;
+        position: relative;
+        z-index: 1;
+    }
 }

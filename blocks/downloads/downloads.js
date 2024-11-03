@@ -1,4 +1,3 @@
-// Configuration constants
 const DOWNLOAD_CONFIG = {
   ARIA_LABELS: {
     BUTTON: 'Download',
@@ -53,7 +52,7 @@ function formatFileSize(bytes) {
 
   while (size >= 1024 && unitIndex < units.length - 1) {
     size /= 1024;
-    unitIndex += 1;
+    unitIndex++;
   }
 
   return `${Math.round(size * 10) / 10} ${units[unitIndex]}`;
@@ -81,10 +80,10 @@ function createDownloadButton(url, filename, size) {
   icon.className = DOWNLOAD_CONFIG.CLASSES.ICON;
   icon.innerHTML = DOWNLOAD_CONFIG.ICONS.PDF;
 
-  // Add filename with size in brackets
+  // Add filename as a link
   const filenameLink = document.createElement('span');
   filenameLink.className = DOWNLOAD_CONFIG.CLASSES.FILENAME;
-  filenameLink.textContent = size ? `${filename} (${size})` : filename;
+  filenameLink.textContent = filename;
 
   // Add info container
   const info = document.createElement('span');

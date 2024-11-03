@@ -10,8 +10,6 @@ const DOWNLOAD_CONFIG = {
     INFO: 'download-info',
     SIZE: 'download-size',
     FILENAME: 'download-filename',
-    LINK: 'downloads-link',
-    NAME: 'downloads-name',
   },
   PATTERNS: {
     GOOGLE_DRIVE: /^https:\/\/drive\.google\.com\/file\/d\/([a-zA-Z0-9_-]+)\/view\?usp=sharing$/,
@@ -55,7 +53,7 @@ function formatFileSize(bytes) {
 
   while (size >= 1024 && unitIndex < units.length - 1) {
     size /= 1024;
-    unitIndex += 1;
+    unitIndex++;
   }
 
   return `${Math.round(size * 10) / 10} ${units[unitIndex]}`;
@@ -118,15 +116,6 @@ export default async function decorate(block) {
   // Process each row as a download item
   rows.forEach((row) => {
     const cells = [...row.children];
-    
-    // Add classes to cells
-    if (cells[0]) {
-      cells[0].className = DOWNLOAD_CONFIG.CLASSES.LINK;
-    }
-    if (cells[1]) {
-      cells[1].className = DOWNLOAD_CONFIG.CLASSES.NAME;
-    }
-
     let fileUrl = cells[0]?.textContent?.trim() || '';
     const fileName = cells[1]?.textContent?.trim() || '';
     const fileSize = cells[2]?.textContent?.trim() || '';

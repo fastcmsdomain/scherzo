@@ -7,6 +7,8 @@ const DOWNLOAD_CONFIG = {
     ICON: 'download-icon',
     INFO: 'download-info',
     FILENAME: 'download-filename',
+    FILE: 'downloads-file',
+    INFO_CONTAINER: 'downloads-info',
   },
   PATTERNS: {
     GOOGLE_DRIVE: /^https:\/\/drive\.google\.com\/file\/d\/([a-zA-Z0-9_-]+)\/view\?usp=sharing$/,
@@ -79,27 +81,23 @@ function createDownloadButton(url, filename) {
  * @param {HTMLElement} block - The block element to decorate
  */
 export default async function decorate(block) {
-  // Get file information from the block content
   const rows = [...block.children];
+  const cells = rows[0]?.children || [];
+  const fileUrl = cells[0]?.textContent?.trim() || '';
 
-  // Process each row as a download item
-  rows.forEach((row) => {
-    const cells = [...row.children];
-    let fileUrl = cells[0]?.textContent?.trim() || '';
-    const fileName = cells[1]?.textContent?.trim() || '';
-
-    if (fileUrl) {
-      // Convert Google Drive URL if necessary
-      fileUrl = convertGoogleDriveUrl(fileUrl);
-
-      const downloadButton = createDownloadButton(
-        fileUrl,
-        fileName || fileUrl.split('/').pop(),
-      );
-
-      // Replace row content with download button
+  if (fileUrl) {
+    const convertedUrl = convertGoogleDriveUrl(fileUrl);
+    
+    rows.forEach((row, index) => {
+      const rowCells = [...row.children];
+      const displayName = rowCells[1]?.textContent?.trim() || '';
+      const downloadButton = createDownloadButton(convertedUrl, displayName);
+      
       row.innerHTML = '';
       row.appendChild(downloadButton);
-    }
-  });
+      
+      const className = index === 0 ? 'downloads-file' : 'downloads-info';
+      row.className = className;
+    });
+  }
 }

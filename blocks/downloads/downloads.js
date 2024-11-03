@@ -101,22 +101,46 @@ function createDownloadButton(url, filename, size) {
 }
 
 /**
- * Fetches the file size from the URL
+ * Fetches the file size from the URL with fallback options
  * @param {string} url - URL of the file
  * @returns {Promise<number>} File size in bytes
  */
 async function getFileSize(url) {
+  // Skip size check for Google Drive URLs as they require authentication
+  if (url.includes('drive.google.com')) {
+    return 0;
+  }
+
   try {
-    const response = await fetch(url, { method: 'HEAD' });
-    if (!response.ok) {
-      // eslint-disable-next-line no-console
-      console.error('Error fetching file size:', response.statusText);
-      return 0;
+    // Try HEAD request first
+    const response = await fetch(url, {
+      method: 'HEAD',
+      mode: 'cors',
+      credentials: 'same-origin',
+    });
+
+    if (response.ok) {
+      return parseInt(response.headers.get('content-length'), 10) || 0;
     }
-    return parseInt(response.headers.get('content-length'), 10) || 0;
+
+    // If HEAD fails, try a range request
+    const rangeResponse = await fetch(url, {
+      method: 'GET',
+      headers: { Range: 'bytes=0-0' },
+      mode: 'cors',
+      credentials: 'same-origin',
+    });
+
+    if (rangeResponse.ok && rangeResponse.headers.get('content-range')) {
+      const range = rangeResponse.headers.get('content-range');
+      const size = range.split('/')[1];
+      return parseInt(size, 10) || 0;
+    }
+
+    return 0;
   } catch (error) {
     // eslint-disable-next-line no-console
-    console.error('Error fetching file size:', error);
+    console.warn('File size fetch failed:', error.message);
     return 0;
   }
 }
@@ -146,8 +170,8 @@ export default async function decorate(block) {
       // Convert Google Drive URL if necessary
       fileUrl = convertGoogleDriveUrl(fileUrl);
 
-      // Fetch file size if not provided
-      if (!fileSize) {
+      // Only fetch file size if not provided and URL is from same origin
+      if (!fileSize && (new URL(fileUrl, window.location.href).origin === window.location.origin)) {
         const size = await getFileSize(fileUrl);
         fileSize = size.toString();
       }

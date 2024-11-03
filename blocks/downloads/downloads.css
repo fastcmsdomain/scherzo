@@ -73,8 +73,3 @@
   .downloads-name {
     font-weight: 500;
   }
-  
-  .downloads-size {
-    font-size: 0.875rem;
-    color: var(--text-color-secondary, #666);
-  }

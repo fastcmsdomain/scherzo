@@ -52,7 +52,7 @@ main .section.slide-builder-container {
     flex-direction: column;
     height: 100%;
     justify-content: center;
-    padding: 1em;
+    padding: 0;
     position: relative;
     width: 100%;
     z-index: 2;
@@ -114,6 +114,10 @@ body::-webkit-scrollbar {
 } */
 
 @media (width >= 900px) {  
+  .text-container {
+    padding: 1em;
+  }
+
   .title-part-1 {
     font-size: var(--heading-font-size-4xl);
   } 
@@ -130,4 +134,37 @@ body::-webkit-scrollbar {
   .slide-builder-item:first-child .title-part-3 {
     font-size: var(--heading-font-size-xl);
   }
+}
+
+.slide-button {
+  /* Button styling */
+  display: inline-block;
+  padding: 12px 24px;
+  background-color: var(--button-background-color, rgba(255, 255, 255, 0.9));
+  color: var(--button-text-color, #000);
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: inherit;
+  transition: all 0.3s ease;
+  text-decoration: none;
+  
+  /* Hover effects */
+  &:hover {
+    background-color: var(--button-hover-background-color, rgba(255, 255, 255, 1));
+    transform: translateY(-2px);
+  }
+  
+  /* Focus styles for accessibility */
+  &:focus {
+    outline: 2px solid var(--button-focus-color, #007bff);
+    outline-offset: 2px;
+  }
+}
+
+/* Ensure button animation works with slide transitions */
+.slide-builder-item .title-part .slide-button {
+  opacity: inherit;
+  transform: translateY(inherit);
 }

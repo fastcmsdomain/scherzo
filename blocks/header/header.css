@@ -148,14 +148,28 @@ header .nav-brand {
 }
 
 header nav .nav-brand a {
+  align-items: end;
   background-image: url('/images/logo.png');
+  background-position: top center;
   background-repeat: no-repeat;
-  background-size: 150px auto;
-  display: inline-block;
+  background-size: 120px auto;
+  display: flex;
   font-size: 0;
-  height: 118px;
-  width: 150px;
+  height: 180px;
+  justify-content: center;
+  line-height: 1.4;
+  padding-bottom: 50px;
+  text-align: center;
+  transition: transform .2s ease;
+  width: 600px;
 }
+
+header nav .nav-brand a:hover,
+header nav .nav-brand a:focus {
+  text-decoration: none;
+  transform: scale(1.02);
+}
+
 
 /* sections */
 header nav .nav-sections {
@@ -238,6 +252,11 @@ header nav .nav-sections ul > li > ul > li {
     padding-right: 16px;
     position: relative;
   }
+
+header nav .nav-brand a {
+    font-size: var(--body-font-size-s);
+}
+
 
   header nav .nav-sections .nav-drop::after {
     border: 2px solid currentcolor;

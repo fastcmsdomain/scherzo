@@ -41,11 +41,6 @@
     gap: 0.25rem;
   }
   
-  .download-size {
-    font-size: 0.875rem;
-    opacity: 0.8;
-  }
-  
   /* Focus styles for accessibility */
   .download-button:focus-visible {
     outline: 2px solid var(--download-primary-color);

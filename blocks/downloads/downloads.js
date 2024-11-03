@@ -2,13 +2,11 @@
 const DOWNLOAD_CONFIG = {
   ARIA_LABELS: {
     BUTTON: 'Download',
-    SIZE: 'File size',
   },
   CLASSES: {
     BUTTON: 'download-button',
     ICON: 'download-icon',
     INFO: 'download-info',
-    SIZE: 'download-size',
     FILENAME: 'download-filename',
     LINK: 'downloads-link',
     NAME: 'downloads-name',
@@ -44,32 +42,12 @@ function convertGoogleDriveUrl(url) {
 }
 
 /**
- * Formats the file size in bytes to a human-readable format
- * @param {number} bytes - File size in bytes
- * @returns {string} Formatted file size
- */
-function formatFileSize(bytes) {
-  if (!bytes) return '';
-  const units = ['B', 'KB', 'MB', 'GB'];
-  let size = bytes;
-  let unitIndex = 0;
-
-  while (size >= 1024 && unitIndex < units.length - 1) {
-    size /= 1024;
-    unitIndex += 1;
-  }
-
-  return `${Math.round(size * 10) / 10} ${units[unitIndex]}`;
-}
-
-/**
  * Creates the download button element with proper accessibility attributes
  * @param {string} url - Download URL
  * @param {string} filename - Name of the file
- * @param {string} size - File size
  * @returns {HTMLElement} Download button element
  */
-function createDownloadButton(url, filename, size) {
+function createDownloadButton(url, filename) {
   const button = document.createElement('a');
   button.href = url;
   button.className = DOWNLOAD_CONFIG.CLASSES.BUTTON;
@@ -84,10 +62,10 @@ function createDownloadButton(url, filename, size) {
   icon.className = DOWNLOAD_CONFIG.CLASSES.ICON;
   icon.innerHTML = DOWNLOAD_CONFIG.ICONS.PDF;
 
-  // Add filename with size in brackets
+  // Add filename
   const filenameLink = document.createElement('span');
   filenameLink.className = DOWNLOAD_CONFIG.CLASSES.FILENAME;
-  filenameLink.textContent = size ? `${filename} (${size})` : filename;
+  filenameLink.textContent = filename;
 
   // Add info container
   const info = document.createElement('span');
@@ -119,7 +97,6 @@ export default async function decorate(block) {
 
     let fileUrl = cells[0]?.textContent?.trim() || '';
     const fileName = cells[1]?.textContent?.trim() || '';
-    const fileSize = cells[2]?.textContent?.trim() || '';
 
     if (fileUrl) {
       // Convert Google Drive URL if necessary
@@ -128,7 +105,6 @@ export default async function decorate(block) {
       const downloadButton = createDownloadButton(
         fileUrl,
         fileName || fileUrl.split('/').pop(),
-        formatFileSize(parseInt(fileSize, 10)),
       );
 
       // Use object destructuring for className

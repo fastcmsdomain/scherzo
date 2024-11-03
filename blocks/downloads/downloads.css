@@ -64,3 +64,12 @@
     font-weight: 500;
     text-decoration: none;
   }
+  
+  /* Add these new classes to your existing CSS */
+  .downloads-link {
+    display: none;
+  }
+  
+  .downloads-name {
+    font-weight: 500;
+  }

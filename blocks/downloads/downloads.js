@@ -81,15 +81,15 @@ function createDownloadButton(url, filename, size) {
   icon.className = DOWNLOAD_CONFIG.CLASSES.ICON;
   icon.innerHTML = DOWNLOAD_CONFIG.ICONS.PDF;
 
-  // Add filename
-  const filenameElement = document.createElement('span');
-  filenameElement.className = DOWNLOAD_CONFIG.CLASSES.FILENAME;
-  filenameElement.textContent = filename;
+  // Add filename as a link
+  const filenameLink = document.createElement('span');
+  filenameLink.className = DOWNLOAD_CONFIG.CLASSES.FILENAME;
+  filenameLink.textContent = filename;
 
   // Add info container
   const info = document.createElement('span');
   info.className = DOWNLOAD_CONFIG.CLASSES.INFO;
-  info.appendChild(filenameElement);
+  info.appendChild(filenameLink);
 
   if (size) {
     const sizeElement = document.createElement('span');
@@ -116,12 +116,6 @@ export default async function decorate(block) {
   // Process each row as a download item
   rows.forEach((row) => {
     const cells = [...row.children];
-    
-    // Hide the URL cell
-    if (cells[0]) {
-      cells[0].style.display = 'none';
-    }
-
     let fileUrl = cells[0]?.textContent?.trim() || '';
     const fileName = cells[1]?.textContent?.trim() || '';
     const fileSize = cells[2]?.textContent?.trim() || '';

@@ -64,3 +64,8 @@
     font-weight: 500;
     text-decoration: none;
   }
+  
+  /* Add this to your existing CSS */
+  .download [style*="display: none"] {
+    display: none !important;
+  }

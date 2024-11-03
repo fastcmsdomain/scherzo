@@ -68,3 +68,7 @@
   .downloads-name {
     font-weight: 500;
   }
+
+  .downloads-file {
+    display: none;
+  }

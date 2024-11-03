@@ -82,21 +82,42 @@ function createDownloadButton(url, filename) {
  */
 export default async function decorate(block) {
   const rows = [...block.children];
-  const cells = rows[0]?.children || [];
-  const fileUrl = cells[0]?.textContent?.trim() || '';
+  const fileData = {
+    url: '',
+    fileDisplayName: '',
+    infoDisplayName: '',
+  };
 
-  if (fileUrl) {
-    const convertedUrl = convertGoogleDriveUrl(fileUrl);
-    
+  // Get data from the first row
+  if (rows[0]) {
+    const fileCells = [...rows[0].children];
+    fileData.url = fileCells[0]?.textContent?.trim() || '';
+    fileData.fileDisplayName = fileCells[0]?.textContent?.trim() || '';
+  }
+
+  // Get data from the second row
+  if (rows[1]) {
+    const infoCells = [...rows[1].children];
+    fileData.infoDisplayName = infoCells[0]?.textContent?.trim() || '';
+  }
+
+  if (fileData.url) {
+    const convertedUrl = convertGoogleDriveUrl(fileData.url);
+
+    // Create buttons for each row
     rows.forEach((row, index) => {
-      const rowCells = [...row.children];
-      const displayName = rowCells[1]?.textContent?.trim() || '';
+      const displayName = index === 0
+        ? fileData.fileDisplayName
+        : fileData.infoDisplayName;
+
       const downloadButton = createDownloadButton(convertedUrl, displayName);
-      
       row.innerHTML = '';
       row.appendChild(downloadButton);
-      
-      const className = index === 0 ? 'downloads-file' : 'downloads-info';
+
+      // Set appropriate class name
+      const className = index === 0
+        ? DOWNLOAD_CONFIG.CLASSES.FILE
+        : DOWNLOAD_CONFIG.CLASSES.INFO_CONTAINER;
       row.className = className;
     });
   }

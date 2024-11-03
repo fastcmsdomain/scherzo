@@ -51,24 +51,35 @@ main .section.slide-builder-container {
     display: flex;
     flex-direction: column;
     height: 100%;
-    justify-content: center;
+    justify-content: end;
     padding: 0;
     position: relative;
     width: 100%;
     z-index: 2;
 }
 
+.text-container::after {
+    background: linear-gradient(to bottom, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.7));
+    bottom: 0;
+    content: '';
+    height: 100%;
+    left: 0;
+    position: absolute;
+    width: 100%;
+}
+
 .title-part {
     color: var(--color-white);
-    font-size: 24px;
     line-height: 1;
+    padding: 0 1rem;
     text-align: center;
     text-shadow: 0 0 10px rgb(255 255 255 / 40%);
+    z-index: 1;
 }
 
 .title-part-1 {
-    font-family: var(--heading-font-family);
-    font-size: var(--heading-font-size-mobile-xxl);
+    font-size: var(--heading-font-size-mobile-m);
+    margin: 0 0 1rem;
 }
 
 .title-part-2,
@@ -78,21 +89,39 @@ main .section.slide-builder-container {
 
 .title-part-2 {
     font-family: var(--heading-font-family);
-    font-size: var(--heading-font-size-mobile-l);
-    line-height: 1.5;
+    font-size: var(--heading-font-size-mobile-xl);
+    line-height: 1;
 }
 
 .title-part-3 {
-    font-family: var(--body-font-family);
-    font-size: var(--body-font-size-m);
     line-height: 1.6;
-    margin: 0 2rem;
+    margin: 1rem 0 2rem;
 }
 
-.slide-builder-item:first-child .title-part-3 {
-    font-family: var(--heading-font-family);
-    font-size: var(--heading-font-size-mobile-xl);
+.text-container > div:last-child {
+    margin-bottom: 5rem;
 }
+
+.slide-builder .slide-builder-item:first-child .text-container {
+    align-items: center;
+    justify-content: flex-end;
+}
+
+.slide-builder .slide-builder-item:first-child .text-container .title-part-1 {
+    font-size: var(--heading-font-size-mobile-m);
+    margin-bottom: 0;
+}
+
+.slide-builder .slide-builder-item:first-child .text-container .title-part-2 {
+    font-size: var(--heading-font-size-mobile-xxl);
+    margin-bottom: 0;
+}
+
+.slide-builder .slide-builder-item:first-child .text-container > div:last-child {
+    font-size: var(--heading-font-size-mobile-m);
+    margin: 0 0 5rem;
+}
+
 
 /* Ensure the body has enough height for scrolling */
 body {
@@ -119,36 +148,68 @@ body::-webkit-scrollbar {
   }
 
   .title-part-1 {
-    font-size: var(--heading-font-size-4xl);
+    font-size: var(--heading-font-size-l);
   } 
 
   .title-part-2 {
-    font-size: var(--heading-font-size-xxl);
+    font-size: var(--heading-font-size-xxxl);
+    margin-bottom: 2rem;
   }
 
   .title-part-3 {
     font-size: var(--body-font-size-m);
+    margin-top: 0;
     max-width: 600px;
   }
 
   .slide-builder-item:first-child .title-part-3 {
     font-size: var(--heading-font-size-xl);
   }
+
+  .slide-builder .slide-builder-item:first-child .text-container {
+    align-items: flex-start;
+    justify-content: flex-end;
+    margin: 0 0 5rem;
+}
+
+  .slide-builder .slide-builder-item:first-child .text-container .title-part-1 {
+      font-size: var(--heading-font-size-m);
+      line-height: 1;
+      margin-left: 10rem;
+  }
+
+  .slide-builder .slide-builder-item:first-child .text-container .title-part-2 {
+    font-size: var(--heading-font-size-xxxl);
+    line-height: 1;
+    margin: 0;
+  }
+
+  .slide-builder .slide-builder-item:first-child .text-container div.title-part-3 {
+      font-size: var(--heading-font-size-m);
+      line-height: 1;
+      margin-left:  5rem;
+      margin-top: 1rem;
+  }
+
+  .slide-builder .slide-builder-item:first-child .text-container > div:last-child {
+    margin-bottom:  5rem;
+  }
+
 }
 
 .slide-button {
-  /* Button styling */
-  display: inline-block;
-  padding: 12px 24px;
   background-color: var(--button-background-color, rgba(255, 255, 255, 0.9));
-  color: var(--button-text-color, #000);
   border: none;
   border-radius: 4px;
+  color: var(--button-text-color, #000);
   cursor: pointer;
+  /* Button styling */
+  display: inline-block;
   font-family: inherit;
   font-size: inherit;
-  transition: all 0.3s ease;
+  padding: 12px 24px;
   text-decoration: none;
+  transition: all 0.3s ease;
   
   /* Hover effects */
   &:hover {

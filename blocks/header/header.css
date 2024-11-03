@@ -152,7 +152,7 @@ header nav .nav-brand a {
   background-image: url('/images/logo.png');
   background-position: top center;
   background-repeat: no-repeat;
-  background-size: 120px auto;
+  background-size: 130px auto;
   display: flex;
   font-size: 0;
   height: 180px;
@@ -253,9 +253,10 @@ header nav .nav-sections ul > li > ul > li {
     position: relative;
   }
 
-header nav .nav-brand a {
+    header nav .nav-brand a {
+    background-size: 170px auto;
     font-size: var(--body-font-size-s);
-}
+    }
 
 
   header nav .nav-sections .nav-drop::after {

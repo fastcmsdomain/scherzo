@@ -55,7 +55,6 @@
 
 /* Modal styles */
 .galeria-zdjec-modal {
-  background: var(--modal-bg);
   display: none;
   height: 100%;
   left: 0;
@@ -64,6 +63,16 @@
   top: 0;
   width: 100%;
   z-index: 1000;
+}
+
+.galeria-zdjec-modal::before {
+  background: var(--color-black);
+  content: "";
+  height: 100%;
+  opacity: 0.7;
+  position: absolute;
+  width: 100%;
+  z-index: 0;
 }
 
 .galeria-zdjec-modal.active {
@@ -89,15 +98,16 @@
 .galeria-zdjec-modal-prev,
 .galeria-zdjec-modal-next {
   align-items: center;
-  background: var(--color-blue);
-  border: none;
+  background: var(--color-dark-blue);
+  border: 1px solid var(--color-gold);
   border-radius: 50%;
   color: var(--modal-control-color);
   cursor: pointer;
   display: flex;
-  font-size: 1.5rem;
+  font-size: 2rem;
   height: 50px;
   justify-content: center;
+  line-height: 1;
   padding: 0;
   position: absolute;
   transition: opacity var(--transition-duration) ease;

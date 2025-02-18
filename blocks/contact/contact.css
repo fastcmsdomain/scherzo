@@ -1,3 +1,7 @@
+.section.content.contact-container {
+    padding-bottom: 0;
+}
+
 .contact {
   background-color: var(--color-darker-blue);
   display: grid;
@@ -34,7 +38,7 @@
 
 .contact-map {
   border-radius: var(--border-radius, 4px);
-  height: 450px;
+  height: 650px;
   overflow: hidden;
   width: 100%;
 }

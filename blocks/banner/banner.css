@@ -7,7 +7,7 @@
 }
 
   
-.banner-container {
+main .section.banner-container {
   min-width: 100%;
   padding: 0;
 }
@@ -31,12 +31,22 @@
         position: fixed;
         top: 0;
     }
+
+    /* Add new rule for when banner has no picture */
+    .banner-container:not(:has(picture)) + .section.content {
+        margin-top: 372px !important; /* 745px / 2 = 372px */
+    }
+
+    /* Keep original margin for banner with picture */
+    .banner-container:has(picture) + .section.content {
+        margin-top: 745px;
+    }
 }
 
 .banner {
   align-items: center;
   display: flex;
-  height: 100vh;
+  min-height: 300px;
 }
 
 /* .banner-wrapper {
@@ -54,6 +64,12 @@
     height: 700px;
     justify-content: center;
   }
+
+  /* Adjust banner height when no picture */
+  .banner:not(:has(picture)) {
+    height: 350px;
+  }
+
   .banner-container .banner > div {
     margin: 0;
   }
@@ -70,7 +86,7 @@
   color: var(--color-white);
   font-size: var(--heading-font-size-xxl);
   line-height: 1;
-  margin: 0 auto;
+  margin: 0 auto 3rem;
   max-width: 900px;
   padding: 0 1rem;
   position: relative;

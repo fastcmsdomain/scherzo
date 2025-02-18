@@ -1,0 +1,33 @@
+.map {
+  --map-max-width: 800px;
+  --map-border-radius: 8px;
+  --map-box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.map-wrapper {
+  margin: 0 auto;
+  max-width: var(--map-max-width);
+  width: 100%;
+}
+
+.map-iframe {
+  border: none;
+  border-radius: var(--map-border-radius);
+  box-shadow: var(--map-box-shadow);
+  min-height: 400px;
+  width: 100%;
+}
+
+.map .error {
+  color: #ff0000;
+  font-size: var(--body-font-size-s);
+  padding: 1rem;
+  text-align: center;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .map-wrapper {
+    padding: 0 1rem;
+  }
+} 

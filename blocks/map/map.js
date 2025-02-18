@@ -38,9 +38,23 @@ function createFormIframe(url) {
   iframe.marginHeight = '0';
   iframe.marginWidth = '0';
   
+  // Add transparency settings
+  iframe.style.backgroundColor = 'transparent';
+  iframe.allowTransparency = 'true';
+  
   // Make iframe responsive to content height
   iframe.addEventListener('load', () => {
     iframe.style.height = iframe.contentWindow.document.body.scrollHeight + 'px';
+    
+    // Try to make the iframe content transparent
+    try {
+      const iframeDoc = iframe.contentWindow.document;
+      const style = iframeDoc.createElement('style');
+      style.textContent = 'body { background-color: transparent !important; }';
+      iframeDoc.head.appendChild(style);
+    } catch (e) {
+      // Silent catch - security restrictions might prevent this
+    }
   });
   
   return iframe;

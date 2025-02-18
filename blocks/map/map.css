@@ -11,11 +11,21 @@
 }
 
 .map-iframe {
+  background: transparent;
   border: none;
   border-radius: var(--map-border-radius);
   box-shadow: var(--map-box-shadow);
+  height: 1250px;
   min-height: 400px;
   width: 100%;
+}
+
+/* Add transparent background to the iframe content */
+.map-iframe {
+  background-color: transparent !important;
+  /* Force transparency for embedded content */
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
 }
 
 .map .error {

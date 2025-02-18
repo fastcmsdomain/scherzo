@@ -3,7 +3,7 @@
 }
 
 .banner-container .banner > div {
-    margin-bottom: 4rem;
+    /* margin-bottom: 4rem; */
 }
 
   
@@ -13,20 +13,22 @@ main .section.banner-container {
 }
 
 .banner-container::before {
-  background: linear-gradient(
-    0deg,
-    rgb(0 0 0 / 90%) 0%,
-    rgb(0 0 0 / 70%) 50%,
-    rgb(0 0 0 / 0%) 100%
-) ;
     content: '';
     height: 100%;
     position: absolute;
     width: 100%;
 }
 
+
+
 @media (width >= 900px) {
     .banner-container {
+        background: linear-gradient(
+            0deg,
+            rgb(0 0 0 / 90%) 0%,
+            rgb(0 0 0 / 70%) 50%,
+            rgb(0 0 0 / 0%) 100%
+        ) ;
         min-height: 745px;
         position: fixed;
         top: 0;
@@ -44,9 +46,11 @@ main .section.banner-container {
 }
 
 .banner {
-  align-items: center;
+  align-items: flex-end;
   display: flex;
-  min-height: 300px;
+  justify-content: center;
+  min-height: 250px;
+  width: 100%;
 }
 
 /* .banner-wrapper {

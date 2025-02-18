@@ -19,7 +19,7 @@ header nav {
     'sections sections sections' 1fr / auto 1fr auto;
   height: var(--nav-height);
   margin: auto;
-  max-width: 1264px;
+  max-width: 95%;
   padding: 0 1rem;
 }
 
@@ -162,6 +162,7 @@ header nav .nav-brand a {
   height: 120px;
   justify-content: center;
   line-height: 1.4;
+  text-indent: -9999px;;
   padding-bottom: 50px;
   text-align: center;
   transition: transform .2s ease;

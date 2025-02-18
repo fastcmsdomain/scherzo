@@ -1,42 +1,86 @@
 @font-face {
+  font-display: swap;
   font-family: Caveat-bold;
   font-style: normal;
-  font-display: swap;
   src: url('../fonts/Caveat-Bold.woff') format('woff');
 }
 
 @font-face {
+  font-display: swap;
   font-family: Montserrat-thin;
   font-style: normal;
-  font-display: swap;
   src: url('../fonts/Montserrat-Thin.woff') format('woff');
 }
 
 @font-face {
+  font-display: swap;
   font-family: Montserrat-regular;
   font-style: normal;
-  font-display: swap;
   src: url('../fonts/Montserrat-Regular.woff') format('woff');
 }
 
 @font-face {
+  font-display: swap;
   font-family: Montserrat-semibold;
   font-style: normal;
-  font-display: swap;
   src: url('../fonts/Montserrat-SemiBold.woff') format('woff');
 }
 
 @font-face {
+  font-display: swap;
   font-family: Montserrat-bold;
   font-style: normal;
-  font-display: swap;
   src: url('../fonts/Montserrat-Bold.woff') format('woff');
 }
 
 @font-face {
+  font-display: swap;
   font-family: Montserrat-light;
   font-style: normal;
-  font-display: swap;
   src: url('../fonts/Montserrat-Light.woff') format('woff');
 }
+
+@font-face {
+  font-display: swap;
+  font-family: Open-sans;
+  font-style: normal;
+  src: url('../fonts/OpenSans-Regular.woff') format('woff');
+}
+
+@font-face {
+  font-display: swap;
+  font-family: Open-sans-condensed;
+  font-style: normal;
+  src: url('../fonts/OpenSans_Condensed-Regular.ttf') format('ttf');
+}
+
+@font-face {
+  font-display: swap;
+  font-family: Open-sans-condensed-bold;
+  font-style: normal;
+  src: url('../fonts/OpenSans_Condensed-Bold.ttf') format('ttf');
+}
+
+@font-face {
+  font-display: swap;
+  font-family: Open-sans-condensed-light;
+  font-style: normal;
+  src: url('../fonts/OpenSans_Condensed-Light.ttf') format('ttf');
+}
+
+@font-face {
+  font-display: swap;
+  font-family: Open-sans-condensed-Medium;
+  font-style: normal;
+  src: url('../fonts/OpenSans_Condensed-Medium.ttf') format('ttf');
+}
+
+@font-face {
+  font-display: swap;
+  font-family: Open-sans-condensed-SemiBold;
+  font-style: normal;
+  src: url('../fonts/OpenSans_Condensed-SemiBold.ttf') format('ttf');
+}
+
+
 

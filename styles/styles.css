@@ -28,12 +28,14 @@
   --thin-font-family: 'Montserrat-thin';
   --body-bold-family: 'Montserrat-bold';
   --heading-font-family: 'Caveat-Bold';
+  --heading: "Open-sans-condensed-Medium";
 
   /* body sizes */
   --body-font-size-m: 1.25rem;
   --body-font-size-s: 1.125rem;
   --body-font-size-xs: 1rem;
   --body-font-size-xxs: 0.875rem;
+  --body-font-size-3xs: 0.75rem;
 
   /* heading sizes */
   --heading-font-size-4xl: 7rem;
@@ -113,7 +115,7 @@ body::before {
   position: fixed;
   top: 0;
   width: 100%;
-  z-index: 1;
+  z-index: 2;
   }
 
 body.appear {
@@ -126,7 +128,7 @@ body.appear {
 
 h1, h2, h3,
 h4, h5, h6 {
-  font-family: var(--heading-font-family);
+  font-family: var(--heading);
   font-weight: normal;
   line-height: 1.25;
   margin-bottom: .5em;

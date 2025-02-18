@@ -88,17 +88,17 @@
   box-sizing: border-box;
   inset: 0;
   object-fit: cover;
+  overflow: hidden;
   position: absolute;
   z-index: -1;
-  overflow: hidden;
 }
 
 .banner img {
   height: 100%;
   margin: 0;
   object-fit: cover;
-  width: 100%;
   transform-origin: center center;
+  width: 100%;
   will-change: transform;
 }
 

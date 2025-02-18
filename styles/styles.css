@@ -28,7 +28,6 @@
   --thin-font-family: 'Montserrat-thin';
   --body-bold-family: 'Montserrat-bold';
   --heading-font-family: 'Caveat-Bold';
-  --heading: "Open-sans-condensed-Medium";
 
   /* body sizes */
   --body-font-size-m: 1.25rem;
@@ -128,7 +127,7 @@ body.appear {
 
 h1, h2, h3,
 h4, h5, h6 {
-  font-family: var(--heading);
+  font-family: var(--body-bold-regular);
   font-weight: normal;
   line-height: 1.25;
   margin-bottom: .5em;

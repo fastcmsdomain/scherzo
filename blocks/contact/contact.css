@@ -1,0 +1,57 @@
+.contact {
+  background-color: var(--color-darker-blue);
+  display: grid;
+  gap: 2rem;
+  margin: 0 auto;
+}
+
+@media (min-width: 768px) {
+  .contact {
+    align-items: center;
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.section.content .contact-wrapper {
+    max-width: 100%;
+    width: 100%;
+}
+
+.contact-info {
+  padding: 1rem 3rem;
+  text-align: right;
+}
+
+.contact-info h2 {
+  color: var(--heading-color, #000);
+  margin-top: 0;
+}
+
+.contact-info p {
+  line-height: 1.6;
+  margin-bottom: 1rem;
+}
+
+.contact-map {
+  border-radius: var(--border-radius, 4px);
+  height: 450px;
+  overflow: hidden;
+  width: 100%;
+}
+
+.contact-map iframe {
+  border: 0;
+  height: 100%;
+  width: 100%;
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+  .contact-info {
+    color: var(--text-color-dark, #fff);
+  }
+  
+  .contact-info h2 {
+    color: var(--heading-color-dark, #fff);
+  }
+} 

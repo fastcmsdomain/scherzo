@@ -1,26 +1,26 @@
-.map {
-  --map-max-width: 800px;
-  --map-border-radius: 8px;
-  --map-box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+.formularz {
+  --formularz-max-width: 800px;
+  --formularz-border-radius: 8px;
+  --formularz-box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-.map-wrapper {
+.formularz-wrapper {
   /* margin: 0 auto; */
-  /* max-width: var(--map-max-width); */
+  /* max-width: var(--formularz-max-width); */
   width: 100%;
 }
 
-.map-iframe {
+.formularz-iframe {
   background: transparent;
   border: none;
-  /* border-radius: var(--map-border-radius);
-  box-shadow: var(--map-box-shadow); */
+  /* border-radius: var(--formularz-border-radius);
+  box-shadow: var(--formularz-box-shadow); */
   height: 1250px;
   min-height: 400px;
   width: 100%;
 }
 
-.map-iframe:before {
+.formularz-iframe:before {
   background: rgba(0, 0, 0, 1);
   content: '';
   display: block;
@@ -29,14 +29,14 @@
 }
 
 /* Add transparent background to the iframe content */
-.map-iframe {
+.formularz-iframe {
   background-color: transparent !important;
   /* Force transparency for embedded content */
   -webkit-backdrop-filter: none;
   backdrop-filter: none;
 }
 
-.map .error {
+.formularz .error {
   color: #ff0000;
   font-size: var(--body-font-size-s);
   padding: 1rem;
@@ -45,7 +45,7 @@
 
 /* Responsive adjustments */
 @media (max-width: 768px) {
-  .map-wrapper {
+  .formularz-wrapper {
     padding: 0 1rem;
   }
 } 

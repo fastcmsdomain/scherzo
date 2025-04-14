@@ -17,7 +17,7 @@
 /* Gallery grid layout */
 .galeria-zdjec-content {
   display: grid;
-  gap: var(--gallery-gap);
+  gap: 5px;
   grid-template-columns: repeat(4, 1fr);
   margin: 0 auto;
   max-width: 100%;
@@ -36,7 +36,7 @@
 
 .galeria-zdjec-item:hover,
 .galeria-zdjec-item:focus-within {
-  transform: scale(1.05);
+  /* transform: scale(1.05); */
 }
 
 .galeria-zdjec-thumbnail {

@@ -27,7 +27,7 @@
   --body-font-family: 'Montserrat-Regular';
   --thin-font-family: 'Montserrat-thin';
   --body-bold-family: 'Montserrat-bold';
-  --heading-font-family: 'Caveat-Bold';
+  --heading-font-family: 'Montserrat-Regular';
 
   /* body sizes */
   --body-font-size-m: 1.25rem;
@@ -102,7 +102,7 @@ body {
   margin: 0;
 }
 
-body::before {
+/* body::before {
   background: linear-gradient(
     180deg,
     rgb(0 0 0 / 70%) 0%,
@@ -110,12 +110,12 @@ body::before {
     rgb(0 0 0 / 0%) 100%
   );
   content: "";
-  height: 300px;
-  position: fixed;
+  height:200px;
+  position: absolute;
   top: 0;
   width: 100%;
   z-index: 2;
-  }
+  } */
 
 body.appear {
   display: block;

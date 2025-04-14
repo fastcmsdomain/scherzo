@@ -34,7 +34,7 @@ header nav[aria-expanded="true"] {
 
 @media (width >= 600px) {
   header nav {
-    padding: 0 2rem;
+    padding: 0;
   }
 }
 
@@ -207,21 +207,22 @@ header nav[aria-expanded="true"] .nav-sections {
 }
 
 header nav .nav-sections ul  {
-  align-items: center;
+  align-items: flex-start;
   display: flex;
   flex-direction: column;
   font-size: var(--body-font-size-s);
   font-weight: 500;
   justify-content: center;
   list-style: none;
-  padding-left: 0;
+  margin: 0;
+  padding: 0 2rem;
 }
 
 header nav .nav-sections ul > li {
   font-family: var(--thin-font-family);
-  font-size: var(--heading-font-size-xs);
+  font-size: var(--body-font-size-s);
   text-transform: uppercase;
-  white-space: nowrap;
+  text-align: left;
 }
 
 header nav .nav-sections a:hover,
@@ -366,6 +367,14 @@ header nav .nav-sections .menu  {
   width: 33.333%;
 }
 
+header nav .nav-sections .menu  {
+  text-align: left;
+}
+
+header nav .nav-sections .menu .back {
+  padding: 0 0 0 1rem;
+}
+
 header nav .nav-sections .menu.hide {
   opacity: 0 !important;
   visibility: hidden !important;
@@ -442,7 +451,7 @@ header nav .nav-sections .menu ul>li ul {
 
 /* Current menu item styling */
 header nav .nav-sections .menu ul > li.current > a {
-  color: var(--color-blue);
+  color: var(--color-gold);
   font-weight: 600;
 }
 

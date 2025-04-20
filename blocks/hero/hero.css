@@ -120,9 +120,19 @@ main .hero-container::before {
   }
 }
 
-.breadcrumbs ol li,
-.breadcrumbs ol li a {
+.breadcrumbs ol li {
     font-size: var(--body-font-size-xs);
+    color: var(--color-white);
+}
+
+.breadcrumbs ol li a {
+  font-size: var(--body-font-size-xs);
+  text-decoration: underline;
+  color: var(--color-white);
+
+  &:hover, &:focus, &:focus-visible {
+    text-decoration: none;
+  }
 }
 
 @media (width >= 900px) {
@@ -140,7 +150,7 @@ main .hero-container::before {
   .breadcrumbs ol li a {
     font-size: var(--body-font-size-s);
   }
-
+  
   .breadcrumbs ol li {
     &:not(:last-child)::after {
       margin: 0 0  0 1rem;

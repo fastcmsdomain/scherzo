@@ -380,7 +380,9 @@ body.podstrona main {
 }
 
 .yellow, .zolty {
-background-color: var(--color-yellow);
+background-color: var(--color-gold);
+box-shadow: 0 0 0 100vmax var(--color-gold);
+clip-path: inset(0  -100vmax);
 }
 
 .orange, .pomarancz {
@@ -391,6 +393,8 @@ background-color: var(--color-yellow);
 
 .mint, .mintowy {
   background-color: var(--color-mint);
+  box-shadow: 0 0 0 100vmax var(--color-mint);
+  clip-path: inset(0  -100vmax);
 }
 
 .blue, .niebieski {

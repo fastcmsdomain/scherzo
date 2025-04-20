@@ -17,11 +17,22 @@
   --color-darker-blue: #283048;
   --color-blue: #27a9de;
   --color-blue-dark: #1e2436;
-  --color-gold: #f9d50a;
+  --color-gold: #eeb016;
   --color-black: #000;
+  --color-mint: #bfeae2;
+  --color-orange: #eb9423;
   --link-color: #035fe6;
   --link-hover-color: #136ff6;
   --background-color: white;
+
+
+  /* Accordion */
+  --color-accordion-title: var(--color-mint);
+  --color-accordion-body: var(--color-white);
+  --color-accordion-border: var(--color-mint);
+  --color-accordion-text: var(--color-dark-blue);
+  --color-accordion-hover: var(--color-mint);
+  --color-accordion-active: var(--color-mint);  
 
   /* fonts */
   --body-font-family: 'Montserrat-Regular';
@@ -37,14 +48,52 @@
   --body-font-size-3xs: 0.75rem;
 
   /* heading sizes */
-  --heading-font-size-4xl: 7rem;
+  /* --heading-font-size-4xl: 7rem;
   --heading-font-size-xxxl: 3.75rem;
   --heading-font-size-xxl: 3rem;
   --heading-font-size-xl: 2.5rem;
   --heading-font-size-l: 2rem;
   --heading-font-size-m: 1.5rem;
   --heading-font-size-s: 1.25rem;
-  --heading-font-size-xs: 1.125rem;
+  --heading-font-size-xs: 1.125rem; */
+
+/* Base font sizes */
+--font-size-xs: 0.75rem;    /* 12px */
+--font-size-sm: 0.875rem;   /* 14px */
+--font-size-base: 1rem;     /* 16px */
+--font-size-lg: 1.125rem;   /* 18px */
+--font-size-xl: 1.25rem;    /* 20px */
+--font-size-2xl: 1.5rem;    /* 24px */
+--font-size-3xl: 1.875rem;  /* 30px */
+--font-size-4xl: 2.25rem;   /* 36px */
+--font-size-5xl: 3rem;      /* 48px */
+--font-size-6xl: 3.75rem;   /* 60px */
+
+/* Line heights optimized for readability */
+/* Smaller text needs relatively more line height for readability */
+--line-height-xs: 1.6;      /* For very small text, more spacing helps readability */
+--line-height-sm: 1.5;      /* For small text */
+--line-height-base: 1.5;    /* Good standard for body text */
+--line-height-lg: 1.45;     /* Slightly tighter for larger text */
+--line-height-xl: 1.4;      /* For heading text */
+--line-height-2xl: 1.3;     /* For larger headings */
+--line-height-3xl: 1.2;     /* For very large headings */
+--line-height-4xl: 1.15;    /* For display text */
+--line-height-5xl: 1.1;     /* For largest display text */
+--line-height-6xl: 1.05;    /* For the largest text */
+
+/* Calculated absolute line heights (if you prefer using px values) */
+--line-height-xs-px: calc(var(--font-size-xs) * var(--line-height-xs));    /* ~19.2px */
+--line-height-sm-px: calc(var(--font-size-sm) * var(--line-height-sm));    /* ~21px */
+--line-height-base-px: calc(var(--font-size-base) * var(--line-height-base)); /* 24px */
+--line-height-lg-px: calc(var(--font-size-lg) * var(--line-height-lg));    /* ~26.1px */
+--line-height-xl-px: calc(var(--font-size-xl) * var(--line-height-xl));    /* 28px */
+--line-height-2xl-px: calc(var(--font-size-2xl) * var(--line-height-2xl)); /* ~31.2px */
+--line-height-3xl-px: calc(var(--font-size-3xl) * var(--line-height-3xl)); /* 36px */
+--line-height-4xl-px: calc(var(--font-size-4xl) * var(--line-height-4xl)); /* ~41.4px */
+--line-height-5xl-px: calc(var(--font-size-5xl) * var(--line-height-5xl)); /* 33px */
+--line-height-6xl-px: calc(var(--font-size-6xl) * var(--line-height-6xl)); /* ~39.4px */
+
 
   /* mobile heading sizes */
   --heading-font-size-mobile-xxxl: 4rem;
@@ -68,6 +117,7 @@
   --space-46: 46px;
   --space-36: 36px;
   --space-26: 26px;
+  --space-20: 20px;
   --space-16: 16px;
   --space-12: 12px;
   --space-8: 8px;
@@ -293,7 +343,7 @@ main .section {
     background: var(--color-dark-blue);
     background: var(--color-white);
     margin-top: 745px;
-    padding: 4rem 0;
+    padding: 0 0 4rem 0;
     width: 100vw;
   }
 }
@@ -327,4 +377,26 @@ body.podstrona footer.footer-wrapper {
 
 body.podstrona main {
     margin-right: 400px;
+}
+
+.yellow, .zolty {
+background-color: var(--color-yellow);
+}
+
+.orange, .pomarancz {
+  background-color: var(--color-orange);
+  box-shadow: 0 0 0 100vmax var(--color-orange);
+  clip-path: inset(0  -100vmax);
+}
+
+.mint, .mintowy {
+  background-color: var(--color-mint);
+}
+
+.blue, .niebieski {
+  background-color: var(--color-blue);
+}
+
+.dark-blue, .ciemny-niebieski {
+  background-color: var(--color-dark-blue);
 }

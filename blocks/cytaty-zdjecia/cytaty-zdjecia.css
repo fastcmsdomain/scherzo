@@ -1,5 +1,5 @@
 .cytaty-zdjecia-wrapper {
-  margin: var(--space-36) 0;
+  padding: var(--space-36) 0;
 }
 
 .cytaty-zdjecia > ul {

@@ -12,7 +12,7 @@ main .hero-container {
   padding: 0;
 }
 
-main .hero-container::before {
+/* main .hero-container::before {
   background: linear-gradient(
     0deg,
     rgb(0 0 0 / 90%) 0%,
@@ -23,12 +23,12 @@ main .hero-container::before {
     height: 100%;
     position: absolute;
     width: 100%;
-}
+} */
 
 @media (width >= 900px) {
     main .hero-container {
         min-height: 745px;
-        position: fixed;
+        /* position: fixed; */
         top: 0;
     }
 }
@@ -38,15 +38,6 @@ main .hero-container::before {
   display: flex;
   height: 100vh;
 }
-
-/* .hero-wrapper {
-    background: linear-gradient(
-        0deg,
-        rgb(0 0 0 / 90%) 0%,
-        rgb(0 0 0 / 70%) 50%,
-        rgb(0 0 0 / 0%) 100%
-    );
-} */
 
 @media (width >= 900px) {
   .hero {
@@ -68,11 +59,12 @@ main .hero-container::before {
 .hero h1 {
   align-self: flex-end;
   color: var(--color-white);
+  font-family: var(--body-bold-family);
   font-size: var(--heading-font-size-xxl);
   line-height: 1;
   margin: 0 auto;
   max-width: 900px;
-  padding: 0 1rem;
+  padding: var(--space-20) 0 ;
   position: relative;
   text-align: center;
   z-index: 1;
@@ -80,7 +72,7 @@ main .hero-container::before {
 
 @media (width >= 900px) {
   .hero h1 {
-    padding: 0;
+    padding: var(--space-26) 0 ;
   }
 }
 
@@ -88,7 +80,7 @@ main .hero-container::before {
   box-sizing: border-box;
   inset: 0;
   object-fit: cover;
-  position: absolute;
+  position: fixed;
   z-index: -1;
 }
 

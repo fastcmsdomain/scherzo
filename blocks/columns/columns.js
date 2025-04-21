@@ -5,6 +5,12 @@ export default function decorate(block) {
   // setup image columns
   [...block.children].forEach((row) => {
     [...row.children].forEach((col) => {
+      const colContent = [...col.children];
+      // Add columnContent class if column contains paragraphs
+      if (colContent.some((el) => el.tagName === 'P')) {
+        col.classList.add('columns-content-col');
+      }
+      // setup image columns
       const pic = col.querySelector('picture');
       if (pic) {
         const picWrapper = pic.closest('div');

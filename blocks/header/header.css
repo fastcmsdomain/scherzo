@@ -44,7 +44,7 @@ header nav p {
 }
 
 header nav a:any-link {
-  color: currentcolor;
+  color: var(--color-white);
   font-size: var(--body-font-size-s);
   text-transform: uppercase;
 }
@@ -97,7 +97,7 @@ header nav .nav-hamburger-icon::after {
 
 header nav .nav-hamburger-icon::before,
 header nav .nav-hamburger-icon::after {
-  background: currentcolor;
+  background: var(--color-gold);
   content: '';
   position: absolute;
 }
@@ -105,7 +105,7 @@ header nav .nav-hamburger-icon::after {
 header nav[aria-expanded="false"] .nav-hamburger-icon,
 header nav[aria-expanded="false"] .nav-hamburger-icon::before,
 header nav[aria-expanded="false"] .nav-hamburger-icon::after {
-  background: currentcolor;
+  background: var(--color-gold);
   border-radius: 2px;
   height: 2px;
 }
@@ -148,6 +148,7 @@ header .nav-brand {
   top: 2rem;
   transition: opacity .3s ease;
   z-index: 0;
+  background: transparent;
   
 }
 
@@ -219,6 +220,7 @@ header nav .nav-sections ul  {
 }
 
 header nav .nav-sections ul > li {
+  color: var(--color-white);
   font-family: var(--thin-font-family);
   font-size: var(--body-font-size-s);
   text-transform: uppercase;

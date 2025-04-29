@@ -13,14 +13,13 @@
 :root {
   /* colors */
   --color-white: #fff;
-  --color-dark-blue: #1d3b5e;
   --color-darker-blue: #283048;
   --color-blue: #27a9de;
-  --color-blue-dark: #1e2436;
-  --color-gold: #eeb016;
+  --color-blue-dark: #00203e;
+  --color-gold: rgb(247, 209, 23);
   --color-black: #000;
-  --color-mint: #bfeae2;
-  --color-orange: #eb9423;
+  --color-mint: rgb(166, 214, 201);
+  --color-orange: rgb(255, 148, 51);
   --link-color: #035fe6;
   --link-hover-color: #136ff6;
   --background-color: white;
@@ -48,14 +47,14 @@
   --body-font-size-3xs: 0.75rem;
 
   /* heading sizes */
-  /* --heading-font-size-4xl: 7rem;
-  --heading-font-size-xxxl: 3.75rem;
-  --heading-font-size-xxl: 3rem;
-  --heading-font-size-xl: 2.5rem;
-  --heading-font-size-l: 2rem;
-  --heading-font-size-m: 1.5rem;
-  --heading-font-size-s: 1.25rem;
-  --heading-font-size-xs: 1.125rem; */
+  --heading-font-size-4xl: 7rem; /* 112px */
+  --heading-font-size-xxxl: 3.75rem; /* 60px */
+  --heading-font-size-xxl: 3rem; /* 48px */
+  --heading-font-size-xl: 2.5rem; /* 40px */
+  --heading-font-size-l: 2rem; /* 32px */
+  --heading-font-size-m: 1.5rem; /* 24px */
+  --heading-font-size-s: 1.25rem; /* 20px */
+  --heading-font-size-xs: 1.125rem; /* 18px */
 
 /* Base font sizes */
 --font-size-2xs: 0.625rem;    /* 10px */
@@ -206,12 +205,12 @@ h3 {
 
 h4 {
   font-family: var(--body-font-family-light); 
-  font-size: var(--heading-font-size-xs);
+  font-size: var(--heading-font-size-m);
 }
 
 h5 { 
   font-family: var(--heading-font-family);
-  font-size: var(--heading-font-size-m);
+  font-size: var(--heading-font-size-s);
 }
 
 h6 { font-size: var(--heading-font-size-xs);}
@@ -397,8 +396,14 @@ clip-path: inset(0  -100vmax);
 
 .blue, .niebieski {
   background-color: var(--color-blue);
+  color: var(--color-white);
+  box-shadow: 0 0 0 100vmax var(--color-blue);
+  clip-path: inset(0  -100vmax);
 }
 
 .dark-blue, .ciemny-niebieski {
   background-color: var(--color-dark-blue);
+  color: var(--color-white);
+  box-shadow: 0 0 0 100vmax var(--color-dark-blue);
+  clip-path: inset(0  -100vmax);
 }

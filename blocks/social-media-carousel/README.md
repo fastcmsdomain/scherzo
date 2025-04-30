@@ -12,6 +12,8 @@ A dynamic carousel block that displays Instagram feed posts with images, descrip
 - Loading and error states
 - Accessible navigation controls
 - Customizable styling through CSS variables
+- Instagram API integration with caching
+- Rate limiting protection
 
 ## Usage
 
@@ -20,6 +22,18 @@ A dynamic carousel block that displays Instagram feed posts with images, descrip
 | Instagram Feed |
 
 ## Configuration
+
+### Instagram API Setup
+
+1. Configure your Instagram access token in `api-config.js`:
+```javascript
+export default {
+  ACCESS_TOKEN: 'YOUR_INSTAGRAM_ACCESS_TOKEN_HERE',
+  // ... other configuration
+};
+```
+
+2. The block will automatically use this token to fetch posts from Instagram.
 
 ### CSS Variables
 
@@ -53,6 +67,8 @@ The carousel behavior can be modified through the `CAROUSEL_CONFIG` object:
 - Lazy loading of images
 - Optimized transitions
 - Efficient DOM updates
+- Local storage caching of API responses
+- Rate limiting protection
 - Throttled event listeners
 
 ## Browser Compatibility
@@ -63,21 +79,63 @@ The carousel behavior can be modified through the `CAROUSEL_CONFIG` object:
 
 ## Instagram API Integration
 
-To integrate with the Instagram API:
+The block uses the Instagram Graph API to fetch media. To set up:
 
-1. Obtain an Instagram API key
-2. Replace the mock data in `fetchInstagramFeed()` with actual API calls
-3. Handle rate limiting and error cases
-4. Cache responses when appropriate
+1. Create a Facebook Developer account
+2. Set up an Instagram Basic Display app
+3. Generate an access token
+4. Add the token to `api-config.js`
+5. Configure rate limiting and caching as needed
+
+### API Features
+
+- Automatic caching of API responses
+- Configurable cache duration
+- Rate limiting protection
+- Error handling and fallbacks
+- Configurable API fields
 
 ## Troubleshooting
 
 Common issues and solutions:
 
-1. **Carousel not sliding**: Check if JavaScript is enabled and no console errors
-2. **Images not loading**: Verify image URLs and network connectivity
-3. **Responsive issues**: Check viewport settings and media queries
-4. **Performance problems**: Reduce image sizes and optimize transitions
+1. **API Authentication Failed**: 
+   - Check your access token in `api-config.js`
+   - Verify token has not expired
+   - Ensure token has correct permissions
+
+2. **Rate Limiting Issues**:
+   - Check `RATE_LIMIT` configuration in `api-config.js`
+   - Implement proper caching
+   - Monitor API usage
+
+3. **Carousel Display Problems**:
+   - Check JavaScript console for errors
+   - Verify HTML structure
+   - Check CSS variable values
+
+4. **Performance Issues**:
+   - Enable caching
+   - Optimize image sizes
+   - Check network requests
+
+## Cache Configuration
+
+The block implements local storage caching:
+
+- Default cache duration: 5 minutes
+- Cache key: 'instagram_feed_cache'
+- Automatic cache invalidation
+- Configurable through `CACHE` settings in `api-config.js`
+
+## Rate Limiting
+
+To prevent API abuse:
+
+- Maximum requests: 200 per hour
+- Window size: 1 hour
+- Configurable through `RATE_LIMIT` settings in `api-config.js`
+- Automatic request throttling
 
 ## Example Implementation
 

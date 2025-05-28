@@ -100,7 +100,7 @@ main .list-container {
     }
 
     .quick-links ul li {
-        border-right: 1px solid var(--color-blue);
+        border-right: 1px solid var(--color-gold);
         padding-right: 0.6rem;
     }
 

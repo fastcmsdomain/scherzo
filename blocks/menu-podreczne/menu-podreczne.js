@@ -295,7 +295,7 @@ export default async function decorate(block) {
 
     // Check if menu should be shown for current page
     if (!shouldShowMenu(hierarchy, currentPath)) {
-      block.style.display = 'none';
+      block.style.display = 'block';
       return;
     }
 

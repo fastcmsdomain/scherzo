@@ -5,7 +5,7 @@
 
 // Configuration object for the menu-podreczne block
 const MENU_PODRECZNE_CONFIG = {
-  SCROLL_THRESHOLD: 300,
+  SCROLL_THRESHOLD: 0,
   QUERY_INDEX_ENDPOINT: '/query-index.json',
   ERROR_MESSAGE: 'Error loading navigation data:',
   ANIMATION_DURATION: 300,

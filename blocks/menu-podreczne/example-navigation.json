@@ -1,0 +1,64 @@
+{
+  "total": 8,
+  "offset": 0,
+  "limit": 8,
+  "data": [
+    {
+      "path": "/page-1",
+      "title": "Page 1",
+      "image": "https://allabout.network/media_188fa5bcd003e5a2d56e7ad3ca233300c9e52f1e5.png?width=1200&format=pjpg&optimize=medium",
+      "description": "Main page with subpages",
+      "lastModified": "1724942455"
+    },
+    {
+      "path": "/page-1/page-1-1",
+      "title": "Page 1-1",
+      "image": "https://allabout.network/media_14e918fa88c2a9a810fd454fa04f0bd152c01fed2.jpeg?width=1200&format=pjpg&optimize=medium",
+      "description": "First subpage of Page 1",
+      "lastModified": "1724942455"
+    },
+    {
+      "path": "/page-1/page-1-2",
+      "title": "Page 1-2",
+      "image": "https://allabout.network/media_1d92670adcfb7a18a062e49fd7967f4e9f76d8a52.jpeg?width=1200&format=pjpg&optimize=medium",
+      "description": "Second subpage of Page 1",
+      "lastModified": "1724942455"
+    },
+    {
+      "path": "/page-1/page-1-3",
+      "title": "Page 1-3",
+      "image": "https://allabout.network/media_1e744525e97292dcd074e9b1c7ab2cf47a048f292.jpeg?width=1200&format=pjpg&optimize=medium",
+      "description": "Third subpage of Page 1",
+      "lastModified": "1724942455"
+    },
+    {
+      "path": "/page-2",
+      "title": "Page 2",
+      "image": "https://allabout.network/media_1251e262eade67c1f9c8e0ccffa6d35945487140c.png?width=1200&format=pjpg&optimize=medium",
+      "description": "Second main page with subpages",
+      "lastModified": "1724942455"
+    },
+    {
+      "path": "/page-2/page-2-1",
+      "title": "Page 2-1",
+      "image": "https://allabout.network/media_188fa5bcd003e5a2d56e7ad3ca233300c9e52f1e5.png?width=1200&format=pjpg&optimize=medium",
+      "description": "First subpage of Page 2",
+      "lastModified": "1724942455"
+    },
+    {
+      "path": "/page-2/page-2-2",
+      "title": "Page 2-2",
+      "image": "https://allabout.network/media_14e918fa88c2a9a810fd454fa04f0bd152c01fed2.jpeg?width=1200&format=pjpg&optimize=medium",
+      "description": "Second subpage of Page 2",
+      "lastModified": "1724942455"
+    },
+    {
+      "path": "/page-3",
+      "title": "Page 3",
+      "image": "https://allabout.network/media_1d92670adcfb7a18a062e49fd7967f4e9f76d8a52.jpeg?width=1200&format=pjpg&optimize=medium",
+      "description": "Third main page without subpages",
+      "lastModified": "1724942455"
+    }
+  ],
+  "type": "sheet"
+} 

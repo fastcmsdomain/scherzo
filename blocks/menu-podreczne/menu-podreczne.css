@@ -30,6 +30,7 @@
   z-index: var(--menu-z-index);
   transform: translateY(100%);
   transition: transform var(--menu-animation-duration) ease-in-out;
+  transform: translateY(0);
 }
 
 /* Menu visibility states */

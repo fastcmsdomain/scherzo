@@ -27,10 +27,19 @@ main .hero-container {
 
 @media (width >= 900px) {
     main .hero-container {
-        min-height: 745px;
-        /* position: fixed; */
         top: 0;
+        padding:  0 0 32px 0;
     }
+}
+
+.hero-wrapper:before {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 50%;
+    background: linear-gradient(to top, rgb(40 48 72 / 100%) , transparent);
 }
 
 .hero {
@@ -42,7 +51,7 @@ main .hero-container {
 @media (width >= 900px) {
   .hero {
     align-items: end;
-    height: 700px;
+    height: 500px;
     justify-content: center;
   }
   main .hero-container .hero > div {
@@ -102,6 +111,7 @@ main .hero-container {
   justify-content: center;
   list-style: none;
   padding: 0;
+  margin: 0;
 }
 
 .breadcrumbs ol li {
@@ -119,11 +129,10 @@ main .hero-container {
 
 .breadcrumbs ol li a {
   font-size: var(--body-font-size-xs);
-  text-decoration: underline;
-  color: var(--color-white);
+  color: var(--color-gold);
 
   &:hover, &:focus, &:focus-visible {
-    text-decoration: none;
+    text-decoration: underline;
   }
 }
 

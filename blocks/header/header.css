@@ -70,7 +70,6 @@ header nav .nav-hamburger button {
   border: 1px solid var(--color-darker-blue);
   border-radius: 0;
   border-top: 1px solid var(--color-gold);
-  box-shadow: var(--box-shadow);
   color: inherit;
   display: flex;
   height: 22px;
@@ -80,9 +79,7 @@ header nav .nav-hamburger button {
   padding: 1.4rem 1rem ;
   text-overflow: initial;
   white-space: initial;
-}
-
-header nav .nav-hamburger button:hover {
+  box-shadow: var(--box-shadow);
   border: 1px solid var(--color-gold);
 }
 
@@ -336,20 +333,18 @@ header nav .nav-tools {
   position: fixed;
   right: 0;
   width: 100%;
+  box-shadow: var(--box-shadow);
+  border: 1px solid var(--color-gold);
 }
   
 @media (width >= 900px) {
   header nav .nav-tools {
-    border: 1px solid var(--color-darker-blue);
+    border: 1px solid var(--color-gold);
     border-top: 1px solid var(--color-gold);
     bottom: inherit;
     right: 2rem;
     top: 1.4rem;
     width: auto;
-  }
-
-  header nav .nav-tools:hover {
-    border: 1px solid var(--color-gold);
   }
 }
 

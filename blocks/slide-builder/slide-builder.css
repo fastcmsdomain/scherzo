@@ -2,6 +2,10 @@ main .section.slide-builder-container {
     padding: 0;
 }
 
+main .section.slide-builder-container .slide-builder-wrapper {
+    max-width: 100%;
+}
+
 .slide-builder {
   height: auto;
   left: 0;
@@ -32,11 +36,11 @@ main .section.slide-builder-container {
     top: 0;
     width: 100%;
     
-    &::before {
-        background: linear-gradient(to top, rgb(0 0 0 / 150%), transparent);
+    &::after {
+        background: linear-gradient(to top, rgb(40 48 72 / 100%) , transparent);
         bottom: 0;
         content: '';
-        height: 20%;
+        height: 50%;
         left: 0;
         position: absolute;
         width: 100%;
@@ -54,6 +58,7 @@ main .section.slide-builder-container {
     justify-content: end;
     padding: 0;
     position: relative;
+    bottom: 7rem;
     width: 100%;
     z-index: 2;
 }
@@ -63,7 +68,6 @@ main .section.slide-builder-container {
     line-height: 1;
     padding: 0 1rem;
     text-align: center;
-    /* text-shadow: 0 0 10px rgb(255 255 255 / 40%); */
     z-index: 1;
 }
 
@@ -80,9 +84,7 @@ main .section.slide-builder-container {
 .title-part-1 {
   font-size: var(--heading-font-size-xxxl);
   font-family: var(--heading-font-family);
-  transition: transform 0.5s ease-out;
   position: relative;
-  top: 50%;
 }
 
 
@@ -98,12 +100,12 @@ main .section.slide-builder-container {
 }
 
 .text-container > div:last-child {
-    margin-bottom: 5rem;
+    /* margin-bottom: 5rem; */
 }
 
 .slide-builder .slide-builder-item:first-child .text-container {
     align-items: center;
-    justify-content: flex-end;
+    bottom: 4rem;
 }
 
 .slide-builder .slide-builder-item:first-child .text-container .title-part-1 {

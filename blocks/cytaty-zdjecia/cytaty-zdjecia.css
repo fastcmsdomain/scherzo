@@ -1,5 +1,5 @@
 .cytaty-zdjecia-wrapper {
-  margin: var(--space-36) 0;
+  padding: var(--space-36) 0;
 }
 
 .cytaty-zdjecia > ul {
@@ -87,7 +87,7 @@
 }
 
 .feedback .card-body {
-  background-color: var(--color-blue-dark);
+  background-color: var(--color-mint);
   padding: 1rem;
   text-align: center;
 

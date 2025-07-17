@@ -1,5 +1,15 @@
+main .section.social-media-feeds-container,
+body.social-media-page {
+    padding: 0;
+    background-color: var(--color-darker-blue);
+}
+
+main .section .social-media-feeds-wrapper {
+    max-width: 100%;
+}
+
 .social-media-feeds {
-    margin-top: 10rem;
+    /* margin-top: 10rem; */
 }
 
 body.social-media-page::before {

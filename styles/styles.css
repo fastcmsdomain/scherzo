@@ -13,21 +13,31 @@
 :root {
   /* colors */
   --color-white: #fff;
-  --color-dark-blue: #1d3b5e;
   --color-darker-blue: #283048;
   --color-blue: #27a9de;
-  --color-blue-dark: #1e2436;
-  --color-gold: #f9d50a;
+  --color-dark-blue: #00203e;
+  --color-gold: rgb(247, 209, 23);
   --color-black: #000;
+  --color-mint: rgb(166, 214, 201);
+  --color-orange: rgb(255, 148, 51);
   --link-color: #035fe6;
   --link-hover-color: #136ff6;
   --background-color: white;
+
+
+  /* Accordion */
+  --color-accordion-title: var(--color-mint);
+  --color-accordion-body: var(--color-white);
+  --color-accordion-border: var(--color-mint);
+  --color-accordion-text: var(--color-dark-blue);
+  --color-accordion-hover: var(--color-mint);
+  --color-accordion-active: var(--color-mint);  
 
   /* fonts */
   --body-font-family: 'Montserrat-Regular';
   --thin-font-family: 'Montserrat-thin';
   --body-bold-family: 'Montserrat-bold';
-  /* --heading-font-family: 'Caveat-Bold'; */
+  --heading-font-family: 'Montserrat-Regular';
 
   /* body sizes */
   --body-font-size-m: 1.25rem;
@@ -37,14 +47,53 @@
   --body-font-size-3xs: 0.75rem;
 
   /* heading sizes */
-  --heading-font-size-4xl: 7rem;
-  --heading-font-size-xxxl: 3.75rem;
-  --heading-font-size-xxl: 3rem;
-  --heading-font-size-xl: 2.5rem;
-  --heading-font-size-l: 2rem;
-  --heading-font-size-m: 1.5rem;
-  --heading-font-size-s: 1.25rem;
-  --heading-font-size-xs: 1.125rem;
+  --heading-font-size-4xl: 7rem; /* 112px */
+  --heading-font-size-xxxl: 3.75rem; /* 60px */
+  --heading-font-size-xxl: 3rem; /* 48px */
+  --heading-font-size-xl: 2.5rem; /* 40px */
+  --heading-font-size-l: 2rem; /* 32px */
+  --heading-font-size-m: 1.5rem; /* 24px */
+  --heading-font-size-s: 1.25rem; /* 20px */
+  --heading-font-size-xs: 1.125rem; /* 18px */
+
+/* Base font sizes */
+--font-size-2xs: 0.625rem;    /* 10px */
+--font-size-xs: 0.75rem;    /* 12px */
+--font-size-sm: 0.875rem;   /* 14px */
+--font-size-base: 1rem;     /* 16px */
+--font-size-lg: 1.125rem;   /* 18px */
+--font-size-xl: 1.25rem;    /* 20px */
+--font-size-2xl: 1.5rem;    /* 24px */
+--font-size-3xl: 1.875rem;  /* 30px */
+--font-size-4xl: 2.25rem;   /* 36px */
+--font-size-5xl: 3rem;      /* 48px */
+--font-size-6xl: 3.75rem;   /* 60px */
+
+/* Line heights optimized for readability */
+/* Smaller text needs relatively more line height for readability */
+--line-height-xs: 1.6;      /* For very small text, more spacing helps readability */
+--line-height-sm: 1.5;      /* For small text */
+--line-height-base: 1.5;    /* Good standard for body text */
+--line-height-lg: 1.45;     /* Slightly tighter for larger text */
+--line-height-xl: 1.4;      /* For heading text */
+--line-height-2xl: 1.3;     /* For larger headings */
+--line-height-3xl: 1.2;     /* For very large headings */
+--line-height-4xl: 1.15;    /* For display text */
+--line-height-5xl: 1.1;     /* For largest display text */
+--line-height-6xl: 1.05;    /* For the largest text */
+
+/* Calculated absolute line heights (if you prefer using px values) */
+--line-height-xs-px: calc(var(--font-size-xs) * var(--line-height-xs));    /* ~19.2px */
+--line-height-sm-px: calc(var(--font-size-sm) * var(--line-height-sm));    /* ~21px */
+--line-height-base-px: calc(var(--font-size-base) * var(--line-height-base)); /* 24px */
+--line-height-lg-px: calc(var(--font-size-lg) * var(--line-height-lg));    /* ~26.1px */
+--line-height-xl-px: calc(var(--font-size-xl) * var(--line-height-xl));    /* 28px */
+--line-height-2xl-px: calc(var(--font-size-2xl) * var(--line-height-2xl)); /* ~31.2px */
+--line-height-3xl-px: calc(var(--font-size-3xl) * var(--line-height-3xl)); /* 36px */
+--line-height-4xl-px: calc(var(--font-size-4xl) * var(--line-height-4xl)); /* ~41.4px */
+--line-height-5xl-px: calc(var(--font-size-5xl) * var(--line-height-5xl)); /* 33px */
+--line-height-6xl-px: calc(var(--font-size-6xl) * var(--line-height-6xl)); /* ~39.4px */
+
 
   /* mobile heading sizes */
   --heading-font-size-mobile-xxxl: 4rem;
@@ -59,18 +108,21 @@
   --nav-height: 64px;
   
   /* box-shadow */
-  --box-shadow: 0 0 10px 0 rgb(0 0 0 / 50%);
+  --box-shadow: 0 0 6px 0 rgb(0 0 0 / 50%);
   --border-gold: 1px solid var(--color-gold);
   --border-darker-blue: 1px solid var(--color-darker-blue);
 
   /* Spaces */
+  --space-88: 86px;
   --space-66: 66px;
   --space-46: 46px;
   --space-36: 36px;
   --space-26: 26px;
+  --space-20: 20px;
   --space-16: 16px;
   --space-12: 12px;
   --space-8: 8px;
+  --space-4: 4px;
 }
 
 @font-face {
@@ -82,9 +134,9 @@
 
 @media (width >= 900px) {
   :root {
-    --heading-font-size-xxxl: 100px;
-    --heading-font-size-xxl: 80px;
-    --heading-font-size-xl: 60px;
+    --heading-font-size-xxxl: 60px;
+    --heading-font-size-xxl: 50px;
+    --heading-font-size-xl: 40px;
     --heading-font-size-l: 36px;
     --heading-font-size-m: 30px;
     --heading-font-size-s: 24px;
@@ -94,7 +146,9 @@
 
 body {
   background-color: var(--color-dark-blue);
+  background-color: var(--color-white);
   color: var(--color-white);
+  color: var(--color-dark-blue);
   display: none;
   font-family: var(--body-font-family);
   font-size: var(--body-font-size-s);
@@ -102,7 +156,7 @@ body {
   margin: 0;
 }
 
-body::before {
+/* body::before {
   background: linear-gradient(
     180deg,
     rgb(0 0 0 / 70%) 0%,
@@ -110,12 +164,12 @@ body::before {
     rgb(0 0 0 / 0%) 100%
   );
   content: "";
-  height: 300px;
+  height:200px;
   position: absolute;
   top: 0;
   width: 100%;
   z-index: 2;
-  }
+  } */
 
 body.appear {
   display: block;
@@ -127,7 +181,7 @@ body.appear {
 
 h1, h2, h3,
 h4, h5, h6 {
-  font-family: var(--body-bold-regular);
+  font-family: var(--heading-font-family);
   font-weight: normal;
   line-height: 1.25;
   margin-bottom: .5em;
@@ -153,12 +207,12 @@ h3 {
 
 h4 {
   font-family: var(--body-font-family-light); 
-  font-size: var(--heading-font-size-xs);
+  font-size: var(--heading-font-size-m);
 }
 
 h5 { 
   font-family: var(--heading-font-family);
-  font-size: var(--heading-font-size-m);
+  font-size: var(--heading-font-size-s);
 }
 
 h6 { font-size: var(--heading-font-size-xs);}
@@ -195,7 +249,7 @@ main pre {
 
 /* links */
 a:any-link {
-  color: var(--color-gold);
+  color: var(--link-color);
   cursor: pointer;
   text-decoration: none;
 }
@@ -204,9 +258,25 @@ a:hover {
   text-decoration: underline;
 }
 
+ul {
+  list-style-type: square;
+  list-style-position: inside;
+  margin: 0;
+  padding: 0;
+}
+
+ul li {
+  margin-bottom: var(--space-8);
+
+}
+
+ul li::marker {
+  color: var(--color-mint);
+}
+
 /* buttons */
 a.button:any-link, button {
-  background-color: var(--color-blue-dark);
+  background-color: var(--color-dark-blue);
   border: 1px solid var(--color-gold);
   box-sizing: border-box;
   color: var(--color-gold);
@@ -274,27 +344,26 @@ main .section {
 
 @media (width >= 600px) {
   main .section {
-    padding: 32px 0;
+    padding: 0;
   }
 }
 
-.section.content {
+.section {
     background: var(--color-dark-blue);
+    background: var(--color-white);
     padding: 0 1rem;
     position: relative;
     z-index: 1;
 }
 
 @media (width >= 900px) {
-  .section.content {
-    background: var(--color-dark-blue);
-    margin-top: 745px;
-    padding: 4rem 0;
-    width: 100vw;
+  .section {
+    background: var(--color-white);
+    /* padding: 0 0 4rem 0; */
   }
 }
     
-.section.content > div {
+main .section > div {
   margin-inline: auto;
   max-width: 900px;
 }
@@ -323,4 +392,49 @@ body.podstrona footer.footer-wrapper {
 
 body.podstrona main {
     margin-right: 400px;
+}
+
+main .section .columns-wrapper {
+  width: 100vw;
+  max-width: 100vw;
+  margin: 0;
+  padding: 0;
+  /* margin-left: calc(50% - 50vw); */
+
+ & .columns {
+  padding: 0;
+ } 
+
+  & .columns-img-col {
+    padding: 0;
+  }
+
+  & .columns-content-col {
+    padding: var(--space-26) var(--space-66) var(--space-26) var(--space-36);
+  }
+}
+
+.yellow, .zolty {
+background-color: var(--color-gold);
+box-shadow: 0 0 0 100vmax var(--color-gold);
+clip-path: inset(0  -100vmax);
+}
+
+.orange, .pomarancz {
+  background-color: var(--color-orange);
+  box-shadow: 0 0 0 100vmax var(--color-orange);
+  clip-path: inset(0  -100vmax);
+}
+
+.mint, .mintowy {
+  background-color: var(--color-mint);
+  box-shadow: 0 0 0 100vmax var(--color-mint);
+  clip-path: inset(0  -100vmax);
+}
+
+.dark-blue, .ciemny-niebieski {
+  background-color: var(--color-dark-blue);
+  color: var(--color-white);
+  box-shadow: 0 0 0 100vmax var(--color-dark-blue);
+  clip-path: inset(0  -100vmax);
 }

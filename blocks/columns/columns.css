@@ -2,9 +2,44 @@
     margin: var(--space-36) 0;
 }
 
+.columns-wrapper:has(.columns.pelen-ekran) {
+  padding: 0;
+  max-width: 100vw;
+
+  & .columns-img-col {
+    padding: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+ & .columns-content-col {
+    padding:  var(--space-46);
+  }
+
+  img, picture {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+}
+
+.columns {
+  padding: var(--space-36) 0;
+}
+
+
 .columns > div {
   display: flex;
   flex-direction: column;
+
+  &:has(div > p) div{
+    padding: var(--space-36) 0;
+  }
+}
+
+.columns.pomaranczowe {
+  padding: var(--space-36) 0;
 }
 
 .columns img {

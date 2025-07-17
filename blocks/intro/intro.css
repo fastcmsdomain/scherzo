@@ -1,0 +1,12 @@
+.intro {
+  background-color: var(--color-mint);
+  box-shadow: 0 0 0 100vmax var(--color-mint);
+  clip-path: inset(0  -100vmax);
+  padding: var(--space-26) 0;
+}
+
+.intro h2 {
+    font-size: var(--font-size-2xl);
+    font-family: var(--body-bold-family);
+    line-height: var(--line-height-2xl);
+  }

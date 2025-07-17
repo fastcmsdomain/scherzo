@@ -127,6 +127,7 @@ export default async function decorate(block) {
       const slideHeight = slideItem.offsetHeight;
       const scrollProgress = (window.innerHeight - rect.top) / (window.innerHeight + slideHeight);
 
+      const titlePart1 = slideItem.querySelector('.title-part-1');
       const titlePart2 = slideItem.querySelector('.title-part-2');
       const titlePart3 = slideItem.querySelector('.title-part-3');
 
@@ -134,6 +135,10 @@ export default async function decorate(block) {
         const opacity = Math.min(scrollProgress * 2, 1); // Fully visible at 50% scroll
         const translateY = Math.max(50 - scrollProgress * 100, 0); // Start at 50vh, end at 0
 
+        if (titlePart1) {
+          titlePart1.style.opacity = opacity;
+          titlePart1.style.transform = `translateY(${translateY}vh)`;
+        }
         if (titlePart2) {
           titlePart2.style.opacity = opacity;
           titlePart2.style.transform = `translateY(${translateY}vh)`;
@@ -141,15 +146,6 @@ export default async function decorate(block) {
         if (titlePart3) {
           titlePart3.style.opacity = opacity;
           titlePart3.style.transform = `translateY(${translateY}vh)`;
-        }
-      } else {
-        if (titlePart2) {
-          titlePart2.style.opacity = 0;
-          titlePart2.style.transform = 'translateY(50vh)';
-        }
-        if (titlePart3) {
-          titlePart3.style.opacity = 0;
-          titlePart3.style.transform = 'translateY(50vh)';
         }
       }
     });

@@ -11,6 +11,10 @@
  */
 
 :root {
+
+  /* font-size */
+  --font-size-base: 1rem;
+
   /* colors */
   --color-white: #fff;
   --color-darker-blue: #283048;
@@ -151,7 +155,7 @@ body {
   color: var(--color-dark-blue);
   display: none;
   font-family: var(--body-font-family);
-  font-size: var(--body-font-size-s);
+  font-size: var(--font-size-base);
   line-height: 1.6;
   margin: 0;
 }
@@ -190,32 +194,49 @@ h4, h5, h6 {
 }
 
 h1 { 
-  font-size: var(--heading-font-size-xxl);
+  font-size: var(--heading-font-size-xl);
+  @media (width >= 900px) {
+    font-size: var(--heading-font-size-xxl);
+  }
 }
 
 h2 {
-  font-size: var(--heading-font-size-xl);
-  line-height: 1;
+  font-size: var(--heading-font-size-l);
   margin-top: .5em;
-
-
+  @media (width >= 900px) {
+    font-size: var(--heading-font-size-xl);
+  }
 }
 
 h3 {
-  font-size: var(--heading-font-size-l);
+    font-size: var(--heading-font-size-m);
+    
+    @media (width >= 900px) {
+        font-size: var(--heading-font-size-l);
+  }
 }
 
 h4 {
   font-family: var(--body-font-family-light); 
-  font-size: var(--heading-font-size-m);
+  font-size: var(--heading-font-size-s);
+
+  @media (width >= 900px) {
+    font-size: var(--heading-font-size-m);
+  }
 }
 
 h5 { 
   font-family: var(--heading-font-family);
-  font-size: var(--heading-font-size-s);
+  font-size: var(--heading-font-size-xs);
+
+  @media (width >= 900px) {
+    font-size: var(--heading-font-size-s);
+  }
 }
 
-h6 { font-size: var(--heading-font-size-xs);}
+h6 { 
+    font-size: var(--heading-font-size-xs);
+}
 
 p, dl, ol, ul, pre, blockquote {
   margin-bottom: 1em;
@@ -249,13 +270,18 @@ main pre {
 
 /* links */
 a:any-link {
-  color: var(--link-color);
+  color: var(--color-black);
+  font-family: var(--body-bold-family);
   cursor: pointer;
-  text-decoration: none;
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
 }
 
-a:hover {
+a:any-link:hover,
+a:any-link:focus {
+  color: var(--color-black);
   text-decoration: underline;
+  text-decoration-thickness: 1px;
 }
 
 ul {
@@ -275,11 +301,11 @@ ul li::marker {
 }
 
 /* buttons */
-a.button:any-link, button {
+.button-container  a.button:any-link, button {
   background-color: var(--color-dark-blue);
   border: 1px solid var(--color-gold);
   box-sizing: border-box;
-  color: var(--color-gold);
+  color: var(--color-white);
   cursor: pointer;
   display: inline-block;
   font-family: var(--body-font-family);
@@ -293,12 +319,37 @@ a.button:any-link, button {
   text-align: center;
   text-decoration: none;
   text-overflow: ellipsis;
-  white-space: nowrap;
+  white-space: wrap;
+
+  position: relative;
+  transition: all 0.3s ease;
 }
 
-a.button:hover, a.button:focus, button:hover, button:focus  {
-  background-color: var(--color-gold);
-  color: var(--color-dark-blue);
+/* Pseudo arrow icon for buttons */
+.button-container a.button:any-link::after,
+.button-container button::after {
+  content: '→';
+  color: var(--color-white);
+  font-size: 1.2em;
+  margin-left: var(--space-8);
+  transition: transform 0.3s ease;
+  display: inline-block;
+}
+
+/* Arrow shift animation on hover and focus */
+.button-container a.button:hover::after, 
+.button-container a.button:focus::after, 
+button:hover::after, 
+button:focus::after {
+  transform: translateX(4px);
+  color: var(--color-white);
+}
+
+.button-container a.button:hover, 
+.button-container a.button:focus, 
+button:hover, 
+button:focus  {
+  color: var(--color-white);
   cursor: pointer;
 }
 
@@ -339,7 +390,8 @@ main img {
 
 /* sections */
 main .section {
-  padding: 34px 1rem;
+    background: var(--color-white);
+    padding: 0;
 }
 
 @media (width >= 600px) {
@@ -411,6 +463,13 @@ main .section .columns-wrapper {
 
   & .columns-content-col {
     padding: var(--space-26) var(--space-66) var(--space-26) var(--space-36);
+  }
+}
+
+main .default-content-wrapper {
+  padding: var(--space-16);
+  @media (width >= 900px) {
+    padding: var(--space-16) var(--space-36);
   }
 }
 

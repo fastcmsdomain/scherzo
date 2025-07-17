@@ -2,11 +2,17 @@
   background-color: var(--color-mint);
   box-shadow: 0 0 0 100vmax var(--color-mint);
   clip-path: inset(0  -100vmax);
-  padding: var(--space-26) 0;
+  padding: var(--space-26) var(--space-16);
 }
 
 .intro h2 {
     font-size: var(--font-size-2xl);
-    font-family: var(--body-bold-family);
+    font-family: var(--body-font-family);
     line-height: var(--line-height-2xl);
   }
+
+@media (width >= 900px) {
+  .intro {
+    padding: var(--space-26) 0;
+  }
+}

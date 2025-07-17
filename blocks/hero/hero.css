@@ -3,7 +3,7 @@ main .hero-container > div {
 }
 
 main .hero-container .hero > div {
-    margin-bottom: 4rem;
+    margin-bottom: 0;
 }
 
   
@@ -11,20 +11,6 @@ main .hero-container {
   min-width: 100%;
   padding: 0;
 }
-
-/* main .hero-container::before {
-  background: linear-gradient(
-    0deg,
-    rgb(0 0 0 / 90%) 0%,
-    rgb(0 0 0 / 70%) 50%,
-    rgb(0 0 0 / 0%) 100%
-) ;
-    bottom: 0;
-    content: '';
-    height: 20%;
-    position: absolute;
-    width: 100%;
-} */
 
 @media (width >= 900px) {
     main .hero-container {
@@ -46,15 +32,16 @@ main .hero-container {
 .hero {
   align-items: center;
   display: flex;
-  height: 100vh;
+  min-height: 500px;
+  max-height: 500px;
 }
 
 @media (width >= 900px) {
-  .hero {
-    align-items: end;
-    height: 500px;
-    justify-content: center;
+    .hero {
+        align-items: end;
+        justify-content: center;
   }
+
   main .hero-container .hero > div {
     margin: 0;
   }

@@ -27,7 +27,7 @@
   --body-font-family: 'Montserrat-Regular';
   --thin-font-family: 'Montserrat-thin';
   --body-bold-family: 'Montserrat-bold';
-  --heading-font-family: 'Caveat-Bold';
+  /* --heading-font-family: 'Caveat-Bold'; */
 
   /* body sizes */
   --body-font-size-m: 1.25rem;
@@ -111,7 +111,7 @@ body::before {
   );
   content: "";
   height: 300px;
-  position: fixed;
+  position: absolute;
   top: 0;
   width: 100%;
   z-index: 2;

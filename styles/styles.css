@@ -478,6 +478,13 @@ clip-path: inset(0  -100vmax);
   clip-path: inset(0  -100vmax);
 }
 
+.canvy {
+    background-color: #3552C8;
+    color: var(--color-white);
+    box-shadow: 0 0 0 100vmax #3552C8;
+    clip-path: inset(0  -100vmax);
+  }
+
 /* Text alignment from Google Docs - Global styles */
 [data-align="left"] {
   text-align: left;

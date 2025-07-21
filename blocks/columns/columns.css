@@ -2,30 +2,67 @@
     margin: var(--space-36) 0;
 }
 
+main .section .columns-wrapper {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 0;
+}
+
+main .section .columns-wrapper .columns {
+    padding: 0;
+} 
+  
+main .section .columns-wrapper .columns-img-col {
+      padding: 0;
+}
+
+
 .columns-wrapper:has(.columns.pelen-ekran) {
   padding: 0;
   max-width: 100vw;
+}
 
-  & .columns-img-col {
+.columns-img-col {
     padding: 0;
     width: 100%;
     height: 100%;
-  }
+}
 
- & .columns-content-col {
+.columns-content-col {
     padding:  var(--space-46);
   }
 
-  img, picture {
+img, picture {
     display: block;
     width: 100%;
     height: 100%;
     object-fit: cover;
-  }
+}
+
+/* Ensure all nested divs inherit full height for image stretching */
+.columns-img-col {
+  height: 100%;
+}
+
+.columns-img-col picture {
+  display: block;
+  width: 100%;
+  object-fit: cover;
+  height: 100%;
+}
+
+.columns-img-col img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* Use 'fill' if you want image to stretch/distort to exact dimensions */
+  object-position: center; /* Adjust as needed: top, bottom, left, right, etc. */
+  aspect-ratio: 3/2;
 }
 
 .columns {
   padding: var(--space-36) 0;
+  margin:  var(--space-36) 0;
 }
 
 

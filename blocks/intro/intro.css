@@ -6,6 +6,6 @@
 
 @media (width >= 900px) {
   .intro {
-    padding: var(--space-26) 0;
+    padding: var(--space-36) 0;
   }
 }

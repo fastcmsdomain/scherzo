@@ -12,7 +12,7 @@ A block for displaying downloadable PDF files with file size information and a c
 ## Usage
 Create a table in your document with a link to the PDF file:
 
-| Download |
+| preview |
 |----------|
 | [Document Name.pdf](/path/to/document.pdf) |
 

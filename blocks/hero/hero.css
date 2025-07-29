@@ -158,3 +158,6 @@ main .hero-container {
     }
 }
 
+.hero:has(:not(p picture)) {
+  background-color: var(--color-dark-blue);
+}

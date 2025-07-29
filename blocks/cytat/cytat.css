@@ -1,8 +1,6 @@
 .cytat {
-  max-width: 800px;
-  margin: 40px auto;
-  padding: 1rem;
-  margin-left: 4rem;
+  margin: 0 auto;
+  padding: 3rem 1rem;
   position: relative;
   text-align: left;
 }
@@ -18,12 +16,16 @@
 }
 
 
-.cytat::before {
+.cytat div div > *::before {
     content: '\201C';
     font-size: 7rem;
     position: absolute;
     left: -2rem;
-    top: 0;
+    top: 1rem;
     color: var(--color-mint);
     line-height: 0.8;
+}
+
+.cytat div div > * {
+    margin: 0;
 }

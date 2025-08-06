@@ -1,8 +1,9 @@
 .cytat {
-  margin: 0 auto;
-  padding: 3rem 1rem;
+  margin: 2rem auto;
+  padding: 3rem;
   position: relative;
   text-align: left;
+  border-left: 5px solid var(--color-gold);
 }
 
 .cytat p {
@@ -18,14 +19,28 @@
 
 .cytat div div > *::before {
     content: '\201C';
-    font-size: 7rem;
+    font-size: 10rem;
     position: absolute;
-    left: -2rem;
-    top: 1rem;
-    color: var(--color-mint);
+    left: 2rem;
+    top: 0rem;
+    color: var(--color-gold);
     line-height: 0.8;
+
 }
 
 .cytat div div > * {
     margin: 0;
+}
+
+@media (max-width: 768px) {
+
+    .cytat {
+        padding: 2rem;
+        margin: 2rem 1rem
+    }
+
+    .cytat div div > *::before {
+        font-size: 4rem;
+        left: 1rem;
+    }
 }

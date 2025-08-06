@@ -62,7 +62,6 @@ function createDownloadButton(href, fileName, fileSize) {
   
   return button;
 }
-
 /**
  * Decorates the download block
  * @param {HTMLElement} block - The block element to decorate

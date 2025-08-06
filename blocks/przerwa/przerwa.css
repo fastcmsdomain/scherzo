@@ -1,0 +1,48 @@
+/* Block configuration */
+.przerwa {
+  --przerwa-height: 1rem;
+  --przerwa-width: 100%;
+}
+
+/* Base styles for the break block */
+.przerwa {
+  height: var(--przerwa-height);
+  width: var(--przerwa-width);
+  display: block;
+  clear: both;
+}
+
+/* Ensure proper spacing and layout */
+.przerwa-wrapper {
+  margin: 0;
+  padding: 0;
+}
+
+/* Accessibility - hide from screen readers as it's purely visual */
+.przerwa[aria-hidden="true"] {
+  /* Visual spacer only */
+}
+
+/* Optional variations for different heights */
+.przerwa.small {
+  --przerwa-height: 0.5rem;
+}
+
+.przerwa.medium {
+  --przerwa-height: 1rem;
+}
+
+.przerwa.large {
+  --przerwa-height: 2rem;
+}
+
+.przerwa.xlarge {
+  --przerwa-height: 3rem;
+}
+
+/* Responsive adjustments */
+@media (min-width: 768px) {
+  .przerwa {
+    /* Maintain consistent spacing on larger screens */
+  }
+} 

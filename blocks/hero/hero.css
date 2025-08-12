@@ -162,6 +162,11 @@ main .hero-container {
   background-color: var(--color-dark-blue);
 }
 
+.bez-zdjeciem > * {
+  position: relative;
+  z-index: 1;
+}
+
 .bez-zdjeciem h1 {
   color: var(--color-white);
 }

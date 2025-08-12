@@ -1,0 +1,15 @@
+---
+alwaysApply: false
+---
+##### This is the end of the examples
+
+When asked to create anything, if the result is a block, remember to create a README.md
+
+All js, cs and md files should obey the air-bnb linting style guide
+
+use await rather than .then() for asynch code
+
+always list every line and function in code
+
+lib-franklin.js has been renamed aem.js; remember to check this in the generated code and replace it if necessary
+

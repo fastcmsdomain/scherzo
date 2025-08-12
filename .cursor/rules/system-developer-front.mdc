@@ -1,0 +1,104 @@
+---
+description: coding style for an adobe Edge Delivery Services
+alwaysApply: false
+---
+This part of the instructions is intended to train an ai in the coding style for an adobe product. The product uses CSS3,  modern javascript and DOM manipulation instead of libraries
+
+
+Instructions
+
+
+Edge Delivery Services (EDS) Overview:
+EDS is Adobe's serverless platform for fast, scalable web content delivery. Also known as Franklin or Helix. It allows content creators to use familiar tools like Google Docs/Microsoft Word for authoring. The system converts documents to HTML/JSON and serves them via CDN. EDS supports blocks/components for layout and functionality, enabling rapid development and publishing.
+
+Key Components:
+1. Document-based authoring
+2. Auto-blocking and metadata handling
+3. JSON generation from spreadsheets
+4. Redirects and configuration options
+
+Development Process:
+1. Content Creation:
+   - Use Google Docs or Microsoft Word
+   - Add metadata tables for page properties
+   - Define blocks using tables in the document
+
+2. Preview and Publish:
+   - Use Sidekick tool in document
+   - Preview generates temporary URL
+   - Publish pushes content to production
+
+3. Block Development:
+   - Create folder in /blocks with block-name.css and block-name.js files, inside a folder called block-name.  e.g. /blocks/example/example.js and /blocks/example/example.css and /blocks/example/README.md
+   - Use vanilla JavaScript and DOM manipulation
+   - Access block content via classes and data attributes, never ID
+
+4. Spreadsheet Usage:
+   - Create spreadsheets for dynamic content or configuration
+   - System automatically converts to JSON
+   - Access via /path/to/spreadsheet.json
+
+5. Advanced Development:
+   - Use query-index.json for dynamic content across site
+   - Configure headers, redirects, authentication in .helix folder
+
+Block Development Details:
+1. CSS:
+   - Use CSS3 features including variables
+   - Create variations with additional classes
+
+2. JavaScript:
+   - Export a default function that decorates the block
+   - Use modern browser APIs (fetch, Intersection Observer, etc.)
+   - Avoid external libraries to maintain performance
+
+3. HTML Structure:
+   - Blocks wrapped in <div class="blockname-wrapper">
+   - Inner content in <div class="blockname block">
+
+Best Practices:
+1. Performance:
+   - Leverage EDS features for optimal page speed
+   - Minimize external dependencies
+   - Use lazy loading for images and heavy content
+
+2. Modularity:
+   - Keep blocks self-contained and reusable
+   - Use block variations for different use cases
+   - Separate concerns (HTML structure, styling, behavior)
+
+3. Content Author Experience:
+   - Make block usage intuitive in documents
+   - Provide clear documentation for custom blocks
+   - Use sensible defaults with options for customization
+
+4. SEO and Accessibility:
+   - Ensure proper heading structure
+   - Use semantic HTML elements
+   - Provide alt text for images
+
+5. Responsive Design:
+   - Design mobile-first, then enhance for larger screens
+   - Use CSS Grid and Flexbox for layouts
+   - Implement responsive images with picture element
+
+Configuration and Advanced Features:
+1. .helix folder:
+   - Store configuration files (headers, redirects, etc.)
+   - Not publicly accessible
+
+2. Spreadsheets and JSON:
+   - query-index for site-wide content index
+   - Use for dynamic content, site configuration
+   - GitHub fallback for spreadsheets
+
+3. Authentication:
+   - Configure in .helix/config spreadsheet
+
+4. Redirects:
+   - Manage in redirects spreadsheet or GitHub fallback
+
+5. Custom HTTP Headers:
+   - Define in headers spreadsheet or GitHub fallback
+   
+This part of the instructions is intended to train an ai in the coding style for an adobe product. The product uses CSS3,  modern javascript and DOM manipulation instead of librarie

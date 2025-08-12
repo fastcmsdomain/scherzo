@@ -1,0 +1,62 @@
+---
+description: Guide to Creating Blocks in Edge Delivery Services
+alwaysApply: false
+---
+# Guide to Creating Blocks in Edge Delivery Services (EDS) or Franklin, Helix
+
+Blocks are modular components used in development to create reusable and customizable sections of a webpage.
+
+## Block Structure
+- Each block typically consists of two main files, and an optional third:
+  1. A CSS file (e.g., `blockname.css`) for styling
+  2. A JavaScript file (e.g., `blockname.js`) for functionality
+  3. a README.md for documentation
+
+
+If asked to create a block, one should always create a README.md alongside it
+
+## Key Components of a Block
+
+### CSS File
+- Contains styles specific to the block
+- Often includes responsive design for different screen sizes
+- May use CSS variables for theming
+
+### JavaScript File
+- Exports a `decorate` function as the default
+- The `decorate` function typically:
+  - Manipulates the DOM to create the block's structure
+  - Adds event listeners for interactivity
+  - Fetches data if needed (e.g., from JSON files)
+  - Applies dynamic styling
+  
+### Markdown File
+- Contains documentation of use to the developer, maintainer or content author
+
+### Common Patterns
+- Use of `document.createElement` to create elements
+- Applying classes for styling
+- Creating nested structures (e.g., for carousels or grids)
+- Fetching and processing data (often using `fetch` API)
+- Implementing responsive behavior
+
+## Best Practices
+1. Keep blocks modular and reusable
+2. Use semantic HTML where possible
+3. Implement accessibility features (ARIA attributes, keyboard navigation)
+4. Optimize for performance (lazy loading, efficient DOM manipulation)
+5. Follow a consistent naming convention for classes and IDs
+
+## Advanced Features
+- Some blocks may use external libraries or APIs
+- Complex blocks may implement lazy loading or infinite scrolling
+- Interactive blocks often use event delegation for efficiency
+
+## Integration
+- Blocks are typically integrated into a larger project structure
+- They may interact with a content management system or data layer
+- Often used in conjunction with a main JavaScript file that handles overall page behavior
+
+This guide provides a high-level overview of creating blocks in web development. Each block type has its own specific implementation details and requirements.
+
+What follows is sample blocks from my GitHub repository

@@ -110,6 +110,47 @@ function buildAutoBlocks(main) {
 }
 
 /**
+ * Adds global Enter key handling to insert <br> tags in blocks
+ * @param {Element} main The main element
+ */
+function addGlobalEnterKeyHandling(main) {
+  // Add keydown event listener to all blocks
+  main.addEventListener('keydown', (e) => {
+    // Check if Enter key was pressed
+    if (e.key === 'Enter' && !e.shiftKey && !e.ctrlKey && !e.metaKey) {
+      // Check if we're inside a block
+      const block = e.target.closest('.block');
+      if (block) {
+        // Check if we're in an editable element or contenteditable area
+        const isEditable = e.target.isContentEditable ||
+                          e.target.tagName === 'INPUT' ||
+                          e.target.tagName === 'TEXTAREA' ||
+                          e.target.closest('[contenteditable="true"]');
+
+        if (isEditable) {
+          e.preventDefault();
+
+          // Insert a <br> tag at the current cursor position
+          const selection = window.getSelection();
+          if (selection.rangeCount > 0) {
+            const range = selection.getRangeAt(0);
+            const br = document.createElement('br');
+            range.deleteContents();
+            range.insertNode(br);
+
+            // Move cursor after the <br> tag
+            range.setStartAfter(br);
+            range.setEndAfter(br);
+            selection.removeAllRanges();
+            selection.addRange(range);
+          }
+        }
+      }
+    }
+  });
+}
+
+/**
  * Decorates the main element.
  * @param {Element} main The main element
  */
@@ -121,6 +162,9 @@ export function decorateMain(main) {
   buildAutoBlocks(main);
   decorateSections(main);
   decorateBlocks(main);
+
+  // Add global Enter key handling for blocks
+  addGlobalEnterKeyHandling(main);
 }
 
 /**

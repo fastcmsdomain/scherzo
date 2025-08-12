@@ -485,6 +485,12 @@ clip-path: inset(0  -100vmax);
     clip-path: inset(0  -100vmax);
   }
 
+  .canvy li::marker,
+  .canvy a {
+    color: var(--color-white);
+  }
+
+
 /* Text alignment from Google Docs - Global styles */
 [data-align="left"] {
   text-align: left;

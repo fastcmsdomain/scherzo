@@ -24,19 +24,19 @@
 }
 
 /* Optional variations for different heights */
-.przerwa.small {
+.przerwa.mala {
   --przerwa-height: 0.5rem;
 }
 
-.przerwa.medium {
+.przerwa.srednia {
   --przerwa-height: 1rem;
 }
 
-.przerwa.large {
+.przerwa.duza {
   --przerwa-height: 2rem;
 }
 
-.przerwa.xlarge {
+.przerwa.ogromna {
   --przerwa-height: 3rem;
 }
 

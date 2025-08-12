@@ -161,3 +161,15 @@ main .hero-container {
 .hero-container:has(:not(p picture)) {
   background-color: var(--color-dark-blue);
 }
+
+.bez-zdjeciem h1 {
+  color: var(--color-white);
+}
+
+.bez-zdjeciem p {
+  color: var(--color-white);
+}
+
+.bez-zdjeciem a {
+  color: var(--color-gold);
+}

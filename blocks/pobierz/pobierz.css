@@ -1,0 +1,74 @@
+.pobierz {
+    --pobierz-primary-color: var(--link-color, #2558ef);
+    --pobierz-hover-color: var(--link-hover-color, #1a3fa0);
+    --pobierz-background: var(--background-color, #fff);
+    --pobierz-border-color: var(--border-color, #e5e7eb);
+    --pobierz-border-radius: var(--border-radius-medium, 8px);
+    --pobierz-spacing: var(--spacing-small, 1rem);
+  }
+  
+  .pobierz > div {
+    margin-bottom: var(--pobierz-spacing);
+  }
+  
+  .pobierz-button {
+    align-items: center;
+    background: var(--pobierz-background);
+    border: 1px solid var(--pobierz-border-color);
+    border-radius: var(--pobierz-border-radius);
+    color: var(--pobierz-primary-color);
+    display: flex;
+    gap: var(--pobierz-spacing);
+    padding: var(--pobierz-spacing);
+    text-decoration: none;
+    transition: all 0.3s ease;
+  }
+  
+  .pobierz-button:hover,
+  .pobierz-button:focus {
+    background: var(--pobierz-primary-color);
+    border-color: var(--pobierz-primary-color);
+    color: var(--pobierz-background);
+  }
+  
+  .pobierz-icon {
+    flex-shrink: 0;
+  }
+  
+  .pobierz-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+  
+  /* Focus styles for accessibility */
+  .pobierz-button:focus-visible {
+    outline: 2px solid var(--pobierz-primary-color);
+    outline-offset: 2px;
+  }
+  
+  /* Responsive adjustments */
+  @media (width <= 768px) {
+    .pobierz-button {
+      padding: calc(var(--pobierz-spacing) * 0.75);
+    }
+  }
+  
+  .pobierz-filename {
+    color: inherit;
+    font-weight: 500;
+    text-decoration: none;
+  }
+  
+  /* Add these new classes to your existing CSS */
+  .pobierzs-link {
+    display: none;
+  }
+  
+  .pobierzs-name {
+    font-weight: 500;
+  }
+
+  .pobierzs-file {
+    display: none;
+  }

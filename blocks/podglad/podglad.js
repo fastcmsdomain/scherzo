@@ -1,5 +1,5 @@
-// Configuration object for the download block
-const DOWNLOAD_CONFIG = {
+// Configuration object for the podglad block
+const PODGLAD_CONFIG = {
   ICONS: {
     PDF: `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M14 2H6C5.46957 2 4.96086 2.21071 4.58579 2.58579C4.21071 2.96086 4 3.46957 4 4V20C4 20.5304 4.21071 21.0391 4.58579 21.4142C4.96086 21.7893 5.46957 22 6 22H18C18.5304 22 19.0391 21.7893 19.4142 21.4142C19.7893 21.0391 20 20.5304 20 20V8L14 2Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -9,7 +9,7 @@ const DOWNLOAD_CONFIG = {
           </svg>`,
   },
   LABELS: {
-    DOWNLOAD: 'Download',
+    PODGLAD: 'Podglad',
     FILE_SIZE: 'File size:',
     KB: 'KB',
     MB: 'MB',
@@ -30,40 +30,40 @@ function formatFileSize(bytes) {
 }
 
 /**
- * Creates the download button element
- * @param {string} href - URL of the file to download
+ * Creates the podglad button element
+ * @param {string} href - URL of the file to podglad
  * @param {string} fileName - Name of the file
  * @param {number} fileSize - Size of the file in bytes
- * @returns {HTMLElement} Download button element
+ * @returns {HTMLElement} podglad button element
  */
-function createDownloadButton(href, fileName, fileSize) {
+function createpodgladButton(href, fileName, fileSize) {
   const button = document.createElement('a');
   button.href = href;
-  button.className = 'download-button';
-  button.download = fileName;
-  
+  button.className = 'podglad-button';
+  button.podglad = fileName;
+
   const iconWrapper = document.createElement('span');
-  iconWrapper.className = 'download-icon';
-  iconWrapper.innerHTML = DOWNLOAD_CONFIG.ICONS.PDF;
-  
+  iconWrapper.className = 'podglad-icon';
+  iconWrapper.innerHTML = PODGLAD_CONFIG.ICONS.PDF;
+
   const textWrapper = document.createElement('span');
-  textWrapper.className = 'download-text';
-  
+  textWrapper.className = 'podglad-text';
+
   const nameElement = document.createElement('span');
-  nameElement.className = 'download-filename';
+  nameElement.className = 'podglad-filename';
   nameElement.textContent = fileName;
-  
+
   const sizeElement = document.createElement('span');
-  sizeElement.className = 'download-filesize';
-  sizeElement.textContent = `${DOWNLOAD_CONFIG.LABELS.FILE_SIZE} ${formatFileSize(fileSize)}`;
-  
+  sizeElement.className = 'podglad-filesize';
+  sizeElement.textContent = `${PODGLAD_CONFIG.LABELS.FILE_SIZE} ${formatFileSize(fileSize)}`;
+
   textWrapper.append(nameElement, sizeElement);
   button.append(iconWrapper, textWrapper);
-  
+
   return button;
 }
 /**
- * Decorates the download block
+ * Decorates the podglad block
  * @param {HTMLElement} block - The block element to decorate
  */
 export default async function decorate(block) {
@@ -78,16 +78,16 @@ export default async function decorate(block) {
     // Fetch file metadata
     const response = await fetch(href, { method: 'HEAD' });
     if (!response.ok) throw new Error('Failed to fetch file metadata');
-    
+
     const fileSize = parseInt(response.headers.get('content-length'), 10);
-    const downloadButton = createDownloadButton(href, fileName, fileSize);
-    
-    // Clear block content and append download button
+    const podgladButton = createpodgladButton(href, fileName, fileSize);
+
+    // Clear block content and append podglad button
     block.textContent = '';
-    block.appendChild(downloadButton);
-    
-  } catch (error) {
+    block.appendChild(podgladButton);
+
+} catch (error) {
     // eslint-disable-next-line no-console
-    console.error('Error creating download button:', error);
+    console.error('Error creating podglad button:', error);
   }
-} 
+}

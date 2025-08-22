@@ -1,20 +1,20 @@
-const DOWNLOAD_CONFIG = {
+const POBIERZ_CONFIG = {
   ARIA_LABELS: {
-    BUTTON: 'Download',
+    BUTTON: 'pobierz',
   },
   CLASSES: {
-    BUTTON: 'download-button',
-    ICON: 'download-icon',
-    INFO: 'download-info',
-    FILENAME: 'download-filename',
-    FILE: 'downloads-file',
-    INFO_CONTAINER: 'downloads-info',
+    BUTTON: 'pobierz-button',
+    ICON: 'pobierz-icon',
+    INFO: 'pobierz-info',
+    FILENAME: 'pobierz-filename',
+    FILE: 'pobierzs-file',
+    INFO_CONTAINER: 'pobierzs-info',
   },
   PATTERNS: {
     GOOGLE_DRIVE: /^https:\/\/drive\.google\.com\/file\/d\/([a-zA-Z0-9_-]+)\/view\?usp=sharing$/,
   },
   URLS: {
-    GOOGLE_DRIVE_DOWNLOAD: 'https://drive.google.com/uc?export=download&id=',
+    GOOGLE_DRIVE_pobierz: 'https://drive.google.com/uc?export=pobierz&id=',
   },
   ICONS: {
     PDF: `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -27,47 +27,47 @@ const DOWNLOAD_CONFIG = {
 };
 
 /**
- * Converts a Google Drive sharing URL to a direct download URL
+ * Converts a Google Drive sharing URL to a direct pobierz URL
  * @param {string} url - Google Drive sharing URL
- * @returns {string} Direct download URL or original URL if not a Google Drive link
+ * @returns {string} Direct pobierz URL or original URL if not a Google Drive link
  */
 function convertGoogleDriveUrl(url) {
-  const match = url.match(DOWNLOAD_CONFIG.PATTERNS.GOOGLE_DRIVE);
+  const match = url.match(POBIERZ_CONFIG.PATTERNS.GOOGLE_DRIVE);
   if (match && match[1]) {
-    return `${DOWNLOAD_CONFIG.URLS.GOOGLE_DRIVE_DOWNLOAD}${match[1]}`;
+    return `${POBIERZ_CONFIG.URLS.GOOGLE_DRIVE_pobierz}${match[1]}`;
   }
   return url;
 }
 
 /**
- * Creates the download button element with proper accessibility attributes
- * @param {string} url - Download URL
+ * Creates the pobierz button element with proper accessibility attributes
+ * @param {string} url - pobierz URL
  * @param {string} filename - Name of the file
- * @returns {HTMLElement} Download button element
+ * @returns {HTMLElement} pobierz button element
  */
-function createDownloadButton(url, filename) {
+function createpobierzButton(url, filename) {
   const button = document.createElement('a');
   button.href = url;
-  button.className = DOWNLOAD_CONFIG.CLASSES.BUTTON;
+  button.className = POBIERZ_CONFIG.CLASSES.BUTTON;
   button.setAttribute('role', 'button');
-  button.setAttribute('aria-label', `${DOWNLOAD_CONFIG.ARIA_LABELS.BUTTON} ${filename}`);
-  button.setAttribute('download', '');
+  button.setAttribute('aria-label', `${POBIERZ_CONFIG.ARIA_LABELS.BUTTON} ${filename}`);
+  button.setAttribute('pobierz', '');
   button.setAttribute('target', '_blank');
   button.setAttribute('rel', 'noopener noreferrer');
 
   // Add icon
   const icon = document.createElement('span');
-  icon.className = DOWNLOAD_CONFIG.CLASSES.ICON;
-  icon.innerHTML = DOWNLOAD_CONFIG.ICONS.PDF;
+  icon.className = POBIERZ_CONFIG.CLASSES.ICON;
+  icon.innerHTML = POBIERZ_CONFIG.ICONS.PDF;
 
   // Add filename as a link
   const filenameLink = document.createElement('span');
-  filenameLink.className = DOWNLOAD_CONFIG.CLASSES.FILENAME;
+  filenameLink.className = POBIERZ_CONFIG.CLASSES.FILENAME;
   filenameLink.textContent = filename;
 
   // Add info container
   const info = document.createElement('span');
-  info.className = DOWNLOAD_CONFIG.CLASSES.INFO;
+  info.className = POBIERZ_CONFIG.CLASSES.INFO;
   info.appendChild(filenameLink);
 
   button.appendChild(icon);
@@ -77,7 +77,7 @@ function createDownloadButton(url, filename) {
 }
 
 /**
- * Decorates the download block
+ * Decorates the pobierz block
  * @param {HTMLElement} block - The block element to decorate
  */
 export default async function decorate(block) {
@@ -110,14 +110,14 @@ export default async function decorate(block) {
         ? fileData.fileDisplayName
         : fileData.infoDisplayName;
 
-      const downloadButton = createDownloadButton(convertedUrl, displayName);
+      const pobierzButton = createpobierzButton(convertedUrl, displayName);
       row.innerHTML = '';
-      row.appendChild(downloadButton);
+      row.appendChild(pobierzButton);
 
       // Set appropriate class name
       const className = index === 0
-        ? DOWNLOAD_CONFIG.CLASSES.FILE
-        : DOWNLOAD_CONFIG.CLASSES.INFO_CONTAINER;
+        ? POBIERZ_CONFIG.CLASSES.FILE
+        : POBIERZ_CONFIG.CLASSES.INFO_CONTAINER;
       row.className = className;
     });
   }

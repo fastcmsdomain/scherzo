@@ -19,6 +19,10 @@ main .hero-container {
     }
 }
 
+.hero-wrapper {
+  width: 100%;
+}
+
 .hero-wrapper::before {
     content: '';
     position: absolute;
@@ -30,7 +34,7 @@ main .hero-container {
 }
 
 .hero {
-  align-items: center;
+  align-items: flex-end;
   display: flex;
   min-height: 500px;
   max-height: 500px;
@@ -57,7 +61,7 @@ main .hero-container {
   align-self: flex-end;
   color: var(--color-white);
   font-family: var(--body-bold-family);
-  font-size: var(--heading-font-size-xxl);
+  font-size: var(--heading-font-size-mobile-l);
   line-height: 1;
   margin: 0 auto;
   max-width: 900px;
@@ -68,7 +72,7 @@ main .hero-container {
 }
 
 .hero h1.long-heading {
-  font-size: var(--heading-font-size-xl);
+  font-size: var(--heading-font-size-l);
   line-height: 1.2;
 }
 
@@ -94,7 +98,7 @@ main .hero-container {
 }
 
 .breadcrumbs {
-    transform: translateY(-7rem);
+    transform: translateY(-1rem);
 }
 
 .breadcrumbs ol {

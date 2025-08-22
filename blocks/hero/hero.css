@@ -67,6 +67,11 @@ main .hero-container {
   z-index: 1;
 }
 
+.hero h1.long-heading {
+  font-size: var(--heading-font-size-xl);
+  line-height: 1.2;
+}
+
 @media (width >= 900px) {
   .hero h1 {
     padding: var(--space-26) 0 ;

@@ -6,6 +6,15 @@ export default function decorate(block) {
   // Always convert the second paragraph to h1 (original functionality)
   const title = document.createElement('h1');
   title.innerHTML = elemant[1].innerHTML;
+  
+  // Check if heading has more than 5 words and apply smaller size
+  const headingText = elemant[1].textContent || elemant[1].innerText || '';
+  const wordCount = headingText.trim().split(/\s+/).length;
+  
+  if (wordCount > 5) {
+    title.classList.add('long-heading');
+  }
+  
   elemant[1].parentNode.replaceChild(title, elemant[1]);
 
   // Additional handling for 'bez zdjeciem' class if needed

@@ -1,6 +1,6 @@
 .cytat {
-  margin: 2rem auto;
-  padding: 3rem;
+  margin: var(--space-66);
+  padding: 0 var(--space-36);
   position: relative;
   text-align: left;
   border-left: 5px solid var(--color-gold);
@@ -21,7 +21,7 @@
     content: '\201C';
     font-size: 10rem;
     position: absolute;
-    left: 2rem;
+    left: -5rem;
     top: 0rem;
     color: var(--color-gold);
     line-height: 0.8;
@@ -35,12 +35,12 @@
 @media (max-width: 768px) {
 
     .cytat {
-        padding: 2rem;
-        margin: 2rem 1rem
+        padding: 0 var(--space-20);
+        margin: var(--space-36);
     }
 
     .cytat div div > *::before {
         font-size: 4rem;
-        left: 1rem;
+        left: -2.2rem;
     }
 }

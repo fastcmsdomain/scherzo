@@ -71,7 +71,7 @@ export default async function decorate(block) {
   const link = block.querySelector('a');
   if (!link) return;
 
-  const href = link.href;
+  const { href } = link;
   const fileName = link.textContent.trim();
 
   try {
@@ -85,8 +85,7 @@ export default async function decorate(block) {
     // Clear block content and append podglad button
     block.textContent = '';
     block.appendChild(podgladButton);
-
-} catch (error) {
+  } catch (error) {
     // eslint-disable-next-line no-console
     console.error('Error creating podglad button:', error);
   }

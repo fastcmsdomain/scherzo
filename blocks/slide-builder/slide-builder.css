@@ -72,19 +72,15 @@ main .section.slide-builder-container .slide-builder-wrapper {
 }
 
 .title-part-1 {
-    font-size: var(--heading-font-size-mobile-m);
+    font-size: var(--heading-font-size-xxxl);
+    font-family: var(--heading-font-family);
     margin: 0 0 1rem;
+    position: relative;
 }
 
 .title-part-2,
 .title-part-3 {
     will-change: opacity, transform;
-}
-
-.title-part-1 {
-  font-size: var(--heading-font-size-xxxl);
-  font-family: var(--heading-font-family);
-  position: relative;
 }
 
 
@@ -199,11 +195,12 @@ body::-webkit-scrollbar {
 }
 
 .slide-button {
-  background-color: var(--button-background-color, rgba(255, 255, 255, 0.9));
+  background-color: var(--button-background-color, rgb(255 255 255 / 90%));
   border: none;
   border-radius: 4px;
   color: var(--button-text-color, #000);
   cursor: pointer;
+
   /* Button styling */
   display: inline-block;
   font-family: inherit;
@@ -214,7 +211,7 @@ body::-webkit-scrollbar {
   
   /* Hover effects */
   &:hover {
-    background-color: var(--button-hover-background-color, rgba(255, 255, 255, 1));
+    background-color: var(--button-hover-background-color, rgb(255 255 255 / 100%));
     transform: translateY(-2px);
   }
   

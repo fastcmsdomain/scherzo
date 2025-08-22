@@ -30447,3 +30447,25 @@ By following this structured approach to context creation in Cursor.ai, you can 
 
  *** End of Page *** 
 
+ # Scherzo Coding Rules
+
+## JavaScript
+- Use const/let appropriately
+- Define functions before calling
+- Use template literals and destructuring  
+- Arrow functions: (item) => {}
+- Array methods over for...of loops
+- Trailing commas, newline at end
+- Lines under 100 chars
+- Static methods if no 'this'
+
+## CSS
+- Order selectors least to most specific
+- kebab-case class names
+- No duplicates
+- Modern CSS syntax
+- Empty lines before rules
+
+Run 'npm run lint' before completing work.
+
+

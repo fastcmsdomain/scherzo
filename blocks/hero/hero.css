@@ -15,11 +15,11 @@ main .hero-container {
 @media (width >= 900px) {
     main .hero-container {
         top: 0;
-        padding:  0 0 32px 0;
+        padding:  0 0 32px;
     }
 }
 
-.hero-wrapper:before {
+.hero-wrapper::before {
     content: '';
     position: absolute;
     bottom: 0;
@@ -103,16 +103,14 @@ main .hero-container {
 }
 
 .breadcrumbs ol li {
+    font-size: var(--body-font-size-xs);
+    color: var(--color-white);
+
   &:not(:last-child)::after {
     color: var(--color-white);
     content: '-';
     margin: 0 0 0 0.2rem;
   }
-}
-
-.breadcrumbs ol li {
-    font-size: var(--body-font-size-xs);
-    color: var(--color-white);
 }
 
 .breadcrumbs ol li a {
@@ -152,7 +150,7 @@ main .hero-container {
   align-items: end;
 
         &::before {
-            background: linear-gradient(0deg, rgba(0, 0, 0, 0.9) 0%, rgba(0, 0, 0, 0.7) 50%, rgba(0, 0, 0, 0) 100%);
+            background: linear-gradient(0deg, rgb(0 0 0 / 90%) 0%, rgb(0 0 0 / 70%) 50%, rgb(0 0 0 / 0%) 100%);
             height: 300px;
         }
     }

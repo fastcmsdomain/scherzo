@@ -13,7 +13,7 @@ const MENU_PODRECZNE_CONFIG = {
   ACTIVE_CLASS: 'active',
   EXPANDED_CLASS: 'expanded',
   HIDDEN_CLASS: 'hidden',
-  VISIBLE_CLASS: 'visible'
+  VISIBLE_CLASS: 'visible',
 };
 
 // CSS selectors for the menu components
@@ -23,7 +23,7 @@ const SELECTORS = {
   menuItem: '.menu-podreczne__item',
   submenuToggle: '.menu-podreczne__submenu-toggle',
   submenu: '.menu-podreczne__submenu',
-  link: '.menu-podreczne__link'
+  link: '.menu-podreczne__link',
 };
 
 /**
@@ -74,23 +74,22 @@ function buildNavigationHierarchy(pages) {
   // Sort pages by path to ensure proper hierarchy
   const sortedPages = pages.sort((a, b) => a.path.localeCompare(b.path));
 
-  sortedPages.forEach(page => {
-    const pathParts = page.path.split('/').filter(part => part);
+  sortedPages.forEach((page) => {
+    const pathParts = page.path.split('/').filter((part) => part);
     const depth = pathParts.length;
-    
     pathMap.set(page.path, { ...page, depth, children: [] });
   });
 
   // Build parent-child relationships
   pathMap.forEach((page, path) => {
-    const pathParts = path.split('/').filter(part => part);
-    
+    const pathParts = path.split('/').filter((part) => part);
+
     if (pathParts.length === 1) {
       // Top-level page
       hierarchy.push(page);
     } else {
       // Find parent page
-      const parentPath = '/' + pathParts.slice(0, -1).join('/');
+      const parentPath = `/${pathParts.slice(0, -1).join('/')}`;
       const parent = pathMap.get(parentPath);
       if (parent) {
         parent.children.push(page);
@@ -108,7 +107,7 @@ function buildNavigationHierarchy(pages) {
  * @returns {Array} Relevant navigation items
  */
 function getRelevantNavigation(hierarchy, currentPath) {
-  const currentPathParts = currentPath.split('/').filter(part => part);
+  const currentPathParts = currentPath.split('/').filter((part) => part);
   const currentDepth = currentPathParts.length;
 
   if (currentDepth === 1) {
@@ -117,18 +116,16 @@ function getRelevantNavigation(hierarchy, currentPath) {
   }
 
   // On subpage, find parent and show siblings
-  const parentPath = '/' + currentPathParts.slice(0, -1).join('/');
-  
+  const parentPath = `/${currentPathParts.slice(0, -1).join('/')}`;
   // Find the parent in hierarchy
   function findPageInHierarchy(pages, targetPath) {
-    for (const page of pages) {
+    return pages.reduce((found, page) => {
+      if (found) return found;
       if (page.path === targetPath) {
         return page;
       }
-      const found = findPageInHierarchy(page.children, targetPath);
-      if (found) return found;
-    }
-    return null;
+      return findPageInHierarchy(page.children, targetPath);
+    }, null);
   }
 
   const parent = findPageInHierarchy(hierarchy, parentPath);
@@ -137,6 +134,24 @@ function getRelevantNavigation(hierarchy, currentPath) {
   }
 
   return [];
+}
+
+/**
+ * Toggles submenu visibility
+ * @param {HTMLElement} toggleButton - Toggle button element
+ * @param {HTMLElement} submenu - Submenu element
+ */
+function toggleSubmenu(toggleButton, submenu) {
+  const isExpanded = toggleButton.getAttribute('aria-expanded') === 'true';
+  const newState = !isExpanded;
+
+  toggleButton.setAttribute('aria-expanded', newState.toString());
+  submenu.classList.toggle(MENU_PODRECZNE_CONFIG.EXPANDED_CLASS, newState);
+
+  const icon = toggleButton.querySelector('.menu-podreczne__plus-icon');
+  if (icon) {
+    icon.textContent = newState ? '−' : '+';
+  }
 }
 
 /**
@@ -153,7 +168,7 @@ function createMenuItem(page, currentPath) {
   link.href = page.path;
   link.classList.add('menu-podreczne__link');
   link.textContent = page.title;
-  
+
   if (page.path === currentPath) {
     link.classList.add(MENU_PODRECZNE_CONFIG.ACTIVE_CLASS);
   }
@@ -167,12 +182,12 @@ function createMenuItem(page, currentPath) {
     toggleButton.setAttribute('aria-expanded', 'false');
     toggleButton.setAttribute('aria-label', `Toggle submenu for ${page.title}`);
     toggleButton.innerHTML = '<span class="menu-podreczne__plus-icon">+</span>';
-    
+
     const submenu = document.createElement('ul');
     submenu.classList.add('menu-podreczne__submenu');
     submenu.setAttribute('role', 'menu');
 
-    page.children.forEach(child => {
+    page.children.forEach((child) => {
       const childItem = createMenuItem(child, currentPath);
       childItem.setAttribute('role', 'menuitem');
       submenu.appendChild(childItem);
@@ -190,24 +205,6 @@ function createMenuItem(page, currentPath) {
   }
 
   return item;
-}
-
-/**
- * Toggles submenu visibility
- * @param {HTMLElement} toggleButton - Toggle button element
- * @param {HTMLElement} submenu - Submenu element
- */
-function toggleSubmenu(toggleButton, submenu) {
-  const isExpanded = toggleButton.getAttribute('aria-expanded') === 'true';
-  const newState = !isExpanded;
-
-  toggleButton.setAttribute('aria-expanded', newState.toString());
-  submenu.classList.toggle(MENU_PODRECZNE_CONFIG.EXPANDED_CLASS, newState);
-  
-  const icon = toggleButton.querySelector('.menu-podreczne__plus-icon');
-  if (icon) {
-    icon.textContent = newState ? '−' : '+';
-  }
 }
 
 /**
@@ -260,7 +257,9 @@ function handleScrollBehavior(menuContainer) {
  */
 function shouldShowMenu(hierarchy, currentPath) {
   const relevantNav = getRelevantNavigation(hierarchy, currentPath);
-  return relevantNav.length > 0 && relevantNav.some(page => page.children && page.children.length > 0);
+  return relevantNav.length > 0 && relevantNav.some(
+    (page) => page.children && page.children.length > 0,
+  );
 }
 
 /**
@@ -276,7 +275,7 @@ function renderNavigation(block, navigationItems, currentPath) {
   // Clear existing items
   menuList.innerHTML = '';
 
-  navigationItems.forEach(page => {
+  navigationItems.forEach((page) => {
     const menuItem = createMenuItem(page, currentPath);
     menuList.appendChild(menuItem);
   });
@@ -323,7 +322,7 @@ export default async function decorate(block) {
       if (e.key === 'Escape') {
         // Close all submenus on Escape
         const expandedToggles = block.querySelectorAll('[aria-expanded="true"]');
-        expandedToggles.forEach(toggle => {
+        expandedToggles.forEach((toggle) => {
           const submenu = toggle.nextElementSibling;
           if (submenu) {
             toggleSubmenu(toggle, submenu);
@@ -334,11 +333,10 @@ export default async function decorate(block) {
 
     // Mark block as initialized
     block.classList.add('menu-podreczne--initialized');
-
   } catch (error) {
     // eslint-disable-next-line no-console
     console.error(MENU_PODRECZNE_CONFIG.ERROR_MESSAGE, error);
-    
+
     // Graceful error handling - hide the block
     block.style.display = 'none';
   }

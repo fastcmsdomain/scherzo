@@ -20,8 +20,8 @@
   --color-accent-dark: #c500b3;
   
   /* Neutral Colors */
-  --color-black: #000000;
-  --color-white: #ffffff;
+  --color-black: #000;
+  --color-white: #fff;
   --color-gray-50: #fafafa;
   --color-gray-100: #f5f5f5;
   --color-gray-200: #e5e5e5;
@@ -56,8 +56,8 @@
   --color-border-dark: var(--color-gray-300);
   
   /* Shadow Colors */
-  --color-shadow: rgba(0, 0, 0, 0.1);
-  --color-shadow-dark: rgba(0, 0, 0, 0.2);
+  --color-shadow: rgb(0 0 0 / 10%);
+  --color-shadow-dark: rgb(0 0 0 / 20%);
   
   /* Focus Colors */
   --color-focus-ring: var(--color-primary-light);
@@ -107,8 +107,8 @@
   --border-radius-full: 9999px;
   
   /* Typography */
-  --font-family-sans: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-  --font-family-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
+  --font-family-sans: system-ui, -apple-system, blinkmacsystemfont, 'Segoe UI', roboto, 'Helvetica Neue', arial, sans-serif;
+  --font-family-mono: ui-monospace, sfmono-regular, menlo, monaco, consolas, 'Liberation Mono', 'Courier New', monospace;
   
   /* Font Sizes */
   --font-size-xs: 0.75rem;
@@ -151,19 +151,15 @@
     --color-background: var(--color-gray-900);
     --color-background-alt: var(--color-gray-800);
     --color-background-inverse: var(--color-white);
-    
     --color-text: var(--color-gray-100);
     --color-text-light: var(--color-gray-400);
     --color-text-inverse: var(--color-gray-900);
     --color-text-muted: var(--color-gray-500);
-    
     --color-border: var(--color-gray-700);
     --color-border-light: var(--color-gray-800);
     --color-border-dark: var(--color-gray-600);
-    
-    --color-shadow: rgba(0, 0, 0, 0.3);
-    --color-shadow-dark: rgba(0, 0, 0, 0.4);
-    
+    --color-shadow: rgb(0 0 0 / 30%);
+    --color-shadow-dark: rgb(0 0 0 / 40%);
     --color-input-background: var(--color-gray-800);
     --color-input-border: var(--color-gray-700);
   }
@@ -172,14 +168,13 @@
 /* High Contrast Mode Overrides */
 @media (prefers-contrast: high) {
   :root {
-    --color-primary: #0000ff;
+    --color-primary: #00f;
     --color-secondary: #800080;
-    --color-accent: #ff0000;
-    
+    --color-accent: #f00;
     --color-success: #008000;
     --color-warning: #ffa500;
-    --color-error: #ff0000;
-    --color-info: #0000ff;
+    --color-error: #f00;
+    --color-info: #00f;
   }
 }
 

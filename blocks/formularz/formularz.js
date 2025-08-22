@@ -5,13 +5,13 @@ const FORMULARZ_CONFIG = {
   // Classes for styling
   CLASSES: {
     WRAPPER: 'formularz-wrapper',
-    IFRAME: 'formularz-iframe'
+    IFRAME: 'formularz-iframe',
   },
   // Error messages
   ERRORS: {
     NO_URL: 'No form URL provided',
-    INVALID_URL: 'Invalid Google Forms URL'
-  }
+    INVALID_URL: 'Invalid Google Forms URL',
+  },
 };
 
 /**
@@ -37,15 +37,15 @@ function createFormIframe(url) {
   iframe.frameBorder = '0';
   iframe.marginHeight = '0';
   iframe.marginWidth = '0';
-  
+
   // Add transparency settings
   iframe.style.backgroundColor = 'transparent';
   iframe.allowTransparency = 'true';
-  
+
   // Make iframe responsive to content height
   iframe.addEventListener('load', () => {
-    iframe.style.height = iframe.contentWindow.document.body.scrollHeight + 'px';
-    
+    iframe.style.height = `${iframe.contentWindow.document.body.scrollHeight}px`;
+
     // Try to make the iframe content transparent
     try {
       const iframeDoc = iframe.contentWindow.document;
@@ -56,7 +56,7 @@ function createFormIframe(url) {
       // Silent catch - security restrictions might prevent this
     }
   });
-  
+
   return iframe;
 }
 
@@ -68,7 +68,7 @@ export default async function decorate(block) {
   try {
     // Get the URL from the block content
     const formUrl = block.textContent.trim();
-    
+
     if (!formUrl) {
       throw new Error(FORMULARZ_CONFIG.ERRORS.NO_URL);
     }
@@ -88,10 +88,9 @@ export default async function decorate(block) {
     const iframe = createFormIframe(formUrl);
     wrapper.appendChild(iframe);
     block.appendChild(wrapper);
-
   } catch (error) {
     // eslint-disable-next-line no-console
     console.error('Formularz block error:', error);
     block.innerHTML = `<p class="error">${error.message}</p>`;
   }
-} 
+}

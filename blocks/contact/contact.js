@@ -8,7 +8,7 @@ export default function decorate(block) {
   // Create map container
   const mapContainer = document.createElement('div');
   mapContainer.className = 'contact-map';
-  
+
   // Add Google Maps iframe
   mapContainer.innerHTML = `
     <iframe 
@@ -25,7 +25,7 @@ export default function decorate(block) {
   // Create contact info container
   const contactInfo = document.createElement('div');
   contactInfo.className = 'contact-info';
-  
+
   // Move existing content to contact info
   while (block.firstChild) {
     contactInfo.appendChild(block.firstChild);
@@ -34,4 +34,4 @@ export default function decorate(block) {
   // Add containers to block
   block.appendChild(contactInfo);
   block.appendChild(mapContainer);
-} 
+}

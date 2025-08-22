@@ -2,42 +2,19 @@ import { createOptimizedPicture } from '../../scripts/aem.js';
 
 const MAX_IMAGES = 16;
 
-async function createGalleriaZdjec(block) {
-  const imageContainers = block.querySelectorAll(':scope > div');
-  if (imageContainers.length === 0) return;
-
-  const gallery = document.createElement('div');
-  gallery.className = 'galleria-zdjec-gallery';
-  const thumbnails = document.createElement('div');
-  thumbnails.className = 'galleria-zdjec-thumbnails';
-
-  const images = Array.from(imageContainers).slice(0, MAX_IMAGES);
-  await Promise.all(images.map(async (container, index) => {
-    const img = container.querySelector('img');
-    if (img) {
-      const thumbnail = await createThumbnail(img, index);
-      thumbnails.appendChild(thumbnail);
-    }
-  }));
-
-  gallery.appendChild(thumbnails);
-  block.innerHTML = '';
-  block.appendChild(gallery);
-
-  if (imageContainers.length > MAX_IMAGES) {
-    implementLazyLoading(thumbnails, Array.from(imageContainers).slice(MAX_IMAGES));
-  }
-
-  createModal();
+function closeModal() {
+  const modal = document.querySelector('.galleria-zdjec-modal');
+  modal.classList.remove('open');
+  document.body.style.overflow = '';
 }
 
-async function createThumbnail(img) {
-  const thumbnail = document.createElement('div');
-  thumbnail.className = 'galleria-zdjec-thumbnail';
-  const optimizedImg = await createOptimizedPicture(img.src, img.alt, false, [{ width: 250, height: 250 }]);
-  thumbnail.appendChild(optimizedImg);
-  thumbnail.addEventListener('click', () => openModal(img.src, img.alt));
-  return thumbnail;
+function openModal(src, alt) {
+  const modal = document.querySelector('.galleria-zdjec-modal');
+  const modalImg = modal.querySelector('img');
+  modalImg.src = src;
+  modalImg.alt = alt;
+  modal.classList.add('open');
+  document.body.style.overflow = 'hidden';
 }
 
 function createModal() {
@@ -59,19 +36,18 @@ function createModal() {
   closeButton.addEventListener('click', closeModal);
 }
 
-function openModal(src, alt) {
-  const modal = document.querySelector('.galleria-zdjec-modal');
-  const modalImg = modal.querySelector('img');
-  modalImg.src = src;
-  modalImg.alt = alt;
-  modal.classList.add('open');
-  document.body.style.overflow = 'hidden';
-}
-
-function closeModal() {
-  const modal = document.querySelector('.galleria-zdjec-modal');
-  modal.classList.remove('open');
-  document.body.style.overflow = '';
+async function createThumbnail(img) {
+  const thumbnail = document.createElement('div');
+  thumbnail.className = 'galleria-zdjec-thumbnail';
+  const optimizedImg = await createOptimizedPicture(
+    img.src,
+    img.alt,
+    false,
+    [{ width: 250, height: 250 }],
+  );
+  thumbnail.appendChild(optimizedImg);
+  thumbnail.addEventListener('click', () => openModal(img.src, img.alt));
+  return thumbnail;
 }
 
 function implementLazyLoading(container, remainingImages) {
@@ -94,6 +70,35 @@ function implementLazyLoading(container, remainingImages) {
       loadMore.remove();
     }
   });
+}
+
+async function createGalleriaZdjec(block) {
+  const imageContainers = block.querySelectorAll(':scope > div');
+  if (imageContainers.length === 0) return;
+
+  const gallery = document.createElement('div');
+  gallery.className = 'galleria-zdjec-gallery';
+  const thumbnails = document.createElement('div');
+  thumbnails.className = 'galleria-zdjec-thumbnails';
+
+  const images = Array.from(imageContainers).slice(0, MAX_IMAGES);
+  await Promise.all(images.map(async (container) => {
+    const img = container.querySelector('img');
+    if (img) {
+      const thumbnail = await createThumbnail(img);
+      thumbnails.appendChild(thumbnail);
+    }
+  }));
+
+  gallery.appendChild(thumbnails);
+  block.innerHTML = '';
+  block.appendChild(gallery);
+
+  if (imageContainers.length > MAX_IMAGES) {
+    implementLazyLoading(thumbnails, Array.from(imageContainers).slice(MAX_IMAGES));
+  }
+
+  createModal();
 }
 
 export default async function decorate(block) {

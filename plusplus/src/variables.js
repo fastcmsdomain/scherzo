@@ -9,10 +9,10 @@ export async function readVariables(configUrl) {
     if (!response.ok) {
       throw new Error(`Failed to fetch config: ${response.status} ${response.statusText}`);
     }
-    
+
     const jsonData = await response.json();
     if (jsonData?.data) {
-      jsonData.data.forEach(entry => {
+      jsonData.data.forEach((entry) => {
         if (entry.Item && entry.Value !== undefined) {
           window.siteConfig[entry.Item] = entry.Value;
         }
@@ -55,8 +55,8 @@ export function getMonthNumber(monthName) {
 }
 
 export function convertToISODate(input) {
-  // First, try to directly parse the input using the Date constructor.
-  // This works well for ISO and some common formats.
+// First, try to directly parse the input using the Date constructor.
+// This works well for ISO and some common formats.
   const parsedDate = new Date(input);
   if (!Number.isNaN(parsedDate.getTime())) {
     return parsedDate.toISOString();
@@ -102,12 +102,12 @@ export function convertToISODate(input) {
 export async function constructGlobal() {
   window.cmsplus.debug('constructGlobal');
   window.siteConfig = {};
-  
+
   if (window.fetchVariables) {
     try {
       // Get base URL with fallback
       const baseUrl = window.location.origin || 'http://localhost';
-      
+
       // Helper function to safely fetch config
       const safeReadVariables = async (configPath) => {
         try {

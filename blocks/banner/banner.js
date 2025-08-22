@@ -12,7 +12,7 @@ export default function decorate(block) {
   // Check for picture element
   const bannerPicture = block.querySelector(CONFIG.SELECTORS.PICTURE);
   const paragraphs = block.querySelectorAll(CONFIG.SELECTORS.PARAGRAPH);
-  
+
   // If no picture but paragraph exists, convert first paragraph to h1
   if (!bannerPicture && paragraphs.length > 0) {
     const title = document.createElement('h1');
@@ -27,8 +27,8 @@ export default function decorate(block) {
     // Setup image for zoom effect
     bannerImage.style.transition = 'transform 0.1s ease-out';
 
-    // Handle scroll event
-    function handleScroll() {
+    // Handle scroll event outside of conditional scope
+    const handleScroll = () => {
       const scrollPosition = window.scrollY;
       const scale = Math.min(
         1 + (scrollPosition / CONFIG.SCROLL_THRESHOLD) * (CONFIG.ZOOM_SCALE - 1),
@@ -37,7 +37,7 @@ export default function decorate(block) {
 
       // Apply transform with hardware acceleration
       bannerImage.style.transform = `scale(${scale})`;
-    }
+    };
 
     // Add scroll event listener
     window.addEventListener('scroll', () => {

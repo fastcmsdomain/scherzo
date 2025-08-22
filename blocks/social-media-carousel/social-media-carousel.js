@@ -70,19 +70,19 @@ function formatDate(dateString) {
 function createNavigation(block) {
   const prevArrow = document.createElement('button');
   const nextArrow = document.createElement('button');
-  
+
   prevArrow.className = 'carousel-nav prev';
   nextArrow.className = 'carousel-nav next';
-  
+
   prevArrow.innerHTML = '‹';
   nextArrow.innerHTML = '›';
-  
+
   prevArrow.setAttribute('aria-label', 'Previous slides');
   nextArrow.setAttribute('aria-label', 'Next slides');
-  
+
   block.appendChild(prevArrow);
   block.appendChild(nextArrow);
-  
+
   return { prevArrow, nextArrow };
 }
 
@@ -97,14 +97,14 @@ function createSlide(post, index) {
   slide.className = 'carousel-slide';
   const colorIndex = index % CAROUSEL_CONFIG.BACKGROUND_COLORS.length;
   slide.style.backgroundColor = CAROUSEL_CONFIG.BACKGROUND_COLORS[colorIndex];
-  
+
   slide.innerHTML = `
-    <div class="instagram-icon">${CAROUSEL_CONFIG.INSTAGRAM_ICON}</div>
-    <img src="${post.media_url}" alt="${post.caption || ''}" loading="lazy">
-    <p class="post-description">${post.caption || ''}</p>
-    <p class="post-date">${formatDate(post.timestamp)}</p>
-  `;
-  
+<div class="instagram-icon">${CAROUSEL_CONFIG.INSTAGRAM_ICON}</div>
+<img src="${post.media_url}" alt="${post.caption || ''}" loading="lazy">
+<p class="post-description">${post.caption || ''}</p>
+<p class="post-date">${formatDate(post.timestamp)}</p>
+`;
+
   return slide;
 }
 
@@ -117,46 +117,46 @@ function initializeCarousel(block, posts) {
   let currentIndex = 0;
   const slidesContainer = document.createElement('div');
   slidesContainer.className = 'carousel-container';
-  
+
   // Create slides
   posts.forEach((post, index) => {
     const slide = createSlide(post, index);
     slidesContainer.appendChild(slide);
   });
-  
+
   block.appendChild(slidesContainer);
-  
+
   // Create navigation
   const { prevArrow, nextArrow } = createNavigation(block);
-  
+
   // Navigation functionality
   function updateSlides() {
     slidesContainer.style.transform = `translateX(-${currentIndex * CAROUSEL_CONFIG.SLIDE_WIDTH}px)`;
   }
-  
+
   function nextSlide() {
     currentIndex = (currentIndex + 1) % (posts.length - CAROUSEL_CONFIG.VISIBLE_SLIDES + 1);
     updateSlides();
   }
-  
+
   function prevSlide() {
     currentIndex = (currentIndex - 1 + (posts.length - CAROUSEL_CONFIG.VISIBLE_SLIDES + 1))
-      % (posts.length - CAROUSEL_CONFIG.VISIBLE_SLIDES + 1);
+% (posts.length - CAROUSEL_CONFIG.VISIBLE_SLIDES + 1);
     updateSlides();
   }
-  
+
   // Event listeners
   nextArrow.addEventListener('click', nextSlide);
   prevArrow.addEventListener('click', prevSlide);
-  
+
   // Auto scroll
   let autoScrollInterval = setInterval(nextSlide, CAROUSEL_CONFIG.AUTO_SCROLL_INTERVAL);
-  
+
   // Pause auto scroll on hover
   block.addEventListener('mouseenter', () => {
     clearInterval(autoScrollInterval);
   });
-  
+
   block.addEventListener('mouseleave', () => {
     autoScrollInterval = setInterval(nextSlide, CAROUSEL_CONFIG.AUTO_SCROLL_INTERVAL);
   });
@@ -167,7 +167,7 @@ function initializeCarousel(block, posts) {
  * @returns {Promise} Promise that resolves with Instagram feed data
  */
 async function fetchInstagramFeed() {
-  // Check cache first
+// Check cache first
   const cachedData = getCachedFeed();
   if (cachedData) {
     return cachedData;
@@ -180,17 +180,17 @@ async function fetchInstagramFeed() {
     url.searchParams.append('limit', CAROUSEL_CONFIG.TOTAL_SLIDES);
 
     const response = await fetch(url);
-    
+
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
 
     const data = await response.json();
     const posts = data.data.slice(0, CAROUSEL_CONFIG.TOTAL_SLIDES);
-    
+
     // Cache the results
     cacheFeed(posts);
-    
+
     return posts;
   } catch (error) {
     // eslint-disable-next-line no-console

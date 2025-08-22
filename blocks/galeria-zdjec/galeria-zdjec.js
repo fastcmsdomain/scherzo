@@ -21,12 +21,12 @@ class GalleryModal {
   constructor(images) {
     this.images = images;
     this.currentIndex = 0;
-    this.modal = this.createModal();
+    this.modal = GalleryModal.createModal();
     this.isOpen = false;
     this.setupEventListeners();
   }
 
-  createModal() {
+  static createModal() {
     const modal = document.createElement('div');
     modal.className = 'galeria-zdjec-modal';
     modal.innerHTML = `

@@ -211,10 +211,10 @@ export async function createJSON() {
 
 export async function handleMetadataJsonLd() {
   window.cmsplus.debug('handleMetadataJsonLd');
-  
+
   // Get content from config with fallback
-  let content = window.siteConfig['$meta:json-ld$'] || 'owner';
-  
+  const content = window.siteConfig['$meta:json-ld$'] || 'owner';
+
   // Skip if content is explicitly set to 'none'
   if (content.toLowerCase() === 'none') {
     window.cmsplus.debug('JSON-LD processing skipped - content set to none');
@@ -232,6 +232,8 @@ export async function handleMetadataJsonLd() {
     }
 
     const resp = await fetch(jsonLdUrl.href);
+    let json;
+
     if (!resp.ok) {
       // If file not found, try fallback to owner.json
       if (content !== 'owner') {
@@ -241,15 +243,16 @@ export async function handleMetadataJsonLd() {
           window.cmsplus.debug('Fallback JSON-LD file not found, skipping');
           return;
         }
-        resp = fallbackResp;
+        const newJson = await fallbackResp.json();
+        json = extractJsonLd(newJson);
       } else {
         window.cmsplus.debug('JSON-LD file not found, skipping');
         return;
       }
+    } else {
+      const responseJson = await resp.json();
+      json = extractJsonLd(responseJson);
     }
-
-    let json = await resp.json();
-    json = extractJsonLd(json);
     let jsonString = JSON.stringify(json, null, '\t');
     jsonString = replaceTokens(window.siteConfig, jsonString);
 
@@ -263,11 +266,10 @@ export async function handleMetadataJsonLd() {
     document
       .querySelectorAll('meta[name="longdescription"]')
       .forEach((section) => section.remove());
-
   } catch (error) {
     window.cmsplus.debug(`Error processing JSON-LD metadata: ${error.message}`);
     // Don't throw error, just log and continue
   }
-  
+
   window.cmsplus.debug('handleMetadataJsonLd complete');
 }

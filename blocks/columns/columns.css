@@ -136,3 +136,22 @@ main .section .columns-wrapper .columns-content-col {
     padding-top: 30%;
   }
 }
+
+.columns.dwa-rzedy {
+  display: grid;
+  grid-template-rows: 1fr 1fr;
+}
+
+main .section .columns-wrapper .columns.dwa-rzedy>div:last-child {
+  grid-template-columns: 1fr;
+  align-self: flex-start;
+  width: 50%;
+}
+main .section .columns-wrapper .columns.dwa-rzedy>div:last-child > .columns-content-col {
+  padding: var(--space-16);
+  align-self: flex-start;
+}
+
+main .section .columns-wrapper .columns.dwa-rzedy>div:last-child > .columns-content-col p  {
+  margin: 0;
+}

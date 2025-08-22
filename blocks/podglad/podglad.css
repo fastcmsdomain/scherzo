@@ -1,4 +1,4 @@
-.preview {
+.podglad {
   --download-primary-color: var(--color-primary, #2c2c2c);
   --download-hover-color: var(--color-highlight, #0066cc);
   --download-background: var(--background-color, #ffffff);
@@ -8,7 +8,7 @@
   --download-transition: var(--transition-normal, 0.3s ease);
 }
 
-.preview-button {
+.podglad-button {
   display: flex;
   align-items: center;
   gap: 1rem;
@@ -21,42 +21,42 @@
   background: var(--download-background);
 }
 
-.preview-button:hover {
+.podglad-button:hover {
   border-color: var(--download-hover-color);
   color: var(--download-hover-color);
   transform: translateY(-2px);
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-.preview-icon {
+.podglad-icon {
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-.preview-text {
+.podglad-text {
   display: flex;
   flex-direction: column;
   gap: 0.25rem;
 }
 
-.preview-filename {
+.podglad-filename {
   font-weight: 600;
 }
 
-.preview-filesize {
+.podglad-filesize {
   font-size: 0.875rem;
   color: #666;
 }
 
 @media (max-width: 768px) {
-  .preview-button {
+  .podglad-button {
     flex-direction: column;
     text-align: center;
     padding: calc(var(--download-padding) * 0.75);
   }
   
-  .preview-text {
+  .podglad-text {
     align-items: center;
   }
 } 

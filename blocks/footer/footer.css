@@ -70,6 +70,7 @@ footer a:any-link {
 .par-btn {
   align-items: center;
   display: flex;
+  gap: var(--space-4);
 }
 
 .par-btn .icon {
@@ -77,7 +78,7 @@ footer a:any-link {
 }
 
 .par-btn img {
-  width: auto;
+  width: 16px;
 }
 
 footer .button-container a.button {
@@ -87,16 +88,6 @@ footer .button-container a.button {
   font-weight: normal;
   margin: 0;
   padding: 0; 
-}
-
-.parBtn {
-  align-items: center;
-  display: flex;
-  gap: var(--space-4);
-}
-
-.parBtn img {
-  width: 16px;
 }
 
 @media (width >= 900px) {
@@ -126,6 +117,7 @@ footer .button-container a.button {
 
     footer .footer > div {
         background-color: var(--color-darker-blue);
+
         /* border: 1px solid var(--color-gold); */
         border-bottom: none;
         display: grid;

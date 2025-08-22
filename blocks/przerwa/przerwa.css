@@ -1,11 +1,8 @@
-/* Block configuration */
+/* Block configuration and base styles for the break block */
 .przerwa {
   --przerwa-height: 1rem;
   --przerwa-width: 100%;
-}
 
-/* Base styles for the break block */
-.przerwa {
   height: var(--przerwa-height);
   width: var(--przerwa-width);
   display: block;
@@ -41,7 +38,7 @@
 }
 
 /* Responsive adjustments */
-@media (min-width: 768px) {
+@media (width >= 768px) {
   .przerwa {
     /* Maintain consistent spacing on larger screens */
   }

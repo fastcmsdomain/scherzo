@@ -68,7 +68,6 @@ header nav .nav-hamburger {
 header nav .nav-hamburger button {
   align-items: center;
   background-color: var(--color-darker-blue);
-  border: 1px solid var(--color-darker-blue);
   border-radius: 0;
   border-top: 1px solid var(--color-gold);
   color: inherit;
@@ -341,7 +340,6 @@ header nav .nav-tools {
 @media (width >= 900px) {
   header nav .nav-tools {
     border: 1px solid var(--color-gold);
-    border-top: 1px solid var(--color-gold);
     bottom: inherit;
     right: 2rem;
     top: 1.4rem;
@@ -362,10 +360,6 @@ header nav .nav-sections .menu  {
   text-align: left;
   top: 0;
   width: 33.333%;
-}
-
-header nav .nav-sections .menu  {
-  text-align: left;
 }
 
 header nav .nav-sections .menu .back {

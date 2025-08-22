@@ -9,7 +9,7 @@
   margin: 0 auto;
 }
 
-@media (min-width: 768px) {
+@media (width >= 768px) {
   .contact {
     align-items: center;
     grid-template-columns: 1fr 1fr;

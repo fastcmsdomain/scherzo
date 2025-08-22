@@ -1,6 +1,7 @@
 .intro {
   padding: var(--space-36)  var(--space-16);
 }
+
 .intro h2 {
     font-size: var(--font-size-2xl);
     font-family: var(--body-font-family);

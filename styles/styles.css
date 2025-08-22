@@ -11,19 +11,17 @@
  */
 
 :root {
-
-  /* font-size */
-  --font-size-base: 1rem;
+  /* font-size - main definition moved to base font sizes section */
 
   /* colors */
   --color-white: #fff;
   --color-darker-blue: #283048;
   --color-blue: #27a9de;
   --color-dark-blue: #00203e;
-  --color-gold: rgb(247, 209, 23);
+  --color-gold: rgb(247 209 23);
   --color-black: #000;
-  --color-mint: rgb(166, 214, 201);
-  --color-orange: rgb(255, 148, 51);
+  --color-mint: rgb(166 214 201);
+  --color-orange: rgb(255 148 51);
   --link-color: #035fe6;
   --link-hover-color: #136ff6;
   --background-color: white;
@@ -74,6 +72,7 @@
 --font-size-6xl: 3.75rem;   /* 60px */
 
 /* Line heights optimized for readability */
+
 /* Smaller text needs relatively more line height for readability */
 --line-height-xs: 1.6;      /* For very small text, more spacing helps readability */
 --line-height-sm: 1.5;      /* For small text */
@@ -150,9 +149,7 @@
 }
 
 body {
-  background-color: var(--color-dark-blue);
   background-color: var(--color-white);
-  color: var(--color-white);
   color: var(--color-dark-blue);
   display: none;
   font-family: var(--body-font-family);
@@ -196,6 +193,7 @@ h4, h5, h6 {
 
 h1 { 
   font-size: var(--heading-font-size-xl);
+
   @media (width >= 900px) {
     font-size: var(--heading-font-size-xxl);
   }
@@ -204,6 +202,7 @@ h1 {
 h2 {
   font-size: var(--heading-font-size-l);
   margin-top: .5em;
+
   @media (width >= 900px) {
     font-size: var(--heading-font-size-xl);
   }
@@ -321,7 +320,6 @@ ul li::marker {
   text-decoration: none;
   text-overflow: ellipsis;
   white-space: wrap;
-
   position: relative;
   transition: all 0.3s ease;
 }
@@ -402,7 +400,6 @@ main .section {
 }
 
 .section {
-    background: var(--color-dark-blue);
     background: var(--color-white);
     padding: 0 1rem;
     position: relative;
@@ -412,6 +409,7 @@ main .section {
 @media (width >= 900px) {
   .section {
     background: var(--color-white);
+
     /* padding: 0 0 4rem 0; */
   }
 }
@@ -449,6 +447,7 @@ body.podstrona main {
 
 main .default-content-wrapper {
   padding: var(--space-16);
+
   @media (width >= 900px) {
     padding: var(--space-16) var(--space-36);
   }

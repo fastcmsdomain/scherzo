@@ -1,50 +1,48 @@
 .formularz {
   --formularz-max-width: 800px;
   --formularz-border-radius: 8px;
-  --formularz-box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  --formularz-box-shadow: 0 2px 4px rgb(0 0 0 / 10%);
 }
 
 .formularz-wrapper {
   /* margin: 0 auto; */
+
   /* max-width: var(--formularz-max-width); */
   width: 100%;
 }
 
 .formularz-iframe {
   background: transparent;
+  background-color: transparent !important;
   border: none;
+
   /* border-radius: var(--formularz-border-radius);
   box-shadow: var(--formularz-box-shadow); */
   height: 1250px;
   min-height: 400px;
   width: 100%;
+
+  /* Force transparency for embedded content */
+  backdrop-filter: none;
 }
 
-.formularz-iframe:before {
-  background: rgba(0, 0, 0, 1);
+.formularz-iframe::before {
+  background: rgb(0 0 0 / 100%);
   content: '';
   display: block;
   height: 1250px;
   width: 100%;
 }
 
-/* Add transparent background to the iframe content */
-.formularz-iframe {
-  background-color: transparent !important;
-  /* Force transparency for embedded content */
-  -webkit-backdrop-filter: none;
-  backdrop-filter: none;
-}
-
 .formularz .error {
-  color: #ff0000;
+  color: #f00;
   font-size: var(--body-font-size-s);
   padding: 1rem;
   text-align: center;
 }
 
 /* Responsive adjustments */
-@media (max-width: 768px) {
+@media (width <= 768px) {
   .formularz-wrapper {
     padding: 0 1rem;
   }

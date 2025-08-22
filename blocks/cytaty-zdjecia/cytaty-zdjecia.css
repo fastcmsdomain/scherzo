@@ -98,7 +98,7 @@
 
 .feedback .card-image::before {
   background: rgb(0 0 0);
-  background: linear-gradient(0deg, rgba(0, 0, 0, 0.9) 0%, rgba(0, 0, 0, 0.7) 50%, rgba(0, 0, 0, 0) 100%);
+  background: linear-gradient(0deg, rgb(0 0 0 / 90%) 0%, rgb(0 0 0 / 70%) 50%, rgb(0 0 0 / 0%) 100%);
   bottom: 0;
   content: "";
   left: 0;

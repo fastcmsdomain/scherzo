@@ -232,6 +232,7 @@ function openMenuToCurrentItem(schizoMenu) {
         });
       }
     } catch (error) {
+      // eslint-disable-next-line no-console
       console.error('Error in menu sequence:', error);
     }
   };

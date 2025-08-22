@@ -18,7 +18,7 @@ export default async function decorate(block) {
         throw new Error('Invalid data format in JSON feed');
       }
 
-      const processedSlides = await Promise.all(jsonFeed.data.map(async (item, index) => {
+      const processedSlides = await Promise.all(jsonFeed.data.map(async (item) => {
         if (!item.path || !item.path.startsWith('/slides/')) {
           return null;
         }
@@ -100,10 +100,10 @@ export default async function decorate(block) {
     return;
   }
 
-  const slideHeight = window.innerHeight;
-  const footerWrapper = document.querySelector('.footer-wrapper');
+  // const slideHeight = window.innerHeight;
+  // const footerWrapper = document.querySelector('.footer-wrapper');
 
-  slides.forEach((slide, index) => {
+  slides.forEach((slide) => {
     const slideItem = createSlideItem(slide);
     container.appendChild(slideItem);
     setSlideBackground(slideItem, slide.image);
@@ -124,8 +124,8 @@ export default async function decorate(block) {
     // Reveal title parts on scroll
     slideItems.forEach((slideItem) => {
       const rect = slideItem.getBoundingClientRect();
-      const slideHeight = slideItem.offsetHeight;
-      const scrollProgress = (window.innerHeight - rect.top) / (window.innerHeight + slideHeight);
+      const itemHeight = slideItem.offsetHeight;
+      const scrollProgress = (window.innerHeight - rect.top) / (window.innerHeight + itemHeight);
 
       const titlePart1 = slideItem.querySelector('.title-part-1');
       const titlePart2 = slideItem.querySelector('.title-part-2');

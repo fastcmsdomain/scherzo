@@ -33,9 +33,6 @@
   --przerwa-height: 2rem;
 }
 
-.przerwa.ogromna {
-  --przerwa-height: 3rem;
-}
 
 /* Responsive adjustments */
 @media (width >= 768px) {

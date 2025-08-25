@@ -147,6 +147,7 @@ main .section .columns-wrapper .columns.dwa-rzedy>div:last-child {
   align-self: flex-start;
   width: 50%;
 }
+
 main .section .columns-wrapper .columns.dwa-rzedy>div:last-child > .columns-content-col {
   padding: var(--space-16);
   align-self: flex-start;

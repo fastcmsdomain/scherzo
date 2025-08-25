@@ -69,14 +69,14 @@ main .list-container {
     gap: 0.9rem;
     justify-content: space-around;
     margin: 0;
-    padding: 1rem;
+    padding: 1rem 0.5rem;
 }
 
 
 .quick-links ul li,
 .quick-links ul li a {
     color: var(--color-white);
-    font-size: var(--body-font-size-xs);
+    font-size: var(--body-font-size-xxs);
     line-height: 1;
     text-decoration: none;
 }

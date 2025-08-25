@@ -54,20 +54,6 @@ body.social-media-page::before {
   margin: 0 10px 10px;
 }
 
-.social-media-feed-item:hover  {
-  background-color: var(--color-blue);
-  text-decoration: none; 
-}
-
-.social-media-feed-item:hover img {
-  transform: scale(1.05);
-}
-
-.social-media-feed-item:hover p,
-.social-media-feed-item:hover h3 {
-  color: var(--color-dark-blue);
-}
-
 .image-wrapper {
   height: 0;
   overflow: hidden;
@@ -92,6 +78,20 @@ body.social-media-page::before {
   position: absolute;
   top: 0;
   width: 100%;
+}
+
+.social-media-feed-item:hover  {
+  background-color: var(--color-blue);
+  text-decoration: none; 
+}
+
+.social-media-feed-item:hover img {
+  transform: scale(1.05);
+}
+
+.social-media-feed-item:hover p,
+.social-media-feed-item:hover h3 {
+  color: var(--color-dark-blue);
 }
 
 .image-wrapper img.social-media-logo {

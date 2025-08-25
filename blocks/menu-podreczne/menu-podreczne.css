@@ -1,4 +1,5 @@
 /* stylelint-disable selector-class-pattern */
+
 /* Menu Podreczne Block Configuration and Base Styles 
    Note: This component uses BEM naming convention which conflicts with kebab-case requirement */
 .menu-podreczne {
@@ -196,6 +197,11 @@ header nav a.menu-podreczne__link:focus-visible {
   font-size: 0.8125rem;
 }
 
+.menu-podreczne__link:focus {
+  outline: 2px solid var(--menu-link-hover-color);
+  outline-offset: 2px;
+}
+
 .menu-podreczne__submenu .menu-podreczne__link:hover {
   background: var(--menu-submenu-bg);
 }
@@ -297,10 +303,6 @@ header nav a.menu-podreczne__link:focus-visible {
 }
 
 /* Focus management for accessibility */
-.menu-podreczne__link:focus {
-  outline: 2px solid var(--menu-link-hover-color);
-  outline-offset: 2px;
-}
 
 /* Ensure menu doesn't interfere with page content */
 body.menu-podreczne-active {

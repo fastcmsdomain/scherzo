@@ -277,6 +277,10 @@ a:any-link {
   text-decoration-thickness: 2px;
 }
 
+.canvy a {
+    color: var(--color-white);
+}
+
 a:any-link:hover,
 a:any-link:focus {
   color: var(--color-black);
@@ -301,6 +305,13 @@ ul li::marker {
 }
 
 /* buttons */
+.button-container{
+  & strong a.button{
+    border: none;
+    font-size: var(--heading-font-size-m);
+  }
+}
+
 .button-container  a.button:any-link, button {
   background-color: var(--color-dark-blue);
   border: 1px solid var(--color-gold);
@@ -352,13 +363,6 @@ button:focus  {
   cursor: pointer;
 }
 
-.button-container{
-  & strong a.button{
-    border: none;
-    font-size: var(--heading-font-size-m);
-  }
-}
-
 button:disabled, button:disabled:hover {
   background-color: var(--light-color);
   cursor: unset;
@@ -388,22 +392,17 @@ main img {
 }
 
 /* sections */
-main .section {
+.section {
     background: var(--color-white);
-    padding: 0;
+    padding: 0 1rem;
+    position: relative;
+    z-index: 1;
 }
 
 @media (width >= 600px) {
   main .section {
     padding: 0;
   }
-}
-
-.section {
-    background: var(--color-white);
-    padding: 0 1rem;
-    position: relative;
-    z-index: 1;
 }
 
 @media (width >= 900px) {
@@ -485,8 +484,7 @@ clip-path: inset(0  -100vmax);
     clip-path: inset(0  -100vmax);
   }
 
-  .canvy li::marker,
-  .canvy a {
+  .canvy li::marker {
     color: var(--color-white);
   }
 

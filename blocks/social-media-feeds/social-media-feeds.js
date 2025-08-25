@@ -25,7 +25,7 @@ async function fetchYouTubeFeed() {
       link: `https://www.youtube.com/watch?v=${item.id.videoId}`,
     }));
   } catch (error) {
-    console.error('Error fetching YouTube feed:', error);
+    // Error fetching YouTube feed - return empty array
     return [];
   }
 }
@@ -47,7 +47,7 @@ async function fetchFacebookFeed() {
       link: `https://www.facebook.com/${config.facebookPageId}/posts/${item.id}`,
     }));
   } catch (error) {
-    console.error('Error fetching Facebook feed:', error);
+    // Error fetching Facebook feed - return empty array
     return [];
   }
 }

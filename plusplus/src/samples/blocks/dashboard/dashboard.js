@@ -26,7 +26,10 @@ export default function decorate(block) {
       sortTable(0, true);
       document.querySelector('.content-table th[data-column="0"]').classList.add('asc');
     })
-    .catch(error => console.error('Error fetching data:', error));
+    .catch(() => {
+      // Error fetching data - handle gracefully
+      dashboardContainer.innerHTML = '<p>Error loading dashboard data</p>';
+    });
 
   function createDashboard(data) {
     const dashboard = document.createElement('div');

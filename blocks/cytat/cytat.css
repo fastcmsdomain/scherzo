@@ -10,12 +10,15 @@
     margin: 0;
 }
 
+.cytat div div > * {
+    margin: 0;
+}
+
 .cytat [data-align="center"] * {
     text-align: center;
     margin-top: var(--space-20);
 
 }
-
 
 .cytat div div > *::before {
     content: '\201C';
@@ -26,10 +29,6 @@
     color: var(--color-gold);
     line-height: 0.8;
 
-}
-
-.cytat div div > * {
-    margin: 0;
 }
 
 @media (width <= 768px) {

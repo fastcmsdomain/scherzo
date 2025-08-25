@@ -46,15 +46,15 @@ main .hero-container {
         justify-content: center;
   }
 
+  .hero > div > div {
+    align-items: end;
+    display: flex;
+    height: 100%;
+  }
+
   main .hero-container .hero > div {
     margin: 0;
   }
-}
-
-.hero > div > div {
-  align-items: end;
-  display: flex;
-  height: 100%;
 }
 
 .hero h1 {
@@ -122,6 +122,10 @@ main .hero-container {
   }
 }
 
+.bez-zdjeciem a {
+  color: var(--color-gold);
+}
+
 .breadcrumbs ol li a {
   font-size: var(--body-font-size-xs);
   color: var(--color-gold);
@@ -180,8 +184,4 @@ main .hero-container {
 
 .bez-zdjeciem p {
   color: var(--color-white);
-}
-
-.bez-zdjeciem a {
-  color: var(--color-gold);
 }

@@ -127,8 +127,10 @@ main .hero-container {
 }
 
 .breadcrumbs ol li a {
-  font-size: var(--body-font-size-xs);
+  font-size: var(--body-font-size-xxs);
   color: var(--color-gold);
+  font-family: var(--body-regular-family);
+  text-decoration: none;
 
   &:hover, &:focus, &:focus-visible {
     text-decoration: underline;

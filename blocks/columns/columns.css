@@ -150,10 +150,6 @@ main .section .columns-wrapper .columns.dwa-rzedy {
 
 main .section .columns-wrapper .columns.dwa-rzedy>div:last-child {
   grid-template-columns: 1fr;
-}
-
-main .section .columns-wrapper .columns.dwa-rzedy>div:last-child {
-  grid-template-columns: 1fr;
   align-self: flex-end;
 }
 
@@ -167,17 +163,17 @@ main .section .columns-wrapper .columns.dwa-rzedy>div:last-child > .columns-cont
 }
 
 @media (width >= 900px) {
-
   main .section .columns-wrapper .columns.dwa-rzedy {
     max-width: 900px;
   }
+
   .columns.dwa-rzedy > div {
-      grid-template-rows: 1fr;
-    }
+    grid-template-rows: 1fr;
+  }
   
-    main .section .columns-wrapper .columns.dwa-rzedy>div:last-child {
-      grid-template-columns: 1fr;
-      align-self: flex-start;
-       width: 100%;
-    }
+  main .section .columns-wrapper .columns.dwa-rzedy>div:last-child {
+    grid-template-columns: 1fr;
+    align-self: flex-start;
+      width: 100%;
+  }
   }

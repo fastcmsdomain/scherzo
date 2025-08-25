@@ -1,6 +1,6 @@
 /* stylelint-disable selector-class-pattern */
 
-/* Menu Podreczne Block Configuration and Base Styles 
+/* Menu Podreczne Block Configuration and Base Styles - Simplified Sibling Navigation
    Note: This component uses BEM naming convention which conflicts with kebab-case requirement */
 .menu-podreczne {
   --menu-height: 60px;
@@ -10,7 +10,6 @@
   --menu-text-color: var(--color-gray-900, #111827);
   --menu-link-hover-color: var(--color-primary, #2563eb);
   --menu-active-color: var(--color-primary, #2563eb);
-  --menu-submenu-bg: var(--color-gray-50, #f9fafb);
   --menu-animation-duration: 0.3s;
   --menu-spacing: 1rem;
 
@@ -103,113 +102,16 @@ header nav a.menu-podreczne__link:focus-visible {
   border-bottom-color: var(--menu-active-color);
 }
 
-/* Submenu toggle button */
-.menu-podreczne__submenu-toggle {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 16px;
-  height: 16px;
 
-  /* margin-left: 0.25rem; */
-  border: none;
-  margin: 0;;
-  background: none;
-  padding: 0;
-  cursor: pointer;
-  transition: all var(--menu-animation-duration) ease;
-  color: var(--menu-text-color);
-  font-size: 0.875rem;
-  font-weight: bold;
-}
 
-.menu-podreczne__submenu-toggle:hover {
-  background: var(--menu-link-hover-color);
-  color: var(--menu-bg-color);
-  border-color: var(--menu-link-hover-color);
-}
 
-.menu-podreczne__submenu-toggle:focus {
-  outline: 2px solid var(--menu-link-hover-color);
-  outline-offset: 2px;
-}
-
-/* Plus/minus icon in toggle button */
-.menu-podreczne__plus-icon {
-  transition: transform var(--menu-animation-duration) ease;
-}
-
-.menu-podreczne__submenu-toggle[aria-expanded="true"] .menu-podreczne__plus-icon {
-  transform: rotate(45deg);
-}
-
-/* Submenu */
-.menu-podreczne__submenu {
-  position: absolute;
-
-  /* background: red; */
-  left: 0;
-  top: 50%;
-  min-width: 200px;
-  display: flex;
-  flex-direction: row;
-  gap: 0;
-  max-height: 0;
-  margin: 0;
-  padding: 0;
-  list-style: none;
-  overflow: hidden;
-  transition: max-height var(--menu-animation-duration) ease;
-  z-index: 1;
-}
-
-.menu-podreczne__submenu.expanded {
-  max-height: 300px;
-  overflow-y: auto;
-}
-
-/* Submenu items */
-.menu-podreczne__submenu .menu-podreczne__item {
-  position: relative;
-  height: auto;
-  margin: 0;
-}
-
-.menu-podreczne__submenu .menu-podreczne__item:last-child {
-  border-bottom: none;
-}
-
-/* Nested submenu positioning */
-.menu-podreczne__submenu .menu-podreczne__submenu {
-  top: 0;
-  left: 100%;
-  border-radius: 0 8px 8px 0;
-  border-left: none;
-  border-top: 1px solid var(--menu-border-color);
-}
-
-/* Submenu links */
-.menu-podreczne__submenu .menu-podreczne__link {
-  width: 100%;
-  height: auto;
-  padding: 0.75rem var(--menu-spacing);
-  border-bottom: none;
-  font-size: 0.8125rem;
-}
 
 .menu-podreczne__link:focus {
   outline: 2px solid var(--menu-link-hover-color);
   outline-offset: 2px;
 }
 
-.menu-podreczne__submenu .menu-podreczne__link:hover {
-  background: var(--menu-submenu-bg);
-}
 
-.menu-podreczne__submenu .menu-podreczne__link.active {
-  background: var(--menu-link-hover-color);
-  color: var(--menu-bg-color);
-}
 
 /* Responsive design */
 @media (width <= 768px) {
@@ -227,20 +129,7 @@ header nav a.menu-podreczne__link:focus-visible {
     padding: 0 0.75rem;
   }
 
-  .menu-podreczne__submenu-toggle {
-    width: 28px;
-    height: 28px;
-    font-size: 0.8125rem;
-  }
 
-  .menu-podreczne__submenu {
-    min-width: 180px;
-  }
-
-  .menu-podreczne__submenu .menu-podreczne__link {
-    padding: 0.5rem 0.75rem;
-    font-size: 0.75rem;
-  }
 }
 
 @media (width <= 480px) {
@@ -254,21 +143,7 @@ header nav a.menu-podreczne__link:focus-visible {
     padding: 0 0.5rem;
   }
 
-  .menu-podreczne__submenu-toggle {
-    width: 24px;
-    height: 24px;
-    font-size: 0.75rem;
-    margin-left: 0.125rem;
-  }
 
-  .menu-podreczne__submenu {
-    min-width: 160px;
-  }
-
-  .menu-podreczne__submenu .menu-podreczne__link {
-    padding: 0.5rem;
-    font-size: 0.75rem;
-  }
 }
 
 /* High contrast mode support */
@@ -279,12 +154,9 @@ header nav a.menu-podreczne__link:focus-visible {
     --menu-border-color: #000;
     --menu-link-hover-color: #00f;
     --menu-active-color: #00f;
-    --menu-submenu-bg: #f0f0f0;
   }
 
-  .menu-podreczne__submenu-toggle {
-    border-width: 2px;
-  }
+
 
   .menu-podreczne__link.active {
     border-bottom-width: 3px;
@@ -294,10 +166,7 @@ header nav a.menu-podreczne__link:focus-visible {
 /* Reduced motion support */
 @media (prefers-reduced-motion: reduce) {
   .menu-podreczne,
-  .menu-podreczne__link,
-  .menu-podreczne__submenu-toggle,
-  .menu-podreczne__submenu,
-  .menu-podreczne__plus-icon {
+  .menu-podreczne__link {
     transition: none;
   }
 }
@@ -324,7 +193,6 @@ body.menu-podreczne-active {
     --menu-text-color: var(--color-gray-100, #f3f4f6);
     --menu-link-hover-color: var(--color-blue-400, #60a5fa);
     --menu-active-color: var(--color-blue-400, #60a5fa);
-    --menu-submenu-bg: var(--color-gray-800, #1f2937);
     --menu-shadow: 0 -2px 10px rgb(0 0 0 / 30%);
   }
 } 

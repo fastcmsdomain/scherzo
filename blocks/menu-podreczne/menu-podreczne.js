@@ -1,6 +1,6 @@
 /**
  * Menu Podreczne Block
- * A fixed bottom navigation bar with dynamic page links and collapsible subpages
+ * A fixed bottom navigation bar with sibling page links
  */
 
 // Configuration object for the menu-podreczne block
@@ -9,11 +9,10 @@ const MENU_PODRECZNE_CONFIG = {
   QUERY_INDEX_ENDPOINT: '/query-index.json',
   ERROR_MESSAGE: 'Error loading navigation data:',
   ANIMATION_DURATION: 300,
-  SUBMENU_TOGGLE_CLASS: 'submenu-toggle',
   ACTIVE_CLASS: 'active',
-  EXPANDED_CLASS: 'expanded',
   HIDDEN_CLASS: 'hidden',
   VISIBLE_CLASS: 'visible',
+  ENABLED: 'false',
 };
 
 // CSS selectors for the menu components
@@ -21,8 +20,6 @@ const SELECTORS = {
   menuContainer: '.menu-podreczne',
   menuList: '.menu-podreczne__list',
   menuItem: '.menu-podreczne__item',
-  submenuToggle: '.menu-podreczne__submenu-toggle',
-  submenu: '.menu-podreczne__submenu',
   link: '.menu-podreczne__link',
 };
 
@@ -101,21 +98,21 @@ function buildNavigationHierarchy(pages) {
 }
 
 /**
- * Gets relevant navigation items for current page
+ * Gets relevant navigation items for current page (siblings only)
  * @param {Array} hierarchy - Navigation hierarchy
  * @param {string} currentPath - Current page path
- * @returns {Array} Relevant navigation items
+ * @returns {Array} Sibling navigation items
  */
 function getRelevantNavigation(hierarchy, currentPath) {
   const currentPathParts = currentPath.split('/').filter((part) => part);
   const currentDepth = currentPathParts.length;
 
   if (currentDepth === 1) {
-    // On top-level page, show all top-level pages
+    // On top-level page, show all top-level pages (siblings)
     return hierarchy;
   }
 
-  // On subpage, find parent and show siblings
+  // On subpage, find siblings at the same level
   const parentPath = `/${currentPathParts.slice(0, -1).join('/')}`;
   // Find the parent in hierarchy
   function findPageInHierarchy(pages, targetPath) {
@@ -130,28 +127,11 @@ function getRelevantNavigation(hierarchy, currentPath) {
 
   const parent = findPageInHierarchy(hierarchy, parentPath);
   if (parent && parent.children.length > 0) {
-    return [parent]; // Return parent with its children
+    // Return only the children (siblings) without nesting
+    return parent.children;
   }
 
   return [];
-}
-
-/**
- * Toggles submenu visibility
- * @param {HTMLElement} toggleButton - Toggle button element
- * @param {HTMLElement} submenu - Submenu element
- */
-function toggleSubmenu(toggleButton, submenu) {
-  const isExpanded = toggleButton.getAttribute('aria-expanded') === 'true';
-  const newState = !isExpanded;
-
-  toggleButton.setAttribute('aria-expanded', newState.toString());
-  submenu.classList.toggle(MENU_PODRECZNE_CONFIG.EXPANDED_CLASS, newState);
-
-  const icon = toggleButton.querySelector('.menu-podreczne__plus-icon');
-  if (icon) {
-    icon.textContent = newState ? '−' : '+';
-  }
 }
 
 /**
@@ -174,35 +154,6 @@ function createMenuItem(page, currentPath) {
   }
 
   item.appendChild(link);
-
-  // Add submenu if page has children
-  if (page.children && page.children.length > 0) {
-    const toggleButton = document.createElement('button');
-    toggleButton.classList.add('menu-podreczne__submenu-toggle');
-    toggleButton.setAttribute('aria-expanded', 'false');
-    toggleButton.setAttribute('aria-label', `Toggle submenu for ${page.title}`);
-    toggleButton.innerHTML = '<span class="menu-podreczne__plus-icon">+</span>';
-
-    const submenu = document.createElement('ul');
-    submenu.classList.add('menu-podreczne__submenu');
-    submenu.setAttribute('role', 'menu');
-
-    page.children.forEach((child) => {
-      const childItem = createMenuItem(child, currentPath);
-      childItem.setAttribute('role', 'menuitem');
-      submenu.appendChild(childItem);
-    });
-
-    item.appendChild(toggleButton);
-    item.appendChild(submenu);
-
-    // Add click handler for submenu toggle
-    toggleButton.addEventListener('click', (e) => {
-      e.preventDefault();
-      e.stopPropagation();
-      toggleSubmenu(toggleButton, submenu);
-    });
-  }
 
   return item;
 }
@@ -257,9 +208,7 @@ function handleScrollBehavior(menuContainer) {
  */
 function shouldShowMenu(hierarchy, currentPath) {
   const relevantNav = getRelevantNavigation(hierarchy, currentPath);
-  return relevantNav.length > 0 && relevantNav.some(
-    (page) => page.children && page.children.length > 0,
-  );
+  return relevantNav.length > 1; // Show menu if there are siblings to navigate between
 }
 
 /**
@@ -286,6 +235,12 @@ function renderNavigation(block, navigationItems, currentPath) {
  * @param {HTMLElement} block - Block container element
  */
 export default async function decorate(block) {
+  // TEMPORARILY HIDDEN - Remove this line to re-enable
+  if (MENU_PODRECZNE_CONFIG.ENABLED === 'false') {
+    block.style.display = 'none';
+    return;
+  }
+
   try {
     // Fetch navigation data
     const navigationData = await fetchNavigationData();
@@ -317,17 +272,14 @@ export default async function decorate(block) {
     // Set up scroll behavior
     handleScrollBehavior(block);
 
-    // Add keyboard navigation support
+    // Add keyboard navigation support for accessibility
     block.addEventListener('keydown', (e) => {
       if (e.key === 'Escape') {
-        // Close all submenus on Escape
-        const expandedToggles = block.querySelectorAll('[aria-expanded="true"]');
-        expandedToggles.forEach((toggle) => {
-          const submenu = toggle.nextElementSibling;
-          if (submenu) {
-            toggleSubmenu(toggle, submenu);
-          }
-        });
+        // Remove focus from any active menu item
+        const { activeElement } = document;
+        if (activeElement && block.contains(activeElement)) {
+          activeElement.blur();
+        }
       }
     });
 

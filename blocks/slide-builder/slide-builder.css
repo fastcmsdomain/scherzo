@@ -20,21 +20,35 @@ main .section.slide-builder-container .slide-builder-wrapper {
   height: 100vh;
   left: 0;
   overflow: hidden;
-  position: sticky;
+  position: relative; /* Changed from sticky to relative for ScrollMagic pinning */
   top: 0;
   width: 100%;
   will-change: transform;
+}
+
+/* ScrollMagic pinned state */
+.slide-builder-item.scrollmagic-pin-spacer {
+  position: relative !important;
+}
+
+/* Trigger elements for ScrollMagic scenes */
+.slide-trigger {
+  height: 1px;
+  position: absolute;
+  width: 100%;
+  z-index: -1;
 }
 
 
 .slide-background {
     background-position: center;
     background-size: cover;
-    height: 100%;
+    height: 120%; /* Increased height for parallax effect */
     left: 0;
     position: absolute;
-    top: 0;
+    top: -10%; /* Offset for parallax */
     width: 100%;
+    will-change: transform; /* Optimize for transforms */
     
     &::after {
         background: linear-gradient(to top, rgb(40 48 72 / 100%) , transparent);
@@ -76,6 +90,13 @@ main .section.slide-builder-container .slide-builder-wrapper {
     font-family: var(--heading-font-family);
     margin: 0 0 1rem;
     position: relative;
+}
+
+.title-part {
+    will-change: opacity, transform;
+    /* Enhanced transitions for ScrollMagic animations */
+    transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1),
+                transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .title-part-2,
@@ -226,4 +247,62 @@ body::-webkit-scrollbar {
 .slide-builder-item .title-part .slide-button {
   opacity: inherit;
   transform: translateY(inherit);
+}
+
+/* ScrollMagic specific enhancements */
+.scrollmagic-pin-spacer {
+  /* Ensure pinned elements maintain proper styling */
+  box-sizing: border-box !important;
+}
+
+/* Development indicators styling (only visible in dev/preview) */
+.ScrollMagicId {
+  color: #fff !important;
+  background: rgba(0, 0, 0, 0.8) !important;
+  border: 1px solid #fff !important;
+  border-radius: 4px !important;
+  padding: 2px 6px !important;
+  font-size: 12px !important;
+  font-family: monospace !important;
+  z-index: 9999 !important;
+}
+
+/* Enhanced performance optimizations */
+.slide-builder-item,
+.slide-background,
+.title-part {
+  /* Enable hardware acceleration */
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  perspective: 1000px;
+}
+
+/* Smooth scroll behavior for the entire page */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Optimize for ScrollMagic animations */
+@media (prefers-reduced-motion: no-preference) {
+  .slide-builder-item {
+    /* Enhanced animation performance */
+    will-change: transform, opacity;
+  }
+  
+  .title-part {
+    /* Staggered animation support */
+    animation-fill-mode: both;
+  }
+}
+
+/* Respect user's motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  .title-part {
+    transition: none !important;
+    animation: none !important;
+  }
+  
+  .slide-background {
+    transform: none !important;
+  }
 }

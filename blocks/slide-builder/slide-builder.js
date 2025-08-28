@@ -4,6 +4,15 @@
 /* eslint-disable import/no-absolute-path */
 import { renderExpressions } from '/plusplus/plugins/expressions/src/expressions.js';
 
+// Import ScrollMagic
+let ScrollMagic;
+try {
+  ScrollMagic = await import('scrollmagic');
+} catch (error) {
+  // ScrollMagic not available, will fall back to basic scroll implementation
+  ScrollMagic = null;
+}
+
 // eslint-disable-next-line no-unused-vars
 export default async function decorate(block) {
   async function fetchSlides() {
@@ -109,56 +118,170 @@ export default async function decorate(block) {
     setSlideBackground(slideItem, slide.image);
   });
 
-  function updateSlidePositions() {
-    const slideItems = container.querySelectorAll('.slide-builder-item');
-    const lastSlide = slideItems[slideItems.length - 1];
-    const lastSlideRect = lastSlide.getBoundingClientRect();
+  // Fallback basic scroll implementation
+  function initializeBasicScroll() {
+    function updateSlidePositions() {
+      const slideItems = container.querySelectorAll('.slide-builder-item');
+      const lastSlide = slideItems[slideItems.length - 1];
+      const lastSlideRect = lastSlide.getBoundingClientRect();
 
-    // Check if user has scrolled past all slides
-    if (lastSlideRect.bottom <= window.innerHeight) {
-      document.body.classList.add('show-footer');
-    } else {
-      document.body.classList.remove('show-footer');
+      // Check if user has scrolled past all slides
+      if (lastSlideRect.bottom <= window.innerHeight) {
+        document.body.classList.add('show-footer');
+      } else {
+        document.body.classList.remove('show-footer');
+      }
+
+      // Reveal title parts on scroll
+      slideItems.forEach((slideItem) => {
+        const rect = slideItem.getBoundingClientRect();
+        const itemHeight = slideItem.offsetHeight;
+        const scrollProgress = (window.innerHeight - rect.top) / (window.innerHeight + itemHeight);
+
+        const titlePart1 = slideItem.querySelector('.title-part-1');
+        const titlePart2 = slideItem.querySelector('.title-part-2');
+        const titlePart3 = slideItem.querySelector('.title-part-3');
+
+        if (scrollProgress >= 0 && scrollProgress <= 1) {
+          const opacity = Math.min(scrollProgress * 2, 1);
+          const translateY = Math.max(50 - scrollProgress * 100, 0);
+
+          if (titlePart1) {
+            titlePart1.style.opacity = opacity;
+            titlePart1.style.transform = `translateY(${translateY}vh)`;
+          }
+          if (titlePart2) {
+            titlePart2.style.opacity = opacity;
+            titlePart2.style.transform = `translateY(${translateY}vh)`;
+          }
+          if (titlePart3) {
+            titlePart3.style.opacity = opacity;
+            titlePart3.style.transform = `translateY(${translateY}vh)`;
+          }
+        }
+      });
     }
 
-    // Reveal title parts on scroll
-    slideItems.forEach((slideItem) => {
-      const rect = slideItem.getBoundingClientRect();
-      const itemHeight = slideItem.offsetHeight;
-      const scrollProgress = (window.innerHeight - rect.top) / (window.innerHeight + itemHeight);
+    function handleScroll() {
+      window.requestAnimationFrame(updateSlidePositions);
+    }
 
-      const titlePart1 = slideItem.querySelector('.title-part-1');
-      const titlePart2 = slideItem.querySelector('.title-part-2');
-      const titlePart3 = slideItem.querySelector('.title-part-3');
+    window.addEventListener('scroll', handleScroll);
+    updateSlidePositions();
+  }
 
-      if (scrollProgress >= 0 && scrollProgress <= 1) {
-        const opacity = Math.min(scrollProgress * 2, 1); // Fully visible at 50% scroll
-        const translateY = Math.max(50 - scrollProgress * 100, 0); // Start at 50vh, end at 0
+  // Enhanced scroll functionality with ScrollMagic
+  function initializeScrollMagic() {
+    if (!ScrollMagic) {
+      // Fallback to basic scroll implementation
+      initializeBasicScroll();
+      return;
+    }
 
-        if (titlePart1) {
-          titlePart1.style.opacity = opacity;
-          titlePart1.style.transform = `translateY(${translateY}vh)`;
-        }
-        if (titlePart2) {
-          titlePart2.style.opacity = opacity;
-          titlePart2.style.transform = `translateY(${translateY}vh)`;
-        }
-        if (titlePart3) {
-          titlePart3.style.opacity = opacity;
-          titlePart3.style.transform = `translateY(${translateY}vh)`;
-        }
+    // Initialize ScrollMagic controller
+    const controller = new ScrollMagic.Controller();
+    const slideItems = container.querySelectorAll('.slide-builder-item');
+
+    slideItems.forEach((slideItem, index) => {
+      const isFirstSlide = index === 0;
+      const isLastSlide = index === slideItems.length - 1;
+
+      // Create unique IDs for each slide elements
+      const slideId = `slide-${index}`;
+      const triggerId = `trigger-${index}`;
+
+      slideItem.setAttribute('id', slideId);
+
+      // Create trigger element
+      const triggerElement = document.createElement('div');
+      triggerElement.setAttribute('id', triggerId);
+      triggerElement.classList.add('slide-trigger');
+      slideItem.parentNode.insertBefore(triggerElement, slideItem);
+
+      // Calculate duration based on slide content and position
+      let duration = window.innerHeight * 1.5; // 1.5 viewport heights
+      if (isFirstSlide) {
+        duration = window.innerHeight * 2; // Longer duration for first slide
+      } else if (isLastSlide) {
+        duration = window.innerHeight; // Shorter duration for last slide
+      }
+
+      // Create pinning scene
+      new ScrollMagic.Scene({
+        triggerElement: `#${triggerId}`,
+        duration,
+        triggerHook: 1,
+      })
+        .setPin(`#${slideId}`, {
+          pushFollowers: true,
+        })
+        .addTo(controller);
+
+      // Enhanced title animation with CSS transitions
+      const titleParts = slideItem.querySelectorAll('.title-part');
+
+      // Set initial state for title parts
+      titleParts.forEach((titlePart, partIndex) => {
+        titlePart.style.opacity = '0';
+        titlePart.style.transform = 'translateY(10vh) scale(0.95)';
+        titlePart.style.transition = 'opacity 1s ease-out, transform 1s ease-out';
+        titlePart.style.transitionDelay = `${partIndex * 0.2}s`;
+      });
+
+      // Create animation scene for title parts
+      new ScrollMagic.Scene({
+        triggerElement: `#${triggerId}`,
+        duration: duration * 0.6,
+        triggerHook: 0.8,
+      })
+        .on('progress', (event) => {
+          const { progress } = event;
+          titleParts.forEach((titlePart, partIndex) => {
+            const partProgress = Math.max(0, Math.min(1, (progress - (partIndex * 0.1)) * 2));
+            if (partProgress > 0) {
+              titlePart.style.opacity = partProgress;
+              titlePart.style.transform = `translateY(${(1 - partProgress) * 10}vh) scale(${0.95 + (partProgress * 0.05)})`;
+            }
+          });
+        })
+        .addTo(controller);
+
+      // Background parallax effect with CSS transforms
+      const backgroundElement = slideItem.querySelector('.slide-background');
+      if (backgroundElement) {
+        new ScrollMagic.Scene({
+          triggerElement: `#${triggerId}`,
+          duration: duration + window.innerHeight,
+          triggerHook: 1,
+        })
+          .on('progress', (event) => {
+            const { progress } = event;
+            const translateY = progress * -20; // Move up by 20% at full progress
+            backgroundElement.style.transform = `translateY(${translateY}%)`;
+          })
+          .addTo(controller);
       }
     });
+
+    // Footer reveal scene
+    const lastSlide = slideItems[slideItems.length - 1];
+    if (lastSlide) {
+      new ScrollMagic.Scene({
+        triggerElement: lastSlide,
+        triggerHook: 0.2,
+      })
+        .on('enter', () => {
+          document.body.classList.add('show-footer');
+        })
+        .on('leave', () => {
+          document.body.classList.remove('show-footer');
+        })
+        .addTo(controller);
+    }
   }
 
-  function handleScroll() {
-    window.requestAnimationFrame(updateSlidePositions);
-  }
-
-  window.addEventListener('scroll', handleScroll);
-
-  // Set initial positions
-  updateSlidePositions();
+  // Initialize the appropriate scroll implementation
+  initializeScrollMagic();
 
   // Set the height of the body to accommodate all slides
   document.body.style.height = 'auto';

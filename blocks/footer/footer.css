@@ -66,13 +66,20 @@ footer ul li:has(a:any-link) {
 }
 
 
+footer a:any-link {
+    color: var(--color-gold);
+    font-size: var(--body-font-size-xxs);
+    text-decoration: none;
+    font-family: var(--body-regular-family);
+}
+
 footer ul li:has(a:any-link) a:hover,
 footer ul li:has(a:any-link) a:focus,
 footer ul li:has(a:any-link) a:focus-visible {
   color: var(--color-gold);
 }
 
-footer ul li:has(a:any-link):before {
+footer ul li:has(a:any-link)::before {
   content: '→';
   display: inline-block;
   margin-inline-end: var(--space-4);
@@ -88,25 +95,6 @@ footer p {
   margin: 0 0 var(--space-16);
 }
 
-footer a:any-link {
-    color: var(--color-gold);
-    font-size: var(--body-font-size-xxs);
-    text-decoration: none;
-    font-family: var(--body-regular-family);
-}
-
-footer .parBtn:has(.icon.icon-map) {
-  display: flex;
-  gap: var(--space-8);
-}
-
-footer .parBtn .icon.icon-map {
-  width: 16px;
-  height: 16px;
-}
-
-
-
 .par-btn {
   align-items: center;
   display: flex;
@@ -119,6 +107,16 @@ footer .parBtn .icon.icon-map {
 
 .par-btn img {
   width: 16px;
+}
+
+footer .par-btn:has(.icon.icon-map) {
+  display: flex;
+  gap: var(--space-8);
+}
+
+footer .par-btn .icon.icon-map {
+  width: 16px;
+  height: 16px;
 }
 
 footer .button-container a.button {

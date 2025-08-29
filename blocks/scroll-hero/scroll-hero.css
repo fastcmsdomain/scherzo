@@ -1,0 +1,393 @@
+/* Scroll Hero Block - Franklin Component CSS */
+/* Based on Wellington College Prep scroll animations */
+
+/* Progress Navigation (floating left side) */
+.progress-nav {
+  display: block;
+  left: 40px;
+  position: fixed;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 10;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+@media (max-width: 992px) {
+  .progress-nav {
+    display: none !important;
+  }
+}
+
+.progress-nav.isActive {
+  opacity: 1;
+  visibility: visible;
+}
+
+.progress-nav li {
+  cursor: pointer;
+  height: 2px;
+  padding: 7px 0;
+  position: relative;
+  transition: all 0.3s ease;
+  width: 14px;
+}
+
+.progress-nav li:before {
+  background: rgba(255, 255, 255, 0.5);
+  content: '';
+  height: 2px;
+  left: 0;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 100%;
+}
+
+.progress-nav li span {
+  color: #fff;
+  display: block;
+  font-size: 25px;
+  left: 100%;
+  margin-left: 10px;
+  opacity: 0;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  transition: all 0.3s ease;
+  visibility: hidden;
+}
+
+.progress-nav li.isActive {
+  overflow: hidden;
+  width: 30px;
+}
+
+.progress-nav li.isActive:after {
+  animation: nav_progress 1.5s linear infinite;
+  background-color: #fff;
+  content: '';
+  height: 2px;
+  position: absolute;
+  top: calc(50% - 1px);
+  width: 100%;
+}
+
+.progress-nav li:hover {
+  width: 30px;
+}
+
+.progress-nav li:hover:before {
+  background: #fff;
+}
+
+.progress-nav li:hover span {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* Main container */
+.scroll-hero-container {
+  height: auto;
+  position: relative;
+  width: 100%;
+}
+
+/* Section structure - creates overlapping effect */
+.screen-section {
+  height: 300vh; /* Creates scroll space for pin effect */
+  position: relative;
+}
+
+.pin-spacer {
+  position: relative;
+  width: 100%;
+}
+
+.screen {
+  height: 100vh;
+  left: 0;
+  overflow: hidden;
+  position: relative;
+  top: 0;
+  width: 100%;
+  z-index: 1;
+}
+
+.screen.hold-pin {
+  position: sticky;
+  top: 0;
+}
+
+/* Screen stacking - each subsequent screen has higher z-index */
+.screen-section:nth-child(1) .screen { z-index: 1; }
+.screen-section:nth-child(2) .screen { z-index: 2; }
+.screen-section:nth-child(3) .screen { z-index: 3; }
+.screen-section:nth-child(4) .screen { z-index: 4; }
+.screen-section:nth-child(5) .screen { z-index: 5; }
+
+.screen-inner {
+  height: 100vh;
+  left: 0;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 2;
+}
+
+/* Background image setup */
+.background {
+  height: 100%;
+  left: 0;
+  position: absolute;
+  top: 0;
+  width: 100%;
+}
+
+.background .img {
+  background-color: #00203e;
+  background-position: 50%;
+  background-repeat: no-repeat;
+  background-size: cover;
+  display: block;
+  height: calc(100% + 30px);
+  left: 0;
+  margin: -15px;
+  position: absolute;
+  top: 0;
+  width: calc(100% + 30px);
+  will-change: transform;
+}
+
+.background .img:after {
+  background: linear-gradient(180deg, transparent 0%, rgba(0, 0, 0, 0.75) 100%);
+  bottom: 0;
+  content: '';
+  height: 42vh;
+  left: 0;
+  position: absolute;
+  width: 100%;
+}
+
+@media (max-width: 992px) {
+  .background .img:after {
+    background: linear-gradient(180deg, transparent 0%, rgba(0, 0, 0, 0.35) 100%);
+  }
+}
+
+/* Fade overlay */
+.fade {
+  background: rgba(0, 32, 62, 0.6);
+  height: 100%;
+  left: 0;
+  opacity: 0;
+  position: absolute;
+  top: 0;
+  width: 100%;
+  z-index: 1;
+}
+
+/* Text positioning and styling */
+.strapline {
+  left: 0;
+  margin: 0 auto;
+  position: absolute;
+  right: 0;
+  text-align: center;
+  top: calc(100% - 60px);
+  transform: translateY(-100%);
+  z-index: 2;
+  color: #fff;
+  font-family: 'Euclid Circular A', sans-serif;
+}
+
+.strapline .time-indicator {
+  font-size: 20px;
+  font-weight: 400;
+  letter-spacing: 0.07em;
+  text-shadow: 0 0 18px rgba(0, 0, 0, 0.25);
+  text-transform: uppercase;
+  margin: 0;
+}
+
+.strapline .main-title {
+  font-size: 70px;
+  font-weight: 500;
+  line-height: 70px;
+  text-shadow: 0 0 18px rgba(0, 0, 0, 0.25);
+  margin: 0;
+}
+
+/* Title parts styling (from query-index.json titleParts) */
+.strapline .main-title .title-part {
+  display: block;
+  margin: 5px 0;
+  will-change: transform;
+}
+
+.strapline .main-title .title-part-0 {
+  font-size: 1em; /* Main title */
+}
+
+.strapline .main-title .title-part-1 {
+  font-size: 0.6em; /* Subtitle */
+  font-weight: 300;
+  opacity: 0.9;
+}
+
+.strapline .subtitle {
+  font-size: 20px;
+  font-weight: 400;
+  letter-spacing: 0.07em;
+  text-shadow: 0 0 18px rgba(0, 0, 0, 0.25);
+  text-transform: uppercase;
+  margin: 0;
+}
+
+/* Advanced strapline (appears during scroll) */
+.strapline-advanced {
+  left: 0;
+  margin: 0 auto;
+  position: absolute;
+  right: 0;
+  text-align: center;
+  top: 100%;
+  transform: translateY(0);
+  z-index: 1;
+  color: #fff;
+  font-family: 'Euclid Circular A', sans-serif;
+}
+
+.strapline-advanced .advanced-title {
+  font-size: 28px;
+  font-weight: 500;
+  margin: 15px 0 10px;
+  text-transform: capitalize;
+}
+
+.strapline-advanced .description {
+  font-size: 16px;
+  font-weight: 300;
+  line-height: 24px;
+  margin: 0 auto;
+  width: 450px;
+}
+
+.strapline-advanced .description strong {
+  color: #a6d6c9;
+  font-weight: 500;
+}
+
+/* Bottom navigation */
+.strapline-bottom {
+  bottom: -20px;
+  color: #fff;
+  cursor: pointer;
+  font-family: 'Euclid Circular A', sans-serif;
+  font-size: 16px;
+  font-weight: 300;
+  left: 0;
+  margin: 0 auto;
+  position: absolute;
+  right: 0;
+  text-align: center;
+  transform: translateY(0);
+  z-index: 100;
+}
+
+.strapline-bottom a {
+  color: #fff;
+  font-weight: 500;
+  text-decoration: none;
+  transition: all 0.3s ease-in-out;
+}
+
+.strapline-bottom a:hover {
+  color: #a6d6c9;
+}
+
+/* Responsive adjustments */
+@media (max-width: 992px) {
+  .strapline .main-title {
+    font-size: 50px;
+  }
+  
+  .strapline .time-indicator,
+  .strapline .subtitle {
+    font-size: 14px;
+  }
+  
+  .strapline-advanced .description {
+    max-width: 450px;
+    padding: 0 10px;
+    width: 100%;
+  }
+  
+  .strapline-advanced .advanced-title {
+    font-size: 22px;
+  }
+}
+
+@media (max-width: 480px) {
+  .strapline .main-title {
+    font-size: 40px;
+  }
+  
+  .strapline-advanced .description {
+    font-size: 14px;
+  }
+}
+
+/* Animation keyframes */
+@keyframes nav_progress {
+  0% {
+    transform: translateX(-50px);
+  }
+  100% {
+    transform: translateX(50px);
+  }
+}
+
+/* Color scheme variants for different sections */
+.screen.friends .strapline .main-title {
+  color: #f7d117; /* Yellow for friends */
+}
+
+.screen.skills .strapline .main-title {
+  color: #a6d6c9; /* Teal for skills */
+}
+
+.screen.confidence .strapline .main-title {
+  color: #ff6b6b; /* Red for confidence */
+}
+
+/* Ensure smooth performance */
+.screen,
+.background .img,
+.strapline,
+.strapline-advanced {
+  will-change: transform;
+  transform-style: preserve-3d;
+  backface-visibility: hidden;
+}
+
+/* Default fallback styling if GSAP fails to load */
+.no-gsap .screen {
+  position: relative;
+  margin-bottom: 50px;
+}
+
+.no-gsap .strapline {
+  position: relative;
+  top: auto;
+  transform: none;
+  padding: 50px 20px;
+}
+
+.no-gsap .strapline-advanced {
+  position: relative;
+  top: auto;
+  transform: none;
+  padding: 50px 20px;
+}

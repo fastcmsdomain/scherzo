@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scroll Hero Block Demo - Wellington College Style</title>
+    
+    <!-- GSAP Libraries -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollToPlugin.min.js"></script>
+    
+    <!-- Google Fonts (similar to Wellington College) -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700;800&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="scroll-hero.css">
+    
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', sans-serif;
+            background: #00203e;
+            overflow-x: hidden;
+        }
+        
+        /* Demo header */
+        .demo-header {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 1000;
+            background: rgba(0, 32, 62, 0.9);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+        
+        /* Demo content before scroll hero */
+        .intro-section {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #00203e, #1a202f);
+            color: white;
+            text-align: center;
+        }
+        
+        .intro-section h1 {
+            font-size: 48px;
+            margin-bottom: 20px;
+        }
+        
+        .intro-section p {
+            font-size: 18px;
+            max-width: 600px;
+            line-height: 1.6;
+        }
+        
+        /* Demo scroll-hero block container */
+        .scroll-hero {
+            /* Block will be styled by scroll-hero.css */
+        }
+        
+        /* Demo content after scroll hero */
+        .outro-section {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #a6d6c9;
+            color: #00203e;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="demo-header">
+        Scroll Hero Block Demo - Wellington College Style Animations
+    </div>
+
+    <!-- Intro section -->
+    <section class="intro-section">
+        <div>
+            <h1>Scroll Hero Demo</h1>
+            <p>Przewiń w dół, aby zobaczyć animacje w stylu Wellington College Prep. 
+               Obrazy będą nakładać się na siebie, a teksty będą poruszać się w górę i w dół podczas przewijania.</p>
+        </div>
+    </section>
+
+    <!-- Scroll Hero Block (Franklin component) -->
+    <div class="scroll-hero">
+        <!-- This represents the Franklin block content structure -->
+        <div style="display: none;">
+            <!-- Row 1: Friends section with multiple images -->
+            <div>
+                <div>https://images.unsplash.com/photo-1529390079861-591de354faf5?w=1200&h=800&fit=crop, https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=1200&h=800&fit=crop, https://images.unsplash.com/photo-1544717297-fa95b6ee9643?w=1200&h=800&fit=crop</div>
+                <div>friends</div>
+                <div>for life</div>
+                <div>Begin the day with a <strong>healthy and energising breakfast</strong> with boarding friends to get <strong>ready for the exciting day ahead</strong>.</div>
+                <div>07:30</div>
+            </div>
+            <!-- Row 2: Skills section with multiple images -->
+            <div>
+                <div>https://images.unsplash.com/photo-1532094349884-543bc11b234d?w=1200&h=800&fit=crop, https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=1200&h=800&fit=crop, https://images.unsplash.com/photo-1581833971358-2c8b550f87b3?w=1200&h=800&fit=crop</div>
+                <div>skills</div>
+                <div>for life</div>
+                <div>Time to <strong>delve into the world and beyond</strong> in our state-of-the-art science labs. <strong>Question, formulate and experiment</strong>; skills that will take you anywhere.</div>
+                <div>11:15</div>
+            </div>
+            <!-- Row 3: Confidence section with multiple images -->
+            <div>
+                <div>https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=1200&h=800&fit=crop, https://images.unsplash.com/photo-1552664730-d307ca884978?w=1200&h=800&fit=crop</div>
+                <div>confidence</div>
+                <div>for life</div>
+                <div>Make the most of every opportunity. <strong>Play hard, work hard</strong> and your confidence will help you to <strong>be the best you can</strong>.</div>
+                <div>14:30</div>
+            </div>
+            <!-- Row 4: Passions section -->
+            <div>
+                <div>https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=1200&h=800&fit=crop, https://images.unsplash.com/photo-1460661419201-fd4cecdf8a8b?w=1200&h=800&fit=crop</div>
+                <div>passions</div>
+                <div>for life</div>
+                <div>Discover your <strong>creative talents</strong> and express yourself through art, music, and performance. <strong>Let your passions shine</strong>.</div>
+                <div>16:00</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Outro section -->
+    <section class="outro-section">
+        <div>
+            <h2>Koniec demonstracji</h2>
+            <p>Animacje zostały pomyślnie odtworzone z wykorzystaniem GSAP ScrollTrigger!</p>
+        </div>
+    </section>
+
+    <!-- Load the scroll-hero component -->
+    <script type="module">
+        // Simulate Franklin block decoration
+        import scrollHero from './scroll-hero.js';
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            const block = document.querySelector('.scroll-hero');
+            scrollHero(block);
+        });
+    </script>
+</body>
+</html>

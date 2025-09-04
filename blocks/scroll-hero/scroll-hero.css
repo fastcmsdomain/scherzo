@@ -1,6 +1,10 @@
 /* Scroll Hero Block - Franklin Component CSS */
 /* Based on Wellington College Prep scroll animations */
 
+main .section .scroll-hero-wrapper {
+  min-width: 100vw;
+}
+
 /* Progress Navigation (floating left side) */
 .progress-nav {
   display: block;
@@ -96,7 +100,7 @@
 
 /* Section structure - creates overlapping effect */
 .screen-section {
-  height: 300vh; /* Creates scroll space for pin effect */
+  height: 100vh; /* Creates scroll space for pin effect */
   position: relative;
 }
 
@@ -120,12 +124,25 @@
   top: 0;
 }
 
-/* Screen stacking - each subsequent screen has higher z-index */
-.screen-section:nth-child(1) .screen { z-index: 1; }
-.screen-section:nth-child(2) .screen { z-index: 2; }
-.screen-section:nth-child(3) .screen { z-index: 3; }
-.screen-section:nth-child(4) .screen { z-index: 4; }
-.screen-section:nth-child(5) .screen { z-index: 5; }
+/* Screen stacking - each subsequent screen has higher z-index for text overlay */
+.screen-section:nth-child(1) .screen { z-index: 10; }
+.screen-section:nth-child(2) .screen { z-index: 20; }
+.screen-section:nth-child(3) .screen { z-index: 30; }
+.screen-section:nth-child(4) .screen { z-index: 40; }
+.screen-section:nth-child(5) .screen { z-index: 50; }
+
+/* Text overlays have higher z-index than backgrounds */
+.screen .strapline {
+  z-index: 100;
+}
+
+.screen .strapline-advanced {
+  z-index: 101;
+}
+
+.screen .strapline-bottom {
+  z-index: 102;
+}
 
 .screen-inner {
   height: 100vh;
@@ -136,28 +153,28 @@
   z-index: 2;
 }
 
-/* Background image setup */
+/* Background image setup - full viewport, static */
 .background {
-  height: 100%;
+  height: 100vh;
   left: 0;
-  position: absolute;
+  position: fixed;
   top: 0;
-  width: 100%;
+  width: 100vw;
+  z-index: 0;
 }
 
 .background .img {
   background-color: #00203e;
-  background-position: 50%;
+  background-position: center center;
   background-repeat: no-repeat;
   background-size: cover;
   display: block;
-  height: calc(100% + 30px);
+  height: 100vh;
   left: 0;
-  margin: -15px;
   position: absolute;
   top: 0;
-  width: calc(100% + 30px);
-  will-change: transform;
+  width: 100vw;
+  /* Remove will-change to keep image static */
 }
 
 .background .img:after {
@@ -188,7 +205,7 @@
   z-index: 1;
 }
 
-/* Text positioning and styling */
+/* Text positioning and styling - overlays static background */
 .strapline {
   left: 0;
   margin: 0 auto;
@@ -197,9 +214,11 @@
   text-align: center;
   top: calc(100% - 60px);
   transform: translateY(-100%);
-  z-index: 2;
+  z-index: 100;
   color: #fff;
   font-family: 'Euclid Circular A', sans-serif;
+  width: 100%;
+  will-change: transform, opacity;
 }
 
 .strapline .time-indicator {
@@ -245,7 +264,7 @@
   margin: 0;
 }
 
-/* Advanced strapline (appears during scroll) */
+/* Advanced strapline (appears during scroll) - overlays static background */
 .strapline-advanced {
   left: 0;
   margin: 0 auto;
@@ -254,9 +273,11 @@
   text-align: center;
   top: 100%;
   transform: translateY(0);
-  z-index: 1;
+  z-index: 101;
   color: #fff;
   font-family: 'Euclid Circular A', sans-serif;
+  width: 100%;
+  will-change: transform, opacity;
 }
 
 .strapline-advanced .advanced-title {
@@ -279,7 +300,7 @@
   font-weight: 500;
 }
 
-/* Bottom navigation */
+/* Bottom navigation - overlays static background */
 .strapline-bottom {
   bottom: -20px;
   color: #fff;
@@ -293,7 +314,9 @@
   right: 0;
   text-align: center;
   transform: translateY(0);
-  z-index: 100;
+  z-index: 102;
+  width: 100%;
+  will-change: transform, opacity;
 }
 
 .strapline-bottom a {

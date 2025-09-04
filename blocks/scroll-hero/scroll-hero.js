@@ -27,7 +27,7 @@ function loadGSAP() {
       resolve();
       return;
     }
-    
+  
     const script = document.createElement('script');
     script.src = 'https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js';
     script.onload = () => {
@@ -44,7 +44,7 @@ function loadScrollTrigger() {
       resolve();
       return;
     }
-    
+  
     const script = document.createElement('script');
     script.src = 'https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js';
     script.onload = () => {
@@ -64,7 +64,7 @@ function loadScrollToPlugin() {
       resolve();
       return;
     }
-    
+  
     const script = document.createElement('script');
     script.src = 'https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollToPlugin.min.js';
     script.onload = () => {
@@ -78,9 +78,9 @@ function loadScrollToPlugin() {
   });
 }
 
-function initBasicScroll(sections) {
+function initBasicScroll() {
   // Fallback for when GSAP is not available
-  
+
   // Simple scroll behavior without animations
   document.querySelectorAll('.progress-nav li').forEach((li, index) => {
     li.addEventListener('click', () => {
@@ -90,7 +90,7 @@ function initBasicScroll(sections) {
       }
     });
   });
-  
+
   // Basic intersection observer for progress navigation
   const observer = new IntersectionObserver((entries) => {
     entries.forEach((entry) => {
@@ -100,7 +100,7 @@ function initBasicScroll(sections) {
       }
     });
   }, { threshold: 0.5 });
-  
+
   document.querySelectorAll('.screen-section').forEach((section) => {
     observer.observe(section);
   });
@@ -109,20 +109,20 @@ function initBasicScroll(sections) {
 function createSection(section) {
   const sectionDiv = document.createElement('div');
   sectionDiv.className = `screen-section ${section.id}`;
-  
+
   // Use backgroundImages array from query-index.json data
   const backgroundImages = section.backgroundImages || [section.image];
   const bgImagesHtml = backgroundImages.map((img, imgIndex) => 
     `<div class="img image-bg image-bg-${imgIndex}" data-bg="${img}" style="display: ${imgIndex === 0 ? 'block' : 'none'}"></div>`
   ).join('');
-  
+
   // Create title parts HTML from titleParts array
   const titlePartsHtml = section.titleParts && section.titleParts.length > 0 
     ? section.titleParts.map((part, partIndex) => 
         `<span class="title-part title-part-${partIndex}">${part}</span>`
       ).join('')
     : `<span class="title-part title-part-0">${section.title}</span>`;
-  
+
   sectionDiv.innerHTML = `
     <div class="pin-spacer">
       <div class="screen ${section.id.replace('section-', '')} hold-pin">
@@ -149,7 +149,7 @@ function createSection(section) {
       </div>
     </div>
   `;
-  
+
   return sectionDiv;
 }
 
@@ -161,25 +161,25 @@ async function initializeAnimations(sections) {
       await loadScrollTrigger();
       await loadScrollToPlugin();
     }
-    
+  
     initScrollAnimations(sections);
   } catch (error) {
     // Fallback to basic scroll behavior
-    initBasicScroll(sections);
+    initBasicScroll();
   }
 }
 
 function initScrollAnimations(sections) {
   // Use window.gsap and window.ScrollTrigger to avoid undefined errors
   const { gsap, ScrollTrigger } = window;
-  
+
   if (!gsap || !ScrollTrigger) {
-    initBasicScroll(sections);
+    initBasicScroll();
     return;
   }
-  
+
   gsap.registerPlugin(ScrollTrigger);
-  
+
   // Set background images for all sections
   sections.forEach((section) => {
     const sectionElement = document.querySelector(`.screen-section.${section.id}`);
@@ -213,7 +213,7 @@ function initScrollAnimations(sections) {
 
 function createSectionAnimation(section, index, gsap, ScrollTrigger) {
   const sectionSelector = `.${section.id.replace('section-', '')}`;
-  
+
   // Enhanced timeline based on Wellington College exact pattern
   const timeline = gsap.timeline()
     .to(`${sectionSelector} .strapline`, {
@@ -274,12 +274,12 @@ function createSectionAnimation(section, index, gsap, ScrollTrigger) {
 
   // Multiple background images effect
   const backgroundImages = document.querySelectorAll(`${sectionSelector} .background .img`);
-  
+
   // Background image switching during scroll (Wellington College pattern)
   if (backgroundImages.length > 1) {
     backgroundImages.forEach((img, imgIndex) => {
       if (imgIndex === 0) return; // First image is always visible
-      
+    
       ScrollTrigger.create({
         trigger: sectionSelector,
         start: `${25 + (imgIndex * 25)}% center`,
@@ -311,21 +311,9 @@ function createSectionAnimation(section, index, gsap, ScrollTrigger) {
       });
     });
   }
-  
-  // Parallax effect for all background images
-  backgroundImages.forEach((img, imgIndex) => {
-    gsap.to(img, {
-      yPercent: -30 - (imgIndex * 10),
-      scale: 1 + (imgIndex * 0.05),
-      ease: 'none',
-      scrollTrigger: {
-        trigger: sectionSelector,
-        start: 'top bottom',
-        end: 'bottom top',
-        scrub: 1.2 + (imgIndex * 0.3),
-      },
-    });
-  });
+
+  // Keep background images static - no parallax effect
+  // Images remain fixed while text overlays shift up
 
   // Text entrance animation
   gsap.fromTo(`${sectionSelector} .strapline`, {
@@ -464,14 +452,14 @@ export default async function decorate(block) {
           // Extract additional images for multi-image effect
           const allImages = doc.querySelectorAll('picture source[media="(min-width: 600px)"]');
           const backgroundImages = Array.from(allImages).map((img) => {
-            const src = img.getAttribute('srcset').split('?')[0];
+            const [src] = img.getAttribute('srcset').split('?');
             return new URL(src, window.location.origin).href;
           });
 
           // Extract description and time from metadata or content
           const descriptionElement = doc.querySelector('.description, .subtitle, p');
           const timeElement = doc.querySelector('.time, .timestamp');
-          
+        
           return {
             ...item,
             id: `section-${item.path.split('/').pop()}`,
@@ -496,7 +484,7 @@ export default async function decorate(block) {
 
   // Fetch the sections data
   const sections = await fetchScrollHeroData();
-  
+
   if (!sections || sections.length === 0) {
     block.innerHTML = '<p>No scroll hero sections found.</p>';
     return;

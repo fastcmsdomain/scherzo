@@ -61,7 +61,7 @@ main .hero-container {
   align-self: flex-end;
   color: var(--color-white);
   font-family: var(--body-bold-family);
-  font-size: var(--heading-font-size-mobile-l);
+  font-size: var(--heading-font-size-mobile-xxl);
   line-height: 1;
   margin: 0 auto;
   max-width: 900px;

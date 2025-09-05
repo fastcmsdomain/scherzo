@@ -36,8 +36,8 @@ main .hero-container {
 .hero {
   align-items: flex-end;
   display: flex;
-  min-height: 750px;
-  max-height: 750px;
+  min-height: 650px;
+  max-height: 650px;
 }
 
 @media (width >= 900px) {

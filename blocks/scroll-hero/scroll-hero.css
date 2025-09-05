@@ -98,9 +98,9 @@ main .section .scroll-hero-wrapper {
   width: 100%;
 }
 
-/* Section structure - creates overlapping effect */
+/* Section structure - creates overlapping effect with extended scroll */
 .screen-section {
-  height: 100vh; /* Creates scroll space for pin effect */
+  height: 100vh; /* Extended scroll space for pause effect */
   position: relative;
 }
 
@@ -136,9 +136,6 @@ main .section .scroll-hero-wrapper {
   z-index: 100;
 }
 
-.screen .strapline-advanced {
-  z-index: 101;
-}
 
 .screen .strapline-bottom {
   z-index: 102;
@@ -151,6 +148,21 @@ main .section .scroll-hero-wrapper {
   top: 0;
   width: 100%;
   z-index: 2;
+}
+
+/* Fade overlay that appears when titles are centered */
+.fade {
+  background: linear-gradient(180deg, transparent 0%, rgba(0, 0, 0, 0.6) 100%);
+  bottom: 0;
+  height: 100%;
+  left: 0;
+  opacity: 0;
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 100%;
+  z-index: 1;
+  will-change: opacity;
 }
 
 /* Background image setup - full viewport, static */
@@ -205,23 +217,49 @@ main .section .scroll-hero-wrapper {
   z-index: 1;
 }
 
-/* Text positioning and styling - overlays static background */
+/* Text positioning and styling - starts 10% up from bottom, moves to center */
 .strapline {
   left: 0;
   margin: 0 auto;
   position: absolute;
   right: 0;
   text-align: center;
-  top: calc(100% - 60px);
-  transform: translateY(-100%);
+  top: calc(90% - 60px); /* Start 10% up from bottom */
+  transform: translateY(0); /* Visible on screen initially */
   z-index: 100;
   color: #fff;
   font-family: 'Euclid Circular A', sans-serif;
   width: 100%;
   will-change: transform, opacity;
+  opacity: 1; /* Ensure visible initially */
+  /* Initial state - 10% up from bottom, will be animated to center */
+}
+
+.strapline .main-title {
+  font-size: 60px;
+  font-weight: 700;
+  line-height: 1.1;
+  margin: 0;
+  text-shadow: 0 0 18px rgba(0, 0, 0, 0.25);
+  position: relative;
+  top: 0; /* Visible on screen initially */
+  will-change: transform, opacity;
+}
+
+.strapline .subtitle {
+  font-size: 20px;
+  font-weight: 400;
+  letter-spacing: 0.07em;
+  text-shadow: 0 0 18px rgba(0, 0, 0, 0.25);
+  text-transform: uppercase;
+  margin: 0;
+  position: relative;
+  top: 0; /* Visible on screen initially, will be animated to center below main title */
+  will-change: transform, opacity;
 }
 
 .strapline .time-indicator {
+  display: none;
   font-size: 20px;
   font-weight: 400;
   letter-spacing: 0.07em;
@@ -235,7 +273,6 @@ main .section .scroll-hero-wrapper {
   font-weight: 500;
   line-height: 70px;
   text-shadow: 0 0 18px rgba(0, 0, 0, 0.25);
-  margin: 0;
 }
 
 /* Title parts styling (from query-index.json titleParts) */
@@ -253,6 +290,7 @@ main .section .scroll-hero-wrapper {
   font-size: 0.6em; /* Subtitle */
   font-weight: 300;
   opacity: 0.9;
+  display: none;
 }
 
 .strapline .subtitle {
@@ -264,41 +302,6 @@ main .section .scroll-hero-wrapper {
   margin: 0;
 }
 
-/* Advanced strapline (appears during scroll) - overlays static background */
-.strapline-advanced {
-  left: 0;
-  margin: 0 auto;
-  position: absolute;
-  right: 0;
-  text-align: center;
-  top: 100%;
-  transform: translateY(0);
-  z-index: 101;
-  color: #fff;
-  font-family: 'Euclid Circular A', sans-serif;
-  width: 100%;
-  will-change: transform, opacity;
-}
-
-.strapline-advanced .advanced-title {
-  font-size: 28px;
-  font-weight: 500;
-  margin: 15px 0 10px;
-  text-transform: capitalize;
-}
-
-.strapline-advanced .description {
-  font-size: 16px;
-  font-weight: 300;
-  line-height: 24px;
-  margin: 0 auto;
-  width: 450px;
-}
-
-.strapline-advanced .description strong {
-  color: #a6d6c9;
-  font-weight: 500;
-}
 
 /* Bottom navigation - overlays static background */
 .strapline-bottom {
@@ -341,15 +344,6 @@ main .section .scroll-hero-wrapper {
     font-size: 14px;
   }
   
-  .strapline-advanced .description {
-    max-width: 450px;
-    padding: 0 10px;
-    width: 100%;
-  }
-  
-  .strapline-advanced .advanced-title {
-    font-size: 22px;
-  }
 }
 
 @media (max-width: 480px) {
@@ -357,9 +351,6 @@ main .section .scroll-hero-wrapper {
     font-size: 40px;
   }
   
-  .strapline-advanced .description {
-    font-size: 14px;
-  }
 }
 
 /* Animation keyframes */
@@ -388,8 +379,7 @@ main .section .scroll-hero-wrapper {
 /* Ensure smooth performance */
 .screen,
 .background .img,
-.strapline,
-.strapline-advanced {
+.strapline {
   will-change: transform;
   transform-style: preserve-3d;
   backface-visibility: hidden;
@@ -408,9 +398,3 @@ main .section .scroll-hero-wrapper {
   padding: 50px 20px;
 }
 
-.no-gsap .strapline-advanced {
-  position: relative;
-  top: auto;
-  transform: none;
-  padding: 50px 20px;
-}

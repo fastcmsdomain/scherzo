@@ -138,10 +138,6 @@ function createSection(section) {
             </h1>
             <h2 class="subtitle">${section.subtitle}</h2>
           </div>
-          <div class="strapline-advanced">
-            <h2 class="advanced-title">${section.title}</h2>
-            <p class="description">${section.description}</p>
-          </div>
           <div class="strapline-bottom">
             <a href="#stories">Latest #${section.title}ForLife Stories</a>
           </div>
@@ -215,61 +211,69 @@ function createSectionAnimation(section, index, gsap, ScrollTrigger) {
   const sectionSelector = `.${section.id.replace('section-', '')}`;
 
   // Enhanced timeline based on Wellington College exact pattern
+  // Title and subtitle move to center individually, then pause for next slide
   const timeline = gsap.timeline()
+    // Phase 0: Ensure strapline is visible throughout scroll
     .to(`${sectionSelector} .strapline`, {
-      top: 60,
-      y: 0,
-      delay: 0.1,
+      opacity: 1,
+      duration: 0.1,
+      ease: 'power2.out',
+    }, 0)
+    // Phase 1: Move strapline up and center the main title
+    .to(`${sectionSelector} .strapline`, {
+      top: '50%',
+      y: '-50%',
+      duration: 1,
       ease: 'power2.out',
     }, 0)
     .to(`${sectionSelector} .strapline .main-title`, {
       fontSize: getWindowWidth() < 992 ? '44px' : '66px',
-      delay: 0.1,
+      duration: 1,
       ease: 'power2.out',
     }, 0)
     .to(`${sectionSelector} .strapline .time-indicator`, {
       opacity: 0,
-      duration: 0.1,
-      delay: 0.1,
-    }, 0)
-    .to(`${sectionSelector} .strapline .subtitle`, {
-      top: -35,
-      fontSize: '12px',
-      delay: 0.1,
+      duration: 0.5,
       ease: 'power2.out',
     }, 0)
+    // Phase 2: Move subtitle to center below main title
+    .to(`${sectionSelector} .strapline .subtitle`, {
+      top: '20px',
+      fontSize: '18px',
+      duration: 0.8,
+      ease: 'power2.out',
+    }, 0.5)
+    // Phase 3: Fade overlay appears
     .to(`${sectionSelector} .fade`, {
       opacity: 1,
+      duration: 0.5,
       ease: 'power2.inOut',
-    }, 0)
-    .to(`${sectionSelector} .strapline-advanced`, {
-      top: '50%',
-      yPercent: -50,
-      delay: 0.2,
-      ease: 'power2.out',
-    }, 0)
-    .to(`${sectionSelector} .strapline-advanced`, {
-      bottom: '26%',
-      delay: 0.2,
-    }, 0)
+    }, 1.2)
+    // Phase 4: Bottom navigation appears
     .to(`${sectionSelector} .strapline-bottom`, {
       bottom: getWindowWidth() < 992 ? '48px' : '0%',
-      delay: 0.3,
+      duration: 0.5,
       ease: 'power2.out',
-    }, 0);
+    }, 1.5);
 
-  // Create ScrollTrigger for this section (exact Wellington College setup)
+  // Create ScrollTrigger with smooth reverse scrolling
   ScrollTrigger.create({
     trigger: `${sectionSelector}`,
     start: 'top top',
+    end: '+=400vh', // Extended scroll distance for smooth reverse
     pin: true,
     pinSpacing: false,
     animation: timeline,
-    scrub: 1,
+    scrub: 1, // Smooth scrub for better reverse control
     onEnter: () => updateProgressNav(index),
     onEnterBack: () => updateProgressNav(index),
     onLeave: () => clearProgressNav(),
     onLeaveBack: () => clearProgressNav(),
+    // Smooth reverse behavior
+    onUpdate: (self) => {
+      // Ensure timeline plays smoothly in both directions
+      timeline.timeScale(1);
+    }
   });
 
   // Multiple background images effect
@@ -315,60 +319,27 @@ function createSectionAnimation(section, index, gsap, ScrollTrigger) {
   // Keep background images static - no parallax effect
   // Images remain fixed while text overlays shift up
 
-  // Text entrance animation
-  gsap.fromTo(`${sectionSelector} .strapline`, {
-    y: 100,
-    opacity: 0,
-    scale: 0.9,
-  }, {
-    y: 0,
-    opacity: 1,
-    scale: 1,
-    ease: 'power2.out',
-    scrollTrigger: {
-      trigger: sectionSelector,
-      start: 'top 80%',
-      end: 'top 50%',
-      scrub: 1,
-    },
-  });
+  // Text entrance animation removed - handled by main timeline
+  // The main timeline controls strapline visibility and positioning
 
-  // Text exit animation
+  // Text exit animation with reverse scrolling (no scale)
   gsap.to(`${sectionSelector} .strapline`, {
     y: -150,
     opacity: 0.2,
-    scale: 0.7,
     ease: 'none',
     scrollTrigger: {
       trigger: sectionSelector,
       start: 'center top',
       end: 'bottom top',
-      scrub: 1.5,
+      scrub: 1, // Smooth scrub for reverse
     },
   });
 
-  // Advanced strapline entrance
-  gsap.fromTo(`${sectionSelector} .strapline-advanced`, {
-    y: 200,
-    opacity: 0,
-  }, {
-    y: 0,
-    opacity: 1,
-    ease: 'power2.out',
-    scrollTrigger: {
-      trigger: sectionSelector,
-      start: 'top 30%',
-      end: 'center center',
-      scrub: 1,
-    },
-  });
 
-  // Scale effect for depth during overlap
+  // Brightness effect for depth during overlap (no scale)
   gsap.fromTo(`${sectionSelector}`, {
-    scale: 0.95,
     filter: 'brightness(0.8)',
   }, {
-    scale: 1,
     filter: 'brightness(1)',
     ease: 'none',
     scrollTrigger: {
@@ -379,21 +350,18 @@ function createSectionAnimation(section, index, gsap, ScrollTrigger) {
     },
   });
 
-  // Individual title parts animation
+  // Individual title parts animation with reverse scrolling (no scale)
   const mainTitleParts = document.querySelectorAll(`${sectionSelector} .title-part`);
   if (mainTitleParts.length > 0) {
     gsap.fromTo(mainTitleParts, {
       y: 100,
       opacity: 0,
-      scale: 0.8,
       rotationX: 15,
     }, {
       y: 0,
       opacity: 1,
-      scale: 1,
       rotationX: 0,
-      duration: 0.8,
-      ease: 'power2.out',
+      ease: 'none', // Use 'none' for scrub animations
       stagger: 0.15,
       scrollTrigger: {
         trigger: sectionSelector,

@@ -254,7 +254,7 @@ main .section .scroll-hero-wrapper {
   text-transform: uppercase;
   margin: 0;
   position: relative;
-  top: 0; /* Visible on screen initially, will be animated to center below main title */
+  top: 0; /* Will be animated to position below main title */
   will-change: transform, opacity;
 }
 

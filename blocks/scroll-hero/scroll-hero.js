@@ -219,10 +219,10 @@ function createSectionAnimation(section, index, gsap, ScrollTrigger) {
       duration: 0.1,
       ease: 'power2.out',
     }, 0)
-    // Phase 1: Move strapline up and center the main title
+    // Phase 1: Move strapline to top with 4rem margin
     .to(`${sectionSelector} .strapline`, {
-      top: '50%',
-      y: '-50%',
+      top: '4rem',
+      y: '0',
       duration: 1,
       ease: 'power2.out',
     }, 0)
@@ -236,9 +236,9 @@ function createSectionAnimation(section, index, gsap, ScrollTrigger) {
       duration: 0.5,
       ease: 'power2.out',
     }, 0)
-    // Phase 2: Move subtitle to center below main title
+    // Phase 2: Move subtitle below main title
     .to(`${sectionSelector} .strapline .subtitle`, {
-      top: '20px',
+      top: '70px',
       fontSize: '18px',
       duration: 0.8,
       ease: 'power2.out',

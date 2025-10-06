@@ -4,7 +4,6 @@
  */
 
 // Optimized utility functions
-const isMobile = () => window.innerWidth < 992;
 
 const updateProgressNav = (activeIndex) => {
   const navItems = document.querySelectorAll('.progress-nav li');
@@ -183,17 +182,8 @@ function createSectionAnimation(section, index, gsap, ScrollTrigger) {
       duration: 1, // Duration doesn't matter with scrub - controlled by scroll
       ease: 'none', // Use 'none' for scrub animations
     }, 0)
-    // Phase 2: Synchronize h1 and h2 - same timing, duration, and top position
-    .to(`${sectionSelector} .strapline .main-title`, {
-      fontSize: isMobile() ? '44px' : '66px',
-      duration: 1, // Same duration as subtitle
-      ease: 'none', // Same easing as subtitle
-    }, 0) // Same start time as subtitle
-    .to(`${sectionSelector} .strapline .subtitle`, {
-      fontSize: '18px', // Same final size on both mobile and desktop
-      duration: 1, // Same duration as main-title
-      ease: 'none', // Same easing as main-title
-    }, 0) // Same start time as main-title - no stagger
+    // Phase 2: Text elements move together (font sizes controlled by CSS)
+    // No font size animations - handled by CSS media queries
     // Phase 3: Fade overlay appears
     .to(`${sectionSelector} .fade`, {
       opacity: 1,

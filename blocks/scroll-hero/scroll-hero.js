@@ -219,16 +219,16 @@ function createSectionAnimation(section, index, gsap, ScrollTrigger) {
       duration: 0.1,
       ease: 'power2.out',
     }, 0)
-    // Phase 1: Move strapline to top with 4rem margin
+    // Phase 1: Move strapline to top with 4rem margin (slower animation)
     .to(`${sectionSelector} .strapline`, {
       top: '4rem',
       y: '0',
-      duration: 1,
+      duration: 5, // Increased from 1 to 2.5 for slower movement
       ease: 'power2.out',
     }, 0)
     .to(`${sectionSelector} .strapline .main-title`, {
       fontSize: getWindowWidth() < 992 ? '44px' : '66px',
-      duration: 1,
+      duration: 5, // Match the slower strapline movement duration
       ease: 'power2.out',
     }, 0)
     .to(`${sectionSelector} .strapline .time-indicator`, {
@@ -240,31 +240,31 @@ function createSectionAnimation(section, index, gsap, ScrollTrigger) {
     .to(`${sectionSelector} .strapline .subtitle`, {
       top: '70px',
       fontSize: '18px',
-      duration: 0.8,
+      duration: 5, // Increased duration for smoother coordination
       ease: 'power2.out',
-    }, 0.5)
+    }, 1.0) // Delayed start to coordinate with slower main animation
     // Phase 3: Fade overlay appears
     .to(`${sectionSelector} .fade`, {
       opacity: 1,
       duration: 0.5,
       ease: 'power2.inOut',
-    }, 1.2)
+    }, 2.0) // Delayed to coordinate with slower main animation
     // Phase 4: Bottom navigation appears
     .to(`${sectionSelector} .strapline-bottom`, {
       bottom: getWindowWidth() < 992 ? '48px' : '0%',
       duration: 0.5,
       ease: 'power2.out',
-    }, 1.5);
+    }, 2.5); // Delayed to coordinate with slower main animation
 
   // Create ScrollTrigger with smooth reverse scrolling
   ScrollTrigger.create({
     trigger: `${sectionSelector}`,
     start: 'top top',
-    end: '+=400vh', // Extended scroll distance for smooth reverse
+    end: '+=600vh', // Increased scroll distance to accommodate slower animation
     pin: true,
     pinSpacing: false,
     animation: timeline,
-    scrub: 1, // Smooth scrub for better reverse control
+    scrub: 5, // Slightly increased scrub for smoother slower animation
     onEnter: () => updateProgressNav(index),
     onEnterBack: () => updateProgressNav(index),
     onLeave: () => clearProgressNav(),

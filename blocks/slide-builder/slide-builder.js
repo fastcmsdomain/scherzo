@@ -1,19 +1,51 @@
-/* esint-disable no-unused-vars */
+/* eslint-disable no-unused-vars */
 /* eslint-disable prefer-destructuring */
 /* eslint-disable import/no-unresolved */
 /* eslint-disable import/no-absolute-path */
+/* eslint-disable no-console */
 import { renderExpressions } from '/plusplus/plugins/expressions/src/expressions.js';
 
-// Import ScrollMagic
-let ScrollMagic;
-try {
-  ScrollMagic = await import('scrollmagic');
-} catch (error) {
-  // ScrollMagic not available, will fall back to basic scroll implementation
-  ScrollMagic = null;
+// Import GSAP and ScrollTrigger via CDN for reliability
+let gsap;
+let ScrollTrigger;
+
+async function loadGSAP() {
+  try {
+    // Try to load from CDN first for reliability
+    if (!window.gsap) {
+      await new Promise((resolve, reject) => {
+        const script = document.createElement('script');
+        script.src = 'https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js';
+        script.onload = resolve;
+        script.onerror = reject;
+        document.head.appendChild(script);
+      });
+    }
+
+    if (!window.ScrollTrigger) {
+      await new Promise((resolve, reject) => {
+        const script = document.createElement('script');
+        script.src = 'https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js';
+        script.onload = resolve;
+        script.onerror = reject;
+        document.head.appendChild(script);
+      });
+    }
+
+    gsap = window.gsap;
+    ScrollTrigger = window.ScrollTrigger;
+    gsap.registerPlugin(ScrollTrigger);
+
+    console.log('GSAP and ScrollTrigger loaded successfully via CDN');
+    return true;
+  } catch (error) {
+    console.warn('GSAP not available, falling back to basic scroll:', error);
+    gsap = null;
+    ScrollTrigger = null;
+    return false;
+  }
 }
 
-// eslint-disable-next-line no-unused-vars
 export default async function decorate(block) {
   async function fetchSlides() {
     try {
@@ -109,20 +141,23 @@ export default async function decorate(block) {
     return;
   }
 
-  // const slideHeight = window.innerHeight;
-  // const footerWrapper = document.querySelector('.footer-wrapper');
-
   slides.forEach((slide) => {
     const slideItem = createSlideItem(slide);
     container.appendChild(slideItem);
     setSlideBackground(slideItem, slide.image);
   });
 
+  // Set container height to accommodate overlapping slides
+  const totalHeight = slides.length * 100; // 100vh per slide
+  container.style.height = `${totalHeight}vh`;
+
   // Fallback basic scroll implementation
   function initializeBasicScroll() {
     function updateSlidePositions() {
       const slideItems = container.querySelectorAll('.slide-builder-item');
       const lastSlide = slideItems[slideItems.length - 1];
+      if (!lastSlide) return;
+
       const lastSlideRect = lastSlide.getBoundingClientRect();
 
       // Check if user has scrolled past all slides
@@ -138,26 +173,18 @@ export default async function decorate(block) {
         const itemHeight = slideItem.offsetHeight;
         const scrollProgress = (window.innerHeight - rect.top) / (window.innerHeight + itemHeight);
 
-        const titlePart1 = slideItem.querySelector('.title-part-1');
-        const titlePart2 = slideItem.querySelector('.title-part-2');
-        const titlePart3 = slideItem.querySelector('.title-part-3');
+        const titleParts = slideItem.querySelectorAll('.title-part');
 
         if (scrollProgress >= 0 && scrollProgress <= 1) {
           const opacity = Math.min(scrollProgress * 2, 1);
           const translateY = Math.max(50 - scrollProgress * 100, 0);
 
-          if (titlePart1) {
-            titlePart1.style.opacity = opacity;
-            titlePart1.style.transform = `translateY(${translateY}vh)`;
-          }
-          if (titlePart2) {
-            titlePart2.style.opacity = opacity;
-            titlePart2.style.transform = `translateY(${translateY}vh)`;
-          }
-          if (titlePart3) {
-            titlePart3.style.opacity = opacity;
-            titlePart3.style.transform = `translateY(${translateY}vh)`;
-          }
+          titleParts.forEach((titlePart) => {
+            if (titlePart) {
+              titlePart.style.opacity = opacity;
+              titlePart.style.transform = `translateY(${translateY}vh)`;
+            }
+          });
         }
       });
     }
@@ -170,118 +197,180 @@ export default async function decorate(block) {
     updateSlidePositions();
   }
 
-  // Enhanced scroll functionality with ScrollMagic
-  function initializeScrollMagic() {
-    if (!ScrollMagic) {
-      // Fallback to basic scroll implementation
+  // GSAP ScrollTrigger implementation with proper overlapping
+  function initializeGSAPScrollTrigger() {
+    if (!gsap || !ScrollTrigger) {
       initializeBasicScroll();
       return;
     }
 
-    // Initialize ScrollMagic controller
-    const controller = new ScrollMagic.Controller();
     const slideItems = container.querySelectorAll('.slide-builder-item');
 
     slideItems.forEach((slideItem, index) => {
-      const isFirstSlide = index === 0;
-      const isLastSlide = index === slideItems.length - 1;
-
-      // Create unique IDs for each slide elements
-      const slideId = `slide-${index}`;
-      const triggerId = `trigger-${index}`;
-
-      slideItem.setAttribute('id', slideId);
-
-      // Create trigger element
-      const triggerElement = document.createElement('div');
-      triggerElement.setAttribute('id', triggerId);
-      triggerElement.classList.add('slide-trigger');
-      slideItem.parentNode.insertBefore(triggerElement, slideItem);
-
-      // Calculate duration based on slide content and position
-      let duration = window.innerHeight * 1.5; // 1.5 viewport heights
-      if (isFirstSlide) {
-        duration = window.innerHeight * 2; // Longer duration for first slide
-      } else if (isLastSlide) {
-        duration = window.innerHeight; // Shorter duration for last slide
-      }
-
-      // Create pinning scene
-      new ScrollMagic.Scene({
-        triggerElement: `#${triggerId}`,
-        duration,
-        triggerHook: 1,
-      })
-        .setPin(`#${slideId}`, {
-          pushFollowers: true,
-        })
-        .addTo(controller);
-
-      // Enhanced title animation with CSS transitions
+      const backgroundElement = slideItem.querySelector('.slide-background');
       const titleParts = slideItem.querySelectorAll('.title-part');
 
-      // Set initial state for title parts
-      titleParts.forEach((titlePart, partIndex) => {
-        titlePart.style.opacity = '0';
-        titlePart.style.transform = 'translateY(10vh) scale(0.95)';
-        titlePart.style.transition = 'opacity 1s ease-out, transform 1s ease-out';
-        titlePart.style.transitionDelay = `${partIndex * 0.2}s`;
+      // Set unique ID for each slide
+      slideItem.setAttribute('id', `slide-${index}`);
+
+      // Create overlapping parallax effect - slides move over each other
+      gsap.to(slideItem, {
+        yPercent: -100,
+        ease: 'none',
+        scrollTrigger: {
+          trigger: slideItem,
+          start: 'bottom bottom',
+          end: 'bottom top',
+          scrub: 1,
+        },
       });
 
-      // Create animation scene for title parts
-      new ScrollMagic.Scene({
-        triggerElement: `#${triggerId}`,
-        duration: duration * 0.6,
-        triggerHook: 0.8,
-      })
-        .on('progress', (event) => {
-          const { progress } = event;
-          titleParts.forEach((titlePart, partIndex) => {
-            const partProgress = Math.max(0, Math.min(1, (progress - (partIndex * 0.1)) * 2));
-            if (partProgress > 0) {
-              titlePart.style.opacity = partProgress;
-              titlePart.style.transform = `translateY(${(1 - partProgress) * 10}vh) scale(${0.95 + (partProgress * 0.05)})`;
-            }
-          });
-        })
-        .addTo(controller);
-
-      // Background parallax effect with CSS transforms
-      const backgroundElement = slideItem.querySelector('.slide-background');
+      // Enhanced parallax background effect
       if (backgroundElement) {
-        new ScrollMagic.Scene({
-          triggerElement: `#${triggerId}`,
-          duration: duration + window.innerHeight,
-          triggerHook: 1,
-        })
-          .on('progress', (event) => {
-            const { progress } = event;
-            const translateY = progress * -20; // Move up by 20% at full progress
-            backgroundElement.style.transform = `translateY(${translateY}%)`;
-          })
-          .addTo(controller);
+        gsap.fromTo(
+          backgroundElement,
+          {
+            yPercent: 0,
+            scale: 1.2,
+          },
+          {
+            yPercent: -50,
+            scale: 1,
+            ease: 'none',
+            scrollTrigger: {
+              trigger: slideItem,
+              start: 'top bottom',
+              end: 'bottom top',
+              scrub: 1.5,
+            },
+          },
+        );
       }
+
+      // Text animations with scroll sensitivity
+      if (titleParts.length > 0) {
+        // Set initial state for text parts
+        gsap.set(titleParts, {
+          opacity: 0,
+          y: 100,
+          scale: 0.8,
+        });
+
+        // Text entrance animation
+        const textTimeline = gsap.timeline({
+          scrollTrigger: {
+            trigger: slideItem,
+            start: 'top 70%',
+            end: 'top 30%',
+            scrub: 1,
+          },
+        });
+
+        titleParts.forEach((titlePart, partIndex) => {
+          textTimeline.to(
+            titlePart,
+            {
+              opacity: 1,
+              y: 0,
+              scale: 1,
+              duration: 0.5,
+              ease: 'power2.out',
+            },
+            partIndex * 0.1,
+          );
+        });
+
+        // Text parallax movement during scroll
+        gsap.to(titleParts, {
+          y: -150,
+          opacity: 0,
+          scale: 0.7,
+          ease: 'none',
+          scrollTrigger: {
+            trigger: slideItem,
+            start: 'center top',
+            end: 'bottom top',
+            scrub: 1.5,
+          },
+        });
+      }
+
+      // Scale effect for depth during overlap
+      gsap.fromTo(
+        slideItem,
+        {
+          scale: 0.9,
+        },
+        {
+          scale: 1,
+          ease: 'none',
+          scrollTrigger: {
+            trigger: slideItem,
+            start: 'top bottom',
+            end: 'top top',
+            scrub: 1,
+          },
+        },
+      );
     });
 
-    // Footer reveal scene
+    // Footer reveal animation
     const lastSlide = slideItems[slideItems.length - 1];
     if (lastSlide) {
-      new ScrollMagic.Scene({
-        triggerElement: lastSlide,
-        triggerHook: 0.2,
-      })
-        .on('enter', () => {
-          document.body.classList.add('show-footer');
-        })
-        .on('leave', () => {
+      ScrollTrigger.create({
+        trigger: lastSlide,
+        start: 'bottom 80%',
+        onEnter: () => {
+          gsap.to(document.body, {
+            duration: 0.5,
+            ease: 'power2.out',
+            onComplete: () => document.body.classList.add('show-footer'),
+          });
+        },
+        onLeaveBack: () => {
           document.body.classList.remove('show-footer');
-        })
-        .addTo(controller);
+        },
+      });
+    }
+
+    // Add scroll-based performance optimizations
+    let ticking = false;
+
+    function optimizeScrollPerformance() {
+      if (!ticking) {
+        requestAnimationFrame(() => {
+          ScrollTrigger.refresh();
+          ticking = false;
+        });
+        ticking = true;
+      }
+    }
+
+    // Listen for resize events to refresh ScrollTrigger
+    window.addEventListener('resize', optimizeScrollPerformance);
+
+    // Initial refresh
+    ScrollTrigger.refresh();
+
+    // Add debug info for development
+    if (window.location.hostname === 'localhost' || window.location.hostname.includes('hlx.page')) {
+      console.log(`Initialized ${slideItems.length} slides with GSAP ScrollTrigger`);
+
+      // Add ScrollTrigger debug markers in development
+      ScrollTrigger.addEventListener('refresh', () => {
+        console.log('ScrollTrigger refreshed');
+      });
     }
   }
 
-  // Initialize the appropriate scroll implementation
-  initializeScrollMagic();
+  // Load GSAP and initialize scroll implementation
+  const gsapLoaded = await loadGSAP();
+
+  if (gsapLoaded) {
+    initializeGSAPScrollTrigger();
+  } else {
+    initializeBasicScroll();
+  }
 
   // Set the height of the body to accommodate all slides
   document.body.style.height = 'auto';

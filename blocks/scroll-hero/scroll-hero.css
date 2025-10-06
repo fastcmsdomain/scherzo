@@ -150,6 +150,18 @@ main .section .scroll-hero-wrapper {
   z-index: 2;
 }
 
+.screen-inner:before {
+  z-index: 1;
+  content: '';
+  display: block;
+  height: 30vh;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  position: absolute;
+  background: linear-gradient(180deg, transparent 0%, rgba(0, 32, 62, 0.7) 100%);
+}
+
 /* Fade overlay that appears when titles are centered */
 .fade {
   background: linear-gradient(180deg, transparent 0%, rgba(0, 0, 0, 0.6) 100%);

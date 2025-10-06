@@ -138,9 +138,6 @@ function createSection(section) {
             </h1>
             <h2 class="subtitle">${section.subtitle}</h2>
           </div>
-          <div class="strapline-bottom">
-            <a href="#stories">Latest #${section.title}ForLife Stories</a>
-          </div>
         </div>
       </div>
     </div>
@@ -219,52 +216,40 @@ function createSectionAnimation(section, index, gsap, ScrollTrigger) {
       duration: 0.1,
       ease: 'power2.out',
     }, 0)
-    // Phase 1: Move strapline to top with 4rem margin (slower animation)
+    // Phase 1: Move strapline container and all text elements together
     .to(`${sectionSelector} .strapline`, {
       top: '4rem',
       y: '0',
-      duration: 5, // Increased from 1 to 2.5 for slower movement
-      ease: 'power2.out',
+      duration: 1, // Duration doesn't matter with scrub - controlled by scroll
+      ease: 'none', // Use 'none' for scrub animations
     }, 0)
+    // Phase 2: Synchronize h1 and h2 - same timing, duration, and top position
     .to(`${sectionSelector} .strapline .main-title`, {
       fontSize: getWindowWidth() < 992 ? '44px' : '66px',
-      duration: 5, // Match the slower strapline movement duration
-      ease: 'power2.out',
-    }, 0)
-    .to(`${sectionSelector} .strapline .time-indicator`, {
-      opacity: 0,
-      duration: 0.5,
-      ease: 'power2.out',
-    }, 0)
-    // Phase 2: Move subtitle below main title
+      duration: 1, // Same duration as subtitle
+      ease: 'none', // Same easing as subtitle
+    }, 0) // Same start time as subtitle
     .to(`${sectionSelector} .strapline .subtitle`, {
-      top: '70px',
-      fontSize: '18px',
-      duration: 5, // Increased duration for smoother coordination
-      ease: 'power2.out',
-    }, 1.0) // Delayed start to coordinate with slower main animation
+      fontSize: '18px', // Same final size on both mobile and desktop
+      duration: 1, // Same duration as main-title
+      ease: 'none', // Same easing as main-title
+    }, 0) // Same start time as main-title - no stagger
     // Phase 3: Fade overlay appears
     .to(`${sectionSelector} .fade`, {
       opacity: 1,
-      duration: 0.5,
-      ease: 'power2.inOut',
-    }, 2.0) // Delayed to coordinate with slower main animation
-    // Phase 4: Bottom navigation appears
-    .to(`${sectionSelector} .strapline-bottom`, {
-      bottom: getWindowWidth() < 992 ? '48px' : '0%',
-      duration: 0.5,
-      ease: 'power2.out',
-    }, 2.5); // Delayed to coordinate with slower main animation
+      duration: 1,
+      ease: 'none', // Use 'none' for scrub animations
+    }, 0.6); // Start after subtitle positioning
 
-  // Create ScrollTrigger with smooth reverse scrolling
+  // Create ScrollTrigger with smooth reverse scrolling - with CSS offset spacing
   ScrollTrigger.create({
     trigger: `${sectionSelector}`,
     start: 'top top',
-    end: '+=600vh', // Increased scroll distance to accommodate slower animation
+    end: '+=600vh', // Reduced since CSS margin-bottom creates the delay
     pin: true,
     pinSpacing: false,
     animation: timeline,
-    scrub: 5, // Slightly increased scrub for smoother slower animation
+    scrub: 0.5, // Balanced scrub for smooth control
     onEnter: () => updateProgressNav(index),
     onEnterBack: () => updateProgressNav(index),
     onLeave: () => clearProgressNav(),
@@ -322,19 +307,18 @@ function createSectionAnimation(section, index, gsap, ScrollTrigger) {
   // Text entrance animation removed - handled by main timeline
   // The main timeline controls strapline visibility and positioning
 
-  // Text exit animation with reverse scrolling (no scale)
+  // Text exit animation - let h1 and h2 stay at top before exiting
   gsap.to(`${sectionSelector} .strapline`, {
-    y: -150,
-    opacity: 0.2,
+    y: -400, // Move much further up to completely exit screen
+    opacity: 0, // Fade out completely
     ease: 'none',
     scrollTrigger: {
       trigger: sectionSelector,
-      start: 'center top',
-      end: 'bottom top',
-      scrub: 1, // Smooth scrub for reverse
+      start: '60% top', // Start earlier since CSS spacing creates the delay
+      end: '90% top', // Complete exit before section ends
+      scrub: 1, // Smooth exit
     },
   });
-
 
   // Brightness effect for depth during overlap (no scale)
   gsap.fromTo(`${sectionSelector}`, {

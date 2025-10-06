@@ -175,7 +175,6 @@ main .section .scroll-hero-wrapper {
   top: 0;
   width: 100%;
   z-index: 1;
-  will-change: opacity;
 }
 
 /* Background image setup - full viewport, static */
@@ -243,7 +242,6 @@ main .section .scroll-hero-wrapper {
   color: #fff;
   font-family: 'Euclid Circular A', sans-serif;
   width: 100%;
-  will-change: transform, opacity;
   opacity: 1; /* Ensure visible initially */
   /* Initial state - 10% up from bottom, will be animated to center */
 }
@@ -259,6 +257,17 @@ main .section .scroll-hero-wrapper {
   will-change: transform, opacity;
 }
 
+/* Optimized text styling */
+.strapline .main-title {
+  font-size: 70px;
+  font-weight: 500;
+  line-height: 70px;
+  text-shadow: 0 0 18px rgba(0, 0, 0, 0.25);
+  margin: 0;
+  position: relative;
+  top: 0;
+}
+
 .strapline .subtitle {
   font-size: 20px;
   font-weight: 400;
@@ -267,52 +276,28 @@ main .section .scroll-hero-wrapper {
   text-transform: uppercase;
   margin: 0;
   position: relative;
-  top: 0; /* Will be animated to move with main title to same position */
-  will-change: transform, opacity;
+  top: 0;
 }
 
 .strapline .time-indicator {
   display: none;
-  font-size: 20px;
-  font-weight: 400;
-  letter-spacing: 0.07em;
-  text-shadow: 0 0 18px rgba(0, 0, 0, 0.25);
-  text-transform: uppercase;
-  margin: 0;
 }
 
-.strapline .main-title {
-  font-size: 70px;
-  font-weight: 500;
-  line-height: 70px;
-  text-shadow: 0 0 18px rgba(0, 0, 0, 0.25);
-}
-
-/* Title parts styling (from query-index.json titleParts) */
+/* Title parts styling */
 .strapline .main-title .title-part {
   display: block;
   margin: 5px 0;
-  will-change: transform;
 }
 
 .strapline .main-title .title-part-0 {
-  font-size: 1em; /* Main title */
+  font-size: 1em;
 }
 
 .strapline .main-title .title-part-1 {
-  font-size: 0.6em; /* Subtitle */
+  font-size: 0.6em;
   font-weight: 300;
   opacity: 0.9;
   display: none;
-}
-
-.strapline .subtitle {
-  font-size: 20px;
-  font-weight: 400;
-  letter-spacing: 0.07em;
-  text-shadow: 0 0 18px rgba(0, 0, 0, 0.25);
-  text-transform: uppercase;
-  margin: 0;
 }
 
 /* Responsive adjustments */
@@ -358,11 +343,14 @@ main .section .scroll-hero-wrapper {
   color: #ff6b6b; /* Red for confidence */
 }
 
-/* Ensure smooth performance */
+/* Optimized performance */
 .screen,
 .background .img,
-.strapline {
-  will-change: transform;
+.strapline,
+.strapline .main-title,
+.strapline .subtitle,
+.fade {
+  will-change: transform, opacity;
   transform-style: preserve-3d;
   backface-visibility: hidden;
 }

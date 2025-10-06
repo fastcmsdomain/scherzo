@@ -3,80 +3,55 @@
  * Recreates Wellington College Prep scroll animation with GSAP ScrollTrigger
  */
 
-// Utility functions
-function getWindowWidth() {
-  return window.innerWidth || document.documentElement.clientWidth;
-}
+// Optimized utility functions
+const isMobile = () => window.innerWidth < 992;
 
-function updateProgressNav(activeIndex) {
-  document.querySelectorAll('.progress-nav li').forEach((li, index) => {
-    li.classList.toggle('isActive', index === activeIndex);
-  });
-}
+const updateProgressNav = (activeIndex) => {
+  const navItems = document.querySelectorAll('.progress-nav li');
+  navItems.forEach((li, index) => li.classList.toggle('isActive', index === activeIndex));
+};
 
-function clearProgressNav() {
-  document.querySelectorAll('.progress-nav li').forEach((li) => {
-    li.classList.remove('isActive');
-  });
-}
+const clearProgressNav = () => {
+  const navItems = document.querySelectorAll('.progress-nav li');
+  navItems.forEach(li => li.classList.remove('isActive'));
+};
 
-// GSAP loading functions
-function loadGSAP() {
-  return new Promise((resolve, reject) => {
-    if (window.gsap) {
-      resolve();
-      return;
-    }
+// Optimized GSAP loading
+const loadScript = (src) => new Promise((resolve, reject) => {
+  const script = document.createElement('script');
+  script.src = src;
+  script.onload = resolve;
+  script.onerror = reject;
+  document.head.appendChild(script);
+});
+
+const loadGSAPLibraries = async () => {
+  const baseURL = 'https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/';
   
-    const script = document.createElement('script');
-    script.src = 'https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js';
-    script.onload = () => {
-      resolve();
-    };
-    script.onerror = reject;
-    document.head.appendChild(script);
-  });
-}
-
-function loadScrollTrigger() {
-  return new Promise((resolve, reject) => {
-    if (window.ScrollTrigger) {
-      resolve();
-      return;
+  try {
+    // Load GSAP core if not already loaded
+    if (!window.gsap) {
+      await loadScript(`${baseURL}gsap.min.js`);
     }
-  
-    const script = document.createElement('script');
-    script.src = 'https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js';
-    script.onload = () => {
-      if (window.gsap) {
-        window.gsap.registerPlugin(window.ScrollTrigger);
-      }
-      resolve();
-    };
-    script.onerror = reject;
-    document.head.appendChild(script);
-  });
-}
-
-function loadScrollToPlugin() {
-  return new Promise((resolve, reject) => {
-    if (window.gsap && window.gsap.plugins && window.gsap.plugins.ScrollToPlugin) {
-      resolve();
-      return;
+    
+    // Load ScrollTrigger if not already loaded
+    if (!window.ScrollTrigger) {
+      await loadScript(`${baseURL}ScrollTrigger.min.js`);
+      window.gsap.registerPlugin(window.ScrollTrigger);
     }
-  
-    const script = document.createElement('script');
-    script.src = 'https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollToPlugin.min.js';
-    script.onload = () => {
-      if (window.gsap) {
-        window.gsap.registerPlugin(window.ScrollToPlugin);
-      }
-      resolve();
-    };
-    script.onerror = reject;
-    document.head.appendChild(script);
-  });
-}
+    
+    // Load ScrollToPlugin if not already loaded
+    if (!window.gsap?.plugins?.ScrollToPlugin) {
+      await loadScript(`${baseURL}ScrollToPlugin.min.js`);
+      window.gsap.registerPlugin(window.ScrollToPlugin);
+    }
+    
+    return true;
+  } catch (error) {
+    console.warn('Failed to load GSAP libraries:', error);
+    return false;
+  }
+};
 
 function initBasicScroll() {
   // Fallback for when GSAP is not available
@@ -106,64 +81,43 @@ function initBasicScroll() {
   });
 }
 
-function createSection(section) {
+// Optimized section creation
+const createSection = (section) => {
   const sectionDiv = document.createElement('div');
   sectionDiv.className = `screen-section ${section.id}`;
 
-  // Use backgroundImages array from query-index.json data
+  // Optimized background images creation
   const backgroundImages = section.backgroundImages || [section.image];
-  const bgImagesHtml = backgroundImages.map((img, imgIndex) => 
-    `<div class="img image-bg image-bg-${imgIndex}" data-bg="${img}" style="display: ${imgIndex === 0 ? 'block' : 'none'}"></div>`
-  ).join('');
+  const bgImagesHtml = backgroundImages
+    .map((img, i) => `<div class="img image-bg image-bg-${i}" data-bg="${img}" ${i > 0 ? 'style="display:none"' : ''}></div>`)
+    .join('');
 
-  // Create title parts HTML from titleParts array
-  const titlePartsHtml = section.titleParts && section.titleParts.length > 0 
-    ? section.titleParts.map((part, partIndex) => 
-        `<span class="title-part title-part-${partIndex}">${part}</span>`
-      ).join('')
-    : `<span class="title-part title-part-0">${section.title}</span>`;
+  // Optimized title parts creation
+  const titleParts = section.titleParts?.length ? section.titleParts : [section.title];
+  const titlePartsHtml = titleParts
+    .map((part, i) => `<span class="title-part title-part-${i}">${part}</span>`)
+    .join('');
 
-  sectionDiv.innerHTML = `
-    <div class="pin-spacer">
-      <div class="screen ${section.id.replace('section-', '')} hold-pin">
-        <div class="screen-inner">
-          <div class="background">
-            ${bgImagesHtml}
-          </div>
-          <div class="fade"></div>
-          <div class="strapline">
-            <h5 class="time-indicator">${section.time}</h5>
-            <h1 class="main-title">
-              ${titlePartsHtml}
-            </h1>
-            <h2 class="subtitle">${section.subtitle}</h2>
-          </div>
-        </div>
-      </div>
-    </div>
-  `;
+  // Template with minimal whitespace
+  sectionDiv.innerHTML = `<div class="pin-spacer"><div class="screen ${section.id.replace('section-', '')} hold-pin"><div class="screen-inner"><div class="background">${bgImagesHtml}</div><div class="fade"></div><div class="strapline"><h5 class="time-indicator">${section.time}</h5><h1 class="main-title">${titlePartsHtml}</h1><h2 class="subtitle">${section.subtitle}</h2></div></div></div></div>`;
 
   return sectionDiv;
-}
+};
 
-async function initializeAnimations(sections) {
-  // Ensure GSAP and ScrollTrigger are loaded
-  try {
-    if (typeof window.gsap === 'undefined' || typeof window.ScrollTrigger === 'undefined') {
-      await loadGSAP();
-      await loadScrollTrigger();
-      await loadScrollToPlugin();
-    }
+// Optimized initialization
+const initializeAnimations = async (sections) => {
+  const gsapLoaded = await loadGSAPLibraries();
   
+  if (gsapLoaded && window.gsap && window.ScrollTrigger) {
     initScrollAnimations(sections);
-  } catch (error) {
-    // Fallback to basic scroll behavior
+  } else {
+    console.warn('GSAP failed to load, using basic scroll fallback');
     initBasicScroll();
   }
-}
+};
 
-function initScrollAnimations(sections) {
-  // Use window.gsap and window.ScrollTrigger to avoid undefined errors
+// Optimized scroll animations initialization
+const initScrollAnimations = (sections) => {
   const { gsap, ScrollTrigger } = window;
 
   if (!gsap || !ScrollTrigger) {
@@ -173,9 +127,13 @@ function initScrollAnimations(sections) {
 
   gsap.registerPlugin(ScrollTrigger);
 
-  // Set background images for all sections
-  sections.forEach((section) => {
-    const sectionElement = document.querySelector(`.screen-section.${section.id}`);
+  // Batch DOM operations for better performance
+  const sectionElements = document.querySelectorAll('.screen-section');
+  const navItems = document.querySelectorAll('.progress-nav li');
+
+  // Set background images efficiently
+  sections.forEach((section, sectionIndex) => {
+    const sectionElement = sectionElements[sectionIndex];
     if (sectionElement && section.backgroundImages) {
       section.backgroundImages.forEach((img, imgIndex) => {
         const bgElement = sectionElement.querySelector(`.image-bg-${imgIndex}`);
@@ -191,18 +149,20 @@ function initScrollAnimations(sections) {
     createSectionAnimation(section, index, gsap, ScrollTrigger);
   });
 
-  // Progress navigation clicks (smooth scroll like Wellington College)
-  document.querySelectorAll('.progress-nav li').forEach((li, index) => {
-    li.addEventListener('click', () => {
-      const targetSection = `.screen-section:nth-child(${index + 1}) .screen`;
-      gsap.to(window, {
-        duration: 1,
-        scrollTo: targetSection,
-        ease: 'power2.inOut',
+  // Optimized progress navigation with event delegation
+  if (navItems.length > 0) {
+    navItems.forEach((li, index) => {
+      li.addEventListener('click', () => {
+        const targetSection = `.screen-section:nth-child(${index + 1}) .screen`;
+        gsap.to(window, {
+          duration: 1,
+          scrollTo: targetSection,
+          ease: 'power2.inOut',
+        });
       });
     });
-  });
-}
+  }
+};
 
 function createSectionAnimation(section, index, gsap, ScrollTrigger) {
   const sectionSelector = `.${section.id.replace('section-', '')}`;
@@ -225,7 +185,7 @@ function createSectionAnimation(section, index, gsap, ScrollTrigger) {
     }, 0)
     // Phase 2: Synchronize h1 and h2 - same timing, duration, and top position
     .to(`${sectionSelector} .strapline .main-title`, {
-      fontSize: getWindowWidth() < 992 ? '44px' : '66px',
+      fontSize: isMobile() ? '44px' : '66px',
       duration: 1, // Same duration as subtitle
       ease: 'none', // Same easing as subtitle
     }, 0) // Same start time as subtitle

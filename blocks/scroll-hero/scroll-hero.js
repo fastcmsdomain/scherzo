@@ -12,7 +12,7 @@ const updateProgressNav = (activeIndex) => {
 
 const clearProgressNav = () => {
   const navItems = document.querySelectorAll('.progress-nav li');
-  navItems.forEach(li => li.classList.remove('isActive'));
+  navItems.forEach((li) => li.classList.remove('isActive'));
 };
 
 // Optimized GSAP loading
@@ -26,28 +26,28 @@ const loadScript = (src) => new Promise((resolve, reject) => {
 
 const loadGSAPLibraries = async () => {
   const baseURL = 'https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/';
-  
+
   try {
     // Load GSAP core if not already loaded
     if (!window.gsap) {
       await loadScript(`${baseURL}gsap.min.js`);
     }
-    
+
     // Load ScrollTrigger if not already loaded
     if (!window.ScrollTrigger) {
       await loadScript(`${baseURL}ScrollTrigger.min.js`);
       window.gsap.registerPlugin(window.ScrollTrigger);
     }
-    
+
     // Load ScrollToPlugin if not already loaded
     if (!window.gsap?.plugins?.ScrollToPlugin) {
       await loadScript(`${baseURL}ScrollToPlugin.min.js`);
       window.gsap.registerPlugin(window.ScrollToPlugin);
     }
-    
+
     return true;
   } catch (error) {
-    console.warn('Failed to load GSAP libraries:', error);
+    // Failed to load GSAP libraries
     return false;
   }
 };
@@ -103,66 +103,6 @@ const createSection = (section) => {
   return sectionDiv;
 };
 
-// Optimized initialization
-const initializeAnimations = async (sections) => {
-  const gsapLoaded = await loadGSAPLibraries();
-  
-  if (gsapLoaded && window.gsap && window.ScrollTrigger) {
-    initScrollAnimations(sections);
-  } else {
-    console.warn('GSAP failed to load, using basic scroll fallback');
-    initBasicScroll();
-  }
-};
-
-// Optimized scroll animations initialization
-const initScrollAnimations = (sections) => {
-  const { gsap, ScrollTrigger } = window;
-
-  if (!gsap || !ScrollTrigger) {
-    initBasicScroll();
-    return;
-  }
-
-  gsap.registerPlugin(ScrollTrigger);
-
-  // Batch DOM operations for better performance
-  const sectionElements = document.querySelectorAll('.screen-section');
-  const navItems = document.querySelectorAll('.progress-nav li');
-
-  // Set background images efficiently
-  sections.forEach((section, sectionIndex) => {
-    const sectionElement = sectionElements[sectionIndex];
-    if (sectionElement && section.backgroundImages) {
-      section.backgroundImages.forEach((img, imgIndex) => {
-        const bgElement = sectionElement.querySelector(`.image-bg-${imgIndex}`);
-        if (bgElement) {
-          bgElement.style.backgroundImage = `url(${img})`;
-        }
-      });
-    }
-  });
-
-  // Create animations for each section
-  sections.forEach((section, index) => {
-    createSectionAnimation(section, index, gsap, ScrollTrigger);
-  });
-
-  // Optimized progress navigation with event delegation
-  if (navItems.length > 0) {
-    navItems.forEach((li, index) => {
-      li.addEventListener('click', () => {
-        const targetSection = `.screen-section:nth-child(${index + 1}) .screen`;
-        gsap.to(window, {
-          duration: 1,
-          scrollTo: targetSection,
-          ease: 'power2.inOut',
-        });
-      });
-    });
-  }
-};
-
 function createSectionAnimation(section, index, gsap, ScrollTrigger) {
   const sectionSelector = `.${section.id.replace('section-', '')}`;
 
@@ -205,10 +145,10 @@ function createSectionAnimation(section, index, gsap, ScrollTrigger) {
     onLeave: () => clearProgressNav(),
     onLeaveBack: () => clearProgressNav(),
     // Smooth reverse behavior
-    onUpdate: (self) => {
+    onUpdate: () => {
       // Ensure timeline plays smoothly in both directions
       timeline.timeScale(1);
-    }
+    },
   });
 
   // Multiple background images effect
@@ -218,7 +158,7 @@ function createSectionAnimation(section, index, gsap, ScrollTrigger) {
   if (backgroundImages.length > 1) {
     backgroundImages.forEach((img, imgIndex) => {
       if (imgIndex === 0) return; // First image is always visible
-    
+
       ScrollTrigger.create({
         trigger: sectionSelector,
         start: `${25 + (imgIndex * 25)}% center`,
@@ -227,9 +167,9 @@ function createSectionAnimation(section, index, gsap, ScrollTrigger) {
           gsap.to(img, { display: 'block', opacity: 1, duration: 0.5 });
         },
         onLeave: () => {
-          gsap.to(img, { 
-            opacity: 0, 
-            duration: 0.5, 
+          gsap.to(img, {
+            opacity: 0,
+            duration: 0.5,
             onComplete: () => {
               img.style.display = 'none';
             },
@@ -239,9 +179,9 @@ function createSectionAnimation(section, index, gsap, ScrollTrigger) {
           gsap.to(img, { display: 'block', opacity: 1, duration: 0.5 });
         },
         onLeaveBack: () => {
-          gsap.to(img, { 
-            opacity: 0, 
-            duration: 0.5, 
+          gsap.to(img, {
+            opacity: 0,
+            duration: 0.5,
             onComplete: () => {
               img.style.display = 'none';
             },
@@ -307,6 +247,66 @@ function createSectionAnimation(section, index, gsap, ScrollTrigger) {
   }
 }
 
+// Optimized scroll animations initialization
+const initScrollAnimations = (sections) => {
+  const { gsap, ScrollTrigger } = window;
+
+  if (!gsap || !ScrollTrigger) {
+    initBasicScroll();
+    return;
+  }
+
+  gsap.registerPlugin(ScrollTrigger);
+
+  // Batch DOM operations for better performance
+  const sectionElements = document.querySelectorAll('.screen-section');
+  const navItems = document.querySelectorAll('.progress-nav li');
+
+  // Set background images efficiently
+  sections.forEach((section, sectionIndex) => {
+    const sectionElement = sectionElements[sectionIndex];
+    if (sectionElement && section.backgroundImages) {
+      section.backgroundImages.forEach((img, imgIndex) => {
+        const bgElement = sectionElement.querySelector(`.image-bg-${imgIndex}`);
+        if (bgElement) {
+          bgElement.style.backgroundImage = `url(${img})`;
+        }
+      });
+    }
+  });
+
+  // Create animations for each section
+  sections.forEach((section, index) => {
+    createSectionAnimation(section, index, gsap, ScrollTrigger);
+  });
+
+  // Optimized progress navigation with event delegation
+  if (navItems.length > 0) {
+    navItems.forEach((li, index) => {
+      li.addEventListener('click', () => {
+        const targetSection = `.screen-section:nth-child(${index + 1}) .screen`;
+        gsap.to(window, {
+          duration: 1,
+          scrollTo: targetSection,
+          ease: 'power2.inOut',
+        });
+      });
+    });
+  }
+};
+
+// Optimized initialization
+const initializeAnimations = async (sections) => {
+  const gsapLoaded = await loadGSAPLibraries();
+
+  if (gsapLoaded && window.gsap && window.ScrollTrigger) {
+    initScrollAnimations(sections);
+  } else {
+    // GSAP failed to load, using basic scroll fallback
+    initBasicScroll();
+  }
+};
+
 export default async function decorate(block) {
   // Fetch slides data from query-index.json (like slide-builder)
   async function fetchScrollHeroData() {
@@ -347,7 +347,7 @@ export default async function decorate(block) {
           let imageSrc = '';
           if (imgElement) {
             imageSrc = imgElement.getAttribute('srcset');
-            imageSrc = imageSrc.split('?')[0];
+            [imageSrc] = imageSrc.split('?');
           }
           const absoluteImageSrc = imageSrc ? new URL(imageSrc, window.location.origin).href : '';
 
@@ -361,7 +361,7 @@ export default async function decorate(block) {
           // Extract description and time from metadata or content
           const descriptionElement = doc.querySelector('.description, .subtitle, p');
           const timeElement = doc.querySelector('.time, .timestamp');
-        
+
           return {
             ...item,
             id: `section-${item.path.split('/').pop()}`,

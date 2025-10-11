@@ -9,11 +9,13 @@ main .section.slide-builder-container .slide-builder-wrapper {
 .slide-builder {
   height: auto;
   left: 0;
-  overflow: visible;
+  overflow: hidden;
   position: relative;
   top: 0;
   width: 100%;
   z-index: 1;
+  /* Enable smooth scrolling container */
+  scroll-behavior: smooth;
 }
 
 .slide-builder-item {
@@ -24,23 +26,42 @@ main .section.slide-builder-container .slide-builder-wrapper {
   top: 0;
   width: 100%;
   will-change: transform;
+  /* Enable 3D transforms for better performance */
+  transform-style: preserve-3d;
+  perspective: 1000px;
 }
+
+/* Create overlapping effect - each slide overlaps the previous */
+.slide-builder-item:not(:first-child) {
+  margin-top: -100vh;
+}
+
+/* Z-index stacking for proper overlap */
+.slide-builder-item:nth-child(1) { z-index: 1; }
+.slide-builder-item:nth-child(2) { z-index: 2; }
+.slide-builder-item:nth-child(3) { z-index: 3; }
+.slide-builder-item:nth-child(4) { z-index: 4; }
+.slide-builder-item:nth-child(5) { z-index: 5; }
+.slide-builder-item:nth-child(6) { z-index: 6; }
 
 
 .slide-background {
     background-position: center;
+    background-repeat: no-repeat;
     background-size: cover;
-    height: 100%;
+    height: 120%; /* Height for parallax effect */
     left: 0;
     position: absolute;
-    top: 0;
+    top: -10%; /* Offset for parallax */
     width: 100%;
+    will-change: transform; /* Optimize for transforms */
+    z-index: 0;
     
     &::after {
-        background: linear-gradient(to top, rgb(40 48 72 / 100%) , transparent);
+        background: linear-gradient(to top, rgb(40 48 72 / 80%), transparent);
         bottom: 0;
         content: '';
-        height: 50%;
+        height: 60%;
         left: 0;
         position: absolute;
         width: 100%;
@@ -48,7 +69,7 @@ main .section.slide-builder-container .slide-builder-wrapper {
     }
 }
 
-/* Other styles remain the same */
+/* Enhanced text container for GSAP animations */
 .text-container {
     align-items: center;
     color: var(--color-white);
@@ -60,7 +81,7 @@ main .section.slide-builder-container .slide-builder-wrapper {
     position: relative;
     bottom: 7rem;
     width: 100%;
-    z-index: 2;
+    z-index: 10;
 }
 
 .title-part {
@@ -68,7 +89,10 @@ main .section.slide-builder-container .slide-builder-wrapper {
     line-height: 1;
     padding: 0 1rem;
     text-align: center;
-    z-index: 1;
+    z-index: 11;
+    will-change: opacity, transform;
+    /* Remove CSS transitions - GSAP will handle animations */
+    transition: none;
 }
 
 .title-part-1 {
@@ -226,4 +250,95 @@ body::-webkit-scrollbar {
 .slide-builder-item .title-part .slide-button {
   opacity: inherit;
   transform: translateY(inherit);
+}
+
+/* GSAP ScrollTrigger specific enhancements */
+.gsap-pin-spacer {
+  /* Ensure pinned elements maintain proper styling */
+  box-sizing: border-box !important;
+}
+
+/* Enhanced stacking for overlapping effect */
+.slide-builder-item {
+  /* Create stacking context for proper z-index layering */
+  isolation: isolate;
+}
+
+/* Smooth scroll container optimizations */
+.slide-builder {
+  /* Enable hardware acceleration for the container */
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+
+/* Enhanced performance optimizations */
+.slide-builder-item,
+.slide-background,
+.title-part {
+  /* Enable hardware acceleration */
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  perspective: 1000px;
+}
+
+/* Smooth scroll behavior for the entire page */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Optimize for GSAP ScrollTrigger animations */
+@media (prefers-reduced-motion: no-preference) {
+  .slide-builder-item {
+    /* Enhanced animation performance for GSAP */
+    will-change: transform, opacity;
+  }
+  
+  .title-part {
+    /* Optimize for GSAP text animations */
+    will-change: transform, opacity;
+  }
+  
+  .slide-background {
+    /* Optimize for parallax transforms */
+    will-change: transform;
+  }
+}
+
+/* Respect user's motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  .title-part {
+    transition: none !important;
+    animation: none !important;
+    transform: none !important;
+  }
+  
+  .slide-background {
+    transform: none !important;
+    background-attachment: scroll; /* Better performance on mobile */
+  }
+  
+  .slide-builder-item {
+    transform: none !important;
+  }
+}
+
+/* Mobile optimizations */
+@media (max-width: 768px) {
+  .slide-background {
+    /* Reduce parallax intensity on mobile */
+    height: 110%;
+    top: -5%;
+    left: 0;
+    width: 100%;
+  }
+  
+  .text-container {
+    /* Adjust text positioning for mobile */
+    bottom: 4rem;
+  }
+  
+  .title-part {
+    /* Reduce text transforms on mobile for performance */
+    will-change: opacity;
+  }
 }

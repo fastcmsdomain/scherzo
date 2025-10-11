@@ -1,10 +1,51 @@
-/* esint-disable no-unused-vars */
+/* eslint-disable no-unused-vars */
 /* eslint-disable prefer-destructuring */
 /* eslint-disable import/no-unresolved */
 /* eslint-disable import/no-absolute-path */
+/* eslint-disable no-console */
 import { renderExpressions } from '/plusplus/plugins/expressions/src/expressions.js';
 
-// eslint-disable-next-line no-unused-vars
+// Import GSAP and ScrollTrigger via CDN for reliability
+let gsap;
+let ScrollTrigger;
+
+async function loadGSAP() {
+  try {
+    // Try to load from CDN first for reliability
+    if (!window.gsap) {
+      await new Promise((resolve, reject) => {
+        const script = document.createElement('script');
+        script.src = 'https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js';
+        script.onload = resolve;
+        script.onerror = reject;
+        document.head.appendChild(script);
+      });
+    }
+
+    if (!window.ScrollTrigger) {
+      await new Promise((resolve, reject) => {
+        const script = document.createElement('script');
+        script.src = 'https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js';
+        script.onload = resolve;
+        script.onerror = reject;
+        document.head.appendChild(script);
+      });
+    }
+
+    gsap = window.gsap;
+    ScrollTrigger = window.ScrollTrigger;
+    gsap.registerPlugin(ScrollTrigger);
+
+    console.log('GSAP and ScrollTrigger loaded successfully via CDN');
+    return true;
+  } catch (error) {
+    console.warn('GSAP not available, falling back to basic scroll:', error);
+    gsap = null;
+    ScrollTrigger = null;
+    return false;
+  }
+}
+
 export default async function decorate(block) {
   async function fetchSlides() {
     try {
@@ -100,65 +141,236 @@ export default async function decorate(block) {
     return;
   }
 
-  // const slideHeight = window.innerHeight;
-  // const footerWrapper = document.querySelector('.footer-wrapper');
-
   slides.forEach((slide) => {
     const slideItem = createSlideItem(slide);
     container.appendChild(slideItem);
     setSlideBackground(slideItem, slide.image);
   });
 
-  function updateSlidePositions() {
-    const slideItems = container.querySelectorAll('.slide-builder-item');
-    const lastSlide = slideItems[slideItems.length - 1];
-    const lastSlideRect = lastSlide.getBoundingClientRect();
+  // Set container height to accommodate overlapping slides
+  const totalHeight = slides.length * 100; // 100vh per slide
+  container.style.height = `${totalHeight}vh`;
 
-    // Check if user has scrolled past all slides
-    if (lastSlideRect.bottom <= window.innerHeight) {
-      document.body.classList.add('show-footer');
-    } else {
-      document.body.classList.remove('show-footer');
+  // Fallback basic scroll implementation
+  function initializeBasicScroll() {
+    function updateSlidePositions() {
+      const slideItems = container.querySelectorAll('.slide-builder-item');
+      const lastSlide = slideItems[slideItems.length - 1];
+      if (!lastSlide) return;
+
+      const lastSlideRect = lastSlide.getBoundingClientRect();
+
+      // Check if user has scrolled past all slides
+      if (lastSlideRect.bottom <= window.innerHeight) {
+        document.body.classList.add('show-footer');
+      } else {
+        document.body.classList.remove('show-footer');
+      }
+
+      // Reveal title parts on scroll
+      slideItems.forEach((slideItem) => {
+        const rect = slideItem.getBoundingClientRect();
+        const itemHeight = slideItem.offsetHeight;
+        const scrollProgress = (window.innerHeight - rect.top) / (window.innerHeight + itemHeight);
+
+        const titleParts = slideItem.querySelectorAll('.title-part');
+
+        if (scrollProgress >= 0 && scrollProgress <= 1) {
+          const opacity = Math.min(scrollProgress * 2, 1);
+          const translateY = Math.max(50 - scrollProgress * 100, 0);
+
+          titleParts.forEach((titlePart) => {
+            if (titlePart) {
+              titlePart.style.opacity = opacity;
+              titlePart.style.transform = `translateY(${translateY}vh)`;
+            }
+          });
+        }
+      });
     }
 
-    // Reveal title parts on scroll
-    slideItems.forEach((slideItem) => {
-      const rect = slideItem.getBoundingClientRect();
-      const itemHeight = slideItem.offsetHeight;
-      const scrollProgress = (window.innerHeight - rect.top) / (window.innerHeight + itemHeight);
+    function handleScroll() {
+      window.requestAnimationFrame(updateSlidePositions);
+    }
 
-      const titlePart1 = slideItem.querySelector('.title-part-1');
-      const titlePart2 = slideItem.querySelector('.title-part-2');
-      const titlePart3 = slideItem.querySelector('.title-part-3');
+    window.addEventListener('scroll', handleScroll);
+    updateSlidePositions();
+  }
 
-      if (scrollProgress >= 0 && scrollProgress <= 1) {
-        const opacity = Math.min(scrollProgress * 2, 1); // Fully visible at 50% scroll
-        const translateY = Math.max(50 - scrollProgress * 100, 0); // Start at 50vh, end at 0
+  // GSAP ScrollTrigger implementation with proper overlapping
+  function initializeGSAPScrollTrigger() {
+    if (!gsap || !ScrollTrigger) {
+      initializeBasicScroll();
+      return;
+    }
 
-        if (titlePart1) {
-          titlePart1.style.opacity = opacity;
-          titlePart1.style.transform = `translateY(${translateY}vh)`;
-        }
-        if (titlePart2) {
-          titlePart2.style.opacity = opacity;
-          titlePart2.style.transform = `translateY(${translateY}vh)`;
-        }
-        if (titlePart3) {
-          titlePart3.style.opacity = opacity;
-          titlePart3.style.transform = `translateY(${translateY}vh)`;
-        }
+    const slideItems = container.querySelectorAll('.slide-builder-item');
+
+    slideItems.forEach((slideItem, index) => {
+      const backgroundElement = slideItem.querySelector('.slide-background');
+      const titleParts = slideItem.querySelectorAll('.title-part');
+
+      // Set unique ID for each slide
+      slideItem.setAttribute('id', `slide-${index}`);
+
+      // Create overlapping parallax effect - slides move over each other
+      gsap.to(slideItem, {
+        yPercent: -100,
+        ease: 'none',
+        scrollTrigger: {
+          trigger: slideItem,
+          start: 'bottom bottom',
+          end: 'bottom top',
+          scrub: 1,
+        },
+      });
+
+      // Enhanced parallax background effect
+      if (backgroundElement) {
+        gsap.fromTo(
+          backgroundElement,
+          {
+            yPercent: 0,
+            scale: 1.2,
+          },
+          {
+            yPercent: -50,
+            scale: 1,
+            ease: 'none',
+            scrollTrigger: {
+              trigger: slideItem,
+              start: 'top bottom',
+              end: 'bottom top',
+              scrub: 1.5,
+            },
+          },
+        );
       }
+
+      // Text animations with scroll sensitivity
+      if (titleParts.length > 0) {
+        // Set initial state for text parts
+        gsap.set(titleParts, {
+          opacity: 0,
+          y: 100,
+          scale: 0.8,
+        });
+
+        // Text entrance animation
+        const textTimeline = gsap.timeline({
+          scrollTrigger: {
+            trigger: slideItem,
+            start: 'top 70%',
+            end: 'top 30%',
+            scrub: 1,
+          },
+        });
+
+        titleParts.forEach((titlePart, partIndex) => {
+          textTimeline.to(
+            titlePart,
+            {
+              opacity: 1,
+              y: 0,
+              scale: 1,
+              duration: 0.5,
+              ease: 'power2.out',
+            },
+            partIndex * 0.1,
+          );
+        });
+
+        // Text parallax movement during scroll
+        gsap.to(titleParts, {
+          y: -150,
+          opacity: 0,
+          scale: 0.7,
+          ease: 'none',
+          scrollTrigger: {
+            trigger: slideItem,
+            start: 'center top',
+            end: 'bottom top',
+            scrub: 1.5,
+          },
+        });
+      }
+
+      // Scale effect for depth during overlap
+      gsap.fromTo(
+        slideItem,
+        {
+          scale: 0.9,
+        },
+        {
+          scale: 1,
+          ease: 'none',
+          scrollTrigger: {
+            trigger: slideItem,
+            start: 'top bottom',
+            end: 'top top',
+            scrub: 1,
+          },
+        },
+      );
     });
+
+    // Footer reveal animation
+    const lastSlide = slideItems[slideItems.length - 1];
+    if (lastSlide) {
+      ScrollTrigger.create({
+        trigger: lastSlide,
+        start: 'bottom 80%',
+        onEnter: () => {
+          gsap.to(document.body, {
+            duration: 0.5,
+            ease: 'power2.out',
+            onComplete: () => document.body.classList.add('show-footer'),
+          });
+        },
+        onLeaveBack: () => {
+          document.body.classList.remove('show-footer');
+        },
+      });
+    }
+
+    // Add scroll-based performance optimizations
+    let ticking = false;
+
+    function optimizeScrollPerformance() {
+      if (!ticking) {
+        requestAnimationFrame(() => {
+          ScrollTrigger.refresh();
+          ticking = false;
+        });
+        ticking = true;
+      }
+    }
+
+    // Listen for resize events to refresh ScrollTrigger
+    window.addEventListener('resize', optimizeScrollPerformance);
+
+    // Initial refresh
+    ScrollTrigger.refresh();
+
+    // Add debug info for development
+    if (window.location.hostname === 'localhost' || window.location.hostname.includes('hlx.page')) {
+      console.log(`Initialized ${slideItems.length} slides with GSAP ScrollTrigger`);
+
+      // Add ScrollTrigger debug markers in development
+      ScrollTrigger.addEventListener('refresh', () => {
+        console.log('ScrollTrigger refreshed');
+      });
+    }
   }
 
-  function handleScroll() {
-    window.requestAnimationFrame(updateSlidePositions);
+  // Load GSAP and initialize scroll implementation
+  const gsapLoaded = await loadGSAP();
+
+  if (gsapLoaded) {
+    initializeGSAPScrollTrigger();
+  } else {
+    initializeBasicScroll();
   }
-
-  window.addEventListener('scroll', handleScroll);
-
-  // Set initial positions
-  updateSlidePositions();
 
   // Set the height of the body to accommodate all slides
   document.body.style.height = 'auto';

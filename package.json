@@ -18,6 +18,9 @@
     "url": "https://github.com/adobe/aem-boilerplate/issues"
   },
   "homepage": "https://github.com/adobe/aem-boilerplate#readme",
+  "dependencies": {
+    "gsap": "^3.12.5"
+  },
   "devDependencies": {
     "@babel/eslint-parser": "7.25.1",
     "eslint": "8.57.0",

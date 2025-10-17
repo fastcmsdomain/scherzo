@@ -13,9 +13,6 @@
   
   .pobierz-button {
     align-items: center;
-    background: var(--pobierz-background);
-    border: 1px solid var(--pobierz-border-color);
-    border-radius: var(--pobierz-border-radius);
     color: var(--pobierz-primary-color);
     display: flex;
     gap: var(--pobierz-spacing);
@@ -26,9 +23,7 @@
   
   .pobierz-button:hover,
   .pobierz-button:focus {
-    background: var(--pobierz-primary-color);
-    border-color: var(--pobierz-primary-color);
-    color: var(--pobierz-background);
+    color: var(--color-dark-blue);
   }
   
   .pobierz-icon {

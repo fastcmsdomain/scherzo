@@ -91,14 +91,20 @@ const createSection = (section) => {
     .map((img, i) => `<div class="img image-bg image-bg-${i}" data-bg="${img}" ${i > 0 ? 'style="display:none"' : ''}></div>`)
     .join('');
 
-  // Optimized title parts creation
-  const titleParts = section.titleParts?.length ? section.titleParts : [section.title];
-  const titlePartsHtml = titleParts
+  // Optimized title parts creation - main-title gets first 2 rows in spans
+  const mainTitleParts = section.mainTitleParts?.length ? section.mainTitleParts : [section.title];
+  const mainTitleHtml = mainTitleParts
     .map((part, i) => `<span class="title-part title-part-${i}">${part}</span>`)
     .join('');
 
+  // Subtitle gets 3rd and 4th rows in individual spans
+  const subtitleParts = section.subtitleParts?.length ? section.subtitleParts : [section.subtitle];
+  const subtitleHtml = subtitleParts
+    .map((part, i) => `<span class="subtitle-part subtitle-part-${i}">${part}</span>`)
+    .join('');
+
   // Template with minimal whitespace
-  sectionDiv.innerHTML = `<div class="pin-spacer"><div class="screen ${section.id.replace('section-', '')} hold-pin"><div class="screen-inner"><div class="background">${bgImagesHtml}</div><div class="fade"></div><div class="strapline"><h5 class="time-indicator">${section.time}</h5><h1 class="main-title">${titlePartsHtml}</h1><h2 class="subtitle">${section.subtitle}</h2></div></div></div></div>`;
+  sectionDiv.innerHTML = `<div class="pin-spacer"><div class="screen ${section.id.replace('section-', '')} hold-pin"><div class="screen-inner"><div class="background">${bgImagesHtml}</div><div class="fade"></div><div class="strapline"><h1 class="main-title">${mainTitleHtml}</h1></div><div class="strapline-2" style="opacity:0;"><h2 class="subtitle">${subtitleHtml}</h2></div></div></div></div>`;
 
   return sectionDiv;
 };
@@ -122,14 +128,21 @@ function createSectionAnimation(section, index, gsap, ScrollTrigger) {
       duration: 1, // Duration doesn't matter with scrub - controlled by scroll
       ease: 'none', // Use 'none' for scrub animations
     }, 0)
-    // Phase 2: Text elements move together (font sizes controlled by CSS)
-    // No font size animations - handled by CSS media queries
-    // Phase 3: Fade overlay appears
-    .to(`${sectionSelector} .fade`, {
-      opacity: 1,
+    // Phase 2: strapline-2 animation - move to center of page with progressive opacity
+    .to(`${sectionSelector} .strapline-2`, {
+      opacity: 1, // Fade in from 0 to 1
+      top: '50vh',
+      y: '-50%', // Center vertically
+      scale: 1.2, // Make it slightly larger for visibility
       duration: 1,
       ease: 'none', // Use 'none' for scrub animations
-    }, 0.6); // Start after subtitle positioning
+    }, 0.5) // Start when strapline is halfway to top
+    // Phase 3: Fade overlay appears (2x speed)
+    .to(`${sectionSelector} .fade`, {
+      opacity: 1,
+      duration: 0.5,
+      ease: 'none', // Use 'none' for scrub animations
+    }, 0.1); // Start after subtitle positioning
 
   // Create ScrollTrigger with smooth reverse scrolling - with CSS offset spacing
   ScrollTrigger.create({
@@ -245,6 +258,39 @@ function createSectionAnimation(section, index, gsap, ScrollTrigger) {
       },
     });
   }
+
+  // Title-part-0 font-size animation - responsive scaling
+  const titlePart0 = document.querySelector(`${sectionSelector} .title-part-0`);
+  if (titlePart0) {
+    // Get responsive font sizes based on window width
+    const getFontSizes = () => {
+      const width = window.innerWidth;
+      if (width <= 480) {
+        return { to: 24 }; // Very small screens
+      }
+      if (width <= 768) {
+        return { to: 27 }; // Mobile
+      }
+      if (width <= 992) {
+        return { to: 30 }; // Tablet
+      }
+      return { to: 40 }; // Desktop
+    };
+
+    const { to } = getFontSizes();
+
+    // Animate font-size during scroll
+    gsap.to(`${sectionSelector} .title-part-0`, {
+      fontSize: `${to}px`,
+      ease: 'none',
+      scrollTrigger: {
+        trigger: sectionSelector,
+        start: 'top top',
+        end: '+=600vh',
+        scrub: 0.5,
+      },
+    });
+  }
 }
 
 // Optimized scroll animations initialization
@@ -336,11 +382,15 @@ export default async function decorate(block) {
           const parser = new DOMParser();
           const doc = parser.parseFromString(html, 'text/html');
 
-          // Extract title parts (same as slide-builder)
+          // Extract title parts with specific row handling
           const textElements = doc.querySelectorAll('.tytul-zdjecia > div > div');
-          const titleParts = Array.from(textElements)
+          const allTextParts = Array.from(textElements)
             .map((el) => el.textContent.trim())
             .filter((text) => text);
+
+          // Split into main-title (first 2 rows) and subtitle (3rd and 4th rows)
+          const mainTitleParts = allTextParts.slice(0, 2); // First 2 rows
+          const subtitleParts = allTextParts.slice(2, 4); // 3rd and 4th rows
 
           // Extract image (same as slide-builder)
           const imgElement = doc.querySelector('picture source[media="(min-width: 600px)"]');
@@ -365,9 +415,10 @@ export default async function decorate(block) {
           return {
             ...item,
             id: `section-${item.path.split('/').pop()}`,
-            titleParts,
-            title: titleParts[0] || item.title || 'Section',
-            subtitle: titleParts[1] || 'for life',
+            mainTitleParts,
+            subtitleParts,
+            title: mainTitleParts[0] || item.title || 'Section',
+            subtitle: subtitleParts.join(' ') || 'for life',
             description: descriptionElement ? descriptionElement.textContent.trim() : '',
             time: timeElement ? timeElement.textContent.trim() : '00:00',
             backgroundImages: backgroundImages.length > 0 ? backgroundImages : [absoluteImageSrc],

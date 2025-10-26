@@ -241,15 +241,33 @@ main .section .scroll-hero-wrapper {
   transform: translateY(0); /* Visible on screen initially */
   z-index: 100;
   color: #fff;
-  font-family: 'Euclid Circular A', sans-serif;
+  font-family: 'Montserrat-bold', sans-serif;
   width: 100%;
   opacity: 1; /* Ensure visible initially */
   /* Initial state - 10% up from bottom, will be animated to center */
 }
 
+/* Second strapline for subtitle - positioned below main strapline */
+.strapline-2 {
+  left: 0;
+  margin: 0 auto;
+  position: absolute;
+  right: 0;
+  text-align: center;
+  top: calc(90% - 20px); /* Positioned below main strapline */
+  transform: translateY(0);
+  transform-origin: center center; /* Center transform origin for smooth animation */
+  z-index: 99; /* Slightly lower z-index than main strapline */
+  color: #fff;
+  font-family: 'Montserrat-bold', sans-serif;
+  width: 100%;
+  opacity: 0; /* Start with opacity 0, will fade in during animation */
+}
+
 /* Responsive text styling - Desktop first */
 .strapline .main-title {
-  font-size: 66px; /* Final desktop size after animation */
+  font-family: 'Montserrat-bold', sans-serif;
+  font-size: 60px; /* Final desktop size after animation */
   font-weight: 500;
   line-height: 1.1;
   text-shadow: 0 0 18px rgba(0, 0, 0, 0.25);
@@ -258,7 +276,7 @@ main .section .scroll-hero-wrapper {
   top: 0;
 }
 
-.strapline .subtitle {
+.strapline-2 .subtitle {
   font-size: 18px; /* Final size after animation */
   font-weight: 400;
   letter-spacing: 0.07em;
@@ -280,14 +298,30 @@ main .section .scroll-hero-wrapper {
 }
 
 .strapline .main-title .title-part-0 {
-  font-size: 1em;
+  font-size: 60px; /* Starting size, will animate to 40px */
 }
 
 .strapline .main-title .title-part-1 {
-  font-size: 0.6em;
+  font-size: 0.3em;
   font-weight: 300;
   opacity: 0.9;
-  display: none;
+}
+
+/* Subtitle parts styling */
+.strapline-2 .subtitle .subtitle-part {
+  display: block;
+  margin: 3px 0;
+}
+
+.strapline-2 .subtitle .subtitle-part-0 {
+  font-size: 1.4rem;
+  font-weight: 400;
+}
+
+.strapline-2 .subtitle .subtitle-part-1 {
+  font-size: 0.7em;
+  font-weight: 300;
+  opacity: 0.8;
 }
 
 /* Responsive font sizes */
@@ -297,7 +331,11 @@ main .section .scroll-hero-wrapper {
     line-height: 1.2;
   }
   
-  .strapline .subtitle {
+  .strapline .main-title .title-part-0 {
+    font-size: 44px; /* Tablet starting size, will animate to 30px */
+  }
+  
+  .strapline-2 .subtitle {
     font-size: 16px; /* Slightly smaller on tablet */
   }
 }
@@ -308,7 +346,11 @@ main .section .scroll-hero-wrapper {
     line-height: 1.2;
   }
   
-  .strapline .subtitle {
+  .strapline .main-title .title-part-0 {
+    font-size: 40px; /* Mobile starting size, will animate to 27px */
+  }
+  
+  .strapline-2 .subtitle {
     font-size: 14px;
   }
 }
@@ -319,7 +361,11 @@ main .section .scroll-hero-wrapper {
     line-height: 1.3;
   }
   
-  .strapline .subtitle {
+  .strapline .main-title .title-part-0 {
+    font-size: 36px; /* Very small screens starting size, will animate to 24px */
+  }
+  
+  .strapline-2 .subtitle {
     font-size: 12px;
   }
 }
@@ -352,7 +398,8 @@ main .section .scroll-hero-wrapper {
 .background .img,
 .strapline,
 .strapline .main-title,
-.strapline .subtitle,
+.strapline-2,
+.strapline-2 .subtitle,
 .fade {
   will-change: transform, opacity;
   transform-style: preserve-3d;

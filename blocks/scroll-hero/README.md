@@ -52,7 +52,8 @@ Begin the day with a **healthy breakfast**
 ```
 
 Komponent automatycznie ekstraktuje:
-- **titleParts** z `.tytul-zdjecia > div > div`
+- **mainTitleParts** (1-2 wiersze) z `.tytul-zdjecia > div > div` - umieszczane w `<span class="title-part">` tagach
+- **subtitleParts** (3-4 wiersze) z `.tytul-zdjecia > div > div` - umieszczane w `<span class="subtitle-part">` tagach
 - **images** z `picture source[media="(min-width: 600px)"]`
 - **description** z elementów `.description, .subtitle, p`
 - **time** z elementów `.time, .timestamp`
@@ -66,8 +67,10 @@ Komponent automatycznie ekstraktuje:
 # Friends Section
 
 ## Tytul Zdjecia
-- friends  
-- for life
+- friends          <!-- Row 1 -> main-title span -->
+- for life         <!-- Row 2 -> main-title span -->
+- healthy breakfast <!-- Row 3 -> subtitle span -->
+- energising start  <!-- Row 4 -> subtitle span -->
 
 ![Friends Image](./friends-breakfast.jpg)
 ![Friends Image 2](./friends-sports.jpg)
@@ -91,16 +94,41 @@ Begin the day with a **healthy and energising breakfast** with boarding friends.
    - Wyekstraktuje obrazy, teksty i metadane
    - Utworzy animacje GSAP ScrollTrigger
 
+## Struktura HTML
+
+Komponent generuje następującą strukturę HTML:
+
+```html
+<div class="strapline">
+  <h1 class="main-title">
+    <span class="title-part title-part-0">friends</span>
+    <span class="title-part title-part-1">for life</span>
+  </h1>
+</div>
+<div class="strapline-2">
+  <h2 class="subtitle">
+    <span class="subtitle-part subtitle-part-0">healthy breakfast</span>
+    <span class="subtitle-part subtitle-part-1">energising start</span>
+  </h2>
+</div>
+```
+
+### Kluczowe elementy:
+- **strapline**: Zawiera główny tytuł (wiersze 1-2)
+- **strapline-2**: Zawiera podtytuł (wiersze 3-4)
+- **title-part**: Indywidualne span-y dla każdego wiersza tytułu
+- **subtitle-part**: Indywidualne span-y dla każdego wiersza podtytułu
+
 ## Kluczowe animacje
+
+### Animacja tekstów
+- **strapline** (główny tytuł): Przesuwa się do góry strony podczas scrollowania
+- **strapline-2** (podtytuł): Przesuwa się do środka strony gdy strapline osiąga górę
+- Oba elementy używają GSAP ScrollTrigger z płynnym scrub: 0.5
 
 ### Efekt nakładania obrazów
 - Każda sekcja ma `position: sticky` i `z-index` zwiększający się z każdą sekcją
 - `ScrollTrigger.create()` z `pin: true` i `pinSpacing: false`
-
-### Animacje tekstów
-- **Wejście:** `opacity: 0 → 1`, `y: 100 → 0`, `scale: 0.8 → 1`
-- **Wyjście:** `y: 0 → -150`, `opacity: 1 → 0.3`, `scale: 1 → 0.8`
-- **Timing:** `scrub: 1.5` dla płynnego dopasowania do przewijania
 
 ### Parallax tła
 - Obrazy tła poruszają się z `yPercent: -50` podczas przewijania

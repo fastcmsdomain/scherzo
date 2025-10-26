@@ -14,8 +14,10 @@
 # Friends Section
 
 ## Tytul Zdjecia
-- friends
-- for life
+- friends          <!-- Row 1 -> main-title span -->
+- for life         <!-- Row 2 -> main-title span -->
+- healthy breakfast <!-- Row 3 -> subtitle span -->
+- energising start  <!-- Row 4 -> subtitle span -->
 
 ![Friends Breakfast](./friends-breakfast.jpg)
 ![Friends Sports](./friends-sports.jpg)
@@ -32,8 +34,10 @@ Begin the day with a **healthy and energising breakfast** with boarding friends.
 # Skills Section
 
 ## Tytul Zdjecia
-- skills
-- for life
+- skills            <!-- Row 1 -> main-title span -->
+- for life          <!-- Row 2 -> main-title span -->
+- science labs      <!-- Row 3 -> subtitle span -->
+- technology        <!-- Row 4 -> subtitle span -->
 
 ![Science Lab](./science-lab.jpg)
 ![Technology](./technology.jpg)
@@ -72,7 +76,9 @@ To wszystko! Komponent automatycznie:
 - ✅ Pobierze dane z `/slides/query-index.json`
 - ✅ Załaduje HTML każdego slajdu z `.plain.html`
 - ✅ Wyekstraktuje obrazy z `picture source`
-- ✅ Wyekstraktuje teksty z `.tytul-zdjecia > div > div`
+- ✅ Wyekstraktuje teksty z `.tytul-zdjecia > div > div`:
+  - **Wiersze 1-2** → `main-title` w `<span class="title-part">` tagach
+  - **Wiersze 3-4** → `subtitle` w `<span class="subtitle-part">` tagach
 - ✅ Utworzy animacje GSAP ScrollTrigger w stylu Wellington College
 
 ## Kluczowe różnice od slide-builder

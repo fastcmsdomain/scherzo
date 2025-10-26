@@ -177,3 +177,19 @@ main .section .columns-wrapper .columns.dwa-rzedy>div:last-child > .columns-cont
       width: 100%;
   }
   }
+
+  .columns-wrapper:has(.columns.text-zdjecie) {
+    padding: var(--space-36) 0;
+    max-width: 900px;
+    margin-inline: auto;
+    width: auto;
+  }
+
+  .columns-wrapper:has(.columns.text-zdjecie) .columns-img-col {
+    padding: 0;
+  }
+
+  .columns-wrapper:has(.columns.text-zdjecie) picture,
+  .columns-wrapper:has(.columns.text-zdjecie) img {
+    position: relative;
+  }

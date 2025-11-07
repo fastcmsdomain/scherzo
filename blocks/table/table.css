@@ -43,6 +43,14 @@
   border: 1px solid var(--color-white);
 }
 
+.table table th {
+  background-color: var(--color-darker-blue);
+}
+
+.table table td {
+  border-color: var(--color-dark-blue);
+}
+
 .table table th p,
 .table table td p {
   margin: 0;
@@ -61,13 +69,5 @@
 .table.striped tbody tr:nth-child(odd) {
   background-color: var(--light-color);
 }
-
-/* bordered variant */
-.table table tr th {
-  background-color: var(--color-darker-blue);
-  border: 1px solid var(--color-white);
-  font-family: var( --body-bold-family);
-}
-
 
 

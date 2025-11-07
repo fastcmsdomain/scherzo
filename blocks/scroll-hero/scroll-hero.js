@@ -281,7 +281,6 @@ function createSectionAnimation(section, index, gsap, ScrollTrigger) {
 
     // Animate font-size during scroll
     gsap.to(`${sectionSelector} .title-part-0`, {
-      fontSize: `${to}px`,
       ease: 'none',
       scrollTrigger: {
         trigger: sectionSelector,

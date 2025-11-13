@@ -125,6 +125,9 @@ main .section .scroll-hero-wrapper {
   top: 0;
   width: 100%;
   z-index: 1;
+  will-change: transform, opacity;
+  transform-style: preserve-3d;
+  backface-visibility: hidden;
 }
 
 .screen.hold-pin {
@@ -167,6 +170,9 @@ main .section .scroll-hero-wrapper {
   position: absolute;
   width: 100%;
   z-index: 1;
+  will-change: transform, opacity;
+  transform-style: preserve-3d;
+  backface-visibility: hidden;
 }
 
 /* Background image setup - full viewport, static */
@@ -190,6 +196,9 @@ main .section .scroll-hero-wrapper {
   position: absolute;
   top: 0;
   width: 100vw;
+  will-change: transform, opacity;
+  transform-style: preserve-3d;
+  backface-visibility: hidden;
 
   /* Remove will-change to keep image static */
 }
@@ -224,6 +233,9 @@ main .section .scroll-hero-wrapper {
   color: #fff;
   font-family: Montserrat-bold, sans-serif;
   opacity: 1; /* Ensure visible initially */
+  will-change: transform, opacity;
+  transform-style: preserve-3d;
+  backface-visibility: hidden;
 }
 
 /* Text overlays have higher z-index than backgrounds */
@@ -246,6 +258,9 @@ main .section .scroll-hero-wrapper {
   font-family: Montserrat-bold, sans-serif;
   width: 100%;
   opacity: 0; /* Start with opacity 0, will fade in during animation */
+  will-change: transform, opacity;
+  transform-style: preserve-3d;
+  backface-visibility: hidden;
 }
 
 /* Responsive text styling - Desktop first */
@@ -258,6 +273,9 @@ main .section .scroll-hero-wrapper {
   margin: 0;
   position: relative;
   top: 0;
+  will-change: transform, opacity;
+  transform-style: preserve-3d;
+  backface-visibility: hidden;
 }
 
 /* Color scheme variants for different sections */
@@ -282,6 +300,9 @@ main .section .scroll-hero-wrapper {
   max-width: 40%;
   position: relative;
   top: 0;
+  will-change: transform, opacity;
+  transform-style: preserve-3d;
+  backface-visibility: hidden;
 }
 
 .strapline .time-indicator {
@@ -378,19 +399,6 @@ main .section .scroll-hero-wrapper {
   100% {
     transform: translateX(50px);
   }
-}
-
-/* Optimized performance */
-.screen,
-.background .img,
-.strapline,
-.strapline .main-title,
-.strapline-2,
-.strapline-2 .subtitle,
-.fade {
-  will-change: transform, opacity;
-  transform-style: preserve-3d;
-  backface-visibility: hidden;
 }
 
 /* Default fallback styling if GSAP fails to load */

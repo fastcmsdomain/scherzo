@@ -525,4 +525,6 @@ clip-path: inset(0  -100vmax);
 
 .hero-hide-wrapper {
   visibility: hidden;
+  opacity: 0;
+  display: none;
 }

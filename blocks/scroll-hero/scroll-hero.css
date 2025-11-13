@@ -39,8 +39,8 @@ main .section .scroll-hero-wrapper {
   width: 14px;
 }
 
-.progress-nav li::before {
-  background: rgb(255 255 255 / 50%);
+.progress-nav li:before {
+  background: rgba(255, 255, 255, 0.5);
   content: '';
   height: 2px;
   left: 0;
@@ -64,13 +64,13 @@ main .section .scroll-hero-wrapper {
   visibility: hidden;
 }
 
-.progress-nav li.is-active {
+.progress-nav li.isActive {
   overflow: hidden;
   width: 30px;
 }
 
-.progress-nav li.is-active::after {
-  animation: nav-progress 1.5s linear infinite;
+.progress-nav li.isActive:after {
+  animation: nav_progress 1.5s linear infinite;
   background-color: #fff;
   content: '';
   height: 2px;
@@ -83,7 +83,7 @@ main .section .scroll-hero-wrapper {
   width: 30px;
 }
 
-.progress-nav li:hover::before {
+.progress-nav li:hover:before {
   background: #fff;
 }
 
@@ -125,20 +125,11 @@ main .section .scroll-hero-wrapper {
   top: 0;
   width: 100%;
   z-index: 1;
-  will-change: transform, opacity;
-  transform-style: preserve-3d;
-  backface-visibility: hidden;
 }
 
 .screen.hold-pin {
   position: sticky;
   top: 0;
-}
-
-/* Default fallback styling if GSAP fails to load */
-.no-gsap .screen {
-  position: relative;
-  margin-bottom: 50px;
 }
 
 /* Screen stacking - each subsequent screen has higher z-index for text overlay */
@@ -147,6 +138,11 @@ main .section .scroll-hero-wrapper {
 .screen-section:nth-child(3) .screen { z-index: 30; }
 .screen-section:nth-child(4) .screen { z-index: 40; }
 .screen-section:nth-child(5) .screen { z-index: 50; }
+
+/* Text overlays have higher z-index than backgrounds */
+.screen .strapline {
+  z-index: 15; /* Reduced from 100 to allow next section to appear above */
+}
 
 .screen-inner {
   height: 100vh;
@@ -157,28 +153,30 @@ main .section .scroll-hero-wrapper {
   z-index: 2;
 }
 
-.screen-inner::before {
+.screen-inner:before {
   z-index: 1;
   content: '';
   display: block;
   height: 30vh;
-  inset: auto 0 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
   position: absolute;
-  background: linear-gradient(180deg, transparent 0%, rgb(0 32 62 / 80%) 100%);
+  background: linear-gradient(180deg, transparent 0%, rgba(0, 32, 62, 0.8) 100%);
 }
 
 /* Fade overlay that appears when titles are centered */
 .fade {
-  background: linear-gradient(180deg, transparent 0%, rgb(0 0 0 / 60%) 100%);
-  inset: 0;
+  background: linear-gradient(180deg, transparent 0%, rgba(0, 0, 0, 0.6) 100%);
+  bottom: 0;
   height: 100%;
+  left: 0;
   opacity: 0;
   position: absolute;
+  right: 0;
+  top: 0;
   width: 100%;
   z-index: 1;
-  will-change: transform, opacity;
-  transform-style: preserve-3d;
-  backface-visibility: hidden;
 }
 
 /* Background image setup - full viewport, static */
@@ -202,15 +200,11 @@ main .section .scroll-hero-wrapper {
   position: absolute;
   top: 0;
   width: 100vw;
-  will-change: transform, opacity;
-  transform-style: preserve-3d;
-  backface-visibility: hidden;
-
   /* Remove will-change to keep image static */
 }
 
-.background .img::after {
-  background: linear-gradient(180deg, transparent 0%, rgb(0 0 0 / 75%) 100%);
+.background .img:after {
+  background: linear-gradient(180deg, transparent 0%, rgba(0, 0, 0, 0.75) 100%);
   bottom: 0;
   content: '';
   height: 42vh;
@@ -219,10 +213,22 @@ main .section .scroll-hero-wrapper {
   width: 100%;
 }
 
-@media (width <= 992px) {
-  .background .img::after {
-    background: linear-gradient(180deg, transparent 0%, rgb(0 0 0 / 35%) 100%);
+@media (max-width: 992px) {
+  .background .img:after {
+    background: linear-gradient(180deg, transparent 0%, rgba(0, 0, 0, 0.35) 100%);
   }
+}
+
+/* Fade overlay */
+.fade {
+  background: rgba(0, 32, 62, 0.6);
+  height: 100%;
+  left: 0;
+  opacity: 0;
+  position: absolute;
+  top: 0;
+  width: 100%;
+  z-index: 1;
 }
 
 /* Text positioning and styling - starts 10% up from bottom, moves to center */
@@ -237,16 +243,8 @@ main .section .scroll-hero-wrapper {
   z-index: 100;
   width: 60%;
   color: #fff;
-  font-family: Montserrat-bold, sans-serif;
+  font-family: 'Montserrat-bold', sans-serif;
   opacity: 1; /* Ensure visible initially */
-  will-change: transform, opacity;
-  transform-style: preserve-3d;
-  backface-visibility: hidden;
-}
-
-/* Text overlays have higher z-index than backgrounds */
-.screen .strapline {
-  z-index: 15; /* Reduced from 100 to allow next section to appear above */
 }
 
 /* Second strapline for subtitle - positioned below main strapline */
@@ -261,12 +259,9 @@ main .section .scroll-hero-wrapper {
   transform-origin: center center; /* Center transform origin for smooth animation */
   z-index: 99; /* Slightly lower z-index than main strapline */
   color: #fff;
-  font-family: Montserrat-bold, sans-serif;
+  font-family: 'Montserrat-bold', sans-serif;
   width: 100%;
   opacity: 0; /* Start with opacity 0, will fade in during animation */
-  will-change: transform, opacity;
-  transform-style: preserve-3d;
-  backface-visibility: hidden;
 }
 
 /* Responsive text styling - Desktop first */
@@ -275,40 +270,22 @@ main .section .scroll-hero-wrapper {
   font-size: 60px; /* Final desktop size after animation */
   font-weight: 500;
   line-height: 1.1;
-  text-shadow: 0 0 18px rgb(0 0 0 / 25%);
+  text-shadow: 0 0 18px rgba(0, 0, 0, 0.25);
   margin: 0;
   position: relative;
   top: 0;
-  will-change: transform, opacity;
-  transform-style: preserve-3d;
-  backface-visibility: hidden;
-}
-
-/* Color scheme variants for different sections */
-.screen.friends .strapline .main-title {
-  color: #f7d117; /* Yellow for friends */
-}
-
-.screen.skills .strapline .main-title {
-  color: #a6d6c9; /* Teal for skills */
-}
-
-.screen.confidence .strapline .main-title {
-  color: #ff6b6b; /* Red for confidence */
 }
 
 .strapline-2 .subtitle {
   font-size: 18px; /* Final size after animation */
   font-weight: 400;
   letter-spacing: 0.07em;
-  text-shadow: 0 0 18px rgb(0 0 0 / 25%);
-  margin: 0 auto;
-  max-width: 40%;
+  text-shadow: 0 0 18px rgba(0, 0, 0, 0.25);
+  margin: 0;
   position: relative;
   top: 0;
-  will-change: transform, opacity;
-  transform-style: preserve-3d;
-  backface-visibility: hidden;
+  max-width: 40%;
+  margin: 0 auto;
 }
 
 .strapline .time-indicator {
@@ -351,60 +328,91 @@ main .section .scroll-hero-wrapper {
 }
 
 /* Responsive font sizes */
-@media (width <= 992px) {
+@media (max-width: 992px) {
   .strapline .main-title {
     font-size: 44px; /* Mobile final size */
     line-height: 1.2;
   }
-
+  
   .strapline .main-title .title-part-0 {
     font-size: 44px; /* Tablet starting size, will animate to 30px */
   }
-
+  
   .strapline-2 .subtitle {
     font-size: 16px; /* Slightly smaller on tablet */
   }
 }
 
-@media (width <= 768px) {
+@media (max-width: 768px) {
   .strapline .main-title {
     font-size: 30px; /* Smaller mobile screens */
     line-height: 1.2;
   }
-
+  
   .strapline .main-title .title-part-0 {
     font-size: 40px; /* Mobile starting size, will animate to 27px */
   }
-
+  
   .strapline-2 .subtitle {
     font-size: 14px;
   }
 }
 
-@media (width <= 480px) {
+@media (max-width: 480px) {
   .strapline .main-title {
     font-size: 36px; /* Very small screens */
     line-height: 1.3;
   }
-
+  
   .strapline .main-title .title-part-0 {
     font-size: 36px; /* Very small screens starting size, will animate to 24px */
   }
-
+  
   .strapline-2 .subtitle {
     font-size: 12px;
   }
 }
 
 /* Animation keyframes */
-@keyframes nav-progress {
+@keyframes nav_progress {
   0% {
     transform: translateX(-50px);
   }
-
   100% {
     transform: translateX(50px);
   }
+}
+
+/* Color scheme variants for different sections */
+.screen.friends .strapline .main-title {
+  color: #f7d117; /* Yellow for friends */
+}
+
+.screen.skills .strapline .main-title {
+  color: #a6d6c9; /* Teal for skills */
+}
+
+.screen.confidence .strapline .main-title {
+  color: #ff6b6b; /* Red for confidence */
+}
+
+/* Optimized performance */
+.screen,
+.background .img,
+.strapline,
+.strapline .main-title,
+.strapline-2,
+.strapline-2 .subtitle,
+.fade {
+  will-change: transform, opacity;
+  transform-style: preserve-3d;
+  backface-visibility: hidden;
+}
+
+/* Default fallback styling if GSAP fails to load */
+.no-gsap .screen {
+  position: relative;
+  margin-bottom: 50px;
 }
 
 .no-gsap .strapline {

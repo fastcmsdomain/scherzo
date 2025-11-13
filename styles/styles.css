@@ -185,7 +185,7 @@ h1, h2, h3,
 h4, h5, h6 {
   font-family: var(--heading-font-family);
   font-weight: normal;
-  line-height: 1.25;
+  line-height: 1.4;
   margin-bottom: .5em;
   margin-top: 1em;
   scroll-margin: calc(var(--nav-height) + 1em);

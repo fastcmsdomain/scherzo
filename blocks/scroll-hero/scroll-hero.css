@@ -240,11 +240,10 @@ main .section .scroll-hero-wrapper {
   top: calc(90% - 60px); /* Start 10% up from bottom */
   transform: translateY(0); /* Visible on screen initially */
   z-index: 100;
+  width: 60%;
   color: #fff;
   font-family: 'Montserrat-bold', sans-serif;
-  width: 100%;
   opacity: 1; /* Ensure visible initially */
-  /* Initial state - 10% up from bottom, will be animated to center */
 }
 
 /* Second strapline for subtitle - positioned below main strapline */
@@ -254,7 +253,7 @@ main .section .scroll-hero-wrapper {
   position: absolute;
   right: 0;
   text-align: center;
-  top: calc(90% - 20px); /* Positioned below main strapline */
+  top: calc(90% - 40px + 20vh); /* Positioned below main strapline, shifted down 20% */
   transform: translateY(0);
   transform-origin: center center; /* Center transform origin for smooth animation */
   z-index: 99; /* Slightly lower z-index than main strapline */
@@ -266,7 +265,7 @@ main .section .scroll-hero-wrapper {
 
 /* Responsive text styling - Desktop first */
 .strapline .main-title {
-  font-family: 'Montserrat-bold', sans-serif;
+  font-family: var(--body-font-family);
   font-size: 60px; /* Final desktop size after animation */
   font-weight: 500;
   line-height: 1.1;
@@ -284,7 +283,7 @@ main .section .scroll-hero-wrapper {
   margin: 0;
   position: relative;
   top: 0;
-  max-width: 80%;
+  max-width: 40%;
   margin: 0 auto;
 }
 
@@ -295,7 +294,7 @@ main .section .scroll-hero-wrapper {
 /* Title parts styling */
 .strapline .main-title .title-part {
   display: block;
-  margin: 5px 0;
+  margin: 5px 0 1rem;
 }
 
 .strapline .main-title .title-part-0 {
@@ -303,7 +302,8 @@ main .section .scroll-hero-wrapper {
 }
 
 .strapline .main-title .title-part-1 {
-  font-size: 0.5em;
+  font-size: 0.3em;
+  text-transform: uppercase;
   font-weight: 300;
   opacity: 0.9;
 }
@@ -315,13 +315,13 @@ main .section .scroll-hero-wrapper {
 }
 
 .strapline-2 .subtitle .subtitle-part-0 {
-  font-size: 1rem;
+  font-size: 1.1rem;
   font-weight: 400;
   padding-bottom: 0.5rem;
 }
 
 .strapline-2 .subtitle .subtitle-part-1 {
-  font-size: 0.8rem;
+  font-size: 0.9rem;
   font-weight: 300;
   opacity: 0.8;
 }

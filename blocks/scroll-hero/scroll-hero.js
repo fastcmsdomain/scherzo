@@ -104,7 +104,7 @@ const createSection = (section) => {
     .join('');
 
   // Template with minimal whitespace
-  sectionDiv.innerHTML = `<div class="pin-spacer"><div class="screen ${section.id.replace('section-', '')} hold-pin"><div class="screen-inner"><div class="background">${bgImagesHtml}</div><div class="fade"></div><div class="strapline"><h1 class="main-title">${mainTitleHtml}</h1></div><div class="strapline-2" style="opacity:0;"><h2 class="subtitle">${subtitleHtml}</h2></div></div></div></div>`;
+  sectionDiv.innerHTML = `<div class="pin-spacer"><div class="screen ${section.id.replace('section-', '')} hold-pin"><div class="screen-inner"><div class="background">${bgImagesHtml}</div><div class="fade"></div><div class="strapline"><h1 class="main-title">${mainTitleHtml}</h1></div><div class="strapline-2" style="opacity:1;"><h2 class="subtitle">${subtitleHtml}</h2></div></div></div></div>`;
 
   return sectionDiv;
 };
@@ -114,7 +114,18 @@ function createSectionAnimation(section, index, gsap, ScrollTrigger) {
 
   // Enhanced timeline based on Wellington College exact pattern
   // Title and subtitle move to center individually, then pause for next slide
+  // Calculate initial top position for strapline-2: calc(90% - 40px + 20vh)
+  const vh = window.innerHeight;
+  const initialTop = (vh * 0.9) - 40 + (vh * 0.2); // 90% - 40px + 20vh
+
   const timeline = gsap.timeline()
+    // Set initial state for strapline-2 to match CSS
+    .set(`${sectionSelector} .strapline-2`, {
+      top: `${initialTop}px`,
+      y: '0',
+      scale: 1,
+      opacity: 1,
+    }, 0)
     // Phase 0: Ensure strapline is visible throughout scroll
     .to(`${sectionSelector} .strapline`, {
       opacity: 1,
@@ -144,6 +155,13 @@ function createSectionAnimation(section, index, gsap, ScrollTrigger) {
       ease: 'none', // Use 'none' for scrub animations
     }, 0.1); // Start after subtitle positioning
 
+  // Multiple background images effect
+  const backgroundImages = document.querySelectorAll(`${sectionSelector} .background .img`);
+
+  // Background image switching - only after strapline-2 reaches center
+  // Strapline-2 animation starts at timeline time 0.5 and reaches center at time 1.0
+  const strapline2CenterTime = 1.0; // Timeline time when strapline-2 reaches center
+
   // Create ScrollTrigger with smooth reverse scrolling - with CSS offset spacing
   ScrollTrigger.create({
     trigger: `${sectionSelector}`,
@@ -157,52 +175,87 @@ function createSectionAnimation(section, index, gsap, ScrollTrigger) {
     onEnterBack: () => updateProgressNav(index),
     onLeave: () => clearProgressNav(),
     onLeaveBack: () => clearProgressNav(),
-    // Smooth reverse behavior
+    // Smooth reverse behavior and image switching
     onUpdate: () => {
       // Ensure timeline plays smoothly in both directions
       timeline.timeScale(1);
+
+      // Handle background image switching only after strapline-2 reaches center
+      if (backgroundImages.length > 1) {
+        const currentTime = timeline.time();
+        const isStrapline2Centered = currentTime >= strapline2CenterTime;
+
+        if (isStrapline2Centered) {
+          // Calculate progress after center (0 to 1)
+          const timelineDuration = timeline.duration();
+          const remainingTime = timelineDuration - strapline2CenterTime;
+          const afterCenterProgress = remainingTime > 0
+            ? (currentTime - strapline2CenterTime) / remainingTime
+            : 0;
+
+          // Switch images based on progress after center
+          backgroundImages.forEach((img, imgIndex) => {
+            if (imgIndex === 0) {
+              // First image fades out as others appear
+              const firstImageFadeStart = 0.2; // Start fading first image after 20% progress
+              if (afterCenterProgress >= firstImageFadeStart) {
+                const fadeProgress = Math.min(
+                  (afterCenterProgress - firstImageFadeStart) / 0.3,
+                  1,
+                );
+                gsap.set(img, { opacity: 1 - fadeProgress });
+              } else {
+                gsap.set(img, { opacity: 1 });
+              }
+              return;
+            }
+
+            // Distribute remaining images across the remaining scroll
+            const imageCount = backgroundImages.length - 1;
+            const imageSwitchPoint = (imgIndex - 1) / imageCount;
+            const imageFadePoint = (imgIndex - 0.5) / imageCount;
+
+            if (afterCenterProgress >= imageSwitchPoint
+              && afterCenterProgress < imageFadePoint) {
+              // Show this image
+              if (img.style.display === 'none') {
+                img.style.display = 'block';
+              }
+              const showProgress = (afterCenterProgress - imageSwitchPoint)
+                / (imageFadePoint - imageSwitchPoint);
+              gsap.set(img, { opacity: Math.min(showProgress * 2, 1) });
+            } else if (afterCenterProgress >= imageFadePoint
+              && imgIndex < backgroundImages.length - 1) {
+              // Fade out this image (next one is showing)
+              const fadeProgress = (afterCenterProgress - imageFadePoint)
+                / (0.5 / imageCount);
+              const newOpacity = Math.max(1 - fadeProgress * 2, 0);
+              gsap.set(img, { opacity: newOpacity });
+              if (newOpacity <= 0) {
+                img.style.display = 'none';
+              }
+            } else if (afterCenterProgress < imageSwitchPoint) {
+              // Hide images that haven't reached their switch point yet
+              if (img.style.display !== 'none') {
+                img.style.display = 'none';
+                gsap.set(img, { opacity: 0 });
+              }
+            }
+          });
+        } else {
+          // Before strapline-2 reaches center, ensure only first image is visible
+          backgroundImages.forEach((img, imgIndex) => {
+            if (imgIndex === 0) {
+              gsap.set(img, { opacity: 1, display: 'block' });
+            } else if (img.style.display !== 'none') {
+              img.style.display = 'none';
+              gsap.set(img, { opacity: 0 });
+            }
+          });
+        }
+      }
     },
   });
-
-  // Multiple background images effect
-  const backgroundImages = document.querySelectorAll(`${sectionSelector} .background .img`);
-
-  // Background image switching during scroll (Wellington College pattern)
-  if (backgroundImages.length > 1) {
-    backgroundImages.forEach((img, imgIndex) => {
-      if (imgIndex === 0) return; // First image is always visible
-
-      ScrollTrigger.create({
-        trigger: sectionSelector,
-        start: `${25 + (imgIndex * 25)}% center`,
-        end: `${50 + (imgIndex * 25)}% center`,
-        onEnter: () => {
-          gsap.to(img, { display: 'block', opacity: 1, duration: 0.5 });
-        },
-        onLeave: () => {
-          gsap.to(img, {
-            opacity: 0,
-            duration: 0.5,
-            onComplete: () => {
-              img.style.display = 'none';
-            },
-          });
-        },
-        onEnterBack: () => {
-          gsap.to(img, { display: 'block', opacity: 1, duration: 0.5 });
-        },
-        onLeaveBack: () => {
-          gsap.to(img, {
-            opacity: 0,
-            duration: 0.5,
-            onComplete: () => {
-              img.style.display = 'none';
-            },
-          });
-        },
-      });
-    });
-  }
 
   // Keep background images static - no parallax effect
   // Images remain fixed while text overlays shift up
@@ -263,24 +316,25 @@ function createSectionAnimation(section, index, gsap, ScrollTrigger) {
   const titlePart0 = document.querySelector(`${sectionSelector} .title-part-0`);
   if (titlePart0) {
     // Get responsive font sizes based on window width
-    const getFontSizes = () => {
+    const getFontSize = () => {
       const width = window.innerWidth;
       if (width <= 480) {
-        return { to: 24 }; // Very small screens
+        return 24; // Very small screens
       }
       if (width <= 768) {
-        return { to: 27 }; // Mobile
+        return 27; // Mobile
       }
       if (width <= 992) {
-        return { to: 30 }; // Tablet
+        return 30; // Tablet
       }
-      return { to: 40 }; // Desktop
+      return 40; // Desktop
     };
 
-    const { to } = getFontSizes();
+    const targetFontSize = getFontSize();
 
     // Animate font-size during scroll
     gsap.to(`${sectionSelector} .title-part-0`, {
+      fontSize: `${targetFontSize}px`,
       ease: 'none',
       scrollTrigger: {
         trigger: sectionSelector,

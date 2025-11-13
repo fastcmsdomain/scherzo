@@ -135,6 +135,12 @@ main .section .scroll-hero-wrapper {
   top: 0;
 }
 
+/* Default fallback styling if GSAP fails to load */
+.no-gsap .screen {
+  position: relative;
+  margin-bottom: 50px;
+}
+
 /* Screen stacking - each subsequent screen has higher z-index for text overlay */
 .screen-section:nth-child(1) .screen { z-index: 10; }
 .screen-section:nth-child(2) .screen { z-index: 20; }
@@ -399,12 +405,6 @@ main .section .scroll-hero-wrapper {
   100% {
     transform: translateX(50px);
   }
-}
-
-/* Default fallback styling if GSAP fails to load */
-.no-gsap .screen {
-  position: relative;
-  margin-bottom: 50px;
 }
 
 .no-gsap .strapline {

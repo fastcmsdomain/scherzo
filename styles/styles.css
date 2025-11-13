@@ -523,43 +523,6 @@ clip-path: inset(0  -100vmax);
   text-align: justify;
 }
 
-/* Specific handling for paragraphs and headings */
-p[data-align="left"],
-h1[data-align="left"],
-h2[data-align="left"],
-h3[data-align="left"],
-h4[data-align="left"],
-h5[data-align="left"],
-h6[data-align="left"] {
-  text-align: left;
-}
-
-p[data-align="center"],
-h1[data-align="center"],
-h2[data-align="center"],
-h3[data-align="center"],
-h4[data-align="center"],
-h5[data-align="center"],
-h6[data-align="center"] {
-  text-align: center;
-}
-
-p[data-align="right"],
-h1[data-align="right"],
-h2[data-align="right"],
-h3[data-align="right"],
-h4[data-align="right"],
-h5[data-align="right"],
-h6[data-align="right"] {
-  text-align: right;
-}
-
-p[data-align="justify"],
-h1[data-align="justify"],
-h2[data-align="justify"],
-h3[data-align="justify"],
-h4[data-align="justify"],
-h5[data-align="justify"],
-h6[data-align="justify"] {
-  text-align: justify;
+.hero-hide-wrapper {
+  visibility: hidden;
 }

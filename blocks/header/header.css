@@ -76,7 +76,6 @@ header nav .nav-hamburger button {
   align-items: center;
   background-color: var(--color-darker-blue);
   border-radius: 0;
-  border-top: 1px solid var(--color-gold);
   color: inherit;
   display: flex;
   height: 22px;
@@ -86,8 +85,8 @@ header nav .nav-hamburger button {
   padding: 1.4rem 1rem ;
   text-overflow: initial;
   white-space: initial;
-  box-shadow: var(--box-shadow);
-  border: 1px solid var(--color-gold);
+  border: none;
+  z-index: 10;
 }
 
 @media (width <= 900px) {
@@ -117,7 +116,7 @@ header nav .nav-hamburger-icon::after {
 header nav[aria-expanded="false"] .nav-hamburger-icon,
 header nav[aria-expanded="false"] .nav-hamburger-icon::before,
 header nav[aria-expanded="false"] .nav-hamburger-icon::after {
-  background: var(--color-gold);
+  background: var(--color-white);
   border-radius: 2px;
   height: 2px;
 }
@@ -205,7 +204,6 @@ header nav .nav-sections {
 header nav[aria-expanded="true"] .nav-sections {
   align-items: center;
   background-color: #283048;
-  border-top: 1px solid var(--color-gold);
   box-shadow: var(--box-shadow);
   display: flex;
   justify-content: center;
@@ -347,24 +345,22 @@ header nav .nav-sections ul > li > ul > li {
 header nav .nav-tools {
   align-items: center;
   background: var(--color-darker-blue);
-  border-top: 1px solid var(--color-gold);
   bottom: 0;
-  display: flex;
+  padding: 0;
   grid-area: tools;
   justify-content: center;
   position: fixed;
   right: 0;
   width: 100%;
-  box-shadow: var(--box-shadow);
-  border: 1px solid var(--color-gold);
+  display: none;
 }
   
 @media (width >= 900px) {
   header nav .nav-tools {
-    border: 1px solid var(--color-gold);
     bottom: inherit;
     right: 2rem;
     top: 1.4rem;
+    display: flex;
     width: auto;
   }
 }

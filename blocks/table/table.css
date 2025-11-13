@@ -34,6 +34,7 @@
 .table table th {
   font-weight: 700;
   color: var(--color-white);
+  background-color: var(--color-darker-blue);
 }
 
 .table table th,
@@ -41,6 +42,10 @@
   padding: 0.5em;
   text-align: left;
   border: 1px solid var(--color-white);
+}
+
+.table table td {
+  border-color: var(--color-dark-blue);
 }
 
 .table table th p,
@@ -61,13 +66,5 @@
 .table.striped tbody tr:nth-child(odd) {
   background-color: var(--light-color);
 }
-
-/* bordered variant */
-.table table tr th {
-  background-color: var(--color-darker-blue);
-  border: 1px solid var(--color-white);
-  font-family: var( --body-bold-family);
-}
-
 
 

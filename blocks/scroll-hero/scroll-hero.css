@@ -132,11 +132,6 @@ main .section .scroll-hero-wrapper {
   top: 0;
 }
 
-/* Text overlays have higher z-index than backgrounds */
-.screen .strapline {
-  z-index: 15; /* Reduced from 100 to allow next section to appear above */
-}
-
 /* Screen stacking - each subsequent screen has higher z-index for text overlay */
 .screen-section:nth-child(1) .screen { z-index: 10; }
 .screen-section:nth-child(2) .screen { z-index: 20; }
@@ -158,7 +153,7 @@ main .section .scroll-hero-wrapper {
   content: '';
   display: block;
   height: 30vh;
-  inset: auto 0 0 0;
+  inset: auto 0 0;
   position: absolute;
   background: linear-gradient(180deg, transparent 0%, rgb(0 32 62 / 80%) 100%);
 }
@@ -231,6 +226,11 @@ main .section .scroll-hero-wrapper {
   opacity: 1; /* Ensure visible initially */
 }
 
+/* Text overlays have higher z-index than backgrounds */
+.screen .strapline {
+  z-index: 15; /* Reduced from 100 to allow next section to appear above */
+}
+
 /* Second strapline for subtitle - positioned below main strapline */
 .strapline-2 {
   left: 0;
@@ -248,6 +248,18 @@ main .section .scroll-hero-wrapper {
   opacity: 0; /* Start with opacity 0, will fade in during animation */
 }
 
+/* Responsive text styling - Desktop first */
+.strapline .main-title {
+  font-family: var(--body-font-family);
+  font-size: 60px; /* Final desktop size after animation */
+  font-weight: 500;
+  line-height: 1.1;
+  text-shadow: 0 0 18px rgb(0 0 0 / 25%);
+  margin: 0;
+  position: relative;
+  top: 0;
+}
+
 /* Color scheme variants for different sections */
 .screen.friends .strapline .main-title {
   color: #f7d117; /* Yellow for friends */
@@ -259,18 +271,6 @@ main .section .scroll-hero-wrapper {
 
 .screen.confidence .strapline .main-title {
   color: #ff6b6b; /* Red for confidence */
-}
-
-/* Responsive text styling - Desktop first */
-.strapline .main-title {
-  font-family: var(--body-font-family);
-  font-size: 60px; /* Final desktop size after animation */
-  font-weight: 500;
-  line-height: 1.1;
-  text-shadow: 0 0 18px rgb(0 0 0 / 25%);
-  margin: 0;
-  position: relative;
-  top: 0;
 }
 
 .strapline-2 .subtitle {

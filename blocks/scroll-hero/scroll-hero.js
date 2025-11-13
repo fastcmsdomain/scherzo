@@ -7,12 +7,12 @@
 
 const updateProgressNav = (activeIndex) => {
   const navItems = document.querySelectorAll('.progress-nav li');
-  navItems.forEach((li, index) => li.classList.toggle('isActive', index === activeIndex));
+  navItems.forEach((li, index) => li.classList.toggle('is-active', index === activeIndex));
 };
 
 const clearProgressNav = () => {
   const navItems = document.querySelectorAll('.progress-nav li');
-  navItems.forEach((li) => li.classList.remove('isActive'));
+  navItems.forEach((li) => li.classList.remove('is-active'));
 };
 
 // Optimized GSAP loading
@@ -509,7 +509,7 @@ export default async function decorate(block) {
   sections.forEach((section, index) => {
     const li = document.createElement('li');
     li.innerHTML = `<span>${section.title}</span>`;
-    if (index === 0) li.classList.add('isActive');
+    if (index === 0) li.classList.add('is-active');
     progressNav.appendChild(li);
   });
 

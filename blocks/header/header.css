@@ -347,7 +347,6 @@ header nav .nav-tools {
   background: var(--color-darker-blue);
   bottom: 0;
   padding: 0;
-  display: flex;
   grid-area: tools;
   justify-content: center;
   position: fixed;

@@ -522,9 +522,3 @@ clip-path: inset(0  -100vmax);
 [data-align="justify"] * {
   text-align: justify;
 }
-
-.hero-hide-wrapper {
-  visibility: hidden;
-  opacity: 0;
-  display: none;
-}

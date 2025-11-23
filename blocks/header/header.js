@@ -4,6 +4,89 @@
 import { fetchPlaceholders, getMetadata } from '../../scripts/aem.js';
 import { loadFragment } from '../fragment/fragment.js';
 
+/**
+ * Fetches navigation links from query-index.json
+ * @returns {Promise<Array>} Array of navigation items with path and title
+ */
+async function fetchDynamicNavLinks() {
+  try {
+    const response = await fetch('https://main--scherzo--fastcmsdomain.aem.live/query-index.json');
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    const data = await response.json();
+
+    // Extract path and title from the data
+    return data.data.map((item) => ({
+      path: item.path,
+      title: item.title,
+      image: item.image,
+      description: item.description,
+    }));
+  } catch (error) {
+    // eslint-disable-next-line no-console
+    console.error('Failed to fetch dynamic navigation:', error);
+    return [];
+  }
+}
+
+/**
+ * Builds a hierarchical navigation structure from flat paths
+ * @param {Array} items - Array of items with path and title
+ * @returns {Element} Navigation DOM element
+ */
+function buildDynamicNavigation(items) {
+  const navStructure = {};
+
+  // Build hierarchical structure
+  items.forEach((item) => {
+    const pathParts = item.path.split('/').filter(Boolean);
+    let currentLevel = navStructure;
+
+    pathParts.forEach((part, index) => {
+      if (!currentLevel[part]) {
+        currentLevel[part] = {
+          path: `/${pathParts.slice(0, index + 1).join('/')}`,
+          title: index === pathParts.length - 1 ? item.title : part,
+          children: {},
+        };
+      }
+      currentLevel = currentLevel[part].children;
+    });
+  });
+
+  // Convert structure to DOM
+  function createNavList(structure, level = 0) {
+    const ul = document.createElement('ul');
+
+    Object.keys(structure).forEach((key) => {
+      const item = structure[key];
+      const li = document.createElement('li');
+      const a = document.createElement('a');
+
+      a.href = item.path;
+      a.textContent = item.title;
+      li.appendChild(a);
+
+      // Add children if they exist
+      if (Object.keys(item.children).length > 0) {
+        li.classList.add('has-children');
+        li.appendChild(createNavList(item.children, level + 1));
+      }
+
+      ul.appendChild(li);
+    });
+
+    return ul;
+  }
+
+  const wrapper = document.createElement('div');
+  wrapper.className = 'default-content-wrapper';
+  wrapper.appendChild(createNavList(navStructure));
+
+  return wrapper;
+}
+
 function closeOnEscape(e) {
   if (e.code === 'Escape') {
     const nav = document.getElementById('nav');
@@ -276,16 +359,30 @@ function buildMenuPath(element) {
  * @param {Element} block The header block element
  */
 export default async function decorate(block) {
-  // load nav as fragment
-  const navMeta = getMetadata('nav');
-  const navPath = navMeta ? new URL(navMeta, window.location).pathname : '/nav';
-  const fragment = await loadFragment(navPath);
+  // Check if dynamic navigation is enabled via metadata
+  const useDynamicNav = getMetadata('dynamic-nav')?.toLowerCase() === 'true';
 
-  // decorate nav DOM
   block.textContent = '';
   const nav = document.createElement('nav');
   nav.id = 'nav';
-  while (fragment.firstElementChild) nav.append(fragment.firstElementChild);
+
+  if (useDynamicNav) {
+    // Load navigation dynamically from query-index.json
+    const navItems = await fetchDynamicNavLinks();
+    const dynamicNavStructure = buildDynamicNavigation(navItems);
+
+    // Create nav sections wrapper
+    const navSectionsWrapper = document.createElement('div');
+    navSectionsWrapper.appendChild(dynamicNavStructure);
+    nav.appendChild(navSectionsWrapper);
+  } else {
+    // load nav as fragment (original behavior)
+    const navMeta = getMetadata('nav');
+    const navPath = navMeta ? new URL(navMeta, window.location).pathname : '/nav';
+    const fragment = await loadFragment(navPath);
+
+    while (fragment.firstElementChild) nav.append(fragment.firstElementChild);
+  }
 
   const classes = ['brand', 'sections', 'tools'];
   classes.forEach((c, i) => {

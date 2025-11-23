@@ -22,15 +22,23 @@ async function fetchDynamicNavLinks() {
     // eslint-disable-next-line no-console
     console.log(`📊 Total items found: ${data.data.length}`);
 
-    // Extract path and title from the data
-    const navItems = data.data.map((item) => ({
-      path: item.path,
-      title: item.title,
-      image: item.image,
-      description: item.description,
-    }));
+    // Filter out internal/test pages and extract path and title from the data
+    const navItems = data.data
+      .filter((item) => {
+        // Exclude blocks, tools, slides, and other non-navigation pages
+        const excludedPaths = ['/blocks/', '/tools/', '/slides/', '/prompts/', '/page'];
+        return item.path && !excludedPaths.some((excluded) => item.path.startsWith(excluded));
+      })
+      .map((item) => ({
+        path: item.path,
+        title: item.title,
+        image: item.image,
+        description: item.description,
+      }));
     // eslint-disable-next-line no-console
     console.log('📋 Processed nav items:', navItems);
+    // eslint-disable-next-line no-console
+    console.log(`🔍 Filtered ${data.data.length} → ${navItems.length} items (excluded internal pages)`);
     return navItems;
   } catch (error) {
     // eslint-disable-next-line no-console
@@ -49,8 +57,13 @@ function buildDynamicNavigation(items) {
   console.log('🔨 Building navigation structure from items:', items);
   const navStructure = {};
 
+  // Filter out items without valid paths
+  const validItems = items.filter((item) => item && item.path && typeof item.path === 'string');
+  // eslint-disable-next-line no-console
+  console.log(`📝 Valid items: ${validItems.length} out of ${items.length}`);
+
   // Build hierarchical structure
-  items.forEach((item) => {
+  validItems.forEach((item) => {
     const pathParts = item.path.split('/').filter(Boolean);
     let currentLevel = navStructure;
 

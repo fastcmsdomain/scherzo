@@ -10,22 +10,31 @@ import { loadFragment } from '../fragment/fragment.js';
  */
 async function fetchDynamicNavLinks() {
   try {
-    const response = await fetch('https://main--scherzo--fastcmsdomain.aem.live/query-index.json');
+    // eslint-disable-next-line no-console
+    console.log('🔍 Fetching dynamic navigation from query-index.json...');
+    const response = await fetch('/query-index.json');
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
     const data = await response.json();
+    // eslint-disable-next-line no-console
+    console.log('✅ Fetched data:', data);
+    // eslint-disable-next-line no-console
+    console.log(`📊 Total items found: ${data.data.length}`);
 
     // Extract path and title from the data
-    return data.data.map((item) => ({
+    const navItems = data.data.map((item) => ({
       path: item.path,
       title: item.title,
       image: item.image,
       description: item.description,
     }));
+    // eslint-disable-next-line no-console
+    console.log('📋 Processed nav items:', navItems);
+    return navItems;
   } catch (error) {
     // eslint-disable-next-line no-console
-    console.error('Failed to fetch dynamic navigation:', error);
+    console.error('❌ Failed to fetch dynamic navigation:', error);
     return [];
   }
 }
@@ -36,6 +45,8 @@ async function fetchDynamicNavLinks() {
  * @returns {Element} Navigation DOM element
  */
 function buildDynamicNavigation(items) {
+  // eslint-disable-next-line no-console
+  console.log('🔨 Building navigation structure from items:', items);
   const navStructure = {};
 
   // Build hierarchical structure
@@ -55,6 +66,9 @@ function buildDynamicNavigation(items) {
     });
   });
 
+  // eslint-disable-next-line no-console
+  console.log('🌳 Hierarchical structure created:', navStructure);
+
   // Convert structure to DOM
   function createNavList(structure, level = 0) {
     const ul = document.createElement('ul');
@@ -71,7 +85,12 @@ function buildDynamicNavigation(items) {
       // Add children if they exist
       if (Object.keys(item.children).length > 0) {
         li.classList.add('has-children');
+        // eslint-disable-next-line no-console
+        console.log(`  📁 ${item.title} (${item.path}) has ${Object.keys(item.children).length} children`);
         li.appendChild(createNavList(item.children, level + 1));
+      } else {
+        // eslint-disable-next-line no-console
+        console.log(`  📄 ${item.title} (${item.path})`);
       }
 
       ul.appendChild(li);
@@ -84,6 +103,8 @@ function buildDynamicNavigation(items) {
   wrapper.className = 'default-content-wrapper';
   wrapper.appendChild(createNavList(navStructure));
 
+  // eslint-disable-next-line no-console
+  console.log('✅ Navigation DOM created:', wrapper);
   return wrapper;
 }
 
@@ -359,30 +380,35 @@ function buildMenuPath(element) {
  * @param {Element} block The header block element
  */
 export default async function decorate(block) {
-  // Check if dynamic navigation is enabled via metadata
-  const useDynamicNav = getMetadata('dynamic-nav')?.toLowerCase() === 'true';
+  // eslint-disable-next-line no-console
+  console.log('🚀 Header decorate() called');
+  // eslint-disable-next-line no-console
+  console.log('✨ Loading DYNAMIC navigation from query-index.json...');
 
   block.textContent = '';
   const nav = document.createElement('nav');
   nav.id = 'nav';
 
-  if (useDynamicNav) {
-    // Load navigation dynamically from query-index.json
-    const navItems = await fetchDynamicNavLinks();
-    const dynamicNavStructure = buildDynamicNavigation(navItems);
+  // Load navigation dynamically from query-index.json (default behavior)
+  const navItems = await fetchDynamicNavLinks();
+  const dynamicNavStructure = buildDynamicNavigation(navItems);
 
-    // Create nav sections wrapper
-    const navSectionsWrapper = document.createElement('div');
-    navSectionsWrapper.appendChild(dynamicNavStructure);
-    nav.appendChild(navSectionsWrapper);
-  } else {
-    // load nav as fragment (original behavior)
-    const navMeta = getMetadata('nav');
-    const navPath = navMeta ? new URL(navMeta, window.location).pathname : '/nav';
-    const fragment = await loadFragment(navPath);
+  // Create proper nav structure matching fragment structure
+  const brandDiv = document.createElement('div');
+  brandDiv.className = 'nav-brand';
 
-    while (fragment.firstElementChild) nav.append(fragment.firstElementChild);
-  }
+  const sectionsDiv = document.createElement('div');
+  sectionsDiv.className = 'nav-sections';
+  sectionsDiv.appendChild(dynamicNavStructure);
+
+  const toolsDiv = document.createElement('div');
+  toolsDiv.className = 'nav-tools';
+
+  nav.appendChild(brandDiv);
+  nav.appendChild(sectionsDiv);
+  nav.appendChild(toolsDiv);
+  // eslint-disable-next-line no-console
+  console.log('✅ Dynamic navigation structure created and appended');
 
   const classes = ['brand', 'sections', 'tools'];
   classes.forEach((c, i) => {
@@ -391,7 +417,7 @@ export default async function decorate(block) {
   });
 
   const navBrand = nav.querySelector('.nav-brand');
-  const brandLink = navBrand.querySelector('.button');
+  const brandLink = navBrand?.querySelector('.button');
   if (brandLink) {
     brandLink.className = '';
     brandLink.closest('.button-container').className = '';
@@ -598,16 +624,16 @@ export default async function decorate(block) {
       openMenuToCurrentItem(schizoMenu);
     },
     slideInSecondLvl: () => {
-      schizoMenu.menusWrap.querySelector('.menu.one').classList.add('slide-in');
-      schizoMenu.menusWrap.querySelector('.menu.two').classList.add('slide-in');
-      if (getWindowWidth() < 992) schizoMenu.menusWrap.querySelector('.menu.one').classList.add('hide');
+      schizoMenu.menusWrap.querySelector('.menu.one')?.classList.add('slide-in');
+      schizoMenu.menusWrap.querySelector('.menu.two')?.classList.add('slide-in');
+      if (getWindowWidth() < 992) schizoMenu.menusWrap.querySelector('.menu.one')?.classList.add('hide');
     },
     slideOutSecondLvl: () => {
-      schizoMenu.menusWrap.querySelector('.menu.one').classList.remove('slide-in');
-      schizoMenu.menusWrap.querySelector('.menu.two').classList.remove('slide-in');
-      schizoMenu.menusWrap.querySelector('.menu.three').classList.remove('slide-in');
-      if (getWindowWidth() < 992) schizoMenu.menusWrap.querySelector('.menu.one').classList.remove('hide');
-      schizoMenu.menusWrap.querySelector('menu.two').classList.remove('hide');
+      schizoMenu.menusWrap.querySelector('.menu.one')?.classList.remove('slide-in');
+      schizoMenu.menusWrap.querySelector('.menu.two')?.classList.remove('slide-in');
+      schizoMenu.menusWrap.querySelector('.menu.three')?.classList.remove('slide-in');
+      if (getWindowWidth() < 992) schizoMenu.menusWrap.querySelector('.menu.one')?.classList.remove('hide');
+      schizoMenu.menusWrap.querySelector('.menu.two')?.classList.remove('hide');
     },
     copyMenuSecondLvl: (e) => {
       const secondLevelMenu = schizoMenu.menusWrap.querySelector('.menu.two ul');
@@ -627,12 +653,12 @@ export default async function decorate(block) {
       }
     },
     slideInThirdLvl: () => {
-      schizoMenu.menusWrap.querySelector('.menu.three').classList.add('slide-in');
-      if (getWindowWidth() < 992) schizoMenu.menusWrap.querySelector('.menu.two').classList.add('hide');
+      schizoMenu.menusWrap.querySelector('.menu.three')?.classList.add('slide-in');
+      if (getWindowWidth() < 992) schizoMenu.menusWrap.querySelector('.menu.two')?.classList.add('hide');
     },
     slideOutThirdLvl: () => {
-      schizoMenu.menusWrap.querySelector('.menu.three').classList.remove('slide-in');
-      if (getWindowWidth() < 992) schizoMenu.menusWrap.querySelector('.menu.two').classList.remove('hide');
+      schizoMenu.menusWrap.querySelector('.menu.three')?.classList.remove('slide-in');
+      if (getWindowWidth() < 992) schizoMenu.menusWrap.querySelector('.menu.two')?.classList.remove('hide');
     },
     copyMenuThirdLvl: (e) => {
       const thirdLevelMenu = schizoMenu.menusWrap.querySelector('.menu.three ul');

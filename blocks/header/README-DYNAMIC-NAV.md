@@ -1,6 +1,6 @@
 # Dynamic Navigation from Query Index
 
-This header block now supports dynamically loading navigation links from the `query-index.json` file.
+The header block now **automatically loads navigation links from `query-index.json`** by default, replacing the traditional `/nav` fragment.
 
 ## Features
 
@@ -10,25 +10,7 @@ This header block now supports dynamically loading navigation links from the `qu
   - `path` → Navigation link URL
   - `title` → Navigation label text
 
-## How to Enable
-
-To enable dynamic navigation on any page, add the following metadata to your document:
-
-### In Google Docs (Metadata Table)
-
-| Metadata | Value |
-|----------|-------|
-| dynamic-nav | true |
-
-### In Markdown
-
-```markdown
----
-dynamic-nav: true
----
-```
-
-## How It Works
+## How It Works (Out of the Box)
 
 1. **Fetches Data**: On page load, the header fetches from `query-index.json`
 2. **Builds Hierarchy**: Parses the `path` column to create a nested menu structure
@@ -63,9 +45,9 @@ The navigation will be structured as:
 - Primary School (/szkola-podstawowa)
 ```
 
-## Fallback Behavior
+## No Configuration Required
 
-If `dynamic-nav` metadata is NOT set or set to `false`, the header will use the original fragment-based navigation loading from `/nav`.
+Dynamic navigation works automatically on all pages. No metadata or configuration needed.
 
 ## Functions Added
 
@@ -95,4 +77,27 @@ Builds a hierarchical navigation structure from flat path array.
 - If fetch fails, an empty navigation will be rendered
 - All existing menu functionality (slide-in panels, breadcrumbs, etc.) continues to work
 - The dynamic navigation respects the same CSS classes and structure as the original
+
+## Fixed Issues
+
+### TypeError: Cannot read properties of null (reading 'classList')
+
+**Issue**: The slide-in menu system was trying to access menu elements that might not exist yet.
+
+**Fix**: Added optional chaining (`?.`) to all menu manipulation functions:
+- `slideInSecondLvl()`
+- `slideOutSecondLvl()`
+- `slideInThirdLvl()`
+- `slideOutThirdLvl()`
+
+This ensures the code gracefully handles cases where menu elements haven't been created yet.
+
+### Proper Navigation Structure
+
+The dynamic navigation now creates the proper structure expected by the slide menu system:
+- `.nav-brand` - Brand/logo section (empty for dynamic nav)
+- `.nav-sections` - Main navigation links
+- `.nav-tools` - Tools section (empty for dynamic nav)
+
+This matches the structure of the fragment-based navigation.
 

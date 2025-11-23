@@ -248,6 +248,7 @@ main .section .scroll-hero-wrapper {
   opacity: 1; /* Ensure visible initially */
 }
 
+
 /* Second strapline for subtitle - positioned below main strapline */
 .strapline-2 {
   left: 0;
@@ -289,6 +290,7 @@ main .section .scroll-hero-wrapper {
   margin: 0 auto;
 }
 
+
 .strapline .time-indicator {
   display: none;
 }
@@ -300,11 +302,12 @@ main .section .scroll-hero-wrapper {
 }
 
 .strapline .main-title .title-part-0 {
-  font-size: 60px; /* Starting size, will animate to 40px */
+  font-size: 3rem; /* Starting size, will animate to 40px */
 }
 
 .strapline .main-title .title-part-1 {
   font-size: 0.3em;
+  line-height: 1.5;
   text-transform: uppercase;
   font-weight: 300;
   opacity: 0.9;
@@ -328,8 +331,25 @@ main .section .scroll-hero-wrapper {
   opacity: 0.8;
 }
 
+@media (max-width: 992px) {
+  .strapline-2 .subtitle {
+    max-width: 80%;
+  }
+
+  .strapline-2 .subtitle .subtitle-part-0 {
+    font-size: 0.8rem;
+  }
+  .strapline-2 .subtitle .subtitle-part-1 {
+    font-size: 0.6rem;
+  }
+}
+
 /* Responsive font sizes */
 @media (max-width: 992px) {
+  .strapline {
+    width: 80%;
+  }
+
   .strapline .main-title {
     font-size: 44px; /* Mobile final size */
     line-height: 1.2;
@@ -344,21 +364,6 @@ main .section .scroll-hero-wrapper {
   }
 }
 
-@media (max-width: 768px) {
-  .strapline .main-title {
-    font-size: 30px; /* Smaller mobile screens */
-    line-height: 1.2;
-  }
-  
-  .strapline .main-title .title-part-0 {
-    font-size: 40px; /* Mobile starting size, will animate to 27px */
-  }
-  
-  .strapline-2 .subtitle {
-    font-size: 14px;
-  }
-}
-
 @media (max-width: 480px) {
   .strapline .main-title {
     font-size: 36px; /* Very small screens */
@@ -366,7 +371,7 @@ main .section .scroll-hero-wrapper {
   }
   
   .strapline .main-title .title-part-0 {
-    font-size: 36px; /* Very small screens starting size, will animate to 24px */
+    font-size: 20px; /* Very small screens starting size, will animate to 24px */
   }
   
   .strapline-2 .subtitle {

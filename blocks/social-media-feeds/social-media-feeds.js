@@ -4,8 +4,8 @@ const config = {
   itemWidth: 300,
   youtubeApiKey: 'AIzaSyCWyexvg44ePgSFHVjQhk8mNrhLBv_UbF8',
   youtubeChannelId: 'UCxtLxK0Wg6ouftRItp8gWNQ',
-  facebookAccessToken: 'EAALKZAwHGvLABOZCmjDQsZAExCjXP2kjypkCgZBq2zilElECypKqHWMEWu2P72YRJbGpheUuf9vXlD0Eul4jCD1HZBe2ugNFlQDSTFgmDRd2YzZCXjTJ15CKosi04J63e1vAChfiHb6SDNS4qJDoS4Fu6gZBVDgpP1YnziPfCHa44e7LRYNZCNFqmkdcqg3PHhSr',
-  facebookPageId: '475019282357334',
+  facebookAccessToken: 'EAATkOtEZAHLQBQBEYN79VuyB6NkQjPZBm2aGOhYEbnQZCYSo1XyRK7m4EuPYc4oBsdKYjc7FQDF1pRsb951ekwKbZCq3qGg5P1y8R7GcZBSGQkOiCWLMNpLXT4cmuxvZC1Fo1LoxVOh2aYe1XPMdydn5YsfLpbYNpAA8UatRZANfx2pCXEf1fraiyIMWGBX1LMQIgZDZD',
+  facebookPageId: 'SzkolaScherzo',
 };
 
 /**

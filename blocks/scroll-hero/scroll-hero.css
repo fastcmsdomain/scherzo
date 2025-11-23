@@ -268,7 +268,7 @@ main .section .scroll-hero-wrapper {
 
 /* Responsive text styling - Desktop first */
 .strapline .main-title {
-  font-family: var(--body-font-family);
+  font-family: var(--body-bold-family);
   font-size: 60px; /* Final desktop size after animation */
   font-weight: 500;
   line-height: 1.1;

@@ -35,6 +35,7 @@ main .hero-container {
 
 .hero {
   align-items: flex-end;
+  justify-content: center;
   display: flex;
   min-height: 650px;
   max-height: 650px;

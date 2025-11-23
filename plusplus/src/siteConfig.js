@@ -38,8 +38,6 @@ export async function initializeSiteConfig() {
 
     // An Environment is defined as a normal place to serve Helix Content
     const environments = [
-      { key: '.hlx.page', value: 'preview' },
-      { key: '.hlx.live', value: 'live' },
       { key: '.aem.page', value: 'preview' },
       { key: '.aem.live', value: 'live' },
     ];

@@ -1,0 +1,33 @@
+{
+  "total": 3,
+  "offset": 0,
+  "limit": 100,
+  "data": [
+    {
+      "path": "/slides/friends-section",
+      "title": "Friends Section",
+      "image": "/slides/friends-section/media_1e5f7d6c4b8a9c2d3e4f5g6h7i8j9k0l.jpeg",
+      "lastModified": 1703980800,
+      "published": 1703980800,
+      "description": "Begin the day with a healthy breakfast with friends"
+    },
+    {
+      "path": "/slides/skills-section", 
+      "title": "Skills Section",
+      "image": "/slides/skills-section/media_2f6g8h9i0j1k2l3m4n5o6p7q8r9s0t1u.jpeg",
+      "lastModified": 1703980800,
+      "published": 1703980800,
+      "description": "Delve into science and technology"
+    },
+    {
+      "path": "/slides/confidence-section",
+      "title": "Confidence Section", 
+      "image": "/slides/confidence-section/media_3g7h9i0j1k2l3m4n5o6p7q8r9s0t1u2v.jpeg",
+      "lastModified": 1703980800,
+      "published": 1703980800,
+      "description": "Build confidence through sports and activities"
+    }
+  ],
+  ":type": "multi-sheet",
+  ":version": 3
+}

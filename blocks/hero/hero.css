@@ -35,9 +35,10 @@ main .hero-container {
 
 .hero {
   align-items: flex-end;
+  justify-content: center;
   display: flex;
-  min-height: 500px;
-  max-height: 500px;
+  min-height: 650px;
+  max-height: 650px;
 }
 
 @media (width >= 900px) {
@@ -79,6 +80,7 @@ main .hero-container {
 @media (width >= 900px) {
   .hero h1 {
     padding: var(--space-26) 0 ;
+    font-size: var(--heading-font-size-xl);
   }
 }
 

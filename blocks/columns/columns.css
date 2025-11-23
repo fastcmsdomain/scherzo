@@ -40,11 +40,6 @@ main .section .columns-wrapper {
   width: 100%;
 }
 
-.columns > div {
-  display: grid;
-  grid-template-rows: 1fr 1fr;
-}
-
 .columns > div > div {
   order: 1;
 }
@@ -121,6 +116,8 @@ main .section .columns-wrapper .columns-content-col {
 
 @media (width >= 900px) {
   .columns > div {
+    display: grid;
+    grid-template-rows: 1fr 1fr;
     align-items: center;
     grid-template-rows: unset;
     grid-template-columns: 1fr 1fr;
@@ -176,4 +173,20 @@ main .section .columns-wrapper .columns.dwa-rzedy>div:last-child > .columns-cont
     align-self: flex-start;
       width: 100%;
   }
+  }
+
+  .columns-wrapper:has(.columns.text-zdjecie) {
+    padding: var(--space-36) 0;
+    max-width: 900px;
+    margin-inline: auto;
+    width: auto;
+  }
+
+  .columns-wrapper:has(.columns.text-zdjecie) .columns-img-col {
+    padding: 0;
+  }
+
+  .columns-wrapper:has(.columns.text-zdjecie) picture,
+  .columns-wrapper:has(.columns.text-zdjecie) img {
+    position: relative;
   }

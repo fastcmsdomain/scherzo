@@ -1,0 +1,430 @@
+/* stylelint-disable selector-pseudo-element-colon-notation, color-function-notation, alpha-value-notation, selector-class-pattern, declaration-block-no-redundant-longhand-properties, comment-empty-line-before, media-feature-range-notation, no-duplicate-selectors, no-descending-specificity, font-family-name-quotes, declaration-block-no-duplicate-properties, keyframes-name-pattern, rule-empty-line-before */
+/* Scroll Hero Block - Franklin Component CSS */
+
+/* Based on Wellington College Prep scroll animations */
+
+main .section .scroll-hero-wrapper {
+  min-width: 100vw;
+}
+
+/* Progress Navigation (floating left side) */
+.progress-nav {
+  display: block;
+  left: 40px;
+  position: fixed;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 10;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+@media (width <= 992px) {
+  .progress-nav {
+    display: none !important;
+  }
+}
+
+.progress-nav.is-active {
+  opacity: 1;
+  visibility: visible;
+}
+
+.progress-nav li {
+  cursor: pointer;
+  height: 2px;
+  padding: 7px 0;
+  position: relative;
+  transition: all 0.3s ease;
+  width: 14px;
+}
+
+.progress-nav li:before {
+  background: rgba(255, 255, 255, 0.5);
+  content: '';
+  height: 2px;
+  left: 0;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 100%;
+}
+
+.progress-nav li span {
+  color: #fff;
+  display: block;
+  font-size: 25px;
+  left: 100%;
+  margin-left: 10px;
+  opacity: 0;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  transition: all 0.3s ease;
+  visibility: hidden;
+}
+
+.progress-nav li.isActive {
+  overflow: hidden;
+  width: 30px;
+}
+
+.progress-nav li.isActive:after {
+  animation: nav_progress 1.5s linear infinite;
+  background-color: #fff;
+  content: '';
+  height: 2px;
+  position: absolute;
+  top: calc(50% - 1px);
+  width: 100%;
+}
+
+.progress-nav li:hover {
+  width: 30px;
+}
+
+.progress-nav li:hover:before {
+  background: #fff;
+}
+
+.progress-nav li:hover span {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* Main container */
+.scroll-hero-container {
+  height: auto;
+  position: relative;
+  width: 100%;
+  padding: 0;
+}
+
+/* Section structure - creates overlapping effect with extended scroll */
+.screen-section {
+  height: 100vh; /* Extended scroll space for pause effect */
+  position: relative;
+  margin-bottom: 50vh; /* Add offset between sections - wait for text to scroll up */
+}
+
+/* Remove margin from last section */
+.screen-section:last-child {
+  margin-bottom: 0;
+}
+
+.pin-spacer {
+  position: relative;
+  width: 100%;
+}
+
+.screen {
+  height: 100vh;
+  left: 0;
+  overflow: hidden;
+  position: relative;
+  top: 0;
+  width: 100%;
+  z-index: 1;
+}
+
+.screen.hold-pin {
+  position: sticky;
+  top: 0;
+}
+
+/* Screen stacking - each subsequent screen has higher z-index for text overlay */
+.screen-section:nth-child(1) .screen { z-index: 10; }
+.screen-section:nth-child(2) .screen { z-index: 20; }
+.screen-section:nth-child(3) .screen { z-index: 30; }
+.screen-section:nth-child(4) .screen { z-index: 40; }
+.screen-section:nth-child(5) .screen { z-index: 50; }
+
+/* Text overlays have higher z-index than backgrounds */
+.screen .strapline {
+  z-index: 15; /* Reduced from 100 to allow next section to appear above */
+}
+
+.screen-inner {
+  height: 100vh;
+  left: 0;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 2;
+}
+
+.screen-inner:before {
+  z-index: 1;
+  content: '';
+  display: block;
+  height: 30vh;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  position: absolute;
+  background: linear-gradient(180deg, transparent 0%, rgba(0, 32, 62, 0.8) 100%);
+}
+
+/* Fade overlay that appears when titles are centered */
+.fade {
+  background: linear-gradient(180deg, transparent 0%, rgba(0, 0, 0, 0.6) 100%);
+  bottom: 0;
+  height: 100%;
+  left: 0;
+  opacity: 0;
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 100%;
+  z-index: 1;
+}
+
+/* Background image setup - full viewport, static */
+.background {
+  height: 100vh;
+  left: 0;
+  position: fixed;
+  top: 0;
+  width: 100vw;
+  z-index: 0;
+}
+
+.background .img {
+  background-color: #00203e;
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  display: block;
+  height: 100vh;
+  left: 0;
+  position: absolute;
+  top: 0;
+  width: 100vw;
+  /* Remove will-change to keep image static */
+}
+
+.background .img:after {
+  background: linear-gradient(180deg, transparent 0%, rgba(0, 0, 0, 0.75) 100%);
+  bottom: 0;
+  content: '';
+  height: 42vh;
+  left: 0;
+  position: absolute;
+  width: 100%;
+}
+
+@media (max-width: 992px) {
+  .background .img:after {
+    background: linear-gradient(180deg, transparent 0%, rgba(0, 0, 0, 0.35) 100%);
+  }
+}
+
+/* Fade overlay */
+.fade {
+  background: rgba(0, 32, 62, 0.6);
+  height: 100%;
+  left: 0;
+  opacity: 0;
+  position: absolute;
+  top: 0;
+  width: 100%;
+  z-index: 1;
+}
+
+/* Text positioning and styling - starts 10% up from bottom, moves to center */
+.strapline {
+  left: 0;
+  margin: 0 auto;
+  position: absolute;
+  right: 0;
+  text-align: center;
+  top: calc(90% - 60px); /* Start 10% up from bottom */
+  transform: translateY(0); /* Visible on screen initially */
+  z-index: 100;
+  width: 60%;
+  color: #fff;
+  font-family: 'Montserrat-bold', sans-serif;
+  opacity: 1; /* Ensure visible initially */
+}
+
+
+/* Second strapline for subtitle - positioned below main strapline */
+.strapline-2 {
+  left: 0;
+  margin: 0 auto;
+  position: absolute;
+  right: 0;
+  text-align: center;
+  top: calc(90% - 40px + 20vh); /* Positioned below main strapline, shifted down 20% */
+  transform: translateY(0);
+  transform-origin: center center; /* Center transform origin for smooth animation */
+  z-index: 99; /* Slightly lower z-index than main strapline */
+  color: #fff;
+  font-family: 'Montserrat-bold', sans-serif;
+  width: 100%;
+  opacity: 0; /* Start with opacity 0, will fade in during animation */
+}
+
+/* Responsive text styling - Desktop first */
+.strapline .main-title {
+  font-family: var(--body-bold-family);
+  font-size: 60px; /* Final desktop size after animation */
+  font-weight: 500;
+  line-height: 1.1;
+  text-shadow: 0 0 18px rgba(0, 0, 0, 0.25);
+  margin: 0;
+  position: relative;
+  top: 0;
+}
+
+.strapline-2 .subtitle {
+  font-size: 18px; /* Final size after animation */
+  font-weight: 400;
+  letter-spacing: 0.07em;
+  text-shadow: 0 0 18px rgba(0, 0, 0, 0.25);
+  margin: 0;
+  position: relative;
+  top: 0;
+  max-width: 40%;
+  margin: 0 auto;
+}
+
+
+.strapline .time-indicator {
+  display: none;
+}
+
+/* Title parts styling */
+.strapline .main-title .title-part {
+  display: block;
+  margin: 5px 0 1rem;
+}
+
+.strapline .main-title .title-part-0 {
+  font-size: 3rem; /* Starting size, will animate to 40px */
+}
+
+.strapline .main-title .title-part-1 {
+  font-size: 0.3em;
+  line-height: 1.5;
+  text-transform: uppercase;
+  font-weight: 300;
+  opacity: 0.9;
+}
+
+/* Subtitle parts styling */
+.strapline-2 .subtitle .subtitle-part {
+  display: block;
+  margin: 3px 0;
+}
+
+.strapline-2 .subtitle .subtitle-part-0 {
+  font-size: 1.1rem;
+  font-weight: 400;
+  padding-bottom: 0.5rem;
+}
+
+.strapline-2 .subtitle .subtitle-part-1 {
+  font-size: 0.9rem;
+  font-weight: 300;
+  opacity: 0.8;
+}
+
+@media (max-width: 992px) {
+  .strapline-2 .subtitle {
+    max-width: 80%;
+  }
+
+  .strapline-2 .subtitle .subtitle-part-0 {
+    font-size: 0.8rem;
+  }
+  .strapline-2 .subtitle .subtitle-part-1 {
+    font-size: 0.6rem;
+  }
+}
+
+/* Responsive font sizes */
+@media (max-width: 992px) {
+  .strapline {
+    width: 80%;
+  }
+
+  .strapline .main-title {
+    font-size: 44px; /* Mobile final size */
+    line-height: 1.2;
+  }
+  
+  .strapline .main-title .title-part-0 {
+    font-size: 44px; /* Tablet starting size, will animate to 30px */
+  }
+  
+  .strapline-2 .subtitle {
+    font-size: 16px; /* Slightly smaller on tablet */
+  }
+}
+
+@media (max-width: 480px) {
+  .strapline .main-title {
+    font-size: 36px; /* Very small screens */
+    line-height: 1.3;
+  }
+  
+  .strapline .main-title .title-part-0 {
+    font-size: 20px; /* Very small screens starting size, will animate to 24px */
+  }
+  
+  .strapline-2 .subtitle {
+    font-size: 12px;
+  }
+}
+
+/* Animation keyframes */
+@keyframes nav_progress {
+  0% {
+    transform: translateX(-50px);
+  }
+  100% {
+    transform: translateX(50px);
+  }
+}
+
+/* Color scheme variants for different sections */
+.screen.friends .strapline .main-title {
+  color: #f7d117; /* Yellow for friends */
+}
+
+.screen.skills .strapline .main-title {
+  color: #a6d6c9; /* Teal for skills */
+}
+
+.screen.confidence .strapline .main-title {
+  color: #ff6b6b; /* Red for confidence */
+}
+
+/* Optimized performance */
+.screen,
+.background .img,
+.strapline,
+.strapline .main-title,
+.strapline-2,
+.strapline-2 .subtitle,
+.fade {
+  will-change: transform, opacity;
+  transform-style: preserve-3d;
+  backface-visibility: hidden;
+}
+
+/* Default fallback styling if GSAP fails to load */
+.no-gsap .screen {
+  position: relative;
+  margin-bottom: 50px;
+}
+
+.no-gsap .strapline {
+  position: relative;
+  top: auto;
+  transform: none;
+  padding: 50px 20px;
+}
+

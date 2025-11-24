@@ -3,6 +3,13 @@ export default function decorate(block) {
   const imageWrapper = document.createElement('div');
   imageWrapper.classList.add('image');
 
+  // Optimize LCP image: add fetchpriority="high" and loading="eager"
+  const img = block.querySelector('img');
+  if (img) {
+    img.setAttribute('fetchpriority', 'high');
+    img.setAttribute('loading', 'eager');
+  }
+
   // Always convert the second paragraph to h1 (original functionality)
   const title = document.createElement('h1');
   title.innerHTML = elemant[1].innerHTML;

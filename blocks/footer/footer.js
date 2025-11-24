@@ -25,15 +25,6 @@ export default async function decorate(block) {
     }
   });
 
-  // // Find button-container and add classList to btn-email button
-  // const buttonContainer = block.querySelector('.button-container');
-  // if (buttonContainer) {
-  //   const btnEmail = buttonContainer.querySelector('.btn-email');
-  //   if (btnEmail) {
-  //     btnEmail.classList.add('email-button');
-  //   }
-  // }
-
   const buttonEmail = document.querySelector('.button-container');
   if (buttonEmail) {
     buttonEmail.classList.remove('.button-container');

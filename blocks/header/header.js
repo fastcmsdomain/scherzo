@@ -300,6 +300,13 @@ export default async function decorate(block) {
     brandLink.closest('.button-container').className = '';
   }
 
+  // Optimize LCP: add fetchpriority="high" to brand logo
+  const brandImg = navBrand.querySelector('img');
+  if (brandImg) {
+    brandImg.setAttribute('fetchpriority', 'high');
+    brandImg.setAttribute('loading', 'eager');
+  }
+
   // Hide logo on scroll down and reveal on scroll up
   function fadeNavBrandOnScroll() {
     let lastScrollTop = 0;

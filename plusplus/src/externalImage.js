@@ -116,6 +116,7 @@ export function createOptimizedPicture(src, alt = '', eager = false, breakpoints
     } else {
       const img = document.createElement('img');
       img.setAttribute('loading', eager ? 'eager' : 'lazy');
+      if (eager) img.setAttribute('fetchpriority', 'high');
       img.setAttribute('alt', alt);
       picture.appendChild(img);
       img.setAttribute('src', appendQueryParams(url, searchParams));

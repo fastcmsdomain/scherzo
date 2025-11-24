@@ -5,7 +5,7 @@ const config = {
   youtubeApiKey: 'AIzaSyCWyexvg44ePgSFHVjQhk8mNrhLBv_UbF8',
   youtubeChannelId: 'UCxtLxK0Wg6ouftRItp8gWNQ',
   facebookAccessToken: 'EAATkOtEZAHLQBQBEYN79VuyB6NkQjPZBm2aGOhYEbnQZCYSo1XyRK7m4EuPYc4oBsdKYjc7FQDF1pRsb951ekwKbZCq3qGg5P1y8R7GcZBSGQkOiCWLMNpLXT4cmuxvZC1Fo1LoxVOh2aYe1XPMdydn5YsfLpbYNpAA8UatRZANfx2pCXEf1fraiyIMWGBX1LMQIgZDZD',
-  facebookPageId: 'SzkolaScherzo',
+  facebookPageId: 'A8TlULkWngISfZFhsJxC59B',
 };
 
 /**
@@ -33,12 +33,28 @@ async function fetchYouTubeFeed() {
 /**
  * Fetches Facebook feed
  * @returns {Promise<Array>} Array of Facebook feed items
+ * 
+ * NOTE: Requires a Page Access Token with 'pages_read_engagement' permission.
+ * Get it from: https://developers.facebook.com/tools/explorer/
+ * Select your app, generate token with 'pages_manage_metadata' and 'pages_read_engagement' permissions,
+ * then get the Page Access Token for your specific page.
  */
 async function fetchFacebookFeed() {
   const url = `https://graph.facebook.com/v12.0/${config.facebookPageId}/posts?fields=id,message,full_picture,created_time&access_token=${config.facebookAccessToken}&limit=20`;
   try {
     const response = await fetch(url);
     const data = await response.json();
+    
+    // Check for API errors
+    if (data.error) {
+      console.error('Facebook API Error:', data.error);
+      return [];
+    }
+    
+    if (!data.data) {
+      return [];
+    }
+    
     return data.data.map((item) => ({
       type: 'facebook',
       title: item.message ? item.message.substring(0, 100) : 'No message',
@@ -47,7 +63,7 @@ async function fetchFacebookFeed() {
       link: `https://www.facebook.com/${config.facebookPageId}/posts/${item.id}`,
     }));
   } catch (error) {
-    // Error fetching Facebook feed - return empty array
+    console.error('Error fetching Facebook feed:', error);
     return [];
   }
 }

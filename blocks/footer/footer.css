@@ -73,6 +73,10 @@ footer a:any-link {
     font-family: var(--body-regular-family);
 }
 
+footer p a:any-link:hover,
+footer p a:any-link:focus,
+footer a:any-link:hover,
+footer a:any-link:focus,
 footer ul li:has(a:any-link) a:hover,
 footer ul li:has(a:any-link) a:focus,
 footer ul li:has(a:any-link) a:focus-visible {

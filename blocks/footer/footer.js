@@ -24,4 +24,9 @@ export default async function decorate(block) {
       p.classList.add('parBtn');
     }
   });
+
+  const buttonEmail = document.querySelector('.button-container');
+  if (buttonEmail) {
+    buttonEmail.classList.remove('.button-container');
+  }
 }

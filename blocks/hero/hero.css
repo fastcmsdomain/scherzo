@@ -177,6 +177,11 @@ main .hero-container {
   background-color: var(--color-dark-blue);
 }
 
+.hero.bez-zdjeciem {
+  min-height: 300px;
+  max-width: 300px;
+}
+
 .bez-zdjeciem > * {
   position: relative;
   z-index: 1;

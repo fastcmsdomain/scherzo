@@ -182,7 +182,7 @@ header nav .nav-brand a:focus {
   transform: scale(1.02);
 }
 
-header .nav-brand {
+header .nav-brand img{
   max-width: 100px;
 }
 

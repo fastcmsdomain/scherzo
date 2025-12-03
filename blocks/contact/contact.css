@@ -9,13 +9,6 @@
   margin: 0 auto;
 }
 
-@media (width >= 768px) {
-  .contact {
-    align-items: center;
-    grid-template-columns: 1fr 1fr;
-  }
-}
-
 .section.content .contact-wrapper {
     max-width: 100%;
     width: 100%;
@@ -23,7 +16,7 @@
 
 .contact-info {
   padding: 1rem 3rem;
-  text-align: right;
+  text-align: center;
 }
 
 .contact-info h2 {
@@ -58,4 +51,15 @@
   .contact-info h2 {
     color: var(--heading-color-dark, #fff);
   }
-} 
+}
+
+@media (width >= 768px) {
+  .contact {
+    align-items: right;
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .contact-info {
+    text-align: center;
+  }
+}

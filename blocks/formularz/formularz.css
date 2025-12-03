@@ -5,9 +5,6 @@
 }
 
 .formularz-wrapper {
-  /* margin: 0 auto; */
-
-  /* max-width: var(--formularz-max-width); */
   width: 100%;
 }
 
@@ -15,9 +12,6 @@
   background: transparent;
   background-color: transparent !important;
   border: none;
-
-  /* border-radius: var(--formularz-border-radius);
-  box-shadow: var(--formularz-box-shadow); */
   height: 1250px;
   min-height: 400px;
   width: 100%;
@@ -39,11 +33,4 @@
   font-size: var(--body-font-size-s);
   padding: 1rem;
   text-align: center;
-}
-
-/* Responsive adjustments */
-@media (width <= 768px) {
-  .formularz-wrapper {
-    padding: 0 1rem;
-  }
 } 

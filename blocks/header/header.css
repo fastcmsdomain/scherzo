@@ -182,6 +182,9 @@ header nav .nav-brand a:focus {
   transform: scale(1.02);
 }
 
+header .nav-brand {
+  max-width: 100px;
+}
 
 
 /* sections */

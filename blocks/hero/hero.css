@@ -179,7 +179,7 @@ main .hero-container {
 
 .hero.bez-zdjeciem {
   min-height: 300px;
-  max-width: 300px;
+  max-height: 300px;
 }
 
 .bez-zdjeciem > * {

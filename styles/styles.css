@@ -160,7 +160,7 @@ body {
 }
 
 /* Page load overlay with logo - shows until body receives 'appear' class */
-body::before {
+html:has(body.appear)::before {
   background-color: var(--color-dark-blue);
   background-image: url('/images/logo.png');
   background-position: center center;
@@ -177,7 +177,7 @@ body::before {
 }
 
 /* Hide overlay when body receives 'appear' class */
-body.appear::before {
+html:has(body.appear)::before {
   opacity: 0;
   pointer-events: none;
   visibility: hidden;

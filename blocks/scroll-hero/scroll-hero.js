@@ -313,6 +313,7 @@ function createSectionAnimation(section, index, gsap, ScrollTrigger) {
   }
 
   // Title-part-0 font-size animation - responsive scaling
+  // Font size decreases quickly as strapline shifts up
   const titlePart0 = document.querySelector(`${sectionSelector} .title-part-0`);
   if (titlePart0) {
     // Get responsive font sizes based on window width
@@ -327,19 +328,54 @@ function createSectionAnimation(section, index, gsap, ScrollTrigger) {
       if (width <= 992) {
         return 30; // Tablet
       }
-      return 40; // Desktop
+      return 36; // Desktop
     };
 
     const targetFontSize = getFontSize();
 
-    // Animate font-size during scroll
+    // Animate font-size during scroll - decreased over shorter distance for quicker effect
     gsap.to(`${sectionSelector} .title-part-0`, {
       fontSize: `${targetFontSize}px`,
       ease: 'none',
       scrollTrigger: {
         trigger: sectionSelector,
         start: 'top top',
-        end: '+=600vh',
+        end: '+=400vh', // Reduced from 600vh to 200vh for quicker font-size decrease
+        scrub: 0.5,
+      },
+    });
+  }
+
+  // Title-part-1 font-size animation - responsive scaling
+  // Font size decreases quickly as strapline shifts up
+  const titlePart1 = document.querySelector(`${sectionSelector} .title-part-1`);
+  if (titlePart1) {
+    // Get responsive font sizes based on window width
+    // Title-part-1 is smaller than title-part-0 (proportional decrease)
+    const getFontSize = () => {
+      const width = window.innerWidth;
+      if (width <= 480) {
+        return 14; // Very small screens - proportional to title-part-0
+      }
+      if (width <= 768) {
+        return 16; // Mobile - proportional to title-part-0
+      }
+      if (width <= 992) {
+        return 18; // Tablet - proportional to title-part-0
+      }
+      return 14; // Desktop - proportional to title-part-0
+    };
+
+    const targetFontSize = getFontSize();
+
+    // Animate font-size during scroll - decreased over shorter distance for quicker effect
+    gsap.to(`${sectionSelector} .title-part-1`, {
+      fontSize: `${targetFontSize}px`,
+      ease: 'none',
+      scrollTrigger: {
+        trigger: sectionSelector,
+        start: 'top top',
+        end: '+=400vh', // Same scroll distance as title-part-0
         scrub: 0.5,
       },
     });

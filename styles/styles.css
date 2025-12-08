@@ -173,12 +173,12 @@ html::before {
   top: 0;
   width: 100vw;
   z-index: 9999;
-  transition: opacity 0.5s ease-out, visibility 0.5s ease-out;
+  /* transition: opacity 0.5s ease-out, visibility 0.5s ease-out; */
 }
 
 /* Hide overlay when body receives 'appear' class */
 html:has(body.appear)::before {
-  opacity: 0;
+  /* opacity: 0; */
   pointer-events: none;
   visibility: hidden;
 }

@@ -171,7 +171,6 @@ header nav .nav-brand a {
   line-height: 1.4;;
   padding-bottom: 50px;
   text-align: center;
-  text-indent: -9999px;
   transition: transform .2s ease;
   width: 600px;
 }
@@ -184,7 +183,7 @@ header nav .nav-brand a:focus {
 
 header .nav-brand img,
 header .nav-brand picture {
-  max-width: 100px;
+  max-width: 128px;
   height: auto;
 }
 

@@ -29,4 +29,22 @@ export default async function decorate(block) {
   if (buttonEmail) {
     buttonEmail.classList.remove('.button-container');
   }
+
+  const footerLogo = document.querySelector('.footer-logo');
+if (footerLogo) {
+  const h3 = footerLogo.querySelector('h3');
+  if (h3) {
+    // Split innerHTML on <br> (as HTML, not just \n) and trim
+    const lines = h3.innerHTML.split(/<br\s*\/?>/i).map(line => line.trim());
+    h3.innerHTML = lines
+      .map(line => {
+        // For each line, split by space and wrap each word with a span
+        return line
+          .split(' ')
+          .map(word => `<span>${word}</span>`)
+          .join(' ');
+      })
+      .join('<br>');
+  }
+}
 }

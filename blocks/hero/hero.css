@@ -37,14 +37,16 @@ main .hero-container {
   align-items: flex-end;
   justify-content: center;
   display: flex;
-  min-height: 650px;
-  max-height: 650px;
+  min-height: 350px;
+  max-height: 350px;
 }
 
 @media (width >= 900px) {
     .hero {
         align-items: end;
         justify-content: center;
+        min-height: 650px;
+        max-height: 650px;
   }
 
   .hero > div > div {

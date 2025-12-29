@@ -216,7 +216,8 @@ main .section .scroll-hero-wrapper {
 
 @media (max-width: 992px) {
   .background .img:after {
-    background: linear-gradient(180deg, transparent 0%, rgba(0, 0, 0, 0.35) 100%);
+    background: linear-gradient(180deg, transparent 0%, rgba(0, 0, 0, 3.65) 100%);
+    height: 60vh;
   }
 }
 
@@ -242,7 +243,7 @@ main .section .scroll-hero-wrapper {
   top: calc(90% - 60px); /* Start 10% up from bottom */
   transform: translateY(0); /* Visible on screen initially */
   z-index: 100;
-  width: 60%;
+  width: 700px;
   color: #fff;
   font-family: 'Montserrat-bold', sans-serif;
   opacity: 1; /* Ensure visible initially */
@@ -371,7 +372,7 @@ main .section .scroll-hero-wrapper {
   }
   
   .strapline .main-title .title-part-0 {
-    font-size: 20px; /* Very small screens starting size, will animate to 24px */
+    font-size: 30px; /* Very small screens starting size, will animate to 24px */
   }
   
   .strapline-2 .subtitle {

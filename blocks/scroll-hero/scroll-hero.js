@@ -101,9 +101,11 @@ const createSection = (section) => {
     .map((part, i) => `<span class="title-part title-part-${i}">${part}</span>`)
     .join('');
 
-  // Subtitle parts
-  const subtitleParts = section.subtitleParts?.length ? section.subtitleParts : [section.subtitle];
-  const subtitleHtml = subtitleParts
+  // Subtitle parts - use HTML parts if available (preserves buttons)
+  const subtitlePartsToUse = section.subtitleHtmlParts?.length
+    ? section.subtitleHtmlParts
+    : (section.subtitleParts?.length ? section.subtitleParts : [section.subtitle]);
+  const subtitleHtml = subtitlePartsToUse
     .map((part, i) => `<span class="subtitle-part subtitle-part-${i}">${part}</span>`)
     .join('');
 
@@ -129,7 +131,7 @@ const createSection = (section) => {
 /**
  * Initializes the simple parallax cover effect
  * Each section slides over the previous one when scrolling
- * Text on first slide is static, text on other slides animates
+ * Text on first and second slide is static, text on other slides animates
  * @param {Object} gsap - GSAP instance
  * @param {Object} ScrollTrigger - ScrollTrigger instance
  * @param {number} totalSections - Total number of sections
@@ -167,7 +169,19 @@ function initParallaxCover(gsap, ScrollTrigger, totalSections) {
       },
     );
 
-    // Text animation for subsequent slides
+    // Second section - static text (like first slide), no text animations
+    if (index === 1) {
+      // Set static positions for second slide
+      if (strapline) {
+        gsap.set(strapline, { top: '50%', y: '-50%' });
+      }
+      if (strapline2) {
+        gsap.set(strapline2, { top: '50%', opacity: 1 });
+      }
+      return;
+    }
+
+    // Text animation for subsequent slides (3rd and beyond)
     // Text starts at bottom (90%) and moves to center (50%) then to top (10%)
     if (strapline) {
       // Initial position - text at bottom
@@ -335,6 +349,19 @@ export default async function decorate(block) {
           const mainTitleParts = allTextParts.slice(0, 2); // First 2 rows
           const subtitleParts = allTextParts.slice(2, 4); // 3rd and 4th rows
 
+          // Check for links in subtitle rows (3rd and 4th elements) - preserve HTML
+          const subtitleElements = Array.from(textElements).slice(2, 4);
+          const subtitleHtmlParts = subtitleElements.map((el) => {
+            const link = el.querySelector('a');
+            if (link) {
+              // Convert link to button
+              const href = link.getAttribute('href');
+              const text = link.textContent.trim();
+              return `<a href="${href}" class="scroll-hero-button">${text}</a>`;
+            }
+            return el.textContent.trim();
+          }).filter((text) => text);
+
           // Extract image (same as slide-builder)
           const imgElement = doc.querySelector('picture source[media="(min-width: 600px)"]');
           let imageSrc = '';
@@ -360,6 +387,7 @@ export default async function decorate(block) {
             id: `section-${item.path.split('/').pop()}`,
             mainTitleParts,
             subtitleParts,
+            subtitleHtmlParts, // HTML parts with buttons preserved
             title: mainTitleParts[0] || item.title,
             subtitle: subtitleParts.join(' '),
             description: descriptionElement ? descriptionElement.textContent.trim() : '',

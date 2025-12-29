@@ -80,273 +80,162 @@ function initBasicScroll() {
   });
 }
 
-// Optimized section creation
+/**
+ * Creates a section element with parallax cover structure
+ * @param {Object} section - Section data object
+ * @returns {HTMLElement} - Section DOM element
+ */
 const createSection = (section) => {
   const sectionDiv = document.createElement('div');
   sectionDiv.className = `screen-section ${section.id}`;
 
-  // Optimized background images creation
+  // Only use first background image for parallax cover effect
   const backgroundImages = section.backgroundImages || [section.image];
   const bgImagesHtml = backgroundImages
     .map((img, i) => `<div class="img image-bg image-bg-${i}" data-bg="${img}" ${i > 0 ? 'style="display:none"' : ''}></div>`)
     .join('');
 
-  // Optimized title parts creation - main-title gets first 2 rows in spans
+  // Main title parts
   const mainTitleParts = section.mainTitleParts?.length ? section.mainTitleParts : [section.title];
   const mainTitleHtml = mainTitleParts
     .map((part, i) => `<span class="title-part title-part-${i}">${part}</span>`)
     .join('');
 
-  // Subtitle gets 3rd and 4th rows in individual spans
+  // Subtitle parts
   const subtitleParts = section.subtitleParts?.length ? section.subtitleParts : [section.subtitle];
   const subtitleHtml = subtitleParts
     .map((part, i) => `<span class="subtitle-part subtitle-part-${i}">${part}</span>`)
     .join('');
 
-  // Template with minimal whitespace
-  sectionDiv.innerHTML = `<div class="pin-spacer"><div class="screen ${section.id.replace('section-', '')} hold-pin"><div class="screen-inner"><div class="background">${bgImagesHtml}</div><div class="fade"></div><div class="strapline"><h1 class="main-title">${mainTitleHtml}</h1></div><div class="strapline-2" style="opacity:1;"><h2 class="subtitle">${subtitleHtml}</h2></div></div></div></div>`;
+  // Simplified structure for parallax cover effect
+  sectionDiv.innerHTML = `
+    <div class="screen ${section.id.replace('section-', '')}">
+      <div class="screen-inner">
+        <div class="background">${bgImagesHtml}</div>
+        <div class="fade"></div>
+        <div class="strapline">
+          <h1 class="main-title">${mainTitleHtml}</h1>
+        </div>
+        <div class="strapline-2">
+          <h2 class="subtitle">${subtitleHtml}</h2>
+        </div>
+      </div>
+    </div>
+  `;
 
   return sectionDiv;
 };
 
-function createSectionAnimation(section, index, gsap, ScrollTrigger) {
-  const sectionSelector = `.${section.id.replace('section-', '')}`;
+/**
+ * Initializes the simple parallax cover effect
+ * Each section slides over the previous one when scrolling
+ * Text on first slide is static, text on other slides animates
+ * @param {Object} gsap - GSAP instance
+ * @param {Object} ScrollTrigger - ScrollTrigger instance
+ * @param {number} totalSections - Total number of sections
+ */
+function initParallaxCover(gsap, ScrollTrigger, totalSections) {
+  const sections = document.querySelectorAll('.screen-section');
 
-  // Enhanced timeline based on Wellington College exact pattern
-  // Title and subtitle move to center individually, then pause for next slide
-  // Calculate initial top position for strapline-2: calc(90% - 40px + 20vh)
-  const vh = window.innerHeight;
-  const initialTop = (vh * 0.9) - 40 + (vh * 0.2); // 90% - 40px + 20vh
+  sections.forEach((section, index) => {
+    const sectionSelector = `.screen-section:nth-child(${index + 1})`;
+    const strapline = section.querySelector('.strapline');
+    const strapline2 = section.querySelector('.strapline-2');
 
-  const timeline = gsap.timeline()
-    // Set initial state for strapline-2 to match CSS
-    .set(`${sectionSelector} .strapline-2`, {
-      top: `${initialTop}px`,
-      y: '0',
-      scale: 1,
-      opacity: 1,
-    }, 0)
-    // Phase 0: Ensure strapline is visible throughout scroll
-    .to(`${sectionSelector} .strapline`, {
-      opacity: 1,
-      duration: 0.1,
-      ease: 'power2.out',
-    }, 0)
-    // Phase 1: Move strapline container and all text elements together
-    .to(`${sectionSelector} .strapline`, {
-      top: '4rem',
-      y: '0',
-      duration: 1, // Duration doesn't matter with scrub - controlled by scroll
-      ease: 'none', // Use 'none' for scrub animations
-    }, 0)
-    // Phase 2: strapline-2 animation - move to center of page with progressive opacity
-    .to(`${sectionSelector} .strapline-2`, {
-      opacity: 1, // Fade in from 0 to 1
-      top: '50vh',
-      y: '-50%', // Center vertically
-      scale: 1.2, // Make it slightly larger for visibility
-      duration: 1,
-      ease: 'none', // Use 'none' for scrub animations
-    }, 0.5) // Start when strapline is halfway to top
-    // Phase 3: Fade overlay appears (2x speed)
-    .to(`${sectionSelector} .fade`, {
-      opacity: 1,
-      duration: 0.5,
-      ease: 'none', // Use 'none' for scrub animations
-    }, 0.1); // Start after subtitle positioning
+    // First section - static text, no animations
+    if (index === 0) {
+      updateProgressNav(0);
+      return;
+    }
 
-  // Multiple background images effect
-  const backgroundImages = document.querySelectorAll(`${sectionSelector} .background .img`);
-
-  // Background image switching - only after strapline-2 reaches center
-  // Strapline-2 animation starts at timeline time 0.5 and reaches center at time 1.0
-  const strapline2CenterTime = 1.0; // Timeline time when strapline-2 reaches center
-
-  // Create ScrollTrigger with smooth reverse scrolling - with CSS offset spacing
-  ScrollTrigger.create({
-    trigger: `${sectionSelector}`,
-    start: 'top top',
-    end: '+=600vh', // Reduced since CSS margin-bottom creates the delay
-    pin: true,
-    pinSpacing: false,
-    animation: timeline,
-    scrub: 0.5, // Balanced scrub for smooth control
-    onEnter: () => updateProgressNav(index),
-    onEnterBack: () => updateProgressNav(index),
-    onLeave: () => clearProgressNav(),
-    onLeaveBack: () => clearProgressNav(),
-    // Smooth reverse behavior and image switching
-    onUpdate: () => {
-      // Ensure timeline plays smoothly in both directions
-      timeline.timeScale(1);
-
-      // Handle background image switching only after strapline-2 reaches center
-      if (backgroundImages.length > 1) {
-        const currentTime = timeline.time();
-        const isStrapline2Centered = currentTime >= strapline2CenterTime;
-
-        if (isStrapline2Centered) {
-          // Calculate progress after center (0 to 1)
-          const timelineDuration = timeline.duration();
-          const remainingTime = timelineDuration - strapline2CenterTime;
-          const afterCenterProgress = remainingTime > 0
-            ? (currentTime - strapline2CenterTime) / remainingTime
-            : 0;
-
-          // Switch images based on progress after center
-          backgroundImages.forEach((img, imgIndex) => {
-            if (imgIndex === 0) {
-              // First image fades out as others appear
-              const firstImageFadeStart = 0.2; // Start fading first image after 20% progress
-              if (afterCenterProgress >= firstImageFadeStart) {
-                const fadeProgress = Math.min(
-                  (afterCenterProgress - firstImageFadeStart) / 0.3,
-                  1,
-                );
-                gsap.set(img, { opacity: 1 - fadeProgress });
-              } else {
-                gsap.set(img, { opacity: 1 });
-              }
-              return;
-            }
-
-            // Distribute remaining images across the remaining scroll
-            const imageCount = backgroundImages.length - 1;
-            const imageSwitchPoint = (imgIndex - 1) / imageCount;
-            const imageFadePoint = (imgIndex - 0.5) / imageCount;
-
-            if (afterCenterProgress >= imageSwitchPoint
-              && afterCenterProgress < imageFadePoint) {
-              // Show this image
-              if (img.style.display === 'none') {
-                img.style.display = 'block';
-              }
-              const showProgress = (afterCenterProgress - imageSwitchPoint)
-                / (imageFadePoint - imageSwitchPoint);
-              gsap.set(img, { opacity: Math.min(showProgress * 2, 1) });
-            } else if (afterCenterProgress >= imageFadePoint
-              && imgIndex < backgroundImages.length - 1) {
-              // Fade out this image (next one is showing)
-              const fadeProgress = (afterCenterProgress - imageFadePoint)
-                / (0.5 / imageCount);
-              const newOpacity = Math.max(1 - fadeProgress * 2, 0);
-              gsap.set(img, { opacity: newOpacity });
-              if (newOpacity <= 0) {
-                img.style.display = 'none';
-              }
-            } else if (afterCenterProgress < imageSwitchPoint) {
-              // Hide images that haven't reached their switch point yet
-              if (img.style.display !== 'none') {
-                img.style.display = 'none';
-                gsap.set(img, { opacity: 0 });
-              }
-            }
-          });
-        } else {
-          // Before strapline-2 reaches center, ensure only first image is visible
-          backgroundImages.forEach((img, imgIndex) => {
-            if (imgIndex === 0) {
-              gsap.set(img, { opacity: 1, display: 'block' });
-            } else if (img.style.display !== 'none') {
-              img.style.display = 'none';
-              gsap.set(img, { opacity: 0 });
-            }
-          });
-        }
-      }
-    },
-  });
-
-  // Keep background images static - no parallax effect
-  // Images remain fixed while text overlays shift up
-
-  // Text entrance animation removed - handled by main timeline
-  // The main timeline controls strapline visibility and positioning
-
-  // Text exit animation - let h1 and h2 stay at top before exiting
-  gsap.to(`${sectionSelector} .strapline`, {
-    y: -400, // Move much further up to completely exit screen
-    opacity: 0, // Fade out completely
-    ease: 'none',
-    scrollTrigger: {
-      trigger: sectionSelector,
-      start: '60% top', // Start earlier since CSS spacing creates the delay
-      end: '90% top', // Complete exit before section ends
-      scrub: 1, // Smooth exit
-    },
-  });
-
-  // Brightness effect for depth during overlap (no scale)
-  gsap.fromTo(`${sectionSelector}`, {
-    filter: 'brightness(0.8)',
-  }, {
-    filter: 'brightness(1)',
-    ease: 'none',
-    scrollTrigger: {
-      trigger: sectionSelector,
-      start: 'top bottom',
-      end: 'top top',
-      scrub: 1,
-    },
-  });
-
-  // Individual title parts animation with reverse scrolling (no scale)
-  const mainTitleParts = document.querySelectorAll(`${sectionSelector} .title-part`);
-  if (mainTitleParts.length > 0) {
-    gsap.fromTo(mainTitleParts, {
-      y: 100,
-      opacity: 0,
-      rotationX: 15,
-    }, {
-      y: 0,
-      opacity: 1,
-      rotationX: 0,
-      ease: 'none', // Use 'none' for scrub animations
-      stagger: 0.15,
-      scrollTrigger: {
-        trigger: sectionSelector,
-        start: 'top 80%',
-        end: 'top 50%',
-        scrub: 1,
+    // Each subsequent section slides up from bottom to cover the previous one
+    gsap.fromTo(
+      section,
+      { yPercent: 100 },
+      {
+        yPercent: 0,
+        ease: 'none',
+        scrollTrigger: {
+          trigger: section,
+          start: 'top bottom',
+          end: 'top top',
+          scrub: true,
+          onEnter: () => updateProgressNav(index),
+          onEnterBack: () => updateProgressNav(index),
+          onLeaveBack: () => updateProgressNav(index - 1),
+        },
       },
-    });
-  }
+    );
 
-  // Title-part-0 font-size animation - responsive scaling
-  const titlePart0 = document.querySelector(`${sectionSelector} .title-part-0`);
-  if (titlePart0) {
-    // Get responsive font sizes based on window width
-    const getFontSize = () => {
-      const width = window.innerWidth;
-      if (width <= 480) {
-        return 24; // Very small screens
-      }
-      if (width <= 768) {
-        return 27; // Mobile
-      }
-      if (width <= 992) {
-        return 30; // Tablet
-      }
-      return 40; // Desktop
-    };
+    // Text animation for subsequent slides
+    // Text starts at bottom (90%) and moves to center (50%) then to top (10%)
+    if (strapline) {
+      // Initial position - text at bottom
+      gsap.set(strapline, { top: '80%', y: '-50%' });
 
-    const targetFontSize = getFontSize();
+      // Animate text from bottom to center as section enters
+      gsap.to(strapline, {
+        top: '50%',
+        y: '-50%',
+        ease: 'none',
+        scrollTrigger: {
+          trigger: section,
+          start: 'top bottom',
+          end: 'top top',
+          scrub: true,
+        },
+      });
 
-    // Animate font-size during scroll
-    gsap.to(`${sectionSelector} .title-part-0`, {
-      fontSize: `${targetFontSize}px`,
-      ease: 'none',
-      scrollTrigger: {
-        trigger: sectionSelector,
-        start: 'top top',
-        end: '+=600vh',
-        scrub: 0.5,
-      },
-    });
-  }
+      // Then animate from center to top as user continues scrolling
+      gsap.to(strapline, {
+        top: '15%',
+        ease: 'none',
+        scrollTrigger: {
+          trigger: section,
+          start: 'top top',
+          end: '+=50%',
+          scrub: true,
+        },
+      });
+    }
+
+    // Subtitle animation - follows main title but slightly delayed
+    if (strapline2) {
+      // Initial position - subtitle below main title at bottom
+      gsap.set(strapline2, { top: '95%', y: '0', opacity: 0 });
+
+      // Animate subtitle: fade in and move to center
+      gsap.to(strapline2, {
+        top: '60%',
+        opacity: 1,
+        ease: 'none',
+        scrollTrigger: {
+          trigger: section,
+          start: 'top 50%',
+          end: 'top top',
+          scrub: true,
+        },
+      });
+
+      // Then animate to top following main title
+      gsap.to(strapline2, {
+        top: '28%',
+        ease: 'none',
+        scrollTrigger: {
+          trigger: section,
+          start: 'top top',
+          end: '+=50%',
+          scrub: true,
+        },
+      });
+    }
+  });
 }
 
-// Optimized scroll animations initialization
+/**
+ * Initializes parallax cover scroll animations
+ * @param {Array} sections - Array of section data objects
+ */
 const initScrollAnimations = (sections) => {
   const { gsap, ScrollTrigger } = window;
 
@@ -360,35 +249,36 @@ const initScrollAnimations = (sections) => {
   // Batch DOM operations for better performance
   const sectionElements = document.querySelectorAll('.screen-section');
   const navItems = document.querySelectorAll('.progress-nav li');
+  const totalSections = sections.length;
 
   // Set background images efficiently
   sections.forEach((section, sectionIndex) => {
     const sectionElement = sectionElements[sectionIndex];
-    if (sectionElement && section.backgroundImages) {
-      section.backgroundImages.forEach((img, imgIndex) => {
-        const bgElement = sectionElement.querySelector(`.image-bg-${imgIndex}`);
-        if (bgElement) {
-          bgElement.style.backgroundImage = `url(${img})`;
-        }
-      });
+    if (!sectionElement) return;
+
+    // Use only the first background image
+    const bgElement = sectionElement.querySelector('.image-bg-0');
+    if (bgElement && section.backgroundImages && section.backgroundImages[0]) {
+      bgElement.style.backgroundImage = `url(${section.backgroundImages[0]})`;
+      bgElement.style.display = 'block';
     }
   });
 
-  // Create animations for each section
-  sections.forEach((section, index) => {
-    createSectionAnimation(section, index, gsap, ScrollTrigger);
-  });
+  // Initialize the simple parallax cover effect
+  initParallaxCover(gsap, ScrollTrigger, totalSections);
 
-  // Optimized progress navigation with event delegation
+  // Progress navigation click handlers
   if (navItems.length > 0) {
     navItems.forEach((li, index) => {
       li.addEventListener('click', () => {
-        const targetSection = `.screen-section:nth-child(${index + 1}) .screen`;
+        const targetSection = sectionElements[index];
+        if (targetSection) {
         gsap.to(window, {
           duration: 1,
-          scrollTo: targetSection,
+            scrollTo: { y: targetSection, autoKill: false },
           ease: 'power2.inOut',
         });
+        }
       });
     });
   }

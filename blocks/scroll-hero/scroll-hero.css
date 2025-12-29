@@ -1,7 +1,7 @@
 /* stylelint-disable selector-pseudo-element-colon-notation, color-function-notation, alpha-value-notation, selector-class-pattern, declaration-block-no-redundant-longhand-properties, comment-empty-line-before, media-feature-range-notation, no-duplicate-selectors, no-descending-specificity, font-family-name-quotes, declaration-block-no-duplicate-properties, keyframes-name-pattern, rule-empty-line-before */
 /* Scroll Hero Block - Franklin Component CSS */
 
-/* Based on Wellington College Prep scroll animations */
+/* Parallax Cover Effect - Each section covers the viewport and slides over the previous */
 
 main .section .scroll-hero-wrapper {
   min-width: 100vw;
@@ -14,7 +14,7 @@ main .section .scroll-hero-wrapper {
   position: fixed;
   top: 50%;
   transform: translateY(-50%);
-  z-index: 10;
+  z-index: 1000;
   list-style: none;
   margin: 0;
   padding: 0;
@@ -93,69 +93,51 @@ main .section .scroll-hero-wrapper {
   visibility: visible;
 }
 
-/* Main container */
+/* Main container - parallax stack */
 .scroll-hero-container {
-  height: auto;
   position: relative;
   width: 100%;
   padding: 0;
 }
 
-/* Section structure - creates overlapping effect with extended scroll */
+/* Section structure - full viewport sections that stack */
 .screen-section {
-  height: 100vh; /* Extended scroll space for pause effect */
-  position: relative;
-  margin-bottom: 50vh; /* Add offset between sections - wait for text to scroll up */
-}
-
-/* Remove margin from last section */
-.screen-section:last-child {
-  margin-bottom: 0;
-}
-
-.pin-spacer {
-  position: relative;
+  height: 100vh;
   width: 100%;
+  position: sticky;
+  top: 0;
+  overflow: hidden;
 }
+
+/* Each section stacks above the previous - higher z-index for later sections */
+.screen-section:nth-child(1) { z-index: 1; }
+.screen-section:nth-child(2) { z-index: 2; }
+.screen-section:nth-child(3) { z-index: 3; }
+.screen-section:nth-child(4) { z-index: 4; }
+.screen-section:nth-child(5) { z-index: 5; }
+.screen-section:nth-child(6) { z-index: 6; }
+.screen-section:nth-child(7) { z-index: 7; }
+.screen-section:nth-child(8) { z-index: 8; }
+.screen-section:nth-child(9) { z-index: 9; }
+.screen-section:nth-child(10) { z-index: 10; }
 
 .screen {
   height: 100vh;
-  left: 0;
-  overflow: hidden;
-  position: relative;
-  top: 0;
   width: 100%;
-  z-index: 1;
-}
-
-.screen.hold-pin {
-  position: sticky;
-  top: 0;
-}
-
-/* Screen stacking - each subsequent screen has higher z-index for text overlay */
-.screen-section:nth-child(1) .screen { z-index: 10; }
-.screen-section:nth-child(2) .screen { z-index: 20; }
-.screen-section:nth-child(3) .screen { z-index: 30; }
-.screen-section:nth-child(4) .screen { z-index: 40; }
-.screen-section:nth-child(5) .screen { z-index: 50; }
-
-/* Text overlays have higher z-index than backgrounds */
-.screen .strapline {
-  z-index: 15; /* Reduced from 100 to allow next section to appear above */
+  position: relative;
+  overflow: hidden;
 }
 
 .screen-inner {
   height: 100vh;
-  left: 0;
-  position: fixed;
-  top: 0;
   width: 100%;
-  z-index: 2;
+  position: relative;
+  top: 0;
+  left: 0;
 }
 
 .screen-inner:before {
-  z-index: 1;
+  z-index: 2;
   content: '';
   display: block;
   height: 30vh;
@@ -164,32 +146,26 @@ main .section .scroll-hero-wrapper {
   bottom: 0;
   position: absolute;
   background: linear-gradient(180deg, transparent 0%, rgba(0, 32, 62, 0.8) 100%);
+  pointer-events: none;
 }
 
-/* Fade overlay that appears when titles are centered */
+/* Fade overlay */
 .fade {
-  background: linear-gradient(180deg, transparent 0%, rgba(0, 0, 0, 0.6) 100%);
-  bottom: 0;
-  height: 100%;
-  left: 0;
-  opacity: 0;
-  position: absolute;
-  right: 0;
-  top: 0;
-  width: 100%;
-  z-index: 1;
+  display: none;
 }
 
-/* Background image setup - full viewport, static */
+/* Background image setup - full viewport cover */
 .background {
   height: 100vh;
-  left: 0;
-  position: fixed;
+  width: 100%;
+  position: absolute;
   top: 0;
-  width: 100vw;
+  left: 0;
   z-index: 0;
+  overflow: hidden;
 }
 
+/* Background image - covers viewport */
 .background .img {
   background-color: #00203e;
   background-position: center center;
@@ -197,18 +173,17 @@ main .section .scroll-hero-wrapper {
   background-size: cover;
   display: block;
   height: 100vh;
-  left: 0;
+  width: 100%;
   position: absolute;
   top: 0;
-  width: 100vw;
-  /* Remove will-change to keep image static */
+  left: 0;
 }
 
 .background .img:after {
-  background: linear-gradient(180deg, transparent 0%, rgba(0, 0, 0, 0.75) 100%);
+  background: linear-gradient(180deg, transparent 0%, rgba(0, 0, 0, 0.6) 100%);
   bottom: 0;
   content: '';
-  height: 42vh;
+  height: 50vh;
   left: 0;
   position: absolute;
   width: 100%;
@@ -221,50 +196,50 @@ main .section .scroll-hero-wrapper {
   }
 }
 
-/* Fade overlay */
-.fade {
-  background: rgba(0, 32, 62, 0.6);
-  height: 100%;
-  left: 0;
-  opacity: 0;
-  position: absolute;
-  top: 0;
-  width: 100%;
-  z-index: 1;
-}
-
-/* Text positioning and styling - starts 10% up from bottom, moves to center */
+/* Text positioning and styling - centered in viewport */
 .strapline {
   left: 0;
   margin: 0 auto;
   position: absolute;
   right: 0;
   text-align: center;
-  top: calc(90% - 60px); /* Start 10% up from bottom */
-  transform: translateY(0); /* Visible on screen initially */
-  z-index: 100;
-  width: 700px;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 10;
+  width: 60%;
   color: #fff;
   font-family: 'Montserrat-bold', sans-serif;
-  opacity: 1; /* Ensure visible initially */
+  opacity: 1;
+  will-change: top, transform;
 }
 
+/* First section text - static position */
+.screen-section:first-child .strapline {
+  top: 50%;
+  transform: translateY(-50%);
+}
 
-/* Second strapline for subtitle - positioned below main strapline */
+.screen-section:first-child .strapline-2 {
+  top: 60%;
+  opacity: 1;
+}
+
+/* Second strapline for subtitle - positioned below main title */
 .strapline-2 {
   left: 0;
   margin: 0 auto;
   position: absolute;
   right: 0;
   text-align: center;
-  top: calc(90% - 40px + 20vh); /* Positioned below main strapline, shifted down 20% */
+  top: 60%;
   transform: translateY(0);
-  transform-origin: center center; /* Center transform origin for smooth animation */
-  z-index: 99; /* Slightly lower z-index than main strapline */
+  transform-origin: center center;
+  z-index: 9;
   color: #fff;
   font-family: 'Montserrat-bold', sans-serif;
   width: 100%;
-  opacity: 0; /* Start with opacity 0, will fade in during animation */
+  opacity: 1;
+  will-change: top, opacity;
 }
 
 /* Responsive text styling - Desktop first */
@@ -403,20 +378,21 @@ main .section .scroll-hero-wrapper {
   color: #ff6b6b; /* Red for confidence */
 }
 
-/* Optimized performance */
+/* Optimized performance for parallax */
+.screen-section,
 .screen,
 .background .img,
 .strapline,
-.strapline .main-title,
-.strapline-2,
-.strapline-2 .subtitle,
-.fade {
-  will-change: transform, opacity;
-  transform-style: preserve-3d;
+.strapline-2 {
+  will-change: transform;
   backface-visibility: hidden;
 }
 
 /* Default fallback styling if GSAP fails to load */
+.no-gsap .screen-section {
+  position: relative;
+}
+
 .no-gsap .screen {
   position: relative;
   margin-bottom: 50px;

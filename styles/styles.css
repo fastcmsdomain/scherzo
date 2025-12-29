@@ -15,7 +15,7 @@
 
   /* colors */
   --color-white: #fff;
-  --color-darker-blue: #283048;
+  --color-darker-blue: #00274c;
   --color-blue: #27a9de;
   --color-dark-blue: #00203e;
   --color-gold: rgb(247 209 23);
@@ -149,13 +149,38 @@
 }
 
 body {
-  background-color: var(--color-white);
+  background-color: var(--color-dark-blue);
   color: var(--color-dark-blue);
   display: none;
   font-family: var(--body-font-family);
   font-size: var(--font-size-base);
   line-height: 1.6;
   margin: 0;
+  position: relative;
+}
+
+/* Page load overlay with logo - shows until body receives 'appear' class */
+html::before {
+  background-color: var(--color-dark-blue);
+  background-image: url('/images/logo.png');
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: 128px auto;
+  content: '';
+  height: 100vh;
+  left: 0;
+  position: fixed;
+  top: 0;
+  width: 100vw;
+  z-index: 9999;
+  /* transition: opacity 0.5s ease-out, visibility 0.5s ease-out; */
+}
+
+/* Hide overlay when body receives 'appear' class */
+html:has(body.appear)::before {
+  /* opacity: 0; */
+  pointer-events: none;
+  visibility: hidden;
 }
 
 /* body::before {

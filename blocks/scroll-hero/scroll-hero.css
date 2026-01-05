@@ -206,7 +206,7 @@ main .section .scroll-hero-wrapper {
   top: 50%;
   transform: translateY(-50%);
   z-index: 10;
-  width: 60%;
+  width: 800px;
   color: #fff;
   font-family: 'Montserrat-bold', sans-serif;
   opacity: 1;

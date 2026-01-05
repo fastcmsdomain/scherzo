@@ -15,6 +15,160 @@ const clearProgressNav = () => {
   navItems.forEach((li) => li.classList.remove('isActive'));
 };
 
+/**
+ * Video Modal Utilities
+ * Handles opening videos in a fullscreen modal popup
+ */
+const videoModalUtils = {
+  // Video URL patterns for detection
+  patterns: {
+    youtube: /(?:youtube\.com\/(?:watch\?v=|embed\/)|youtu\.be\/)([a-zA-Z0-9_-]+)/,
+    vimeo: /vimeo\.com\/(?:video\/)?(\d+)/,
+    directVideo: /\.(mp4|webm|ogg)(\?.*)?$/i,
+  },
+
+  /**
+   * Check if URL is a video link
+   * @param {string} url - URL to check
+   * @returns {Object|null} - Video info or null
+   */
+  getVideoInfo(url) {
+    if (!url) return null;
+
+    // Check YouTube
+    const youtubeMatch = url.match(this.patterns.youtube);
+    if (youtubeMatch) {
+      return { type: 'youtube', id: youtubeMatch[1], url };
+    }
+
+    // Check Vimeo
+    const vimeoMatch = url.match(this.patterns.vimeo);
+    if (vimeoMatch) {
+      return { type: 'vimeo', id: vimeoMatch[1], url };
+    }
+
+    // Check direct video files
+    if (this.patterns.directVideo.test(url)) {
+      return { type: 'direct', url };
+    }
+
+    return null;
+  },
+
+  /**
+   * Create video embed HTML based on type
+   * @param {Object} videoInfo - Video information object
+   * @returns {string} - HTML string for video embed
+   */
+  createVideoEmbed(videoInfo) {
+    const { type, id, url } = videoInfo;
+
+    switch (type) {
+      case 'youtube':
+        return `<iframe 
+          src="https://www.youtube.com/embed/${id}?autoplay=1&rel=0&modestbranding=1" 
+          frameborder="0" 
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+          allowfullscreen>
+        </iframe>`;
+      case 'vimeo':
+        return `<iframe 
+          src="https://player.vimeo.com/video/${id}?autoplay=1" 
+          frameborder="0" 
+          allow="autoplay; fullscreen; picture-in-picture" 
+          allowfullscreen>
+        </iframe>`;
+      case 'direct':
+        return `<video src="${url}" controls autoplay>
+          Your browser does not support the video tag.
+        </video>`;
+      default:
+        return '';
+    }
+  },
+
+  /**
+   * Open video modal
+   * @param {string} videoUrl - URL of the video
+   */
+  openModal(videoUrl) {
+    const videoInfo = this.getVideoInfo(videoUrl);
+    if (!videoInfo) return;
+
+    // Create modal elements
+    const modal = document.createElement('div');
+    modal.className = 'scroll-hero-video-modal';
+    modal.innerHTML = `
+      <div class="video-modal-overlay"></div>
+      <div class="video-modal-content">
+        <button class="video-modal-close" aria-label="Close video">
+          <span>&times;</span>
+        </button>
+        <div class="video-modal-player">
+          ${this.createVideoEmbed(videoInfo)}
+        </div>
+      </div>
+    `;
+
+    // Add to DOM
+    document.body.appendChild(modal);
+    document.body.style.overflow = 'hidden';
+
+    // Animate in
+    requestAnimationFrame(() => {
+      modal.classList.add('is-open');
+    });
+
+    // Close handlers
+    const closeModal = () => {
+      modal.classList.remove('is-open');
+      setTimeout(() => {
+        modal.remove();
+        document.body.style.overflow = '';
+      }, 300);
+    };
+
+    // Close on X button click
+    modal.querySelector('.video-modal-close').addEventListener('click', closeModal);
+
+    // Close on overlay click
+    modal.querySelector('.video-modal-overlay').addEventListener('click', closeModal);
+
+    // Close on Escape key
+    const handleEscape = (e) => {
+      if (e.key === 'Escape') {
+        closeModal();
+        document.removeEventListener('keydown', handleEscape);
+      }
+    };
+    document.addEventListener('keydown', handleEscape);
+  },
+
+  /**
+   * Initialize video button handlers
+   * @param {HTMLElement} container - Container element to search for video buttons
+   */
+  initVideoButtons(container) {
+    const buttons = container.querySelectorAll('.scroll-hero-button');
+
+    buttons.forEach((button) => {
+      const href = button.getAttribute('href');
+      const videoInfo = this.getVideoInfo(href);
+
+      if (videoInfo) {
+        // Mark as video button
+        button.classList.add('is-video-button');
+
+        // Prevent default and open modal
+        button.addEventListener('click', (e) => {
+          e.preventDefault();
+          this.openModal(href);
+        });
+      }
+    });
+  },
+};
+
 // Optimized GSAP loading
 const loadScript = (src) => new Promise((resolve, reject) => {
   const script = document.createElement('script');
@@ -176,7 +330,7 @@ function initParallaxCover(gsap, ScrollTrigger, totalSections) {
         gsap.set(strapline, { top: '50%', y: '-50%' });
       }
       if (strapline2) {
-        gsap.set(strapline2, { top: '50%', opacity: 1 });
+        gsap.set(strapline2, { top: '52%', opacity: 1 });
       }
       return;
     }
@@ -233,7 +387,7 @@ function initParallaxCover(gsap, ScrollTrigger, totalSections) {
 
       // Then animate to top following main title
       gsap.to(strapline2, {
-        top: '28%',
+        top: '10%',
         ease: 'none',
         scrollTrigger: {
           trigger: section,
@@ -440,6 +594,9 @@ export default async function decorate(block) {
   // Append to block
   block.appendChild(progressNav);
   block.appendChild(heroContainer);
+
+  // Initialize video button handlers
+  videoModalUtils.initVideoButtons(block);
 
   // Initialize animations after DOM is ready
   setTimeout(async () => {

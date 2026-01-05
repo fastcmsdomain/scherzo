@@ -110,9 +110,17 @@ main .section .scroll-hero-wrapper {
 }
 
 /* Each section stacks above the previous - higher z-index for later sections */
+/* Slides 1-2: sticky for overlap effect */
 .screen-section:nth-child(1) { z-index: 1; }
 .screen-section:nth-child(2) { z-index: 2; }
-.screen-section:nth-child(3) { z-index: 3; }
+
+/* Slides 3+: relative positioning - GSAP controls slide-in and pinning */
+.screen-section:nth-child(n+3) {
+  position: relative;
+  z-index: 3;
+}
+
+/* Higher z-index for later slides when they appear */
 .screen-section:nth-child(4) { z-index: 4; }
 .screen-section:nth-child(5) { z-index: 5; }
 .screen-section:nth-child(6) { z-index: 6; }
@@ -149,8 +157,49 @@ main .section .scroll-hero-wrapper {
   pointer-events: none;
 }
 
-/* Fade overlay */
+/* Fade overlay - gradient that animates FROM BOTTOM for slides 3+ */
 .fade {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 3;
+  pointer-events: none;
+  background: linear-gradient(
+    0deg,
+    rgba(0, 32, 62, 0.95) 0%,
+    rgba(0, 32, 62, 0.85) 20%,
+    rgba(0, 32, 62, 0.6) 50%,
+    rgba(0, 32, 62, 0.3) 75%,
+    transparent 100%
+  );
+  transform-origin: bottom center;
+  transform: scaleY(0);
+  will-change: transform;
+}
+
+/* Fade is hidden by default for slides 1 and 2 (they use static gradients) */
+.screen-section:nth-child(1) .fade,
+.screen-section:nth-child(2) .fade {
+  /* display: none; */
+  /* opacity: 0; */
+  display: block;
+}
+
+/* For slides 3+, fade starts with scaleY(0) and grows from bottom */
+.screen-section:nth-child(n+3) .fade {
+  display: block;
+  transform: scaleY(0);
+}
+
+/* Hide the default gradient on .img:after for slides 3+ (we use animated .fade instead) */
+.screen-section:nth-child(n+3) .background .img:after {
+  display: none;
+}
+
+/* Hide the default gradient on .screen-inner:before for slides 3+ */
+.screen-section:nth-child(n+3) .screen-inner:before {
   display: none;
 }
 
@@ -235,6 +284,17 @@ main .section .scroll-hero-wrapper {
   opacity: 1;
 }
 
+/* Slides 3+: text starts hidden (below viewport), GSAP animates them in */
+.screen-section:nth-child(n+3) .strapline {
+  top: 100%;
+  opacity: 0;
+}
+
+.screen-section:nth-child(n+3) .strapline-2 {
+  top: 110%;
+  opacity: 0;
+}
+
 /* Second strapline for subtitle - positioned below main title */
 .strapline-2 {
   left: 0;
@@ -307,13 +367,14 @@ main .section .scroll-hero-wrapper {
 }
 
 .strapline-2 .subtitle .subtitle-part-0 {
-  font-size: 1.1rem;
+  font-family: var(--body-bold-family, 'Montserrat-bold', sans-serif);
+  font-size: 1.4rem;
   font-weight: 400;
   padding-bottom: 0.5rem;
 }
 
 .strapline-2 .subtitle .subtitle-part-1 {
-  font-size: 0.9rem;
+  font-size: 1rem;
   font-weight: 300;
   opacity: 0.8;
 }

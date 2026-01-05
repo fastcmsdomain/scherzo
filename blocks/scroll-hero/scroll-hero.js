@@ -335,68 +335,68 @@ function initParallaxCover(gsap, ScrollTrigger, totalSections) {
       return;
     }
 
-    // Text animation for subsequent slides (3rd and beyond)
-    // Text starts at bottom (90%) and moves to center (50%) then to top (10%)
-    if (strapline) {
-      // Initial position - text at bottom
-      gsap.set(strapline, { top: '80%', y: '-50%' });
+    // Animation for slides 3 and beyond
+    // SEQUENCE: slide-in → pin → gradient → text → unpin
+    // pinSpacing: false = no gaps, animations driven by section scroll
+    const fadeOverlay = section.querySelector('.fade');
 
-      // Animate text from bottom to center as section enters
-      gsap.to(strapline, {
+    // Initial states
+    if (fadeOverlay) {
+      gsap.set(fadeOverlay, { scaleY: 0, transformOrigin: 'bottom center' });
+    }
+    if (strapline) {
+      gsap.set(strapline, { top: '100%', y: '0', opacity: 0, scale: 1, transformOrigin: 'center center' });
+    }
+    if (strapline2) {
+      gsap.set(strapline2, { top: '100%', y: '0', opacity: 0 });
+    }
+
+    // Create timeline with pin - extended duration for smooth text animations
+    const pinnedTimeline = gsap.timeline({
+      scrollTrigger: {
+        trigger: section,
+        start: 'top top',
+        end: '+=200%', // Pin duration (200% of viewport height for animations)
+        scrub: 1, // Smooth scrubbing
+        pin: true,
+        pinSpacing: true, // Required for timeline to progress
+        anticipatePin: 1,
+      },
+    });
+
+    // Phase 1: Gradient grows from bottom (0% - 30%)
+    if (fadeOverlay) {
+      pinnedTimeline.to(fadeOverlay, {
+        scaleY: 1,
+        ease: 'none',
+        duration: 0.3, // 30% of timeline
+      }, 0); // Start at 0%
+    }
+
+    // Phase 2: Strapline - from bottom (100%) to top (10%) + shrink (30% - 80%)
+    if (strapline) {
+      pinnedTimeline.to(strapline, {
+        top: '10%',
+        y: '0',
+        opacity: 1,
+        scale: 0.6,
+        ease: 'none',
+        duration: 0.5, // 50% of timeline (30% to 80%)
+      }, 0.3); // Start at 30%
+    }
+
+    // Phase 3: Strapline-2 - from bottom (100%) to center (50%) (40% - 80%)
+    if (strapline2) {
+      pinnedTimeline.to(strapline2, {
         top: '50%',
         y: '-50%',
-        ease: 'none',
-        scrollTrigger: {
-          trigger: section,
-          start: 'top bottom',
-          end: 'top top',
-          scrub: true,
-        },
-      });
-
-      // Then animate from center to top as user continues scrolling
-      gsap.to(strapline, {
-        top: '15%',
-        ease: 'none',
-        scrollTrigger: {
-          trigger: section,
-          start: 'top top',
-          end: '+=50%',
-          scrub: true,
-        },
-      });
-    }
-
-    // Subtitle animation - follows main title but slightly delayed
-    if (strapline2) {
-      // Initial position - subtitle below main title at bottom
-      gsap.set(strapline2, { top: '95%', y: '0', opacity: 0 });
-
-      // Animate subtitle: fade in and move to center
-      gsap.to(strapline2, {
-        top: '60%',
         opacity: 1,
         ease: 'none',
-        scrollTrigger: {
-          trigger: section,
-          start: 'top 50%',
-          end: 'top top',
-          scrub: true,
-        },
-      });
-
-      // Then animate to top following main title
-      gsap.to(strapline2, {
-        top: '10%',
-        ease: 'none',
-        scrollTrigger: {
-          trigger: section,
-          start: 'top top',
-          end: '+=50%',
-          scrub: true,
-        },
-      });
+        duration: 0.4, // 40% of timeline (40% to 80%)
+      }, 0.4); // Start at 40%
     }
+
+    // Phase 4: Hold (80% - 100%) - text visible before next slide appears
   });
 }
 

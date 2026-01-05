@@ -7,6 +7,17 @@ main .section .scroll-hero-wrapper {
   min-width: 100vw;
 }
 
+/* Hide visual gap from pinSpacing */
+/* Pin-spacer gets background matching the pinned slide */
+.scroll-hero-container .pin-spacer {
+  background-color: transparent !important;
+}
+
+/* Pull next section up to cover the pin-spacer gap */
+.scroll-hero-container .pin-spacer + .screen-section {
+  margin-top: -200vh !important; /* Negative margin = height of pinSpacing */
+}
+
 /* Progress Navigation (floating left side) */
 .progress-nav {
   display: block;
@@ -284,15 +295,32 @@ main .section .scroll-hero-wrapper {
   opacity: 1;
 }
 
-/* Slides 3+: text starts hidden (below viewport), GSAP animates them in */
+/* Slides 3+: GSAP controls text positioning completely */
+.screen-section:nth-child(n+3) .strapline,
+.screen-section:nth-child(n+3) .strapline-2 {
+  /* GSAP will set: position, top, left via JS */
+  left: auto !important;
+  right: auto !important;
+  transform: none !important;
+  opacity: 1;
+  width: auto; /* Allow text to size naturally */
+  max-width: 800px;
+  margin: 0;
+}
+
 .screen-section:nth-child(n+3) .strapline {
-  top: 100%;
-  opacity: 0;
+  z-index: 100;
 }
 
 .screen-section:nth-child(n+3) .strapline-2 {
-  top: 110%;
-  opacity: 0;
+  z-index: 99;
+}
+
+/* Parent must allow overflow for text to animate in from below */
+.screen-section:nth-child(n+3),
+.screen-section:nth-child(n+3) .screen,
+.screen-section:nth-child(n+3) .screen-inner {
+  overflow: visible !important;
 }
 
 /* Second strapline for subtitle - positioned below main title */

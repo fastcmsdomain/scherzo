@@ -340,63 +340,95 @@ function initParallaxCover(gsap, ScrollTrigger, totalSections) {
     // pinSpacing: false = no gaps, animations driven by section scroll
     const fadeOverlay = section.querySelector('.fade');
 
-    // Initial states
+    // Initial states - MUST use gsap.set() so GSAP knows starting values
     if (fadeOverlay) {
       gsap.set(fadeOverlay, { scaleY: 0, transformOrigin: 'bottom center' });
     }
+    
+    // Set initial position for strapline - starts BELOW viewport (hidden)
     if (strapline) {
-      gsap.set(strapline, { top: '100%', y: '0', opacity: 0, scale: 1, transformOrigin: 'center center' });
+      gsap.set(strapline, { 
+        position: 'absolute',
+        top: '110%', // Start BELOW viewport (completely hidden)
+        left: '50%', 
+        xPercent: -50,
+        yPercent: 0,
+        scale: 1,
+        opacity: 1,
+        transformOrigin: 'center center'
+      });
     }
+    
+    // Set initial position for strapline2 - starts BELOW viewport (hidden)
     if (strapline2) {
-      gsap.set(strapline2, { top: '100%', y: '0', opacity: 0 });
+      gsap.set(strapline2, { 
+        position: 'absolute',
+        top: '110%', // Start even LOWER below viewport (completely hidden)
+        left: '50%', 
+        xPercent: -50,
+        yPercent: 0,
+        opacity: 1
+      });
     }
 
-    // Create timeline with pin - extended duration for smooth text animations
+    // Create timeline with pin - pinSpacing creates scroll space for animations
     const pinnedTimeline = gsap.timeline({
       scrollTrigger: {
         trigger: section,
         start: 'top top',
-        end: '+=200%', // Pin duration (200% of viewport height for animations)
-        scrub: 1, // Smooth scrubbing
+        end: '+=350%', // Longer pin duration for: gradient + text animations + hold
+        scrub: 1,
         pin: true,
-        pinSpacing: true, // Required for timeline to progress
+        pinSpacing: true, // Required for timeline - CSS hides the visual gap
         anticipatePin: 1,
+        markers: true, // DEBUG: Show scroll trigger markers
       },
     });
 
-    // Phase 1: Gradient grows from bottom (0% - 30%)
+    // Phase 1: Gradient grows from bottom to top (0% - 15%)
+    // Straplines are HIDDEN below viewport during this phase
     if (fadeOverlay) {
       pinnedTimeline.to(fadeOverlay, {
         scaleY: 1,
         ease: 'none',
-        duration: 0.3, // 30% of timeline
-      }, 0); // Start at 0%
+        duration: 0.15,
+      }, 0);
     }
 
-    // Phase 2: Strapline - from bottom (100%) to top (10%) + shrink (30% - 80%)
+    // Phase 2: Strapline - slides from BELOW viewport (110%) to top (10%) + scale down 40%
+    // Starts AFTER gradient is fully visible
+    // Image and gradient remain STATIC during this animation
     if (strapline) {
-      pinnedTimeline.to(strapline, {
-        top: '10%',
-        y: '0',
-        opacity: 1,
-        scale: 0.6,
-        ease: 'none',
-        duration: 0.5, // 50% of timeline (30% to 80%)
-      }, 0.3); // Start at 30%
+      pinnedTimeline.to(strapline, 
+        {
+          top: '5%', // Move to top of viewport
+          scale: 0.6, // Scale down by 40%
+          ease: 'none',
+          duration: 0.10, // Longer duration for smooth animation
+        }, 
+        0.15 // Start at 15% of timeline (AFTER gradient finishes)
+      );
     }
 
-    // Phase 3: Strapline-2 - from bottom (100%) to center (50%) (40% - 80%)
+    // Phase 3: Strapline-2 - slides from BELOW viewport (120%) to center (50%)
+    // Animates TOGETHER with strapline
+    // Image and gradient remain STATIC during this animation
     if (strapline2) {
-      pinnedTimeline.to(strapline2, {
-        top: '50%',
-        y: '-50%',
-        opacity: 1,
-        ease: 'none',
-        duration: 0.4, // 40% of timeline (40% to 80%)
-      }, 0.4); // Start at 40%
+      pinnedTimeline.to(strapline2,
+        {
+          top: '50%', // Move to center of viewport
+          yPercent: -50, // Center it properly
+          ease: 'none',
+          duration: 0.40, // Same duration as strapline
+        },
+        0.15 // Start SAME TIME as strapline (15% of timeline)
+      );
     }
 
-    // Phase 4: Hold (80% - 100%) - text visible before next slide appears
+    // Phase 4: Hold (55% - 100%) - all elements stay in place before next slide can overlap
+    // Slide 4 can now shift up and overlap slide 3
+
+    // Phase 4: Hold (75% - 100%) - all elements in place before next slide
   });
 }
 

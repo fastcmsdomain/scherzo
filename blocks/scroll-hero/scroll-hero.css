@@ -93,40 +93,48 @@ main .section .scroll-hero-wrapper {
   visibility: visible;
 }
 
-/* Main container - parallax stack */
+/* Main container - provides scroll height for fixed sections */
 .scroll-hero-container {
   position: relative;
   width: 100%;
   padding: 0;
+  /* Height set dynamically by JS based on number of sections */
 }
 
-/* Section structure - full viewport sections that stack */
+/* Section structure - all sections fixed, stacked with z-index */
 .screen-section {
   height: 100vh;
   width: 100%;
-  position: sticky;
+  position: fixed;
   top: 0;
+  left: 0;
   overflow: hidden;
+  background-color: #00203e;
+  /* clip-path will be animated via JS to reveal from bottom */
+  clip-path: inset(0 0 0 0);
+}
+
+/* .screen contains the actual content */
+.screen-section .screen {
+  height: 100vh;
+  width: 100%;
+  position: relative;
+  background-color: #00203e;
 }
 
 /* Each section stacks above the previous - higher z-index for later sections */
 .screen-section:nth-child(1) { z-index: 1; }
-.screen-section:nth-child(2) { z-index: 2; }
-.screen-section:nth-child(3) { z-index: 3; }
-.screen-section:nth-child(4) { z-index: 4; }
-.screen-section:nth-child(5) { z-index: 5; }
-.screen-section:nth-child(6) { z-index: 6; }
-.screen-section:nth-child(7) { z-index: 7; }
-.screen-section:nth-child(8) { z-index: 8; }
-.screen-section:nth-child(9) { z-index: 9; }
-.screen-section:nth-child(10) { z-index: 10; }
+.screen-section:nth-child(2) { z-index: 2; clip-path: inset(100% 0 0 0); }
+.screen-section:nth-child(3) { z-index: 3; clip-path: inset(100% 0 0 0); }
+.screen-section:nth-child(4) { z-index: 4; clip-path: inset(100% 0 0 0); }
+.screen-section:nth-child(5) { z-index: 5; clip-path: inset(100% 0 0 0); }
+.screen-section:nth-child(6) { z-index: 6; clip-path: inset(100% 0 0 0); }
+.screen-section:nth-child(7) { z-index: 7; clip-path: inset(100% 0 0 0); }
+.screen-section:nth-child(8) { z-index: 8; clip-path: inset(100% 0 0 0); }
+.screen-section:nth-child(9) { z-index: 9; clip-path: inset(100% 0 0 0); }
+.screen-section:nth-child(10) { z-index: 10; clip-path: inset(100% 0 0 0); }
 
-.screen {
-  height: 100vh;
-  width: 100%;
-  position: relative;
-  overflow: hidden;
-}
+/* Note: .screen styles are now defined above in section structure */
 
 .screen-inner {
   height: 100vh;
@@ -134,6 +142,7 @@ main .section .scroll-hero-wrapper {
   position: relative;
   top: 0;
   left: 0;
+  background-color: #00203e;
 }
 
 .screen-inner:before {
@@ -213,33 +222,35 @@ main .section .scroll-hero-wrapper {
   will-change: top, transform;
 }
 
-/* First section text - static position */
+/* First section text - static position (Wellington College style) */
 .screen-section:first-child .strapline {
-  top: 50%;
+  top: 18%;
   transform: translateY(-50%);
+  scale: 1;
 }
 
 .screen-section:first-child .strapline-2 {
-  top: 60%;
+  top: 50%;
+  transform: translateY(-50%);
   opacity: 1;
 }
 
-/* Second strapline for subtitle - positioned below main title */
+/* Second strapline for subtitle - positioned at center (Wellington College style) */
 .strapline-2 {
   left: 0;
   margin: 0 auto;
   position: absolute;
   right: 0;
   text-align: center;
-  top: 60%;
-  transform: translateY(0);
+  top: 50%;
+  transform: translateY(-50%);
   transform-origin: center center;
   z-index: 9;
   color: #fff;
   font-family: 'Montserrat-bold', sans-serif;
   width: 100%;
   opacity: 1;
-  will-change: top, opacity;
+  will-change: top, transform;
 }
 
 /* Responsive text styling - Desktop first */
@@ -403,5 +414,57 @@ main .section .scroll-hero-wrapper {
   top: auto;
   transform: none;
   padding: 50px 20px;
+}
+
+/* WCAG Accessibility: Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  .strapline,
+  .strapline-2,
+  .screen-section {
+    animation: none !important;
+    transition: none !important;
+  }
+
+  /* Static positions without animations */
+  .strapline {
+    top: 18% !important;
+    transform: translateY(-50%) !important;
+    scale: 1 !important;
+  }
+
+  .strapline-2 {
+    top: 50% !important;
+    transform: translateY(-50%) !important;
+    opacity: 1 !important;
+  }
+
+  .screen-section {
+    transform: none !important;
+  }
+}
+
+/* Responsive positions for Wellington College style layout */
+@media (max-width: 992px) {
+  .screen-section:first-child .strapline,
+  .strapline {
+    top: 20%;
+  }
+
+  .screen-section:first-child .strapline-2,
+  .strapline-2 {
+    top: 52%;
+  }
+}
+
+@media (max-width: 480px) {
+  .screen-section:first-child .strapline,
+  .strapline {
+    top: 22%;
+  }
+
+  .screen-section:first-child .strapline-2,
+  .strapline-2 {
+    top: 55%;
+  }
 }
 

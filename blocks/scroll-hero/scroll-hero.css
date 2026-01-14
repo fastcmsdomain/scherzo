@@ -136,6 +136,11 @@ main .section .scroll-hero-wrapper {
 
 /* Note: .screen styles are now defined above in section structure */
 
+.screen-section:nth-child(2) .strapline {
+    transform: translateY(-50%) !important;
+    top: 50% !important;
+}
+
 .screen-inner {
   height: 100vh;
   width: 100%;

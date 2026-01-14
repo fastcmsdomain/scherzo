@@ -154,7 +154,7 @@ main .section .scroll-hero-wrapper {
   right: 0;
   bottom: 0;
   position: absolute;
-  background: rgba(0, 32, 62, 3);
+  background: rgba(0, 32, 62, 0.3);
   pointer-events: none;
 }
 

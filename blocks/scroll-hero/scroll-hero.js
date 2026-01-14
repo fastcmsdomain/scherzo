@@ -176,7 +176,7 @@ function initParallaxCover(gsap) {
       gsap.set(strapline, { top: '85%', y: '0', scale: 1.1 });
     }
     if (strapline2) {
-      gsap.set(strapline2, { top: '90%', y: '0', opacity: 1 });
+      gsap.set(strapline2, { top: '105%', y: '0', opacity: 1 });
     }
 
     // Calculate scroll positions (150vh per section)
@@ -205,9 +205,9 @@ function initParallaxCover(gsap) {
     // PHASE 2: Strapline animates from bottom to top
     if (strapline) {
       gsap.to(strapline, {
-        top: '18%',
+        top: '15%',
         y: '-50%',
-        scale: 1,
+        scale: 0.8,
         ease: 'none',
         scrollTrigger: {
           trigger: 'body',

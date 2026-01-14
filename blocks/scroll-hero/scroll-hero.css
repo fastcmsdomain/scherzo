@@ -149,12 +149,12 @@ main .section .scroll-hero-wrapper {
   z-index: 2;
   content: '';
   display: block;
-  height: 30vh;
+  height:100vh;
   left: 0;
   right: 0;
   bottom: 0;
   position: absolute;
-  background: linear-gradient(180deg, transparent 0%, rgba(0, 32, 62, 0.8) 100%);
+  background: rgba(0, 32, 62, 0.4);
   pointer-events: none;
 }
 
@@ -215,7 +215,7 @@ main .section .scroll-hero-wrapper {
   top: 50%;
   transform: translateY(-50%);
   z-index: 10;
-  width: 60%;
+  width: 800px;
   color: #fff;
   font-family: 'Montserrat-bold', sans-serif;
   opacity: 1;
@@ -224,8 +224,8 @@ main .section .scroll-hero-wrapper {
 
 /* First section text - static position (Wellington College style) */
 .screen-section:first-child .strapline {
-  top: 18%;
-  transform: translateY(-50%);
+  top: 50% !important;
+  transform: translateY(-50%) !important;
   scale: 1;
 }
 

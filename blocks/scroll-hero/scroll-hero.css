@@ -140,6 +140,20 @@ main .section .scroll-hero-wrapper {
     transform: translateY(-50%) !important;
     top: 50% !important;
 }
+.section-last-slide .background {
+  position: relative;
+}
+
+.section-last-slide .background:before {
+  content: '';
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  z-index: 1;
+  top: 0;
+  left: 0;
+  background-color: rgba(0,32,62,.8);
+}
 
 .screen-inner {
   height: 100vh;

@@ -182,6 +182,11 @@ main .section .scroll-hero-wrapper {
   display: none;
 }
 
+/* blur effect */
+.screen-section:nth-child(2) .background {
+  filter: blur(5px);
+}
+
 /* Background image setup - full viewport cover */
 .background {
   height: 100vh;

@@ -50,7 +50,8 @@
       "Skill(eds-block-development)",
       "Bash(npm run debug:*)",
       "Skill(webapp-testing)",
-      "Bash(playwright install:*)"
+      "Bash(playwright install:*)",
+      "Bash(npm run lint:*)"
     ],
     "deny": [],
     "ask": []

@@ -51,7 +51,8 @@
       "Bash(npm run debug:*)",
       "Skill(webapp-testing)",
       "Bash(playwright install:*)",
-      "Bash(npm run lint:*)"
+      "Bash(npm run lint:*)",
+      "Bash(python test_overlap.py:*)"
     ],
     "deny": [],
     "ask": []

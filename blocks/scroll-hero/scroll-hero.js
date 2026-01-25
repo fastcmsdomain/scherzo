@@ -10,11 +10,6 @@ const updateProgressNav = (activeIndex) => {
   navItems.forEach((li, index) => li.classList.toggle('isActive', index === activeIndex));
 };
 
-const clearProgressNav = () => {
-  const navItems = document.querySelectorAll('.progress-nav li');
-  navItems.forEach((li) => li.classList.remove('isActive'));
-};
-
 // Optimized GSAP loading
 const loadScript = (src) => new Promise((resolve, reject) => {
   const script = document.createElement('script');
@@ -127,104 +122,98 @@ const createSection = (section) => {
 };
 
 /**
- * Initializes the simple parallax cover effect
- * Each section slides over the previous one when scrolling
- * Text on first slide is static, text on other slides animates
+ * Initializes the Wellington College-style parallax cover effect
+ * Uses clip-path to reveal each section from bottom, covering the previous
  * @param {Object} gsap - GSAP instance
- * @param {Object} ScrollTrigger - ScrollTrigger instance
- * @param {number} totalSections - Total number of sections
  */
-function initParallaxCover(gsap, ScrollTrigger, totalSections) {
+function initParallaxCover(gsap) {
   const sections = document.querySelectorAll('.screen-section');
+  const container = document.querySelector('.scroll-hero-container');
+  const totalSections = sections.length;
+
+  // Set container height to allow scrolling (150vh per section for animation)
+  if (container) {
+    container.style.height = `${totalSections * 150}vh`;
+  }
 
   sections.forEach((section, index) => {
-    const sectionSelector = `.screen-section:nth-child(${index + 1})`;
     const strapline = section.querySelector('.strapline');
     const strapline2 = section.querySelector('.strapline-2');
 
-    // First section - static text, no animations
+    // First section - fully visible, text in position
     if (index === 0) {
       updateProgressNav(0);
+      gsap.set(section, { clipPath: 'inset(0 0 0 0)' });
+      if (strapline) {
+        gsap.set(strapline, { top: '18%', y: '-50%', scale: 1 });
+      }
+      if (strapline2) {
+        gsap.set(strapline2, { top: '50%', y: '-50%', opacity: 1 });
+      }
       return;
     }
 
-    // Each subsequent section slides up from bottom to cover the previous one
-    gsap.fromTo(
-      section,
-      { yPercent: 100 },
-      {
-        yPercent: 0,
-        ease: 'none',
-        scrollTrigger: {
-          trigger: section,
-          start: 'top bottom',
-          end: 'top top',
-          scrub: true,
-          onEnter: () => updateProgressNav(index),
-          onEnterBack: () => updateProgressNav(index),
-          onLeaveBack: () => updateProgressNav(index - 1),
+    // Keep section hidden initially
+    gsap.set(section, { clipPath: 'inset(100% 0 0 0)' });
+
+    // Set initial text positions
+    if (strapline) {
+      gsap.set(strapline, { top: '85%', y: '0', scale: 1.1 });
+    }
+    if (strapline2) {
+      gsap.set(strapline2, { top: '105%', y: '0', opacity: 1 });
+    }
+
+    // Calculate scroll positions (150vh per section)
+    const scrollPerSection = window.innerHeight * 1.5;
+    const sectionStartPx = index * scrollPerSection;
+
+    // PHASE 1: Reveal section using clip-path
+    gsap.to(section, {
+      clipPath: 'inset(0% 0 0 0)',
+      ease: 'none',
+      scrollTrigger: {
+        trigger: 'body',
+        start: sectionStartPx,
+        end: sectionStartPx + (scrollPerSection * 0.4), // 40% for reveal
+        scrub: true,
+        onEnter: () => updateProgressNav(index),
+        onEnterBack: () => updateProgressNav(index),
+        onLeaveBack: () => {
+          updateProgressNav(index - 1);
+          // Reset clip-path when scrolling back
+          gsap.set(section, { clipPath: 'inset(100% 0 0 0)' });
         },
       },
-    );
+    });
 
-    // Text animation for subsequent slides
-    // Text starts at bottom (90%) and moves to center (50%) then to top (10%)
+    // PHASE 2: Strapline animates from bottom to top
     if (strapline) {
-      // Initial position - text at bottom
-      gsap.set(strapline, { top: '80%', y: '-50%' });
-
-      // Animate text from bottom to center as section enters
-      gsap.to(strapline, {
-        top: '50%',
-        y: '-50%',
-        ease: 'none',
-        scrollTrigger: {
-          trigger: section,
-          start: 'top bottom',
-          end: 'top top',
-          scrub: true,
-        },
-      });
-
-      // Then animate from center to top as user continues scrolling
       gsap.to(strapline, {
         top: '15%',
+        y: '-50%',
+        scale: 0.8,
         ease: 'none',
         scrollTrigger: {
-          trigger: section,
-          start: 'top top',
-          end: '+=50%',
+          trigger: 'body',
+          start: sectionStartPx + (scrollPerSection * 0.2), // Start during reveal
+          end: sectionStartPx + (scrollPerSection * 0.7), // Complete 70% through
           scrub: true,
         },
       });
     }
 
-    // Subtitle animation - follows main title but slightly delayed
+    // PHASE 3: Strapline-2 animates from bottom to center
     if (strapline2) {
-      // Initial position - subtitle below main title at bottom
-      gsap.set(strapline2, { top: '95%', y: '0', opacity: 0 });
-
-      // Animate subtitle: fade in and move to center
       gsap.to(strapline2, {
-        top: '60%',
+        top: '50%',
+        y: '-50%',
         opacity: 1,
         ease: 'none',
         scrollTrigger: {
-          trigger: section,
-          start: 'top 50%',
-          end: 'top top',
-          scrub: true,
-        },
-      });
-
-      // Then animate to top following main title
-      gsap.to(strapline2, {
-        top: '28%',
-        ease: 'none',
-        scrollTrigger: {
-          trigger: section,
-          start: 'top top',
-          end: '+=50%',
+          trigger: 'body',
+          start: sectionStartPx + (scrollPerSection * 0.35), // Start later
+          end: sectionStartPx + (scrollPerSection * 0.7), // Same end
           scrub: true,
         },
       });
@@ -249,7 +238,6 @@ const initScrollAnimations = (sections) => {
   // Batch DOM operations for better performance
   const sectionElements = document.querySelectorAll('.screen-section');
   const navItems = document.querySelectorAll('.progress-nav li');
-  const totalSections = sections.length;
 
   // Set background images efficiently
   sections.forEach((section, sectionIndex) => {
@@ -264,8 +252,8 @@ const initScrollAnimations = (sections) => {
     }
   });
 
-  // Initialize the simple parallax cover effect
-  initParallaxCover(gsap, ScrollTrigger, totalSections);
+  // Initialize the Wellington College-style parallax cover effect
+  initParallaxCover(gsap);
 
   // Progress navigation click handlers
   if (navItems.length > 0) {
@@ -273,11 +261,11 @@ const initScrollAnimations = (sections) => {
       li.addEventListener('click', () => {
         const targetSection = sectionElements[index];
         if (targetSection) {
-        gsap.to(window, {
-          duration: 1,
+          gsap.to(window, {
+            duration: 1,
             scrollTo: { y: targetSection, autoKill: false },
-          ease: 'power2.inOut',
-        });
+            ease: 'power2.inOut',
+          });
         }
       });
     });

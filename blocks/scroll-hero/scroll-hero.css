@@ -93,39 +93,104 @@ main .section .scroll-hero-wrapper {
   visibility: visible;
 }
 
-/* Main container - parallax stack */
+/* Main container - provides scroll height for fixed sections */
 .scroll-hero-container {
   position: relative;
   width: 100%;
   padding: 0;
+  /* Height set dynamically by JS based on number of sections */
 }
 
-/* Section structure - full viewport sections that stack */
+/* Section structure - all sections fixed, stacked with z-index */
 .screen-section {
   height: 100vh;
   width: 100%;
-  position: sticky;
+  position: fixed;
   top: 0;
+  left: 0;
   overflow: hidden;
+  background-color: #00203e;
+  /* clip-path will be animated via JS to reveal from bottom */
+  clip-path: inset(0 0 0 0);
 }
 
-/* Each section stacks above the previous - higher z-index for later sections */
-.screen-section:nth-child(1) { z-index: 1; }
-.screen-section:nth-child(2) { z-index: 2; }
-.screen-section:nth-child(3) { z-index: 3; }
-.screen-section:nth-child(4) { z-index: 4; }
-.screen-section:nth-child(5) { z-index: 5; }
-.screen-section:nth-child(6) { z-index: 6; }
-.screen-section:nth-child(7) { z-index: 7; }
-.screen-section:nth-child(8) { z-index: 8; }
-.screen-section:nth-child(9) { z-index: 9; }
-.screen-section:nth-child(10) { z-index: 10; }
-
-.screen {
+/* .screen contains the actual content */
+.screen-section .screen {
   height: 100vh;
   width: 100%;
   position: relative;
-  overflow: hidden;
+  background-color: #00203e;
+}
+
+/* Each section stacks above the previous - higher z-index for later sections */
+.screen-section:nth-child(1) {
+  z-index: 1;
+}
+
+.screen-section:nth-child(2) {
+  z-index: 2;
+  clip-path: inset(100% 0 0 0);
+}
+
+.screen-section:nth-child(3) {
+  z-index: 3;
+  clip-path: inset(100% 0 0 0);
+}
+
+.screen-section:nth-child(4) {
+  z-index: 4;
+  clip-path: inset(100% 0 0 0);
+}
+
+.screen-section:nth-child(5) {
+  z-index: 5;
+  clip-path: inset(100% 0 0 0);
+}
+
+.screen-section:nth-child(6) {
+  z-index: 6;
+  clip-path: inset(100% 0 0 0);
+}
+
+.screen-section:nth-child(7) {
+  z-index: 7;
+  clip-path: inset(100% 0 0 0);
+}
+
+.screen-section:nth-child(8) {
+  z-index: 8;
+  clip-path: inset(100% 0 0 0);
+}
+
+.screen-section:nth-child(9) {
+  z-index: 9;
+  clip-path: inset(100% 0 0 0);
+}
+
+.screen-section:nth-child(10) {
+  z-index: 10;
+  clip-path: inset(100% 0 0 0);
+}
+
+/* Note: .screen styles are now defined above in section structure */
+
+.screen-section:nth-child(2) .strapline {
+    transform: translateY(-50%) !important;
+    top: 50% !important;
+}
+.section-last-slide .background {
+  position: relative;
+}
+
+.section-last-slide .background:before {
+  content: '';
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  z-index: 1;
+  top: 0;
+  left: 0;
+  background-color: rgba(0,32,62,.8);
 }
 
 .screen-inner {
@@ -134,24 +199,30 @@ main .section .scroll-hero-wrapper {
   position: relative;
   top: 0;
   left: 0;
+  background-color: #00203e;
 }
 
 .screen-inner:before {
   z-index: 2;
   content: '';
   display: block;
-  height: 30vh;
+  height:100vh;
   left: 0;
   right: 0;
   bottom: 0;
   position: absolute;
-  background: linear-gradient(180deg, transparent 0%, rgba(0, 32, 62, 0.8) 100%);
+  background: rgba(0, 32, 62, 0.3);
   pointer-events: none;
 }
 
 /* Fade overlay */
 .fade {
   display: none;
+}
+
+/* blur effect */
+.screen-section:nth-child(2) .background {
+  filter: blur(5px);
 }
 
 /* Background image setup - full viewport cover */
@@ -206,40 +277,42 @@ main .section .scroll-hero-wrapper {
   top: 50%;
   transform: translateY(-50%);
   z-index: 10;
-  width: 60%;
+  width: 800px;
   color: #fff;
   font-family: 'Montserrat-bold', sans-serif;
   opacity: 1;
   will-change: top, transform;
 }
 
-/* First section text - static position */
+/* First section text - static position (Wellington College style) */
 .screen-section:first-child .strapline {
-  top: 50%;
-  transform: translateY(-50%);
+  top: 50% !important;
+  transform: translateY(-50%) !important;
+  scale: 1;
 }
 
 .screen-section:first-child .strapline-2 {
-  top: 60%;
+  top: 50%;
+  transform: translateY(-50%);
   opacity: 1;
 }
 
-/* Second strapline for subtitle - positioned below main title */
+/* Second strapline for subtitle - positioned at center (Wellington College style) */
 .strapline-2 {
   left: 0;
   margin: 0 auto;
   position: absolute;
   right: 0;
   text-align: center;
-  top: 60%;
-  transform: translateY(0);
+  top: 50%;
+  transform: translateY(-50%);
   transform-origin: center center;
   z-index: 9;
   color: #fff;
   font-family: 'Montserrat-bold', sans-serif;
   width: 100%;
   opacity: 1;
-  will-change: top, opacity;
+  will-change: top, transform;
 }
 
 /* Responsive text styling - Desktop first */
@@ -282,9 +355,9 @@ main .section .scroll-hero-wrapper {
 }
 
 .strapline .main-title .title-part-1 {
-  font-size: 0.3em;
+  font-family: var(--body-font-family);
+  font-size: 1.4rem;
   line-height: 1.5;
-  text-transform: uppercase;
   font-weight: 300;
   opacity: 0.9;
 }
@@ -296,13 +369,13 @@ main .section .scroll-hero-wrapper {
 }
 
 .strapline-2 .subtitle .subtitle-part-0 {
-  font-size: 1.1rem;
+  font-size: 1.4rem;
   font-weight: 400;
   padding-bottom: 0.5rem;
 }
 
 .strapline-2 .subtitle .subtitle-part-1 {
-  font-size: 0.9rem;
+  font-size: 0.3em;
   font-weight: 300;
   opacity: 0.8;
 }
@@ -403,5 +476,32 @@ main .section .scroll-hero-wrapper {
   top: auto;
   transform: none;
   padding: 50px 20px;
+}
+
+/* Note: Reduced motion support removed to ensure parallax works on all systems */
+
+/* Responsive positions for Wellington College style layout */
+@media (max-width: 992px) {
+  .screen-section:first-child .strapline,
+  .strapline {
+    top: 20%;
+  }
+
+  .screen-section:first-child .strapline-2,
+  .strapline-2 {
+    top: 52%;
+  }
+}
+
+@media (max-width: 480px) {
+  .screen-section:first-child .strapline,
+  .strapline {
+    top: 22%;
+  }
+
+  .screen-section:first-child .strapline-2,
+  .strapline-2 {
+    top: 55%;
+  }
 }
 

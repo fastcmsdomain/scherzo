@@ -21,8 +21,7 @@ main .section .galeria-text-wrapper .galeria-text-container {
   display: flex;
   scroll-behavior: smooth;
   scroll-snap-type: x mandatory;
-  overflow-x: scroll;
-  overflow-y: hidden;
+  overflow: hidden scroll;
   list-style: none;
   margin: 0;
   padding: 0;
@@ -81,11 +80,6 @@ main .section .galeria-text-wrapper .galeria-text-container {
   transition: background-color 0.2s ease;
 }
 
-.galeria-text-nav button::after:hover,
-.galeria-text-nav button:focus-visible {
-  border-color: var(--color-gold);
-}
-
 .galeria-text-nav button::after {
   content: "";
   display: block;
@@ -98,6 +92,11 @@ main .section .galeria-text-wrapper .galeria-text-container {
   top: 50%;
   left: 55%;
   transform: translate(-50%, -50%) rotate(-135deg);
+}
+
+.galeria-text-nav button::after:hover,
+.galeria-text-nav button:focus-visible {
+  border-color: var(--color-gold);
 }
 
 .galeria-text-nav button.galeria-text-next::after {

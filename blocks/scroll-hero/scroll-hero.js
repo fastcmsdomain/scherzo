@@ -136,9 +136,6 @@ function initParallaxCover(gsap) {
     container.style.height = `${totalSections * 150}vh`;
   }
 
-  // Check for reduced motion preference
-  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
   sections.forEach((section, index) => {
     const strapline = section.querySelector('.strapline');
     const strapline2 = section.querySelector('.strapline-2');
@@ -146,18 +143,6 @@ function initParallaxCover(gsap) {
     // First section - fully visible, text in position
     if (index === 0) {
       updateProgressNav(0);
-      gsap.set(section, { clipPath: 'inset(0 0 0 0)' });
-      if (strapline) {
-        gsap.set(strapline, { top: '18%', y: '-50%', scale: 1 });
-      }
-      if (strapline2) {
-        gsap.set(strapline2, { top: '50%', y: '-50%', opacity: 1 });
-      }
-      return;
-    }
-
-    // Skip animations if user prefers reduced motion
-    if (prefersReducedMotion) {
       gsap.set(section, { clipPath: 'inset(0 0 0 0)' });
       if (strapline) {
         gsap.set(strapline, { top: '18%', y: '-50%', scale: 1 });

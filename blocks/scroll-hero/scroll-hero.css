@@ -435,32 +435,7 @@ main .section .scroll-hero-wrapper {
   padding: 50px 20px;
 }
 
-/* WCAG Accessibility: Reduced motion support */
-@media (prefers-reduced-motion: reduce) {
-  .strapline,
-  .strapline-2,
-  .screen-section {
-    animation: none !important;
-    transition: none !important;
-  }
-
-  /* Static positions without animations */
-  .strapline {
-    top: 18% !important;
-    transform: translateY(-50%) !important;
-    scale: 1 !important;
-  }
-
-  .strapline-2 {
-    top: 50% !important;
-    transform: translateY(-50%) !important;
-    opacity: 1 !important;
-  }
-
-  .screen-section {
-    transform: none !important;
-  }
-}
+/* Note: Reduced motion support removed to ensure parallax works on all systems */
 
 /* Responsive positions for Wellington College style layout */
 @media (max-width: 992px) {

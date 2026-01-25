@@ -33,28 +33,29 @@ async function fetchYouTubeFeed() {
 /**
  * Fetches Facebook feed
  * @returns {Promise<Array>} Array of Facebook feed items
- * 
+ *
  * NOTE: Requires a Page Access Token with 'pages_read_engagement' permission.
  * Get it from: https://developers.facebook.com/tools/explorer/
- * Select your app, generate token with 'pages_manage_metadata' and 'pages_read_engagement' permissions,
- * then get the Page Access Token for your specific page.
+ * Select your app, generate token with 'pages_manage_metadata' and
+ * 'pages_read_engagement' permissions, then get the Page Access Token
+ * for your specific page.
  */
 async function fetchFacebookFeed() {
   const url = `https://graph.facebook.com/v12.0/${config.facebookPageId}/posts?fields=id,message,full_picture,created_time&access_token=${config.facebookAccessToken}&limit=20`;
   try {
     const response = await fetch(url);
     const data = await response.json();
-    
+
     // Check for API errors
     if (data.error) {
-      console.error('Facebook API Error:', data.error);
+      // Error fetching Facebook feed - return empty array
       return [];
     }
-    
+
     if (!data.data) {
       return [];
     }
-    
+
     return data.data.map((item) => ({
       type: 'facebook',
       title: item.message ? item.message.substring(0, 100) : 'No message',
@@ -63,7 +64,7 @@ async function fetchFacebookFeed() {
       link: `https://www.facebook.com/${config.facebookPageId}/posts/${item.id}`,
     }));
   } catch (error) {
-    console.error('Error fetching Facebook feed:', error);
+    // Error fetching Facebook feed - return empty array
     return [];
   }
 }

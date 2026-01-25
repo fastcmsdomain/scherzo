@@ -123,16 +123,54 @@ main .section .scroll-hero-wrapper {
 }
 
 /* Each section stacks above the previous - higher z-index for later sections */
-.screen-section:nth-child(1) { z-index: 1; }
-.screen-section:nth-child(2) { z-index: 2; clip-path: inset(100% 0 0 0); }
-.screen-section:nth-child(3) { z-index: 3; clip-path: inset(100% 0 0 0); }
-.screen-section:nth-child(4) { z-index: 4; clip-path: inset(100% 0 0 0); }
-.screen-section:nth-child(5) { z-index: 5; clip-path: inset(100% 0 0 0); }
-.screen-section:nth-child(6) { z-index: 6; clip-path: inset(100% 0 0 0); }
-.screen-section:nth-child(7) { z-index: 7; clip-path: inset(100% 0 0 0); }
-.screen-section:nth-child(8) { z-index: 8; clip-path: inset(100% 0 0 0); }
-.screen-section:nth-child(9) { z-index: 9; clip-path: inset(100% 0 0 0); }
-.screen-section:nth-child(10) { z-index: 10; clip-path: inset(100% 0 0 0); }
+.screen-section:nth-child(1) {
+  z-index: 1;
+}
+
+.screen-section:nth-child(2) {
+  z-index: 2;
+  clip-path: inset(100% 0 0 0);
+}
+
+.screen-section:nth-child(3) {
+  z-index: 3;
+  clip-path: inset(100% 0 0 0);
+}
+
+.screen-section:nth-child(4) {
+  z-index: 4;
+  clip-path: inset(100% 0 0 0);
+}
+
+.screen-section:nth-child(5) {
+  z-index: 5;
+  clip-path: inset(100% 0 0 0);
+}
+
+.screen-section:nth-child(6) {
+  z-index: 6;
+  clip-path: inset(100% 0 0 0);
+}
+
+.screen-section:nth-child(7) {
+  z-index: 7;
+  clip-path: inset(100% 0 0 0);
+}
+
+.screen-section:nth-child(8) {
+  z-index: 8;
+  clip-path: inset(100% 0 0 0);
+}
+
+.screen-section:nth-child(9) {
+  z-index: 9;
+  clip-path: inset(100% 0 0 0);
+}
+
+.screen-section:nth-child(10) {
+  z-index: 10;
+  clip-path: inset(100% 0 0 0);
+}
 
 /* Note: .screen styles are now defined above in section structure */
 

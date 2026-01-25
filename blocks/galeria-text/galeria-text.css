@@ -5,7 +5,7 @@ main .section .galeria-text-wrapper {
   max-width: 100%;
 }
 
-.galeria-text-container {
+main .section .galeria-text-wrapper .galeria-text-container {
   display: flex;
   flex-direction: column;
 }
@@ -137,7 +137,7 @@ main .section .galeria-text-wrapper {
 
 /* Desktop layout - side by side */
 @media (width >= 900px) {
-  .galeria-text-container {
+  main .section .galeria-text-wrapper .galeria-text-container {
     flex-direction: row;
   }
 

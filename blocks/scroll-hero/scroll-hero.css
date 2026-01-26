@@ -372,7 +372,7 @@ main .section .scroll-hero-wrapper {
   font-size: 1.4rem;
   font-weight: 400;
   padding-bottom: 0.5rem;
-
+}
 
 @media (max-width: 992px) {
   .strapline-2 .subtitle {

@@ -99,21 +99,7 @@ const createSection = (section) => {
   // Subtitle parts
   const subtitleParts = section.subtitleParts?.length ? section.subtitleParts : [section.subtitle];
   const subtitleHtml = subtitleParts
-    .map((part, i) => {
-      // For subtitle-part-0, split text to wrap to new line
-      if (i === 0 && part) {
-        // Split by space in the middle, or by first space if short
-        const words = part.trim().split(' ');
-        if (words.length > 1) {
-          // Split into two parts: first half and second half
-          const midPoint = Math.ceil(words.length / 2);
-          const firstHalf = words.slice(0, midPoint).join(' ');
-          const secondHalf = words.slice(midPoint).join(' ');
-          return `<span class="subtitle-part subtitle-part-${i}">${firstHalf}<br>${secondHalf}</span>`;
-        }
-      }
-      return `<span class="subtitle-part subtitle-part-${i}">${part}</span>`;
-    })
+    .map((part, i) => `<span class="subtitle-part subtitle-part-${i}">${part}</span>`)
     .join('');
 
   // Simplified structure for parallax cover effect

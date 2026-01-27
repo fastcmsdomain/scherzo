@@ -178,6 +178,7 @@ main .section .scroll-hero-wrapper {
     transform: translateY(-50%) !important;
     top: 50% !important;
 }
+/* Last slide section - logo above strapline */
 .section-last-slide .background {
   position: relative;
 }
@@ -191,6 +192,15 @@ main .section .scroll-hero-wrapper {
   top: 0;
   left: 0;
   background-color: rgba(0,32,62,.8);
+}
+
+/* Logo positioned above strapline in last-slide, scrolls with text */
+.section-last-slide .strapline-logo {
+  display: block;
+  width: 125px;
+  height: auto;
+  margin: 0 auto 20px;
+  object-fit: contain;
 }
 
 .screen-inner {

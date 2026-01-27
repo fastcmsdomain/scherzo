@@ -84,11 +84,27 @@ const createSection = (section) => {
   const sectionDiv = document.createElement('div');
   sectionDiv.className = `screen-section ${section.id}`;
 
-  // Only use first background image for parallax cover effect
+  // Check if this is the last-slide section (has 2 images: logo + background)
+  const isLastSlide = section.id === 'section-last-slide';
   const backgroundImages = section.backgroundImages || [section.image];
-  const bgImagesHtml = backgroundImages
-    .map((img, i) => `<div class="img image-bg image-bg-${i}" data-bg="${img}" ${i > 0 ? 'style="display:none"' : ''}></div>`)
-    .join('');
+
+  // For last-slide: first image is logo, second image is background
+  // For other slides: first image is background (no logo)
+  let bgImageSrc = '';
+  let logoImage = '';
+
+  if (isLastSlide && backgroundImages.length >= 2) {
+    // Last slide: [0] = logo, [1] = background
+    [logoImage, bgImageSrc] = backgroundImages;
+  } else {
+    // Other slides: [0] = background
+    [bgImageSrc = section.image] = backgroundImages;
+  }
+
+  // Build background image HTML
+  const bgImagesHtml = bgImageSrc
+    ? `<div class="img image-bg image-bg-0" data-bg="${bgImageSrc}"></div>`
+    : '';
 
   // Main title parts
   const mainTitleParts = section.mainTitleParts?.length ? section.mainTitleParts : [section.title];
@@ -103,12 +119,14 @@ const createSection = (section) => {
     .join('');
 
   // Simplified structure for parallax cover effect
+  // For last-slide: logo above strapline (scrolls with text), background separate
   sectionDiv.innerHTML = `
     <div class="screen ${section.id.replace('section-', '')}">
       <div class="screen-inner">
         <div class="background">${bgImagesHtml}</div>
         <div class="fade"></div>
         <div class="strapline">
+          ${isLastSlide && logoImage ? `<img class="strapline-logo" src="${logoImage}" alt="Logo" />` : ''}
           <h1 class="main-title">${mainTitleHtml}</h1>
         </div>
         <div class="strapline-2">
@@ -244,10 +262,18 @@ const initScrollAnimations = (sections) => {
     const sectionElement = sectionElements[sectionIndex];
     if (!sectionElement) return;
 
-    // Use only the first background image
     const bgElement = sectionElement.querySelector('.image-bg-0');
-    if (bgElement && section.backgroundImages && section.backgroundImages[0]) {
-      bgElement.style.backgroundImage = `url(${section.backgroundImages[0]})`;
+    if (!bgElement || !section.backgroundImages) return;
+
+    // For last-slide: [0] = logo, [1] = background
+    // For other slides: [0] = background
+    const isLastSlide = section.id === 'section-last-slide';
+    const bgImageSrc = isLastSlide && section.backgroundImages.length >= 2
+      ? section.backgroundImages[1]
+      : section.backgroundImages[0];
+
+    if (bgImageSrc) {
+      bgElement.style.backgroundImage = `url(${bgImageSrc})`;
       bgElement.style.display = 'block';
     }
   });
@@ -332,12 +358,29 @@ export default async function decorate(block) {
           }
           const absoluteImageSrc = imageSrc ? new URL(imageSrc, window.location.origin).href : '';
 
-          // Extract additional images for multi-image effect
-          const allImages = doc.querySelectorAll('picture source[media="(min-width: 600px)"]');
-          const backgroundImages = Array.from(allImages).map((img) => {
+          // Extract all images from the page (picture sources and standalone img)
+          const allPictureSources = doc.querySelectorAll('picture source[media="(min-width: 600px)"]');
+          const rawImages = Array.from(allPictureSources).map((img) => {
             const [src] = img.getAttribute('srcset').split('?');
             return new URL(src, window.location.origin).href;
           });
+
+          // Also check for standalone img elements (not in picture)
+          const allImgElements = doc.querySelectorAll('img');
+          allImgElements.forEach((img) => {
+            // Skip if this img is inside a picture element (already processed)
+            if (!img.closest('picture')) {
+              const src = img.getAttribute('src');
+              if (src) {
+                const [cleanSrc] = src.split('?');
+                const absoluteSrc = new URL(cleanSrc, window.location.origin).href;
+                rawImages.push(absoluteSrc);
+              }
+            }
+          });
+
+          // Remove duplicates while preserving order (first occurrence wins)
+          const backgroundImages = [...new Set(rawImages)];
 
           // Extract description and time from metadata or content
           const descriptionElement = doc.querySelector('.description, .subtitle, p');

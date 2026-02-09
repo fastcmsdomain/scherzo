@@ -4,6 +4,8 @@ const config = {
   itemWidth: 300,
   youtubeApiKey: '',
   youtubeChannelId: '',
+  instagramAccessToken: 'EAAMk8DVyZAr0BQlxVsUyaJJ0z6hzNv7Vo6sJf6w0QUvg7y8lx8sG7GdZAeCkuAhUS2ave6twzOqpu3rqX8cIoQy8dZAiskLKv3EkqjzZC9v0iRqDgiDNs6UEmBD0flSzplPdz3n2ZBPhJgjiomfBSX9qUgZA4xxm9H8iFvGKfJztEPes4ojaEdy9KAALDZAjJAAeumnPz49Jb4nCTqAV1xYKZABfW0UQz9AxeVSkEoOI',
+  instagramUserId: '17841454725415470',
   facebookAccessToken: 'EAAMk8DVyZAr0BQlxVsUyaJJ0z6hzNv7Vo6sJf6w0QUvg7y8lx8sG7GdZAeCkuAhUS2ave6twzOqpu3rqX8cIoQy8dZAiskLKv3EkqjzZC9v0iRqDgiDNs6UEmBD0flSzplPdz3n2ZBPhJgjiomfBSX9qUgZA4xxm9H8iFvGKfJztEPes4ojaEdy9KAALDZAjJAAeumnPz49Jb4nCTqAV1xYKZABfW0UQz9AxeVSkEoOI',
   facebookPageId: '433485486688506',
 };
@@ -70,6 +72,50 @@ async function fetchFacebookFeed() {
 }
 
 /**
+ * Fetches Instagram feed
+ * @returns {Promise<Array>} Array of Instagram feed items
+ *
+ * NOTE: Requires a valid access token. For Instagram Graph API (Business/Creator),
+ * provide `instagramUserId`. For Basic Display API, leave it blank.
+ */
+async function fetchInstagramFeed() {
+  const fields = 'id,caption,media_type,media_url,permalink,thumbnail_url,timestamp';
+  const baseUrl = config.instagramUserId
+    ? `https://graph.facebook.com/v12.0/${config.instagramUserId}/media`
+    : 'https://graph.instagram.com/me/media';
+  const url = `${baseUrl}?fields=${fields}&access_token=${config.instagramAccessToken}&limit=20`;
+
+  try {
+    const response = await fetch(url);
+    const data = await response.json();
+
+    // Check for API errors
+    if (data.error) {
+      // Error fetching Instagram feed - return empty array
+      return [];
+    }
+
+    if (!data.data) {
+      return [];
+    }
+
+    return data.data
+      .map((item) => ({
+        type: 'instagram',
+        title: item.caption ? item.caption.substring(0, 100) : 'No caption',
+        image: item.media_url || item.thumbnail_url,
+        date: new Date(item.timestamp),
+        link: item.permalink,
+        mediaType: item.media_type,
+      }))
+      .filter((item) => item.image && item.link && !Number.isNaN(item.date.getTime()));
+  } catch (error) {
+    // Error fetching Instagram feed - return empty array
+    return [];
+  }
+}
+
+/**
  * Creates a search form with input field and a magnifying glass button
  * @param {function} onSearch - The search event handler
  * @returns {HTMLElement} The search form element
@@ -111,7 +157,7 @@ function createSearchField(onSearch) {
 
 /**
  * Creates a filter button
- * @param {string} type - The type of feed ('all', 'youtube', or 'facebook')
+ * @param {string} type - The type of feed ('all', 'youtube', 'facebook', or 'instagram')
  * @param {function} onClick - The click event handler
  * @returns {HTMLElement} The filter button element
  */
@@ -153,6 +199,7 @@ function createFeedItem(item) {
   const image = document.createElement('img');
   image.src = item.image;
   image.alt = item.title;
+  image.loading = 'lazy';
   image.width = config.itemWidth;
   imageWrapper.appendChild(image);
 
@@ -199,12 +246,15 @@ export default async function decorate(block) {
   const filterContainer = document.createElement('div');
   filterContainer.classList.add('filter-container');
 
-  const [youtubeFeed, facebookFeed] = await Promise.all([
+  const [youtubeFeed, facebookFeed, instagramFeed] = await Promise.all([
     fetchYouTubeFeed(),
     fetchFacebookFeed(),
+    fetchInstagramFeed(),
   ]);
 
-  const combinedFeed = [...youtubeFeed, ...facebookFeed].sort((a, b) => b.date - a.date);
+  const combinedFeed = [...youtubeFeed, ...facebookFeed, ...instagramFeed]
+    .filter((item) => item.image && item.link && !Number.isNaN(item.date.getTime()))
+    .sort((a, b) => b.date - a.date);
 
   let currentFeedIndex = 0;
   const feedsPerPage = 18;
@@ -267,11 +317,13 @@ export default async function decorate(block) {
   const allButton = createFilterButton('all', createFilterHandler('all'));
   const youtubeButton = createFilterButton('youtube', createFilterHandler('youtube'));
   const facebookButton = createFilterButton('facebook', createFilterHandler('facebook'));
+  const instagramButton = createFilterButton('instagram', createFilterHandler('instagram'));
 
   filterContainer.appendChild(searchField);
   filterContainer.appendChild(allButton);
   filterContainer.appendChild(youtubeButton);
   filterContainer.appendChild(facebookButton);
+  filterContainer.appendChild(instagramButton);
 
   block.appendChild(filterContainer);
   block.appendChild(feedContainer);

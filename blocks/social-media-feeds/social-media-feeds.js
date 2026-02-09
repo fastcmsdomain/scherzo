@@ -4,7 +4,7 @@ const config = {
   itemWidth: 300,
   youtubeApiKey: '',
   youtubeChannelId: '',
-  facebookAccessToken: '',
+  facebookAccessToken: 'EAAMk8DVyZAr0BQrpOhHCF70PzMVZADFLJVmxtuwB3qC9XxbpZA4FeefYEfcDRwqdejDsd5SwnA4ZAhTuYwlpFCbOzcgLAf0IQQ9QQly5zwfcZBEtd46qaxVSFTmpmMxllQ4fg7PnrDKZCET72FnSeb4oxCLCgd0HuyXtZBTeIEIk1xkDuf22MBzib5xmQuxE5zU4qY4MWU7bDun06CholbPUVnbQ7vKKyKKEIFyDCe2TbMZD',
   facebookPageId: 'A8TlULkWngISfZFhsJxC59B',
 };
 

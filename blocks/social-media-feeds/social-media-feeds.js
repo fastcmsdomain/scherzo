@@ -103,7 +103,9 @@ async function fetchInstagramFeed() {
       .map((item) => ({
         type: 'instagram',
         title: item.caption ? item.caption.substring(0, 100) : 'No caption',
-        image: item.media_url || item.thumbnail_url,
+        image: item.media_type === 'VIDEO'
+          ? (item.thumbnail_url || item.media_url)
+          : (item.media_url || item.thumbnail_url),
         date: new Date(item.timestamp),
         link: item.permalink,
         mediaType: item.media_type,

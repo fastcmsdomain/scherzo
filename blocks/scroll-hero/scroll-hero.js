@@ -1,6 +1,9 @@
 /**
  * Scroll Hero Block - Franklin Component
- * Parallax cover scroll animation with GSAP ScrollTrigger
+ * Wellington-style parallax cover scroll: each section is pinned (fixed) while
+ * the next section slides UP from the bottom to cover it. The previous section
+ * stays static; outgoing text drifts up and fades for a parallax feel.
+ * Built with GSAP ScrollTrigger. Optimized for performance and accessibility.
  */
 
 // =============================================================================
@@ -9,18 +12,28 @@
 
 const CONFIG = {
   gsapBaseURL: 'https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/',
-  scrollPerSection: 1.5, // viewport heights per section
-  animationPhases: {
-    reveal: 0.4, // 40% of scroll for section reveal
-    straplineStart: 0.2,
-    straplineEnd: 0.7,
-    subtitleStart: 0.35,
+  // Cover effect tuning
+  cover: {
+    factor: 1.6, // viewport heights of scroll per transition (longer = smoother)
+    dwell: 0.12, // portion of a segment the slide rests before its text shifts
+    // Two-phase split: the text shift completes FIRST, then the image cover
+    // plays. textPortion is the fraction of the moving part spent on the text;
+    // the image stays paused until the text has reached its final positions.
+    textPortion: 0.55,
   },
-  initialPositions: {
-    firstSection: { straplineTop: '18%', subtitleTop: '50%' },
-    otherSections: { straplineTop: '85%', subtitleTop: '105%' },
-    finalPositions: { straplineTop: '15%', subtitleTop: '50%' },
+  // Wellington-style text choreography. Each slide owns one scroll segment.
+  // When the slide settles, the TITLE (strapline) sits low (bottom anchor) and
+  // the SUBTITLE (strapline-2) waits off-screen below. As the user scrolls, the
+  // title travels to the TOP and the subtitle rises from the bottom to the
+  // MIDDLE. They never overlap: distinct top/middle/bottom anchors keep a gap.
+  // Positions are `top` values in vh (relative to the viewport).
+  text: {
+    titleBottomVh: 72, // title resting anchor near the bottom of the slide
+    titleTopVh: 14, // title destination near the top of the page
+    subtitleStartVh: 108, // subtitle starts just below the fold (off-screen)
+    subtitleMiddleVh: 52, // subtitle destination, the middle (below the top title)
   },
+  navScrollDuration: 1,
 };
 
 const SELECTORS = {
@@ -39,28 +52,66 @@ const CLASSES = {
 };
 
 // =============================================================================
+// PERFORMANCE: CACHED DOM REFERENCES
+// =============================================================================
+
+let cachedNavItems = null;
+let cachedSections = null;
+
+const clearDOMCache = () => {
+  cachedNavItems = null;
+  cachedSections = null;
+};
+
+const getNavItems = () => {
+  if (!cachedNavItems) {
+    cachedNavItems = document.querySelectorAll(SELECTORS.progressNavItem);
+  }
+  return cachedNavItems;
+};
+
+const getSections = () => {
+  if (!cachedSections) {
+    cachedSections = document.querySelectorAll(SELECTORS.screenSection);
+  }
+  return cachedSections;
+};
+
+// =============================================================================
+// ACCESSIBILITY: REDUCED MOTION SUPPORT
+// =============================================================================
+
+const prefersReducedMotion = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+// =============================================================================
 // UTILITY FUNCTIONS
 // =============================================================================
 
 /**
- * Updates progress navigation active state
+ * Updates progress navigation active state with ARIA
  * @param {number} activeIndex - Index of active section
  */
 const updateProgressNav = (activeIndex) => {
-  const navItems = document.querySelectorAll(SELECTORS.progressNavItem);
-  navItems.forEach((li, index) => {
-    li.classList.toggle(CLASSES.active, index === activeIndex);
+  getNavItems().forEach((li, index) => {
+    const isActive = index === activeIndex;
+    li.classList.toggle(CLASSES.active, isActive);
+    li.setAttribute('aria-current', isActive ? 'step' : 'false');
   });
 };
 
 /**
- * Loads an external script dynamically
+ * Loads an external script dynamically (skips duplicates)
  * @param {string} src - Script URL
  * @returns {Promise} - Resolves when script loads
  */
 const loadScript = (src) => new Promise((resolve, reject) => {
+  if (document.querySelector(`script[src="${src}"]`)) {
+    resolve();
+    return;
+  }
   const script = document.createElement('script');
   script.src = src;
+  script.async = true;
   script.onload = resolve;
   script.onerror = reject;
   document.head.appendChild(script);
@@ -73,43 +124,45 @@ const loadScript = (src) => new Promise((resolve, reject) => {
  */
 const extractImages = (doc) => {
   const images = [];
+  const { origin } = window.location;
 
-  // Extract from picture sources (desktop images)
   doc.querySelectorAll('picture source[media="(min-width: 600px)"]').forEach((source) => {
     const srcset = source.getAttribute('srcset');
     if (srcset) {
       const [src] = srcset.split('?');
-      images.push(new URL(src, window.location.origin).href);
+      images.push(new URL(src, origin).href);
     }
   });
 
-  // Extract standalone img elements (not in picture)
-  doc.querySelectorAll('img').forEach((img) => {
-    if (!img.closest('picture')) {
-      const src = img.getAttribute('src');
-      if (src) {
-        const [cleanSrc] = src.split('?');
-        images.push(new URL(cleanSrc, window.location.origin).href);
-      }
+  doc.querySelectorAll('img:not(picture img)').forEach((img) => {
+    const src = img.getAttribute('src');
+    if (src) {
+      const [cleanSrc] = src.split('?');
+      images.push(new URL(cleanSrc, origin).href);
     }
   });
 
-  // Remove duplicates, preserve order
   return [...new Set(images)];
 };
 
 /**
- * Extracts text content from elements
+ * Extracts non-empty text content from elements
  * @param {Document} doc - Parsed HTML document
  * @param {string} selector - CSS selector
  * @returns {string[]} - Array of text content
  */
-const extractTextParts = (doc, selector) => Array.from(doc.querySelectorAll(selector))
-  .map((el) => el.textContent.trim())
-  .filter(Boolean);
+const extractTextParts = (doc, selector) => {
+  const parts = [];
+  doc.querySelectorAll(selector).forEach((el) => {
+    const text = el.textContent.trim();
+    if (text) parts.push(text);
+  });
+  return parts;
+};
 
 /**
  * Gets background and logo image sources for a section
+ * For last-slide: [0] = logo, [1] = background. Other slides: [0] = background.
  * @param {Object} section - Section data
  * @returns {Object} - { bgImageSrc, logoImage }
  */
@@ -117,12 +170,22 @@ const getSectionImages = (section) => {
   const images = section.backgroundImages || [section.image];
   const isLastSlide = section.id === CLASSES.lastSlide;
 
-  // Last slide: [0] = logo, [1] = background
-  // Other slides: [0] = background
   if (isLastSlide && images.length >= 2) {
     return { logoImage: images[0], bgImageSrc: images[1] };
   }
   return { logoImage: '', bgImageSrc: images[0] || section.image };
+};
+
+/**
+ * Escapes HTML to prevent XSS
+ * @param {string} str - String to escape
+ * @returns {string} - Escaped string
+ */
+const escapeHtml = (str) => {
+  if (!str) return '';
+  const div = document.createElement('div');
+  div.textContent = str;
+  return div.innerHTML;
 };
 
 // =============================================================================
@@ -155,38 +218,45 @@ const loadGSAPLibraries = async () => {
 };
 
 // =============================================================================
-// FALLBACK SCROLL (NO GSAP)
+// FALLBACK SCROLL (NO GSAP / REDUCED MOTION)
 // =============================================================================
 
 /**
- * Initializes basic scroll behavior when GSAP is unavailable
+ * Initializes basic stacked scroll when GSAP is unavailable
+ * @param {HTMLElement} block - Block element (gets no-gsap class)
  */
-const initBasicScroll = () => {
-  const sections = document.querySelectorAll(SELECTORS.screenSection);
+const initBasicScroll = (block) => {
+  if (block) block.classList.add('no-gsap');
 
-  // Click navigation
-  document.querySelectorAll(SELECTORS.progressNavItem).forEach((li, index) => {
-    li.addEventListener('click', () => {
-      const target = sections[index]?.querySelector('.screen');
+  const sections = getSections();
+
+  getNavItems().forEach((li, index) => {
+    const go = () => {
+      const target = sections[index];
       if (target) {
-        target.scrollIntoView({ behavior: 'smooth' });
+        target.scrollIntoView({ behavior: prefersReducedMotion() ? 'auto' : 'smooth' });
+        target.focus({ preventScroll: true });
+      }
+    };
+    li.addEventListener('click', go);
+    li.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        go();
       }
     });
   });
 
-  // Intersection observer for progress updates
   const observer = new IntersectionObserver(
     (entries) => {
       entries.forEach((entry) => {
         if (entry.isIntersecting) {
-          const index = Array.from(sections).indexOf(entry.target);
-          updateProgressNav(index);
+          updateProgressNav(Array.from(sections).indexOf(entry.target));
         }
       });
     },
     { threshold: 0.5 },
   );
-
   sections.forEach((section) => observer.observe(section));
 };
 
@@ -195,25 +265,26 @@ const initBasicScroll = () => {
 // =============================================================================
 
 /**
- * Creates HTML for title/subtitle parts
+ * Creates HTML for title/subtitle parts with escaped content
  * @param {string[]} parts - Array of text parts
  * @param {string} className - Base class name
  * @returns {string} - HTML string
  */
 const createPartsHtml = (parts, className) => parts
-  .map((part, i) => `<span class="${className} ${className}-${i}">${part}</span>`)
+  .map((part, i) => `<span class="${className} ${className}-${i}">${escapeHtml(part)}</span>`)
   .join('');
 
 /**
- * Creates a section DOM element
+ * Creates a section DOM element with accessibility attributes
  * @param {Object} section - Section data
+ * @param {number} index - Section index
+ * @param {number} total - Total sections
  * @returns {HTMLElement} - Section element
  */
-const createSection = (section) => {
+const createSection = (section, index, total) => {
   const { bgImageSrc, logoImage } = getSectionImages(section);
   const isLastSlide = section.id === CLASSES.lastSlide;
 
-  // Prepare content
   const mainTitleParts = section.mainTitleParts?.length
     ? section.mainTitleParts
     : [section.title];
@@ -222,20 +293,23 @@ const createSection = (section) => {
     : [section.subtitle];
 
   const bgHtml = bgImageSrc
-    ? `<div class="img image-bg image-bg-0" data-bg="${bgImageSrc}"></div>`
+    ? `<div class="img image-bg image-bg-0" data-bg="${escapeHtml(bgImageSrc)}" role="img" aria-label="${escapeHtml(section.title)}"></div>`
     : '';
   const logoHtml = isLastSlide && logoImage
-    ? `<img class="strapline-logo" src="${logoImage}" alt="Logo" />`
+    ? `<img class="strapline-logo" src="${escapeHtml(logoImage)}" alt="Scherzo Logo" loading="lazy" decoding="async" width="125" />`
     : '';
 
-  // Create element
   const sectionDiv = document.createElement('div');
   sectionDiv.className = `screen-section ${section.id}`;
+  sectionDiv.setAttribute('role', 'region');
+  sectionDiv.setAttribute('aria-label', `Section ${index + 1} of ${total}: ${section.title}`);
+  sectionDiv.setAttribute('tabindex', '-1');
+
   sectionDiv.innerHTML = `
     <div class="screen ${section.id.replace('section-', '')}">
       <div class="screen-inner">
-        <div class="background">${bgHtml}</div>
-        <div class="fade"></div>
+        <div class="background" aria-hidden="true">${bgHtml}</div>
+        <div class="fade" aria-hidden="true"></div>
         <div class="strapline">
           ${logoHtml}
           <h1 class="main-title">${createPartsHtml(mainTitleParts, 'title-part')}</h1>
@@ -251,140 +325,180 @@ const createSection = (section) => {
 };
 
 // =============================================================================
-// PARALLAX ANIMATIONS
+// PARALLAX COVER ANIMATIONS (Wellington-style)
 // =============================================================================
 
 /**
- * Sets up scroll trigger for a single section
- * @param {Object} gsap - GSAP instance
- * @param {HTMLElement} section - Section element
- * @param {number} index - Section index
+ * Sets all section background images
+ * @param {Object[]} sections - Section data array
  */
-const setupSectionScrollTrigger = (gsap, section, index) => {
-  const strapline = section.querySelector(SELECTORS.strapline);
-  const strapline2 = section.querySelector(SELECTORS.strapline2);
-  const { animationPhases, initialPositions } = CONFIG;
+const setBackgrounds = (sections) => {
+  const elements = getSections();
+  sections.forEach((section, index) => {
+    const bgElement = elements[index]?.querySelector(SELECTORS.backgroundImage);
+    if (bgElement) {
+      const { bgImageSrc } = getSectionImages(section);
+      if (bgImageSrc) {
+        bgElement.style.backgroundImage = `url(${bgImageSrc})`;
+        bgElement.style.display = 'block';
+      }
+    }
+  });
+};
 
-  const scrollPerSection = window.innerHeight * CONFIG.scrollPerSection;
-  const sectionStart = index * scrollPerSection;
+/**
+ * Builds the pinned cover-reveal timeline (Wellington College choreography).
+ *
+ * Each slide owns one scroll segment. When the slide settles, its TITLE
+ * (.strapline) sits low (bottom anchor) and its SUBTITLE (.strapline-2) waits
+ * off-screen below. As the user scrolls through the segment:
+ *   - the title travels from the bottom up to the TOP of the page;
+ *   - the subtitle rises from the bottom to the MIDDLE of the page;
+ *   - the next slide's image slides up to cover, lagging slightly behind the
+ *     text so the picture trails the words.
+ * Distinct top/middle/bottom anchors guarantee the lines never overlap.
+ * Everything is scrubbed, so scroll-up plays the exact reverse.
+ * @param {Object} gsap - GSAP instance
+ */
+const initParallaxCover = (gsap) => {
+  const sections = getSections();
+  const container = document.querySelector(SELECTORS.container);
+  const total = sections.length;
+  const { factor, dwell, textPortion } = CONFIG.cover;
+  const {
+    titleBottomVh,
+    titleTopVh,
+    subtitleStartVh,
+    subtitleMiddleVh,
+  } = CONFIG.text;
 
-  // Initial state
-  gsap.set(section, { clipPath: 'inset(100% 0 0 0)' });
-  if (strapline) {
-    gsap.set(strapline, {
-      top: initialPositions.otherSections.straplineTop,
-      y: '0',
-      scale: 1.1,
-    });
+  // Total scroll distance: one segment per transition + a final resting screen
+  if (container) {
+    container.style.height = `${((total - 1) * factor + 1) * 100}vh`;
   }
-  if (strapline2) {
-    gsap.set(strapline2, {
-      top: initialPositions.otherSections.subtitleTop,
-      y: '0',
-      opacity: 1,
-    });
-  }
 
-  // Section reveal animation
-  gsap.to(section, {
-    clipPath: 'inset(0% 0 0 0)',
-    ease: 'none',
-    scrollTrigger: {
-      trigger: 'body',
-      start: sectionStart,
-      end: sectionStart + (scrollPerSection * animationPhases.reveal),
-      scrub: true,
-      onEnter: () => updateProgressNav(index),
-      onEnterBack: () => updateProgressNav(index),
-      onLeaveBack: () => {
-        updateProgressNav(index - 1);
-        gsap.set(section, { clipPath: 'inset(100% 0 0 0)' });
-      },
-    },
+  // Scroll distance (px) of a single transition; recomputed on refresh
+  const segment = () => window.innerHeight * factor;
+
+  // Place a strapline at a given viewport anchor (top in vh, centred on itself)
+  const setAt = (el, vh, opacity = 1) => {
+    if (el) gsap.set(el, { top: `${vh}vh`, yPercent: -50, opacity });
+  };
+
+  // Initialize base states: each slide's title rests low, subtitle off-screen.
+  sections.forEach((section, i) => {
+    const title = section.querySelector(SELECTORS.strapline);
+    const subtitle = section.querySelector(SELECTORS.strapline2);
+
+    setAt(title, titleBottomVh, 1);
+    // Subtitle waits below the fold until its segment begins
+    setAt(subtitle, subtitleStartVh, 0);
+
+    // First section visible; the rest wait below the fold
+    gsap.set(section, { yPercent: i === 0 ? 0 : 100 });
   });
 
-  // Strapline animation
-  if (strapline) {
-    gsap.to(strapline, {
-      top: initialPositions.finalPositions.straplineTop,
-      y: '-50%',
-      scale: 0.8,
-      ease: 'none',
-      scrollTrigger: {
-        trigger: 'body',
-        start: sectionStart + (scrollPerSection * animationPhases.straplineStart),
-        end: sectionStart + (scrollPerSection * animationPhases.straplineEnd),
-        scrub: true,
-      },
-    });
-  }
+  updateProgressNav(0);
 
-  // Subtitle animation
-  if (strapline2) {
-    gsap.to(strapline2, {
-      top: initialPositions.finalPositions.subtitleTop,
-      y: '-50%',
-      opacity: 1,
-      ease: 'none',
+  // One timeline per transition, split into two sequential phases:
+  //   Phase 1 [0 .. textPortion]      shift slide[t-1]'s text into place
+  //   Phase 2 [textPortion .. 1]      slide[t]'s image rises to cover it
+  // The image stays PAUSED through phase 1, so it only starts moving once the
+  // title is at the top and the subtitle is in the middle. Eased tweens keep
+  // both phases buttery-smooth (Wellington glide).
+  const imagePortion = 1 - textPortion;
+
+  for (let t = 1; t < total; t += 1) {
+    const covering = sections[t];
+    const active = sections[t - 1];
+
+    const activeTitle = active.querySelector(SELECTORS.strapline);
+    const activeSubtitle = active.querySelector(SELECTORS.strapline2);
+
+    const tl = gsap.timeline({
       scrollTrigger: {
         trigger: 'body',
-        start: sectionStart + (scrollPerSection * animationPhases.subtitleStart),
-        end: sectionStart + (scrollPerSection * animationPhases.straplineEnd),
-        scrub: true,
+        start: () => (t - 1) * segment() + segment() * dwell,
+        end: () => t * segment(),
+        scrub: 1, // small smoothing so scrubbing glides instead of snapping
+        invalidateOnRefresh: true,
+        onEnter: () => updateProgressNav(t),
+        onEnterBack: () => updateProgressNav(t),
+        onLeaveBack: () => updateProgressNav(t - 1),
       },
     });
+
+    // --- Phase 1: text settles (image untouched) ---
+    // Title rises from the bottom anchor to the top of the page.
+    if (activeTitle) {
+      tl.fromTo(
+        activeTitle,
+        { top: `${titleBottomVh}vh` },
+        { top: `${titleTopVh}vh`, ease: 'power1.inOut', duration: textPortion },
+        0,
+      );
+    }
+
+    // Subtitle rises from below the fold to the middle, fading in. It stops at
+    // the middle, so the two lines never meet.
+    if (activeSubtitle) {
+      tl.fromTo(
+        activeSubtitle,
+        { top: `${subtitleStartVh}vh`, opacity: 0 },
+        {
+          top: `${subtitleMiddleVh}vh`,
+          opacity: 1,
+          ease: 'power1.inOut',
+          duration: textPortion,
+        },
+        0,
+      );
+    }
+
+    // --- Phase 2: image cover (starts only after the text is in place) ---
+    tl.fromTo(
+      covering,
+      { yPercent: 100 },
+      { yPercent: 0, ease: 'power2.inOut', duration: imagePortion },
+      textPortion,
+    );
   }
 };
 
 /**
- * Initializes parallax cover effect for all sections
+ * Wires progress-nav clicks/keys to scroll to a section's resting position
  * @param {Object} gsap - GSAP instance
  */
-const initParallaxCover = (gsap) => {
-  const sections = document.querySelectorAll(SELECTORS.screenSection);
-  const container = document.querySelector(SELECTORS.container);
-  const { initialPositions } = CONFIG;
+const initNavControls = (gsap) => {
+  const { factor } = CONFIG.cover;
+  const segment = () => window.innerHeight * factor;
 
-  // Set container height for scrolling
-  if (container) {
-    container.style.height = `${sections.length * CONFIG.scrollPerSection * 100}vh`;
-  }
+  getNavItems().forEach((li, index) => {
+    const go = () => {
+      const targetY = index === 0 ? 0 : index * segment();
+      gsap.to(window, {
+        duration: CONFIG.navScrollDuration,
+        scrollTo: { y: targetY, autoKill: false },
+        ease: 'power2.inOut',
+      });
+      const target = getSections()[index];
+      if (target) target.focus({ preventScroll: true });
+    };
 
-  sections.forEach((section, index) => {
-    if (index === 0) {
-      // First section: visible, text in position
-      updateProgressNav(0);
-      gsap.set(section, { clipPath: 'inset(0 0 0 0)' });
-
-      const strapline = section.querySelector(SELECTORS.strapline);
-      const strapline2 = section.querySelector(SELECTORS.strapline2);
-
-      if (strapline) {
-        gsap.set(strapline, {
-          top: initialPositions.firstSection.straplineTop,
-          y: '-50%',
-          scale: 1,
-        });
+    li.addEventListener('click', go);
+    li.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        go();
       }
-      if (strapline2) {
-        gsap.set(strapline2, {
-          top: initialPositions.firstSection.subtitleTop,
-          y: '-50%',
-          opacity: 1,
-        });
-      }
-      return;
-    }
-
-    setupSectionScrollTrigger(gsap, section, index);
+    });
   });
 };
 
 /**
  * Initializes scroll animations with GSAP
- * @param {Object[]} sections - Section data array
  */
-const initScrollAnimations = (sections) => {
+const initScrollAnimations = () => {
   const { gsap, ScrollTrigger } = window;
 
   if (!gsap || !ScrollTrigger) {
@@ -394,38 +508,14 @@ const initScrollAnimations = (sections) => {
 
   gsap.registerPlugin(ScrollTrigger);
 
-  const sectionElements = document.querySelectorAll(SELECTORS.screenSection);
-  const navItems = document.querySelectorAll(SELECTORS.progressNavItem);
-
-  // Set background images
-  sections.forEach((section, index) => {
-    const element = sectionElements[index];
-    const bgElement = element?.querySelector(SELECTORS.backgroundImage);
-
-    if (bgElement) {
-      const { bgImageSrc } = getSectionImages(section);
-      if (bgImageSrc) {
-        bgElement.style.backgroundImage = `url(${bgImageSrc})`;
-        bgElement.style.display = 'block';
-      }
-    }
-  });
-
-  // Initialize parallax
   initParallaxCover(gsap);
+  initNavControls(gsap);
 
-  // Navigation click handlers
-  navItems.forEach((li, index) => {
-    li.addEventListener('click', () => {
-      const target = sectionElements[index];
-      if (target) {
-        gsap.to(window, {
-          duration: 1,
-          scrollTo: { y: target, autoKill: false },
-          ease: 'power2.inOut',
-        });
-      }
-    });
+  // Keep distances correct on resize/orientation change
+  let resizeTimer;
+  window.addEventListener('resize', () => {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(() => ScrollTrigger.refresh(), 200);
   });
 };
 
@@ -434,7 +524,7 @@ const initScrollAnimations = (sections) => {
 // =============================================================================
 
 /**
- * Fetches and processes slide data from a single slide path
+ * Fetches and processes a single slide's data
  * @param {Object} item - Slide index item
  * @returns {Promise<Object|null>} - Processed section data or null
  */
@@ -450,11 +540,9 @@ const fetchSlideData = async (item) => {
     const html = await response.text();
     const doc = new DOMParser().parseFromString(html, 'text/html');
 
-    // Extract content
     const textParts = extractTextParts(doc, '.tytul-zdjecia > div > div');
     const backgroundImages = extractImages(doc);
 
-    // Get first image as fallback
     const firstSource = doc.querySelector('picture source[media="(min-width: 600px)"]');
     const fallbackImage = firstSource
       ? new URL(firstSource.getAttribute('srcset').split('?')[0], window.location.origin).href
@@ -499,54 +587,70 @@ const fetchScrollHeroData = async () => {
 // =============================================================================
 
 /**
- * Creates progress navigation element
+ * Creates progress navigation with accessibility
  * @param {Object[]} sections - Section data array
  * @returns {HTMLElement} - Navigation element
  */
 const createProgressNav = (sections) => {
-  const nav = document.createElement('ul');
-  nav.className = 'progress-nav';
+  const nav = document.createElement('nav');
+  nav.setAttribute('aria-label', 'Section navigation');
+
+  const ul = document.createElement('ul');
+  ul.className = 'progress-nav';
+  ul.setAttribute('role', 'list');
 
   sections.forEach((section, index) => {
     const li = document.createElement('li');
-    li.innerHTML = `<span>${section.title}</span>`;
+    li.setAttribute('role', 'listitem');
+    li.setAttribute('tabindex', '0');
+    li.setAttribute('aria-current', index === 0 ? 'step' : 'false');
+    li.setAttribute('aria-label', `Go to section: ${section.title}`);
+    li.innerHTML = `<span>${escapeHtml(section.title)}</span>`;
     if (index === 0) li.classList.add(CLASSES.active);
-    nav.appendChild(li);
+    ul.appendChild(li);
   });
 
+  nav.appendChild(ul);
   return nav;
 };
 
 /**
- * Main block decorator function
+ * Main block decorator
  * @param {HTMLElement} block - Block element to decorate
  */
 export default async function decorate(block) {
+  clearDOMCache();
+
   const sections = await fetchScrollHeroData();
 
   if (!sections.length) {
-    block.innerHTML = '<p>No scroll hero sections found.</p>';
+    block.innerHTML = '<p role="alert">No scroll hero sections found.</p>';
     return;
   }
 
-  // Build DOM structure
   const container = document.createElement('div');
   container.className = 'scroll-hero-container';
+  container.setAttribute('role', 'main');
 
-  sections.forEach((section) => {
-    container.appendChild(createSection(section));
+  const total = sections.length;
+  sections.forEach((section, index) => {
+    container.appendChild(createSection(section, index, total));
   });
 
-  // Render
   block.innerHTML = '';
   block.appendChild(createProgressNav(sections));
   block.appendChild(container);
 
-  // Initialize animations after DOM is ready
-  const gsapLoaded = await loadGSAPLibraries();
-  if (gsapLoaded && window.gsap && window.ScrollTrigger) {
-    initScrollAnimations(sections);
-  } else {
-    initBasicScroll();
-  }
+  // Always set background images (works for both GSAP and fallback paths)
+  setBackgrounds(sections);
+
+  // Initialize after paint so layout/measurements are stable
+  requestAnimationFrame(async () => {
+    const gsapLoaded = await loadGSAPLibraries();
+    if (gsapLoaded && window.gsap && window.ScrollTrigger) {
+      initScrollAnimations();
+    } else {
+      initBasicScroll(block);
+    }
+  });
 }

@@ -29,9 +29,15 @@ const CONFIG = {
   // Positions are `top` values in vh (relative to the viewport).
   text: {
     titleBottomVh: 72, // title resting anchor near the bottom of the slide
-    titleTopVh: 14, // title destination near the top of the page
+    titleTopVh: 20, // title destination near the top of the page
     subtitleStartVh: 108, // subtitle starts just below the fold (off-screen)
     subtitleMiddleVh: 52, // subtitle destination, the middle (below the top title)
+    // Slides listed here keep BOTH straplines locked dead-centre (no shift) for
+    // the whole slide. Index is the slide's position (0-based). The 2nd slide
+    // (index 1) is centred; its title is at the centre, subtitle just below.
+    centeredSlides: [1],
+    centeredTitleVh: 66, // centred slide: title block sits centred in viewport
+    centeredSubtitleVh: 66, // centred slide: subtitle (empty here) tracks centre
   },
   navScrollDuration: 1,
 };
@@ -44,6 +50,7 @@ const SELECTORS = {
   strapline: '.strapline',
   strapline2: '.strapline-2',
   backgroundImage: '.image-bg-0',
+  scrollOverlay: '.scroll-overlay',
 };
 
 const CLASSES = {
@@ -309,6 +316,7 @@ const createSection = (section, index, total) => {
     <div class="screen ${section.id.replace('section-', '')}">
       <div class="screen-inner">
         <div class="background" aria-hidden="true">${bgHtml}</div>
+        <div class="scroll-overlay" aria-hidden="true"></div>
         <div class="fade" aria-hidden="true"></div>
         <div class="strapline">
           ${logoHtml}
@@ -370,7 +378,12 @@ const initParallaxCover = (gsap) => {
     titleTopVh,
     subtitleStartVh,
     subtitleMiddleVh,
+    centeredSlides,
+    centeredTitleVh,
+    centeredSubtitleVh,
   } = CONFIG.text;
+
+  const isCentered = (index) => centeredSlides.includes(index);
 
   // Total scroll distance: one segment per transition + a final resting screen
   if (container) {
@@ -389,10 +402,19 @@ const initParallaxCover = (gsap) => {
   sections.forEach((section, i) => {
     const title = section.querySelector(SELECTORS.strapline);
     const subtitle = section.querySelector(SELECTORS.strapline2);
+    const overlay = section.querySelector(SELECTORS.scrollOverlay);
 
-    setAt(title, titleBottomVh, 1);
-    // Subtitle waits below the fold until its segment begins
-    setAt(subtitle, subtitleStartVh, 0);
+    if (isCentered(i)) {
+      // Centred slide: both straplines locked dead-centre, fully visible.
+      setAt(title, centeredTitleVh, 1);
+      setAt(subtitle, centeredSubtitleVh, 1);
+    } else {
+      setAt(title, titleBottomVh, 1);
+      // Subtitle waits below the fold until its segment begins
+      setAt(subtitle, subtitleStartVh, 0);
+    }
+    // Overlay starts fully transparent (no darkening at the slide's rest state)
+    if (overlay) gsap.set(overlay, { opacity: 0 });
 
     // First section visible; the rest wait below the fold
     gsap.set(section, { yPercent: i === 0 ? 0 : 100 });
@@ -414,6 +436,7 @@ const initParallaxCover = (gsap) => {
 
     const activeTitle = active.querySelector(SELECTORS.strapline);
     const activeSubtitle = active.querySelector(SELECTORS.strapline2);
+    const activeOverlay = active.querySelector(SELECTORS.scrollOverlay);
 
     const tl = gsap.timeline({
       scrollTrigger: {
@@ -429,28 +452,43 @@ const initParallaxCover = (gsap) => {
     });
 
     // --- Phase 1: text settles (image untouched) ---
-    // Title rises from the bottom anchor to the top of the page.
-    if (activeTitle) {
-      tl.fromTo(
-        activeTitle,
-        { top: `${titleBottomVh}vh` },
-        { top: `${titleTopVh}vh`, ease: 'power1.inOut', duration: textPortion },
-        0,
-      );
+    // Centred slides keep their text locked in the centre (no shift); only the
+    // overlay and the image cover play during their segment.
+    if (!isCentered(t - 1)) {
+      // Title rises from the bottom anchor to the top of the page.
+      if (activeTitle) {
+        tl.fromTo(
+          activeTitle,
+          { top: `${titleBottomVh}vh` },
+          { top: `${titleTopVh}vh`, ease: 'power1.inOut', duration: textPortion },
+          0,
+        );
+      }
+
+      // Subtitle rises from below the fold to the middle, fading in. It stops at
+      // the middle, so the two lines never meet.
+      if (activeSubtitle) {
+        tl.fromTo(
+          activeSubtitle,
+          { top: `${subtitleStartVh}vh`, opacity: 0 },
+          {
+            top: `${subtitleMiddleVh}vh`,
+            opacity: 1,
+            ease: 'power1.inOut',
+            duration: textPortion,
+          },
+          0,
+        );
+      }
     }
 
-    // Subtitle rises from below the fold to the middle, fading in. It stops at
-    // the middle, so the two lines never meet.
-    if (activeSubtitle) {
+    // Dark overlay fades in over the image as the text shifts, reaching full
+    // strength (CSS rgba alpha 0.5) exactly when the title is at the top.
+    if (activeOverlay) {
       tl.fromTo(
-        activeSubtitle,
-        { top: `${subtitleStartVh}vh`, opacity: 0 },
-        {
-          top: `${subtitleMiddleVh}vh`,
-          opacity: 1,
-          ease: 'power1.inOut',
-          duration: textPortion,
-        },
+        activeOverlay,
+        { opacity: 0 },
+        { opacity: 1, ease: 'power1.inOut', duration: textPortion },
         0,
       );
     }

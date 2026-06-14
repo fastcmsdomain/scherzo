@@ -168,22 +168,26 @@ main .section .scroll-hero-wrapper {
   background-color: #00203e;
 }
 
-.screen-inner:before {
-  z-index: 2;
-  content: '';
-  display: block;
-  height:100vh;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  position: absolute;
-  background: rgba(0, 32, 62, 0.3);
-  pointer-events: none;
-}
-
 /* Fade overlay */
 .fade {
   display: none;
+}
+
+/* Scroll-driven darkening overlay - sits above the image, below the text.
+   GSAP animates its opacity 0 -> 1 as the text shifts, so the image goes from
+   no overlay (rgba(0, 32, 62, 0)) to a 0.5-alpha veil (rgba(0, 32, 62, 0.5))
+   exactly when the title reaches the top. Triggers on every slide. */
+.scroll-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  z-index: 1; /* above .background (0), below .strapline-2 (9) / .strapline (10) */
+  background: rgba(0, 32, 62, 0.5);
+  opacity: 0;
+  pointer-events: none;
+  will-change: opacity;
 }
 
 /* Background image setup - full viewport cover */
@@ -195,6 +199,11 @@ main .section .scroll-hero-wrapper {
   left: 0;
   z-index: 0;
   overflow: hidden;
+}
+
+/* Second slide only: soft blur on its background image */
+.screen-section:nth-child(2) .background .img {
+  filter: blur(3px);
 }
 
 /* Background image - covers viewport */
@@ -304,8 +313,7 @@ main .section .scroll-hero-wrapper {
 
 .strapline .main-title .title-part-1 {
   font-family: var(--body-font-family);
-  font-size: 1.4rem;
-  text-transform: uppercase;
+  font-size: 1.3rem;
   line-height: 1.5;
   font-weight: 300;
   opacity: 0.9;
@@ -345,7 +353,7 @@ main .section .scroll-hero-wrapper {
   }
   
   .strapline .main-title .title-part-0 {
-    font-size: 44px; /* Tablet starting size, will animate to 30px */
+    font-size: 32px; /* Tablet starting size, will animate to 30px */
   }
   
   .strapline-2 .subtitle {

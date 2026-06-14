@@ -28,8 +28,8 @@ const CONFIG = {
   // MIDDLE. They never overlap: distinct top/middle/bottom anchors keep a gap.
   // Positions are `top` values in vh (relative to the viewport).
   text: {
-    titleBottomVh: 72, // title resting anchor near the bottom of the slide
-    titleTopVh: 20, // title destination near the top of the page
+    titleBottomVh: 95, // title resting anchor at the very bottom of the slide
+    titleTopVh: 15, // title destination near the top of the page
     subtitleStartVh: 108, // subtitle starts just below the fold (off-screen)
     subtitleMiddleVh: 52, // subtitle destination, the middle (below the top title)
     // Slides listed here keep BOTH straplines locked dead-centre (no shift) for
@@ -413,8 +413,9 @@ const initParallaxCover = (gsap) => {
       // Subtitle waits below the fold until its segment begins
       setAt(subtitle, subtitleStartVh, 0);
     }
-    // Overlay starts fully transparent (no darkening at the slide's rest state)
-    if (overlay) gsap.set(overlay, { opacity: 0 });
+    // Overlay: centred slides keep it fully on (constant 0.5 veil); others
+    // start transparent and the overlay fades in as the text shifts.
+    if (overlay) gsap.set(overlay, { opacity: isCentered(i) ? 1 : 0 });
 
     // First section visible; the rest wait below the fold
     gsap.set(section, { yPercent: i === 0 ? 0 : 100 });
@@ -484,7 +485,8 @@ const initParallaxCover = (gsap) => {
 
     // Dark overlay fades in over the image as the text shifts, reaching full
     // strength (CSS rgba alpha 0.5) exactly when the title is at the top.
-    if (activeOverlay) {
+    // Centred slides skip this: their overlay stays at a constant 0.5 veil.
+    if (activeOverlay && !isCentered(t - 1)) {
       tl.fromTo(
         activeOverlay,
         { opacity: 0 },

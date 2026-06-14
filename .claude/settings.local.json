@@ -52,7 +52,15 @@
       "Skill(webapp-testing)",
       "Bash(playwright install:*)",
       "Bash(npm run lint:*)",
-      "Bash(python test_overlap.py:*)"
+      "Bash(python test_overlap.py:*)",
+      "Bash(ls -lt /Users/simacbook/Development/GitHub/scherzo/scherzo/*.png /tmp/*.png 2>/dev/null | grep -iE '1\\\\.png|2\\\\.png' | head; echo \"---recent in cwd---\"; ls -lt /Users/simacbook/Development/GitHub/scherzo/scherzo/ 2>/dev/null | head -8)",
+      "Read(//private/tmp/**)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:3000/)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:3000/slides/query-index.json)",
+      "Bash(curl -s http://localhost:3000/slides/query-index.json)",
+      "Bash(curl -s http://localhost:3000/)",
+      "Bash(npx eslint *)",
+      "Bash(npx stylelint *)"
     ],
     "deny": [],
     "ask": []

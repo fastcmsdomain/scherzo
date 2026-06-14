@@ -29,15 +29,22 @@ const CONFIG = {
   // Positions are `top` values in vh (relative to the viewport).
   text: {
     titleBottomVh: 95, // title resting anchor at the very bottom of the slide
-    titleTopVh: 15, // title destination near the top of the page
+    titleTopVh: 10, // title destination near the top of the page
+    titleShiftScale: 0.8, // shifting title scales to half size as it reaches top
     subtitleStartVh: 108, // subtitle starts just below the fold (off-screen)
     subtitleMiddleVh: 52, // subtitle destination, the middle (below the top title)
-    // Slides listed here keep BOTH straplines locked dead-centre (no shift) for
-    // the whole slide. Index is the slide's position (0-based). The 2nd slide
-    // (index 1) is centred; its title is at the centre, subtitle just below.
+    // Slides listed here keep BOTH straplines locked centred (no shift) for the
+    // whole slide. Index is the slide's position (0-based). The 2nd slide
+    // (index 1) is centred; the last slide is centred automatically too.
     centeredSlides: [1],
-    centeredTitleVh: 66, // centred slide: title block sits centred in viewport
-    centeredSubtitleVh: 66, // centred slide: subtitle (empty here) tracks centre
+    // Vertical anchor (vh) for a centred slide's text block. Default 50 = dead
+    // centre (used by the last slide). Per-index overrides compensate for blocks
+    // whose trailing whitespace would otherwise sit them high (slide 2's long
+    // title + paragraph needs a lower anchor to read as centred).
+    centeredAnchorVh: 60,
+    centeredAnchorOverrides: { 1: 66 },
+    // The last slide's strapline is controlled separately from slide 2.
+    lastSlideAnchorVh: 30,
   },
   navScrollDuration: 1,
 };
@@ -376,14 +383,27 @@ const initParallaxCover = (gsap) => {
   const {
     titleBottomVh,
     titleTopVh,
+    titleShiftScale,
     subtitleStartVh,
     subtitleMiddleVh,
     centeredSlides,
-    centeredTitleVh,
-    centeredSubtitleVh,
+    centeredAnchorVh,
+    centeredAnchorOverrides,
+    lastSlideAnchorVh,
   } = CONFIG.text;
 
-  const isCentered = (index) => centeredSlides.includes(index);
+  const isLastSlide = (index) => sections[index]?.classList.contains(CLASSES.lastSlide);
+
+  // A slide is centred if it's in the config list OR it's the last slide,
+  // which is also locked centred (like slide 2).
+  const isCentered = (index) => centeredSlides.includes(index) || isLastSlide(index);
+
+  // Vertical anchor for a centred slide. The last slide is controlled
+  // separately; otherwise use a per-index override, else the default.
+  const anchorFor = (index) => {
+    if (isLastSlide(index)) return lastSlideAnchorVh;
+    return centeredAnchorOverrides[index] ?? centeredAnchorVh;
+  };
 
   // Total scroll distance: one segment per transition + a final resting screen
   if (container) {
@@ -405,9 +425,9 @@ const initParallaxCover = (gsap) => {
     const overlay = section.querySelector(SELECTORS.scrollOverlay);
 
     if (isCentered(i)) {
-      // Centred slide: both straplines locked dead-centre, fully visible.
-      setAt(title, centeredTitleVh, 1);
-      setAt(subtitle, centeredSubtitleVh, 1);
+      // Centred slide: both straplines locked centred, fully visible.
+      setAt(title, anchorFor(i), 1);
+      setAt(subtitle, anchorFor(i), 1);
     } else {
       setAt(title, titleBottomVh, 1);
       // Subtitle waits below the fold until its segment begins
@@ -456,12 +476,18 @@ const initParallaxCover = (gsap) => {
     // Centred slides keep their text locked in the centre (no shift); only the
     // overlay and the image cover play during their segment.
     if (!isCentered(t - 1)) {
-      // Title rises from the bottom anchor to the top of the page.
+      // Title rises from the bottom anchor to the top of the page, scaling
+      // down to half size as it reaches the top.
       if (activeTitle) {
         tl.fromTo(
           activeTitle,
-          { top: `${titleBottomVh}vh` },
-          { top: `${titleTopVh}vh`, ease: 'power1.inOut', duration: textPortion },
+          { top: `${titleBottomVh}vh`, scale: 1 },
+          {
+            top: `${titleTopVh}vh`,
+            scale: titleShiftScale,
+            ease: 'power1.inOut',
+            duration: textPortion,
+          },
           0,
         );
       }

@@ -32,7 +32,7 @@ const CONFIG = {
     titleTopVh: 14, // title destination near the top of the page
     titleShiftScale: 0.8, // shifting title scales to half size as it reaches top
     subtitleStartVh: 108, // subtitle starts just below the fold (off-screen)
-    subtitleMiddleVh: 52, // subtitle destination, the middle (below the top title)
+    subtitleMiddleVh: 60, // subtitle destination, the middle (below the top title)
     // Slides listed here keep BOTH straplines locked centred (no shift) for the
     // whole slide. Index is the slide's position (0-based). The 2nd slide
     // (index 1) is centred; the last slide is centred automatically too.

@@ -34,11 +34,18 @@ main .section .scroll-hero-wrapper {
 .progress-nav li {
   cursor: pointer;
   height: 2px;
-  padding: 7px 0;
+  padding: var(--space-4) 0;
   position: relative;
   transition: all 0.3s ease;
   width: 14px;
+  margin-bottom: var(--space-4);
 }
+/* 
+.progress-nav li:last-child,
+.progress-nav li:first-child,
+.progress-nav li:nth-child(2) {
+  display: none;
+} */
 
 .progress-nav li:before {
   background: rgba(255, 255, 255, 0.5);
@@ -52,9 +59,14 @@ main .section .scroll-hero-wrapper {
 }
 
 .progress-nav li span {
-  color: #fff;
+  color: var(--color-white);
   display: block;
-  font-size: 25px;
+  font-size: var(--font-size-xs);
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  line-height: 1.3;
   left: 100%;
   margin-left: 10px;
   opacity: 0;
@@ -133,6 +145,15 @@ main .section .scroll-hero-wrapper {
 .screen-section:nth-child(8) { z-index: 8; }
 .screen-section:nth-child(9) { z-index: 9; }
 .screen-section:nth-child(10) { z-index: 10; }
+
+
+.screen-section:nth-child(8) .strapline {
+  width: 600px;
+}
+
+.screen-section:nth-child(8) .strapline .main-title .title-part-0 {
+  font-size: var(--heading-font-size-xl);
+}
 
 /* Last slide section - logo above strapline */
 .section-last-slide .background {
@@ -275,8 +296,8 @@ main .section .scroll-hero-wrapper {
 
 /* Responsive text styling - Desktop first */
 .strapline .main-title {
-  font-family: var(--semi-bold-font-family);
-  font-size: 60px; /* Final desktop size after animation */
+  font-family: var(--body-font-family);
+  font-size: var(--heading-font-size-3xl); /* Final desktop size after animation */
   line-height: 1.1;
   text-shadow: 0 0 18px rgba(0, 0, 0, 0.25);
   margin: 0;
@@ -308,12 +329,12 @@ main .section .scroll-hero-wrapper {
 }
 
 .strapline .main-title .title-part-0 {
-  font-size: 3rem; /* Starting size, will animate to 40px */
+  font-size: var(--heading-font-size-xxxl); /* Starting size, will animate to 40px */
 }
 
 .strapline .main-title .title-part-1 {
   font-family: var(--body-font-family);
-  font-size: 1.3rem;
+  font-size: var(--body-font-size-l);
   line-height: 1.5;
   font-weight: 300;
   opacity: 0.9;

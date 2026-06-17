@@ -41,13 +41,14 @@ header .nav-brand p {
   line-height: var(--line-height-base);
   margin: 0;
   text-align: center;
-  font-family: 'Montserrat-semibold';
+  font-family: var( --body-font-family);
   text-transform: uppercase;
   color: var(--color-white);
   font-size: var(--font-size-xs);
+  max-width: 160px;
 
   @media (width >= 600px) {
-    font-size: var(--font-size-sm); 
+    font-size: var(--font-size-3xs); 
   }
 }
 
@@ -127,7 +128,7 @@ header nav[aria-expanded="false"] .nav-hamburger-icon::before,
 header nav[aria-expanded="false"] .nav-hamburger-icon::after {
   background: var(--color-white);
   border-radius: 2px;
-  height: 2px;
+  height: 1px;
 }
 
 header nav[aria-expanded="false"] .nav-hamburger-icon::before {
@@ -175,7 +176,7 @@ header nav .nav-brand a {
   display: flex;
   font-size: 0;
   justify-content: center;
-  line-height: 1.4;;
+  line-height: 0;
   text-align: center;
   transition: transform .2s ease;
 }

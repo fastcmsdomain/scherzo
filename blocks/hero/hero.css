@@ -23,7 +23,7 @@ main .hero-container {
   width: 100%;
 }
 
-.hero-wrapper::before {
+/* .hero-wrapper::before {
     content: '';
     position: absolute;
     bottom: 0;
@@ -31,7 +31,7 @@ main .hero-container {
     width: 100%;
     height: 50%;
     background: linear-gradient(to top, rgb(0 32 62 / 100%) , transparent);
-}
+} */
 
 .hero {
   align-items: flex-end;

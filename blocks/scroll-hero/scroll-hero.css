@@ -334,7 +334,7 @@ main .section .scroll-hero-wrapper {
 
 .strapline .main-title .title-part-1 {
   font-family: var(--body-font-family);
-  font-size: var(--body-font-size-l);
+  font-size: var(--body-font-size-xl);
   line-height: 1.5;
   font-weight: 300;
   opacity: 0.9;

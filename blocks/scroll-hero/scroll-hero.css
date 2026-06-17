@@ -367,7 +367,7 @@ main .section .scroll-hero-wrapper {
 }
 
 .strapline-2 .subtitle .subtitle-part-1 {
-  font-size: var(--body-font-size-s);
+  font-size: var(--body-font-size-xs);
 }
 
 /* Responsive font sizes */

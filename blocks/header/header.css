@@ -190,7 +190,7 @@ header nav .nav-brand a:focus {
 
 header .nav-brand img,
 header .nav-brand picture {
-  /* max-width: 128px; */
+  max-width: 128px;
   height: auto;
 }
 

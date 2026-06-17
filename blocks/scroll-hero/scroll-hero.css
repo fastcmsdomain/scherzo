@@ -58,7 +58,7 @@ main .section .scroll-hero-wrapper {
   font-size: var(--font-size-xs);
   overflow: hidden;
   display: -webkit-box;
-  -webkit-line-clamp: 2;
+  -webkit-line-clamp: 1;
   -webkit-box-orient: vertical;
   line-height: 1.3;
   left: 100%;
@@ -69,6 +69,11 @@ main .section .scroll-hero-wrapper {
   transform: translateY(-50%);
   transition: all 0.3s ease;
   visibility: hidden;
+}
+
+.progress-nav li:last-child span,
+.progress-nav li:first-child span,
+.progress-nav li:nth-child(2) span {
   display: none;
 }
 
@@ -225,7 +230,7 @@ main .section .scroll-hero-wrapper {
 /* Background image - covers viewport */
 .background .img {
   background-color: #00203e;
-  background-position: center center;
+  background-position: top center;
   background-repeat: no-repeat;
   background-size: cover;
   display: block;

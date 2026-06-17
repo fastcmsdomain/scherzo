@@ -366,6 +366,10 @@ main .section .scroll-hero-wrapper {
   }
 }
 
+.strapline-2 .subtitle .subtitle-part-1 {
+  font-size: var(--body-font-size-s);
+}
+
 /* Responsive font sizes */
 @media (max-width: 992px) {
   .strapline {

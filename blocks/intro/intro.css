@@ -1,9 +1,9 @@
 .intro {
-  padding: var(--space-36)  var(--space-16);
+  padding: var(--space-12)  var(--space-16);
 }
 
 .intro h2 {
-    font-size: var(--font-size-2xl);
+  font-size: var(--heading-font-size-mobile-xs);
     font-family: var(--body-font-family);
     line-height: var(--line-height-2xl);
   }
@@ -11,5 +11,9 @@
 @media (width >= 900px) {
   .intro {
     padding: var(--space-36) 0;
+  }
+
+  .intro h2 {
+    font-size: var(--font-size-2xl);
   }
 }

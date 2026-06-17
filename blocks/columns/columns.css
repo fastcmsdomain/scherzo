@@ -112,6 +112,7 @@ main .section .columns-wrapper .columns-img-col {
 
 main .section .columns-wrapper .columns-content-col {
     padding: var(--space-26) var(--space-66) var(--space-26) var(--space-36);
+    align-self: start;
 }
 
 @media (width >= 900px) {

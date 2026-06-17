@@ -118,7 +118,7 @@ main .section .columns-wrapper .columns-content-col {
 @media (width >= 900px) {
   .columns > div {
     display: grid;
-    align-items: center;
+    align-items: start;
     grid-template-rows: unset;
     grid-template-columns: 1fr 1fr;
   }

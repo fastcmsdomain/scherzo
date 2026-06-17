@@ -41,12 +41,6 @@ main .section .scroll-hero-wrapper {
   margin-bottom: var(--space-4);
 }
 
-.progress-nav li:last-child,
-.progress-nav li:first-child,
-.progress-nav li:nth-child(2) {
-  display: none;
-}
-
 .progress-nav li:before {
   background: rgba(255, 255, 255, 0.5);
   content: '';
@@ -75,6 +69,7 @@ main .section .scroll-hero-wrapper {
   transform: translateY(-50%);
   transition: all 0.3s ease;
   visibility: hidden;
+  display: none;
 }
 
 .progress-nav li.isActive {

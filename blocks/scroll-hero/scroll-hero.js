@@ -44,7 +44,7 @@ const CONFIG = {
     centeredAnchorVh: 60,
     centeredAnchorOverrides: { 1: 70 },
     // The last slide's strapline is controlled separately from slide 2.
-    lastSlideAnchorVh: 30,
+    lastSlideAnchorVh: 20,
   },
   navScrollDuration: 1,
 };

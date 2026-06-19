@@ -190,3 +190,7 @@ main .section .columns-wrapper .columns.dwa-rzedy>div:last-child > .columns-cont
   .columns-wrapper:has(.columns.text-zdjecie) img {
     position: relative;
   }
+
+  .columns-wrapper:has(.columns.center) .columns-content-col {
+    align-self: center;
+  }

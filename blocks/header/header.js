@@ -307,6 +307,21 @@ export default async function decorate(block) {
     brandImg.setAttribute('loading', 'eager');
   }
 
+  // Insert <br> before "i Przedszkole" in the brand text so each line renders separately
+  const brandParagraph = navBrand.querySelector('p');
+  if (brandParagraph) {
+    Array.from(brandParagraph.childNodes).forEach((node) => {
+      if (node.nodeType === Node.TEXT_NODE && node.textContent.includes('i Przedszkole')) {
+        const text = node.textContent;
+        const idx = text.indexOf('i Przedszkole');
+        const before = document.createTextNode(text.slice(0, idx));
+        const br = document.createElement('br');
+        const after = document.createTextNode(text.slice(idx));
+        node.replaceWith(before, br, after);
+      }
+    });
+  }
+
   // Hide logo on scroll down and reveal on scroll up
   function fadeNavBrandOnScroll() {
     let lastScrollTop = 0;

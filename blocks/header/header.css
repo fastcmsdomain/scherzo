@@ -167,10 +167,14 @@ header .nav-brand {
   grid-area: brand;
   justify-self: center;
   position: absolute;
-  top: 2rem;
+  top: 1rem;
   transition: opacity .3s ease;
   z-index: 0;
   background: transparent;
+  
+  @media (width >= 900px) {
+    top: 2rem;
+  }
 }
 
 header nav .nav-brand a {
@@ -190,8 +194,12 @@ header nav .nav-brand a:focus {
 
 header .nav-brand img,
 header .nav-brand picture {
-  max-width: 128px;
+  max-width: 100px;
   height: auto;
+
+  @media (width >= 900px) {
+    max-width: 128px;
+  }
 }
 
 

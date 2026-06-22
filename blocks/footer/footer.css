@@ -23,7 +23,11 @@ footer {
 
 footer .footer {
   margin: auto;
-  padding: var(--space-26) var(--space-8);
+  padding: var(--space-16) var(--space-8);
+
+  @media (width >= 920px) {
+    padding: var(--space-26) var(--space-8);
+  }
 }
 
 footer .footer .section {
@@ -32,7 +36,7 @@ footer .footer .section {
 
 footer .footer > div {
   display: grid;
-  gap: var(--space-26);
+  gap: var(--space-12);
   grid-template-columns: repeat(1, 1fr);
 }
 
@@ -40,12 +44,16 @@ footer .section:last-child {
   border-top: 1px solid var(--color-gold);
   grid-column: 1 / -1;
   min-width: 100%;
-  padding: var(--space-16) 0;
+  padding: var(--space-16) 0 0;
 }
 
 footer h4 {
   margin: 0 0 var(--space-8);
-  font-size: var(--body-font-size-s);
+  font-size: var(--body-font-size-xs);
+
+  @media (width >= 920px) {
+    font-size: var(--body-font-size-s);
+  }
 }
 
 footer a {
@@ -97,6 +105,11 @@ footer svg {
 footer p {
   font-size: var(--font-size-sm);
   margin: 0 0 var(--space-16);
+
+  @media (max-width: 920px) {
+    font-size: var(--font-size-xs);
+    margin-bottom: var(--space-8);
+  }
 }
 
 .par-btn {

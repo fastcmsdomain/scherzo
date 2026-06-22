@@ -42,7 +42,7 @@ const CONFIG = {
     // whose trailing whitespace would otherwise sit them high (slide 2's long
     // title + paragraph needs a lower anchor to read as centred).
     centeredAnchorVh: 60,
-    centeredAnchorOverrides: { 1: 70 },
+    centeredAnchorOverrides: { 1: 50 },
     // The last slide's strapline is controlled separately from slide 2.
     lastSlideAnchorVh: 20,
   },

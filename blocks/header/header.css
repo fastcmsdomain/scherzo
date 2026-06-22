@@ -45,7 +45,6 @@ header .nav-brand p {
   text-transform: uppercase;
   color: var(--color-white);
   font-size: var(--font-size-xs);
-  max-width: 260px;
 
   @media (width >= 600px) {
     font-size: var(--font-size-sm); 
@@ -171,6 +170,7 @@ header .nav-brand {
   transition: opacity .3s ease;
   z-index: 0;
   background: transparent;
+  width: 260px;
   
   @media (width >= 900px) {
     top: 2rem;

@@ -618,9 +618,9 @@ const fetchSlideData = async (item) => {
       ...item,
       id: `section-${item.path.split('/').pop()}`,
       mainTitleParts: textParts.slice(0, 2),
-      subtitleParts: textParts.slice(2, 4),
+      subtitleParts: textParts.slice(2, 6),
       title: textParts[0] || item.title,
-      subtitle: textParts.slice(2, 4).join(' '),
+      subtitle: textParts.slice(2, 6).join(' '),
       backgroundImages: backgroundImages.length > 0 ? backgroundImages : [fallbackImage],
       image: fallbackImage,
     };

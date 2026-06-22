@@ -165,17 +165,11 @@ header nav[aria-expanded="true"] .nav-hamburger-icon::after {
 header .nav-brand {
   grid-area: brand;
   justify-self: center;
-  position: absolute;
-  top: 1rem;
   transition: opacity .3s ease;
   z-index: 0;
   background: transparent;
   width: 230px;
-  margin-inline: auto;
-  
-  @media (width >= 900px) {
-    top: 2rem;
-  }
+  margin: 5rem auto 0;
 }
 
 header nav .nav-brand a {

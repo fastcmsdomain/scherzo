@@ -407,8 +407,7 @@ const initParallaxCover = (gsap) => {
 
   // Total scroll distance: one segment per transition + a final resting screen
   if (container) {
-    const viewportUnit = window.CSS?.supports?.('height', '100dvh') ? 'dvh' : 'vh';
-    container.style.height = `${((total - 1) * factor + 1) * 100}${viewportUnit}`;
+    container.style.height = `${((total - 1) * factor + 1) * 100}vh`;
   }
 
   // Scroll distance (px) of a single transition; recomputed on refresh

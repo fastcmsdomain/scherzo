@@ -15,7 +15,7 @@ body.show-footer .footer-wrapper {
 }
 
 footer {
-  background-color: hsl(225deg 29% 22% / 90%);
+  background-color: hsl(225deg 29% 22%);
   color: var(--color-white);
   position: relative;
   z-index: 1;

@@ -115,6 +115,10 @@
 
   /* nav height */
   --nav-height: 64px;
+
+  /* Mobile-safe viewport height (100vh alone leaves a gap on iOS/Android) */
+  --viewport-height: 100vh;
+  --viewport-height: 100dvh;
   
   /* box-shadow */
   --box-shadow: 0 0 6px 0 rgb(0 0 0 / 50%);
@@ -154,6 +158,11 @@
   }
 }
 
+html {
+  background-color: var(--color-white);
+  height: 100%;
+}
+
 body {
   background-color: var(--color-dark-blue);
   color: var(--color-dark-blue);
@@ -162,6 +171,8 @@ body {
   font-size: var(--font-size-base);
   line-height: 1.6;
   margin: 0;
+  min-height: 100%;
+  min-height: var(--viewport-height);
   position: relative;
 }
 
@@ -173,11 +184,11 @@ html::before {
   background-repeat: no-repeat;
   background-size: 128px auto;
   content: '';
-  height: 100vh;
+  height: var(--viewport-height);
   left: 0;
   position: fixed;
   top: 0;
-  width: 100vw;
+  width: 100%;
   z-index: 9999;
 
   /* transition: opacity 0.5s ease-out, visibility 0.5s ease-out; */
@@ -206,7 +217,12 @@ html:has(body.appear)::before {
   } */
 
 body.appear {
+  background-color: var(--color-white);
   display: block;
+}
+
+main {
+  background-color: var(--color-white);
 }
 
 /* header {

@@ -117,7 +117,7 @@ main .section .scroll-hero-wrapper {
    GSAP translates each later section up from below (yPercent 100 -> 0)
    to cover the static previous one. No clip-path. */
 .screen-section {
-  height: 100vh;
+  height: var(--viewport-height);
   width: 100%;
   position: fixed;
   top: 0;
@@ -128,7 +128,7 @@ main .section .scroll-hero-wrapper {
 
 /* .screen contains the actual content */
 .screen-section .screen {
-  height: 100vh;
+  height: var(--viewport-height);
   width: 100%;
   position: relative;
   background-color: #00203e;
@@ -188,7 +188,7 @@ main .section .scroll-hero-wrapper {
 }
 
 .screen-inner {
-  height: 100vh;
+  height: var(--viewport-height);
   width: 100%;
   position: relative;
   top: 0;
@@ -210,7 +210,7 @@ main .section .scroll-hero-wrapper {
   top: 0;
   left: 0;
   width: 100%;
-  height: 100vh;
+  height: var(--viewport-height);
   z-index: 1; /* above .background (0), below .strapline-2 (9) / .strapline (10) */
   background: rgba(0, 32, 62, 0.5);
   opacity: 0;
@@ -220,7 +220,7 @@ main .section .scroll-hero-wrapper {
 
 /* Background image setup - full viewport cover */
 .background {
-  height: 100vh;
+  height: var(--viewport-height);
   width: 100%;
   position: absolute;
   top: 0;
@@ -241,7 +241,7 @@ main .section .scroll-hero-wrapper {
   background-repeat: no-repeat;
   background-size: cover;
   display: block;
-  height: 100vh;
+  height: var(--viewport-height);
   width: 100%;
   position: absolute;
   top: 0;

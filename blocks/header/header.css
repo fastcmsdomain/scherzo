@@ -170,6 +170,10 @@ header .nav-brand {
   background: transparent;
   width: 230px;
   margin: 5rem auto 0;
+
+  @media (width >= 900px) {
+    margin: 7rem auto 0;
+  }
 }
 
 header nav .nav-brand a {

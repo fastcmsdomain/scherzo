@@ -157,7 +157,7 @@ main .section .scroll-hero-wrapper {
 .screen-section:nth-child(10) { z-index: 10; }
 
 .screen-section:nth-child(2) .strapline .main-title .title-part-0 {
-  font-size: clamp(1.4rem, 4vw + 1rem, 2.2rem); /* ~30px mobile, ~60px desktop above 920px */
+  font-size: clamp(1.4rem, 4vw + 1rem, 2.6rem); /* ~30px mobile, ~60px desktop above 920px */
 }
 
 .screen-section:nth-child(2) .strapline .main-title .title-part-1 {

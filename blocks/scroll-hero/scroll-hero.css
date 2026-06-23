@@ -161,7 +161,7 @@ main .section .scroll-hero-wrapper {
 }
 
 .screen-section:nth-child(2) .strapline .main-title .title-part-1 {
-  font-size: clamp(1rem, 4vw + 1rem, 1.4rem); /* ~30px mobile, ~60px desktop above 920px */
+  font-size: clamp(1.25rem, 1.5vw + 1rem, 2.5rem);
 }
 
 /* Slide 2 only: each strapline-2 block is positioned individually via GSAP */

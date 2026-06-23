@@ -38,7 +38,7 @@ header nav[aria-expanded="true"] {
 }
 
 header .nav-brand p {
-  line-height: var(--line-height-base);
+  line-height: 1.2;
   margin: 0;
   text-align: center;
   font-family: var( --body-font-family);
@@ -294,7 +294,8 @@ header nav .nav-sections ul > li > ul > li {
 
     header nav .nav-brand a {
     background-size: 100px auto;
-    font-size: var(--body-font-size-xs);
+    font-size: var(--body-font-size-xxs);
+    margin-bottom: var(--space-4);
     }
 
 

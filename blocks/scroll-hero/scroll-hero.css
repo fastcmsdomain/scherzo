@@ -164,12 +164,22 @@ main .section .scroll-hero-wrapper {
   font-size: clamp(1rem, 4vw + 1rem, 1.4rem); /* ~30px mobile, ~60px desktop above 920px */
 }
 
+/* Slide 2 only: each strapline-2 block is positioned individually via GSAP */
+.screen-section:nth-child(2) .strapline-2 .subtitle {
+  max-width: 80%;
+  margin: 0 auto;
+}
+
 .screen-section:nth-child(8) .strapline {
   max-width: 550px;
 }
 
 .screen-section:nth-child(8) .strapline .main-title .title-part-0 {
   font-size: clamp(1.2rem, 4vw + 1rem, 2rem);
+}
+
+.screen-section:nth-child(8) .strapline .main-title .title-part-1 {
+  font-size: clamp(1rem, 1.5vw, 1.5rem);
 }
 
 /* Last slide section - logo above strapline */
@@ -482,6 +492,15 @@ main .section .scroll-hero-wrapper {
 
   .no-gsap .strapline-2 {
     top: 60%;
+  }
+
+  /* Slide 2 only: separate title and subtitle when GSAP is unavailable */
+  .no-gsap .screen-section:nth-child(2) .strapline {
+    top: 35%;
+  }
+
+  .no-gsap .screen-section:nth-child(2) .strapline-2 {
+    top: 65%;
   }
 }
 

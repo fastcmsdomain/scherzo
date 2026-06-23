@@ -41,10 +41,17 @@ const CONFIG = {
     // centre (used by the last slide). Per-index overrides compensate for blocks
     // whose trailing whitespace would otherwise sit them high (slide 2's long
     // title + paragraph needs a lower anchor to read as centred).
-    centeredAnchorVh: 60,
+    centeredAnchorVh: 40,
     centeredAnchorOverrides: { 1: 70 },
+    // Slide 2 (index 1): static centred text — each strapline block gets its own anchor.
+    staticSlideIndex: 1,
+    slide2Anchors: {
+      title: 38,
+      strapline2Start: 52,
+      strapline2Step: 12,
+    },
     // The last slide's strapline is controlled separately from slide 2.
-    lastSlideAnchorVh: 20,
+    lastSlideAnchorVh: 25,
   },
   navScrollDuration: 1,
 };
@@ -306,6 +313,18 @@ const createSection = (section, index, total) => {
     ? section.subtitleParts
     : [section.subtitle];
 
+  // Slide 2 only: one strapline-2 block per paragraph so each can be positioned individually
+  const isStaticSlide = index === CONFIG.text.staticSlideIndex;
+  const strapline2Html = isStaticSlide
+    ? subtitleParts.map((part, partIndex) => (
+      `<div class="strapline-2 strapline-2-${partIndex}">
+          <h2 class="subtitle"><span class="subtitle-part subtitle-part-${partIndex}">${escapeHtml(part)}</span></h2>
+        </div>`
+    )).join('')
+    : `<div class="strapline-2">
+          <h2 class="subtitle">${createPartsHtml(subtitleParts, 'subtitle-part')}</h2>
+        </div>`;
+
   const bgHtml = bgImageSrc
     ? `<div class="img image-bg image-bg-0" data-bg="${escapeHtml(bgImageSrc)}" role="img" aria-label="${escapeHtml(section.title)}"></div>`
     : '';
@@ -329,9 +348,7 @@ const createSection = (section, index, total) => {
           ${logoHtml}
           <h1 class="main-title">${createPartsHtml(mainTitleParts, 'title-part')}</h1>
         </div>
-        <div class="strapline-2">
-          <h2 class="subtitle">${createPartsHtml(subtitleParts, 'subtitle-part')}</h2>
-        </div>
+        ${strapline2Html}
       </div>
     </div>
   `;
@@ -390,6 +407,8 @@ const initParallaxCover = (gsap) => {
     centeredAnchorVh,
     centeredAnchorOverrides,
     lastSlideAnchorVh,
+    staticSlideIndex,
+    slide2Anchors,
   } = CONFIG.text;
 
   const isLastSlide = (index) => sections[index]?.classList.contains(CLASSES.lastSlide);
@@ -421,14 +440,25 @@ const initParallaxCover = (gsap) => {
   // Initialize base states: each slide's title rests low, subtitle off-screen.
   sections.forEach((section, i) => {
     const title = section.querySelector(SELECTORS.strapline);
-    const subtitle = section.querySelector(SELECTORS.strapline2);
+    const subtitleBlocks = section.querySelectorAll(SELECTORS.strapline2);
     const overlay = section.querySelector(SELECTORS.scrollOverlay);
 
     if (isCentered(i)) {
-      // Centred slide: both straplines locked centred, fully visible.
-      setAt(title, anchorFor(i), 1);
-      setAt(subtitle, anchorFor(i), 1);
+      // Slide 2 only: title and each strapline-2 block get their own anchor.
+      if (i === staticSlideIndex) {
+        const { title: titleVh, strapline2Start, strapline2Step } = slide2Anchors;
+        setAt(title, titleVh, 1);
+        subtitleBlocks.forEach((block, blockIndex) => {
+          setAt(block, strapline2Start + blockIndex * strapline2Step, 1);
+        });
+      } else {
+        // Other centred slides (e.g. last): shared anchor behaviour unchanged.
+        const subtitle = subtitleBlocks[0];
+        setAt(title, anchorFor(i), 1);
+        setAt(subtitle, anchorFor(i), 1);
+      }
     } else {
+      const subtitle = subtitleBlocks[0];
       setAt(title, titleBottomVh, 1);
       // Subtitle waits below the fold until its segment begins
       setAt(subtitle, subtitleStartVh, 0);
@@ -592,6 +622,7 @@ const initScrollAnimations = () => {
 /**
  * Fetches and processes a single slide's data
  * @param {Object} item - Slide index item
+ * @param {Object} item - Slide index item
  * @returns {Promise<Object|null>} - Processed section data or null
  */
 const fetchSlideData = async (item) => {
@@ -614,13 +645,16 @@ const fetchSlideData = async (item) => {
       ? new URL(firstSource.getAttribute('srcset').split('?')[0], window.location.origin).href
       : '';
 
+    const mainTitleParts = textParts.slice(0, 2);
+    const subtitleParts = textParts.slice(2, 6);
+
     return {
       ...item,
       id: `section-${item.path.split('/').pop()}`,
-      mainTitleParts: textParts.slice(0, 2),
-      subtitleParts: textParts.slice(2, 6),
+      mainTitleParts,
+      subtitleParts,
       title: textParts[0] || item.title,
-      subtitle: textParts.slice(2, 6).join(' '),
+      subtitle: subtitleParts.join(' '),
       backgroundImages: backgroundImages.length > 0 ? backgroundImages : [fallbackImage],
       image: fallbackImage,
     };

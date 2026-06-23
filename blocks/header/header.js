@@ -310,6 +310,19 @@ export default async function decorate(block) {
   // Insert <br> before "i Przedszkole" in the brand text so each line renders separately
   const brandParagraph = navBrand.querySelector('p');
   if (brandParagraph) {
+    // Remove authored <br> between the logo link and "prywatna szkoła" line
+    Array.from(brandParagraph.childNodes).forEach((node) => {
+      if (node.nodeName !== 'A') return;
+
+      const lineBreak = node.nextSibling;
+      if (lineBreak?.nodeName !== 'BR') return;
+
+      const followingText = lineBreak.nextSibling?.textContent || '';
+      if (/prywatna\s+szko/i.test(followingText)) {
+        lineBreak.remove();
+      }
+    });
+
     Array.from(brandParagraph.childNodes).forEach((node) => {
       if (node.nodeType === Node.TEXT_NODE && node.textContent.includes('i Przedszkole')) {
         const text = node.textContent;

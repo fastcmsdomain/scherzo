@@ -47,7 +47,7 @@ const CONFIG = {
     staticSlideIndex: 1,
     slide2Anchors: {
       title: 38,
-      strapline2Start: 47,
+      strapline2Start: 42,
       strapline2Step: 12,
     },
     // The last slide's strapline is controlled separately from slide 2.

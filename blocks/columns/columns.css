@@ -106,12 +106,12 @@ main .section .columns-wrapper .columns {
 main .section .columns-wrapper .columns-img-col {
   padding: 0;
   position: relative;
-  min-height: 300px;
+  min-height: 550px;
   width: 100%;
 }
 
 main .section .columns-wrapper .columns-content-col {
-    padding: var(--space-26) var(--space-66) var(--space-26) var(--space-36);
+    padding: var(--space-26) var(--space-36);
     align-self: start;
 }
 
@@ -128,9 +128,12 @@ main .section .columns-wrapper .columns-content-col {
     order: unset;
   }
 
+  main .section .columns-wrapper .columns-content-col {
+    padding: var(--space-26) var(--space-66) var(--space-26) var(--space-36);
+  }
+
   main .section .columns-wrapper .columns-img-col {
     overflow: hidden;
-    padding-top: 30%;
   }
 }
 

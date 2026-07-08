@@ -10,3 +10,7 @@ helix-importer-ui
 
 # Generated navigation data (fetch from production)
 query-index.json
+
+# Playwright output
+test-results/
+playwright-report/

@@ -198,15 +198,6 @@ main .section .scroll-hero-wrapper {
   background-color: rgba(0,32,62,.8);
 }
 
-/* Logo positioned above strapline in last-slide, scrolls with text */
-.section-last-slide .strapline-logo {
-  display: block;
-  width: 125px;
-  height: auto;
-  margin: 0 auto 20px;
-  object-fit: contain;
-}
-
 .screen-inner {
   height: 100vh;
   width: 100%;
@@ -254,9 +245,13 @@ main .section .scroll-hero-wrapper {
   filter: blur(3px);
 }
 
-/* Background image - covers viewport */
+/* Background image - covers viewport.
+   JS exposes the slide's images as --bg-mobile / --bg-desktop custom
+   properties; the media query below picks one per viewport (mobile-first),
+   mirroring the <picture> source[media="(min-width: 600px)"] breakpoint. */
 .background .img {
   background-color: #00203e;
+  background-image: var(--bg-mobile, none);
   background-position: top center;
   background-repeat: no-repeat;
   background-size: cover;
@@ -266,6 +261,12 @@ main .section .scroll-hero-wrapper {
   position: absolute;
   top: 0;
   left: 0;
+}
+
+@media (min-width: 600px) {
+  .background .img {
+    background-image: var(--bg-desktop, none);
+  }
 }
 
 .background .img:after {

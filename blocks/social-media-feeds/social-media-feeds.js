@@ -2,115 +2,25 @@
 const config = {
   itemsPerRow: 4,
   itemWidth: 300,
-  instagramAccessToken: 'EAAMk8DVyZAr0BRKaNHZCoXwKahAXYvYbsfSg039LIZAL9tlNxdV4soRZAEiVwXaD2PnnxEmCG9iD55b8rsZAzzWqbzjLDeHCTvglBHzmpadWiAxB3bDarVWR2slVGRBKDyDfGTZChW3PJZA2mxh8tEOcm4RHEEd87uMfJgbnGmudwj2PjU8JbQbJmakQjfa4uc9vsgZB4D1HuuoEyU0C75ZC0uZBWBLsmil8HRXUHkTyHzMPIZD',
-  instagramUserId: '17841454725415470',
-  facebookAccessToken: 'EAAMk8DVyZAr0BRKaNHZCoXwKahAXYvYbsfSg039LIZAL9tlNxdV4soRZAEiVwXaD2PnnxEmCG9iD55b8rsZAzzWqbzjLDeHCTvglBHzmpadWiAxB3bDarVWR2slVGRBKDyDfGTZChW3PJZA2mxh8tEOcm4RHEEd87uMfJgbnGmudwj2PjU8JbQbJmakQjfa4uc9vsgZB4D1HuuoEyU0C75ZC0uZBWBLsmil8HRXUHkTyHzMPIZD',
-  facebookPageId: '433485486688506',
 };
 
 /**
- * Fetches YouTube feed
- * @returns {Promise<Array>} Array of YouTube feed items
- */
-async function fetchYouTubeFeed() {
-  const url = `https://www.googleapis.com/youtube/v3/search?key=${config.youtubeApiKey}&channelId=${config.youtubeChannelId}&part=snippet,id&order=date&maxResults=20`;
-  try {
-    const response = await fetch(url);
-    const data = await response.json();
-    return data.items.map((item) => ({
-      type: 'youtube',
-      title: item.snippet.title,
-      image: item.snippet.thumbnails.medium.url,
-      date: new Date(item.snippet.publishedAt),
-      link: `https://www.youtube.com/watch?v=${item.id.videoId}`,
-    }));
-  } catch (error) {
-    // Error fetching YouTube feed - return empty array
-    return [];
-  }
-}
-
-/**
- * Fetches Facebook feed
- * @returns {Promise<Array>} Array of Facebook feed items
+ * Fetches the combined YouTube/Facebook/Instagram feed.
  *
- * NOTE: Requires a Page Access Token with 'pages_read_engagement' permission.
- * Get it from: https://developers.facebook.com/tools/explorer/
- * Select your app, generate token with 'pages_manage_metadata' and
- * 'pages_read_engagement' permissions, then get the Page Access Token
- * for your specific page.
+ * The feed itself is fetched server-side by a scheduled GitHub Action
+ * (see .github/workflows/social-media-feed.yml), which writes the result to
+ * social-media-feed.json at the repo root. API tokens live only in GitHub
+ * Actions Secrets and are never shipped to the browser.
+ * @returns {Promise<Array>} Array of feed items
  */
-async function fetchFacebookFeed() {
-  const url = `https://graph.facebook.com/v12.0/${config.facebookPageId}/posts?fields=id,message,full_picture,created_time&access_token=${config.facebookAccessToken}&limit=20`;
+async function fetchCombinedFeed() {
   try {
-    const response = await fetch(url);
+    const response = await fetch('/social-media-feed.json');
+    if (!response.ok) return [];
     const data = await response.json();
-
-    // Check for API errors
-    if (data.error) {
-      // Error fetching Facebook feed - return empty array
-      return [];
-    }
-
-    if (!data.data) {
-      return [];
-    }
-
-    return data.data.map((item) => ({
-      type: 'facebook',
-      title: item.message ? item.message.substring(0, 100) : 'No message',
-      image: item.full_picture,
-      date: new Date(item.created_time),
-      link: `https://www.facebook.com/${config.facebookPageId}/posts/${item.id}`,
-    }));
+    return (data.items || []).map((item) => ({ ...item, date: new Date(item.date) }));
   } catch (error) {
-    // Error fetching Facebook feed - return empty array
-    return [];
-  }
-}
-
-/**
- * Fetches Instagram feed
- * @returns {Promise<Array>} Array of Instagram feed items
- *
- * NOTE: Requires a valid access token. For Instagram Graph API (Business/Creator),
- * provide `instagramUserId`. For Basic Display API, leave it blank.
- */
-async function fetchInstagramFeed() {
-  const fields = 'id,caption,media_type,media_url,permalink,thumbnail_url,timestamp';
-  const baseUrl = config.instagramUserId
-    ? `https://graph.facebook.com/v12.0/${config.instagramUserId}/media`
-    : 'https://graph.instagram.com/me/media';
-  const url = `${baseUrl}?fields=${fields}&access_token=${config.instagramAccessToken}&limit=20`;
-
-  try {
-    const response = await fetch(url);
-    const data = await response.json();
-
-    // Check for API errors
-    if (data.error) {
-      // Error fetching Instagram feed - return empty array
-      return [];
-    }
-
-    if (!data.data) {
-      return [];
-    }
-
-    return data.data
-      .map((item) => ({
-        type: 'instagram',
-        title: item.caption ? item.caption.substring(0, 100) : 'No caption',
-        image: item.media_type === 'VIDEO'
-          ? (item.thumbnail_url || item.media_url)
-          : (item.media_url || item.thumbnail_url),
-        date: new Date(item.timestamp),
-        link: item.permalink,
-        mediaType: item.media_type,
-      }))
-      .filter((item) => item.image && item.link && !Number.isNaN(item.date.getTime()));
-  } catch (error) {
-    // Error fetching Instagram feed - return empty array
+    // Error fetching social media feed - return empty array
     return [];
   }
 }
@@ -246,13 +156,9 @@ export default async function decorate(block) {
   const filterContainer = document.createElement('div');
   filterContainer.classList.add('filter-container');
 
-  const [youtubeFeed, facebookFeed, instagramFeed] = await Promise.all([
-    fetchYouTubeFeed(),
-    fetchFacebookFeed(),
-    fetchInstagramFeed(),
-  ]);
+  const rawFeed = await fetchCombinedFeed();
 
-  const combinedFeed = [...youtubeFeed, ...facebookFeed, ...instagramFeed]
+  const combinedFeed = rawFeed
     .filter((item) => item.image && item.link && !Number.isNaN(item.date.getTime()))
     .sort((a, b) => b.date - a.date);
 

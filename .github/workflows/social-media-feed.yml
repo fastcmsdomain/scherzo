@@ -1,0 +1,41 @@
+# Fetches YouTube/Facebook/Instagram feeds server-side and commits the
+# result as a static JSON file. This keeps all API tokens in GitHub Actions
+# Secrets and out of the client-side bundle served by blocks/social-media-feeds.
+name: Update Social Media Feed
+
+on:
+  schedule:
+    - cron: '0 * * * *' # every hour
+  workflow_dispatch:
+
+jobs:
+  update-feed:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Use Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Fetch social media feeds
+        env:
+          YOUTUBE_API_KEY: ${{ secrets.YOUTUBE_API_KEY }}
+          YOUTUBE_CHANNEL_ID: ${{ secrets.YOUTUBE_CHANNEL_ID }}
+          FB_PAGE_ID: ${{ secrets.FB_PAGE_ID }}
+          FB_PAGE_ACCESS_TOKEN: ${{ secrets.FB_PAGE_ACCESS_TOKEN }}
+          IG_USER_ID: ${{ secrets.IG_USER_ID }}
+          IG_ACCESS_TOKEN: ${{ secrets.IG_ACCESS_TOKEN }}
+        run: node tools/social-media-feed/fetch-feeds.mjs
+
+      - name: Commit updated feed
+        run: |
+          git config --local user.email "helix@adobe.com"
+          git config --local user.name "AEM Bot"
+          git add social-media-feed.json
+          git diff --cached --quiet || git commit -m "chore: update social media feed data"
+          git push

@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scroll Hero Block Test</title>
+    <style>
+        body { margin: 0; }
+    </style>
+</head>
+<body>
+    <main>
+        <div class="section">
+            <div>
+                <div class="scroll-hero"></div>
+            </div>
+        </div>
+    </main>
+
+    <script type="module">
+        import { decorateBlock, loadBlock } from '/scripts/aem.js';
+
+        const block = document.querySelector('.scroll-hero');
+        decorateBlock(block);
+        await loadBlock(block);
+
+        // Signal to automated tests that decoration finished
+        document.body.dataset.testReady = 'true';
+    </script>
+</body>
+</html>

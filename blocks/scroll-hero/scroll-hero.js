@@ -28,10 +28,10 @@ const CONFIG = {
   // MIDDLE. They never overlap: distinct top/middle/bottom anchors keep a gap.
   // Positions are `top` values in vh (relative to the viewport).
   text: {
-    titleBottomVh: 70, // title resting anchor at the very bottom of the slide
+    titleBottomVh: 90, // title resting anchor at the very bottom of the slide
     titleTopVh: 25, // title destination near the top of the page
     titleShiftScale: 0.8, // shifting title scales to half size as it reaches top
-    subtitleStartVh: 108, // subtitle starts just below the fold (off-screen)
+    subtitleStartVh: 140, // subtitle starts just below the fold (off-screen)
     subtitleMiddleVh: 60, // subtitle destination, the middle (below the top title)
     // Slides listed here keep BOTH straplines locked centred (no shift) for the
     // whole slide. Index is the slide's position (0-based). The 2nd slide
@@ -182,19 +182,19 @@ const extractTextParts = (doc, selector) => {
 };
 
 /**
- * Gets background and logo image sources for a section
- * For last-slide: [0] = logo, [1] = background. Other slides: [0] = background.
+ * Gets background image sources for a section
+ * Image order convention (same slide table in Google Drive, all slides):
+ *   [0] = desktop background, [1] = mobile background (optional)
+ * When no mobile image is authored, the desktop image is used for all viewports.
  * @param {Object} section - Section data
- * @returns {Object} - { bgImageSrc, logoImage }
+ * @returns {Object} - { bgImageSrc, bgMobileSrc }
  */
 const getSectionImages = (section) => {
   const images = section.backgroundImages || [section.image];
-  const isLastSlide = section.id === CLASSES.lastSlide;
-
-  if (isLastSlide && images.length >= 2) {
-    return { logoImage: images[0], bgImageSrc: images[1] };
-  }
-  return { logoImage: '', bgImageSrc: images[0] || section.image };
+  return {
+    bgImageSrc: images[0] || section.image,
+    bgMobileSrc: images[1] || '',
+  };
 };
 
 /**
@@ -303,8 +303,7 @@ const createPartsHtml = (parts, className) => parts
  * @returns {HTMLElement} - Section element
  */
 const createSection = (section, index, total) => {
-  const { bgImageSrc, logoImage } = getSectionImages(section);
-  const isLastSlide = section.id === CLASSES.lastSlide;
+  const { bgImageSrc, bgMobileSrc } = getSectionImages(section);
 
   const mainTitleParts = section.mainTitleParts?.length
     ? section.mainTitleParts
@@ -326,10 +325,7 @@ const createSection = (section, index, total) => {
         </div>`;
 
   const bgHtml = bgImageSrc
-    ? `<div class="img image-bg image-bg-0" data-bg="${escapeHtml(bgImageSrc)}" role="img" aria-label="${escapeHtml(section.title)}"></div>`
-    : '';
-  const logoHtml = isLastSlide && logoImage
-    ? `<img class="strapline-logo" src="${escapeHtml(logoImage)}" alt="Scherzo Logo" loading="lazy" decoding="async" width="125" />`
+    ? `<div class="img image-bg image-bg-0" data-bg="${escapeHtml(bgImageSrc)}"${bgMobileSrc ? ` data-bg-mobile="${escapeHtml(bgMobileSrc)}"` : ''} role="img" aria-label="${escapeHtml(section.title)}"></div>`
     : '';
 
   const sectionDiv = document.createElement('div');
@@ -345,7 +341,6 @@ const createSection = (section, index, total) => {
         <div class="scroll-overlay" aria-hidden="true"></div>
         <div class="fade" aria-hidden="true"></div>
         <div class="strapline">
-          ${logoHtml}
           <h1 class="main-title">${createPartsHtml(mainTitleParts, 'title-part')}</h1>
         </div>
         ${strapline2Html}
@@ -361,7 +356,10 @@ const createSection = (section, index, total) => {
 // =============================================================================
 
 /**
- * Sets all section background images
+ * Sets all section background images.
+ * Exposes desktop/mobile sources as CSS custom properties; the stylesheet's
+ * media query picks the right one, so the browser swaps images on viewport
+ * change natively (same idea as the <picture> media attribute in hero).
  * @param {Object[]} sections - Section data array
  */
 const setBackgrounds = (sections) => {
@@ -369,9 +367,10 @@ const setBackgrounds = (sections) => {
   sections.forEach((section, index) => {
     const bgElement = elements[index]?.querySelector(SELECTORS.backgroundImage);
     if (bgElement) {
-      const { bgImageSrc } = getSectionImages(section);
+      const { bgImageSrc, bgMobileSrc } = getSectionImages(section);
       if (bgImageSrc) {
-        bgElement.style.backgroundImage = `url(${bgImageSrc})`;
+        bgElement.style.setProperty('--bg-desktop', `url(${bgImageSrc})`);
+        bgElement.style.setProperty('--bg-mobile', `url(${bgMobileSrc || bgImageSrc})`);
         bgElement.style.display = 'block';
       }
     }

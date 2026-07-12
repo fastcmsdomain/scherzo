@@ -58,6 +58,25 @@ Komponent automatycznie ekstraktuje:
 - **description** z elementów `.description, .subtitle, p`
 - **time** z elementów `.time, .timestamp`
 
+### Obrazy desktop / mobile
+
+Każdy slajd może mieć **dwa obrazy tła** w tej samej tabeli w Google Drive —
+kolejność obrazów decyduje o ich roli (ta sama konwencja dla wszystkich
+slajdów, łącznie z ostatnim):
+
+| Obraz 1 | Obraz 2 |
+|---|---|
+| tło desktop | tło mobile (opcjonalny) |
+
+- Przełączenie następuje przy szerokości **600px** (ten sam breakpoint co
+  `<picture source media="(min-width: 600px)">` w EDS) — czysty CSS, bez
+  nasłuchiwania resize w JS.
+- Jeśli slajd ma tylko jeden obraz, jest on używany na wszystkich
+  szerokościach (pełna kompatybilność wsteczna).
+- Technicznie: JS ustawia custom properties `--bg-desktop` / `--bg-mobile`
+  na elemencie `.image-bg-0`, a media query w `scroll-hero.css` wybiera
+  właściwy obraz.
+
 ## Użycie
 
 1. **Utwórz slajdy w folderze `/slides/`:**

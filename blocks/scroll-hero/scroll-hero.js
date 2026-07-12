@@ -29,10 +29,10 @@ const CONFIG = {
   // Positions are `top` values in vh (relative to the viewport).
   text: {
     titleBottomVh: 90, // title resting anchor at the very bottom of the slide
-    titleTopVh: 22, // title destination near the top of the page
+    titleTopVh: 14, // title destination near the top of the page
     titleShiftScale: 0.8, // shifting title scales to half size as it reaches top
     subtitleStartVh: 140, // subtitle starts just below the fold (off-screen)
-    subtitleMiddleVh: 60, // subtitle destination, the middle (below the top title)
+    subtitleMiddleVh: 40, // subtitle destination, the middle (below the top title)
     // Slides listed here keep BOTH straplines locked centred (no shift) for the
     // whole slide. Index is the slide's position (0-based). The 2nd slide
     // (index 1) is centred; the last slide is centred automatically too.
@@ -41,12 +41,12 @@ const CONFIG = {
     // centre (used by the last slide). Per-index overrides compensate for blocks
     // whose trailing whitespace would otherwise sit them high (slide 2's long
     // title + paragraph needs a lower anchor to read as centred).
-    centeredAnchorVh: 40,
+    centeredAnchorVh: 43,
     centeredAnchorOverrides: { 1: 70 },
     // Slide 2 (index 1): static centred text — each strapline block gets its own anchor.
     staticSlideIndex: 1,
     slide2Anchors: {
-      title: 38,
+      title: 50,
       strapline2Start: 60,
       strapline2Step: 12,
     },

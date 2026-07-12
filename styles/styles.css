@@ -420,7 +420,7 @@ main img {
 }
 
 .icon img {
-  width: 100%;
+  width: auto;
 }
 
 /* sections */

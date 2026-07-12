@@ -166,7 +166,7 @@ main .section .scroll-hero-wrapper {
 
 /* Slide 2 only: each strapline-2 block is positioned individually via GSAP */
 .screen-section:nth-child(2) .strapline-2 .subtitle {
-  max-width: 80%;
+  max-width: 50%;
   margin: 0 auto;
 }
 
@@ -269,7 +269,7 @@ main .section .scroll-hero-wrapper {
   }
 }
 
-.background .img:after {
+/* .background .img:after {
   background: linear-gradient(180deg, transparent 0%, rgba(0, 0, 0, 0.6) 100%);
   bottom: 0;
   content: '';
@@ -284,7 +284,7 @@ main .section .scroll-hero-wrapper {
     background: linear-gradient(180deg, transparent 0%, rgba(0, 0, 0, 3.65) 100%);
     height: 60vh;
   }
-}
+} */
 
 /* Text positioning and styling - centered in viewport */
 .strapline {
@@ -356,12 +356,13 @@ main .section .scroll-hero-wrapper {
 }
 
 .strapline .main-title .title-part-0 {
+  font-family: var(--semi-bold-font-family);
   font-size: var(--heading-font-size-xxxl); /* Starting size, will animate to 40px */
 }
 
 .strapline .main-title .title-part-1 {
   font-family: var(--body-font-family);
-  font-size: clamp(1.25rem, 1.5vw + 1rem, 2.5rem); /* ~20px mobile, ~40px desktop above 920px */
+  font-size: clamp(1.25rem, 1.5vw + 1rem, 2rem); /* ~20px mobile, ~40px desktop above 920px */
   line-height: 1.5;
   font-weight: 300;
   opacity: 0.9;

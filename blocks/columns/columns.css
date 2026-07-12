@@ -112,7 +112,7 @@ main .section .columns-wrapper .columns-img-col {
 
 main .section .columns-wrapper .columns-content-col {
     padding: var(--space-26) var(--space-36);
-    align-self: start;
+    align-self: center;
 }
 
 @media (width >= 900px) {
@@ -192,8 +192,4 @@ main .section .columns-wrapper .columns.dwa-rzedy>div:last-child > .columns-cont
   .columns-wrapper:has(.columns.text-zdjecie) picture,
   .columns-wrapper:has(.columns.text-zdjecie) img {
     position: relative;
-  }
-
-  .columns-wrapper:has(.columns.center) .columns-content-col {
-    align-self: center;
   }

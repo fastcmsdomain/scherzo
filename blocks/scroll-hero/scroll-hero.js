@@ -29,7 +29,7 @@ const CONFIG = {
   // Positions are `top` values in vh (relative to the viewport).
   text: {
     titleBottomVh: 90, // title resting anchor at the very bottom of the slide
-    titleTopVh: 20, // title destination near the top of the page
+    titleTopVh: 22, // title destination near the top of the page
     titleShiftScale: 0.8, // shifting title scales to half size as it reaches top
     subtitleStartVh: 140, // subtitle starts just below the fold (off-screen)
     subtitleMiddleVh: 60, // subtitle destination, the middle (below the top title)

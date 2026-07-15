@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-07-15T21:52:06.565Z",
+  "generatedAt": "2026-07-15T22:52:43.000Z",
   "items": [
     {
       "type": "youtube",
@@ -28,6 +28,13 @@
       "image": "https://i.ytimg.com/vi/AJUUJUIv5D4/mqdefault.jpg",
       "date": "2023-12-22T12:30:08.000Z",
       "link": "https://www.youtube.com/watch?v=AJUUJUIv5D4"
+    },
+    {
+      "type": "youtube",
+      "title": "Charytatywny kiermasz wielkanocny 2023",
+      "image": "https://i.ytimg.com/vi/jvK8rBzFGBg/mqdefault.jpg",
+      "date": "2023-04-07T14:34:30.000Z",
+      "link": "https://www.youtube.com/watch?v=jvK8rBzFGBg"
     },
     {
       "type": "youtube",
@@ -133,13 +140,6 @@
       "image": "https://i.ytimg.com/vi/aMNEjR1y9bs/mqdefault.jpg",
       "date": "2020-08-20T18:14:45.000Z",
       "link": "https://www.youtube.com/watch?v=aMNEjR1y9bs"
-    },
-    {
-      "type": "youtube",
-      "title": "Szkoła Scherzo - lekcja ortografii",
-      "image": "https://i.ytimg.com/vi/TzheG5Jg3m4/mqdefault.jpg",
-      "date": "2020-07-08T11:45:14.000Z",
-      "link": "https://www.youtube.com/watch?v=TzheG5Jg3m4"
     }
   ]
 }

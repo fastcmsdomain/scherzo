@@ -33,6 +33,7 @@ jobs:
         run: node tools/social-media-feed/fetch-feeds.mjs
 
       - name: Commit updated feed
+        if: always()
         run: |
           git config --local user.email "helix@adobe.com"
           git config --local user.name "AEM Bot"

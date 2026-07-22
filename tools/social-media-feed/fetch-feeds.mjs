@@ -53,15 +53,6 @@ const GRAPH_API_VERSION = 'v23.0';
 
 async function fetchFacebookFeed() {
   if (!FB_PAGE_ID || !FB_PAGE_ACCESS_TOKEN) return [];
-  console.log(
-    'DEBUG matches known page ID:',
-    FB_PAGE_ID.trim() === '433485486688506',
-    '| ID has stray whitespace:',
-    FB_PAGE_ID !== FB_PAGE_ID.trim(),
-    '| token length raw/trimmed:',
-    FB_PAGE_ACCESS_TOKEN.length,
-    FB_PAGE_ACCESS_TOKEN.trim().length,
-  );
   const url = `https://graph.facebook.com/${GRAPH_API_VERSION}/${FB_PAGE_ID}/posts?fields=id,message,full_picture,created_time&access_token=${FB_PAGE_ACCESS_TOKEN}&limit=20`;
   try {
     const response = await fetch(url);

@@ -29,6 +29,23 @@ const AUDIENCES = {
   // define your custom audiences here as needed
 };
 
+// Loading splash (logo overlay defined in styles.css) must stay visible at
+// least this long so the page doesn't flash unstyled/unloaded content.
+const MIN_SPLASH_DURATION_MS = 1000;
+const pageLoadStart = Date.now();
+
+/**
+ * Resolves once at least `minMs` have elapsed since `start`.
+ * @param {number} start - Reference timestamp (Date.now())
+ * @param {number} minMs - Minimum duration in milliseconds
+ * @returns {Promise<void>}
+ */
+function waitForMinDuration(start, minMs) {
+  const remaining = minMs - (Date.now() - start);
+  if (remaining <= 0) return Promise.resolve();
+  return new Promise((resolve) => { setTimeout(resolve, remaining); });
+}
+
 /**
      * Gets all the metadata elements that are in the given scope.
      * @param {String} scope The scope/prefix for the metadata
@@ -191,6 +208,7 @@ async function loadEager(doc) {
   const main = doc.querySelector('main');
   if (main) {
     decorateMain(main);
+    await waitForMinDuration(pageLoadStart, MIN_SPLASH_DURATION_MS);
     document.body.classList.add('appear');
     await waitForLCP(LCP_BLOCKS);
   }

@@ -29,6 +29,8 @@ const CONFIG = {
   // Positions are `top` values in vh (relative to the viewport).
   text: {
     titleBottomVh: 90, // title resting anchor at the very bottom of the slide
+    // First slide only: sits 5% (of viewport height) higher than the rest.
+    titleBottomVhOverrides: { 0: 85 },
     titleTopVh: 14, // title destination near the top of the page
     titleShiftScale: 0.8, // shifting title scales to half size as it reaches top
     subtitleStartVh: 140, // subtitle starts just below the fold (off-screen)
@@ -301,11 +303,17 @@ const initBasicScroll = (block) => {
  * Creates HTML for title/subtitle parts with escaped content
  * @param {string[]} parts - Array of text parts
  * @param {string} className - Base class name
+ * @param {(html: string) => string} [transform] - Optional post-escape transform per part
  * @returns {string} - HTML string
  */
-const createPartsHtml = (parts, className) => parts
-  .map((part, i) => `<span class="${className} ${className}-${i}">${escapeHtml(part)}</span>`)
+const createPartsHtml = (parts, className, transform = (html) => html) => parts
+  .map((part, i) => `<span class="${className} ${className}-${i}">${transform(escapeHtml(part))}</span>`)
   .join('');
+
+// First slide only: force a manual line break after "Scherzo" so the title
+// reads "Edukacja w Scherzo" / "to fundament..." on two lines.
+const FIRST_SLIDE_TITLE_BREAK = /(Edukacja w Scherzo)\s+/i;
+const breakFirstSlideTitle = (html) => html.replace(FIRST_SLIDE_TITLE_BREAK, '$1<br>');
 
 /**
  * Creates a section DOM element with accessibility attributes
@@ -359,7 +367,7 @@ const createSection = (section, index, total) => {
         <div class="fade" aria-hidden="true"></div>
         <div class="strapline">
           ${logoHtml}
-          <h1 class="main-title">${createPartsHtml(mainTitleParts, 'title-part')}</h1>
+          <h1 class="main-title">${createPartsHtml(mainTitleParts, 'title-part', index === 0 ? breakFirstSlideTitle : undefined)}</h1>
         </div>
         ${strapline2Html}
       </div>
@@ -416,6 +424,7 @@ const initParallaxCover = (gsap) => {
   const { factor, dwell, textPortion } = CONFIG.cover;
   const {
     titleBottomVh,
+    titleBottomVhOverrides,
     titleTopVh,
     titleShiftScale,
     subtitleStartVh,
@@ -440,6 +449,10 @@ const initParallaxCover = (gsap) => {
     if (isLastSlide(index)) return lastSlideAnchorVh;
     return centeredAnchorOverrides[index] ?? centeredAnchorVh;
   };
+
+  // Bottom resting anchor for a non-centred slide's title. Per-index override
+  // (e.g. slide 0 sits 10% higher) falls back to the shared default.
+  const titleBottomFor = (index) => titleBottomVhOverrides[index] ?? titleBottomVh;
 
   // Total scroll distance: one segment per transition + a final resting screen
   if (container) {
@@ -476,7 +489,7 @@ const initParallaxCover = (gsap) => {
       }
     } else {
       const subtitle = subtitleBlocks[0];
-      setAt(title, titleBottomVh, 1);
+      setAt(title, titleBottomFor(i), 1);
       // Subtitle waits below the fold until its segment begins
       setAt(subtitle, subtitleStartVh, 0);
     }
@@ -528,7 +541,7 @@ const initParallaxCover = (gsap) => {
       if (activeTitle) {
         tl.fromTo(
           activeTitle,
-          { top: `${titleBottomVh}vh`, scale: 1 },
+          { top: `${titleBottomFor(t - 1)}vh`, scale: 1 },
           {
             top: `${titleTopVh}vh`,
             scale: titleShiftScale,

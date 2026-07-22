@@ -221,15 +221,15 @@ export default async function decorate(block) {
 
   const searchField = createSearchField(handleSearch);
   const allButton = createFilterButton('all', createFilterHandler('all'));
-  const youtubeButton = createFilterButton('youtube', createFilterHandler('youtube'));
   const facebookButton = createFilterButton('facebook', createFilterHandler('facebook'));
   const instagramButton = createFilterButton('instagram', createFilterHandler('instagram'));
+  const youtubeButton = createFilterButton('youtube', createFilterHandler('youtube'));
 
   filterContainer.appendChild(searchField);
   filterContainer.appendChild(allButton);
-  filterContainer.appendChild(youtubeButton);
   filterContainer.appendChild(facebookButton);
   filterContainer.appendChild(instagramButton);
+  filterContainer.appendChild(youtubeButton);
 
   block.appendChild(filterContainer);
   block.appendChild(feedContainer);

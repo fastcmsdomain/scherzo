@@ -98,6 +98,20 @@ async function fetchInstagramFeed() {
   }
 }
 
+// The school cross-posts the same caption to Facebook and Instagram on the same
+// day, so a naive merge shows every post twice. Drop the later duplicate (keeping
+// Facebook's copy) when a Facebook/Instagram post shares a day and opening text.
+function dropCrossPostedDuplicates(items) {
+  const seen = new Set();
+  return items.filter((item) => {
+    if (item.type !== 'facebook' && item.type !== 'instagram') return true;
+    const key = `${item.date.slice(0, 10)}|${item.title.replace(/[^\p{L}\p{N}]/gu, '').slice(0, 40).toLowerCase()}`;
+    if (seen.has(key)) return false;
+    seen.add(key);
+    return true;
+  });
+}
+
 async function main() {
   const [youtube, facebook, instagram] = await Promise.all([
     fetchYouTubeFeed(),
@@ -107,7 +121,7 @@ async function main() {
 
   const errors = [youtube, facebook, instagram].map((result) => result.error).filter(Boolean);
 
-  const items = [...youtube.items, ...facebook.items, ...instagram.items]
+  const items = dropCrossPostedDuplicates([...youtube.items, ...facebook.items, ...instagram.items])
     .filter((item) => item.image && item.link && !Number.isNaN(new Date(item.date).getTime()))
     .sort((a, b) => new Date(b.date) - new Date(a.date))
     .slice(0, MAX_ITEMS);

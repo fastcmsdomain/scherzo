@@ -47,9 +47,13 @@ async function fetchYouTubeFeed() {
   }
 }
 
+// Meta only supports Graph API versions for ~2 years; pin a current one (v19.0 started
+// silently rejecting fields once it aged out).
+const GRAPH_API_VERSION = 'v23.0';
+
 async function fetchFacebookFeed() {
   if (!FB_PAGE_ID || !FB_PAGE_ACCESS_TOKEN) return [];
-  const url = `https://graph.facebook.com/v19.0/${FB_PAGE_ID}/posts?fields=id,message,full_picture,created_time&access_token=${FB_PAGE_ACCESS_TOKEN}&limit=20`;
+  const url = `https://graph.facebook.com/${GRAPH_API_VERSION}/${FB_PAGE_ID}/posts?fields=id,message,full_picture,created_time&access_token=${FB_PAGE_ACCESS_TOKEN}&limit=20`;
   try {
     const response = await fetch(url);
     const data = await response.json();
@@ -73,7 +77,7 @@ async function fetchFacebookFeed() {
 async function fetchInstagramFeed() {
   if (!IG_USER_ID || !IG_ACCESS_TOKEN) return [];
   const fields = 'id,caption,media_type,media_url,permalink,thumbnail_url,timestamp';
-  const url = `https://graph.facebook.com/v19.0/${IG_USER_ID}/media?fields=${fields}&access_token=${IG_ACCESS_TOKEN}&limit=20`;
+  const url = `https://graph.facebook.com/${GRAPH_API_VERSION}/${IG_USER_ID}/media?fields=${fields}&access_token=${IG_ACCESS_TOKEN}&limit=20`;
   try {
     const response = await fetch(url);
     const data = await response.json();

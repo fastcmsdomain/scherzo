@@ -53,6 +53,7 @@ const GRAPH_API_VERSION = 'v23.0';
 
 async function fetchFacebookFeed() {
   if (!FB_PAGE_ID || !FB_PAGE_ACCESS_TOKEN) return [];
+  console.log('DEBUG FB_PAGE_ID:', JSON.stringify(FB_PAGE_ID), 'token length:', FB_PAGE_ACCESS_TOKEN.length);
   const url = `https://graph.facebook.com/${GRAPH_API_VERSION}/${FB_PAGE_ID}/posts?fields=id,message,full_picture,created_time&access_token=${FB_PAGE_ACCESS_TOKEN}&limit=20`;
   try {
     const response = await fetch(url);

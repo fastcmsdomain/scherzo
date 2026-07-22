@@ -182,18 +182,30 @@ const extractTextParts = (doc, selector) => {
 };
 
 /**
- * Gets background image sources for a section
+ * Gets image sources for a section.
  * Image order convention (same slide table in Google Drive, all slides):
  *   [0] = desktop background, [1] = mobile background (optional)
  * When no mobile image is authored, the desktop image is used for all viewports.
+ * The last slide breaks this convention: it authors [0] = logo (shown under the
+ * title, not a background) and [1] = the single background image (no mobile crop).
  * @param {Object} section - Section data
- * @returns {Object} - { bgImageSrc, bgMobileSrc }
+ * @returns {Object} - { bgImageSrc, bgMobileSrc, logoSrc }
  */
 const getSectionImages = (section) => {
   const images = section.backgroundImages || [section.image];
+
+  if (section.id === CLASSES.lastSlide) {
+    return {
+      bgImageSrc: images[1] || images[0] || section.image,
+      bgMobileSrc: '',
+      logoSrc: images[0] || '',
+    };
+  }
+
   return {
     bgImageSrc: images[0] || section.image,
     bgMobileSrc: images[1] || '',
+    logoSrc: '',
   };
 };
 
@@ -303,7 +315,7 @@ const createPartsHtml = (parts, className) => parts
  * @returns {HTMLElement} - Section element
  */
 const createSection = (section, index, total) => {
-  const { bgImageSrc, bgMobileSrc } = getSectionImages(section);
+  const { bgImageSrc, bgMobileSrc, logoSrc } = getSectionImages(section);
 
   const mainTitleParts = section.mainTitleParts?.length
     ? section.mainTitleParts
@@ -328,6 +340,11 @@ const createSection = (section, index, total) => {
     ? `<div class="img image-bg image-bg-0" data-bg="${escapeHtml(bgImageSrc)}"${bgMobileSrc ? ` data-bg-mobile="${escapeHtml(bgMobileSrc)}"` : ''} role="img" aria-label="${escapeHtml(section.title)}"></div>`
     : '';
 
+  // Last slide only: logo sits above the title, layered on top of the background image
+  const logoHtml = logoSrc
+    ? `<img class="strapline-logo" src="${escapeHtml(logoSrc)}" alt="" />`
+    : '';
+
   const sectionDiv = document.createElement('div');
   sectionDiv.className = `screen-section ${section.id}`;
   sectionDiv.setAttribute('role', 'region');
@@ -341,6 +358,7 @@ const createSection = (section, index, total) => {
         <div class="scroll-overlay" aria-hidden="true"></div>
         <div class="fade" aria-hidden="true"></div>
         <div class="strapline">
+          ${logoHtml}
           <h1 class="main-title">${createPartsHtml(mainTitleParts, 'title-part')}</h1>
         </div>
         ${strapline2Html}

@@ -182,9 +182,24 @@ main .section .scroll-hero-wrapper {
   font-size: clamp(1rem, 1.5vw, 1.5rem);
 }
 
-/* Last slide section - logo above strapline */
+/* Last slide section - logo above the title, background image behind both */
 .section-last-slide .background {
   position: relative;
+}
+
+.strapline-logo {
+  display: block;
+  margin: 0 auto var(--space-16);
+  max-width: 90px;
+  width: 12vw;
+  height: auto;
+}
+
+@media (max-width: 992px) {
+  .strapline-logo {
+    margin-bottom: var(--space-12);
+    max-width: 60px;
+  }
 }
 
 .section-last-slide .background:before {

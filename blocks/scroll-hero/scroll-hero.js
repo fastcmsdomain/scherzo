@@ -34,25 +34,15 @@ const CONFIG = {
     titleTopVh: 14, // title destination near the top of the page
     titleShiftScale: 0.8, // shifting title scales to half size as it reaches top
     subtitleStartVh: 140, // subtitle starts just below the fold (off-screen)
-    subtitleMiddleVh: 40, // subtitle destination, the middle (below the top title)
+    subtitleMiddleVh: 60, // subtitle destination, the middle (below the top title)
     // Slides listed here keep BOTH straplines locked centred (no shift) for the
     // whole slide. Index is the slide's position (0-based). The 2nd slide
     // (index 1) is centred; the last slide is centred automatically too.
     centeredSlides: [1],
-    // Vertical anchor (vh) for a centred slide's text block. Default 50 = dead
-    // centre (used by the last slide). Per-index overrides compensate for blocks
-    // whose trailing whitespace would otherwise sit them high (slide 2's long
-    // title + paragraph needs a lower anchor to read as centred).
-    centeredAnchorVh: 43,
-    centeredAnchorOverrides: { 1: 70 },
-    // Slide 2 (index 1): static centred text — each strapline block gets its own anchor.
+    // Slide 2 (index 1): static centred text, laid out via CSS flow
+    // (.text-stack) rather than a vh anchor — see scroll-hero.css.
     staticSlideIndex: 1,
-    slide2Anchors: {
-      title: 50,
-      strapline2Start: 60,
-      strapline2Step: 12,
-    },
-    // The last slide's strapline is controlled separately from slide 2.
+    // The last slide's strapline anchor (vh, dead centre-ish).
     lastSlideAnchorVh: 25,
   },
   navScrollDuration: 1,
@@ -359,17 +349,25 @@ const createSection = (section, index, total) => {
   sectionDiv.setAttribute('aria-label', `Section ${index + 1} of ${total}: ${section.title}`);
   sectionDiv.setAttribute('tabindex', '-1');
 
+  // Slide 2 only: title + subtitle blocks are wrapped so CSS can stack them
+  // with normal document flow (see .text-stack) instead of independent
+  // vh-anchored absolute positions, which never overlaps regardless of
+  // viewport height.
+  const textHtml = `
+    <div class="strapline">
+      ${logoHtml}
+      <h1 class="main-title">${createPartsHtml(mainTitleParts, 'title-part', index === 0 ? breakFirstSlideTitle : undefined)}</h1>
+    </div>
+    ${strapline2Html}
+  `;
+
   sectionDiv.innerHTML = `
     <div class="screen ${section.id.replace('section-', '')}">
       <div class="screen-inner">
         <div class="background" aria-hidden="true">${bgHtml}</div>
         <div class="scroll-overlay" aria-hidden="true"></div>
         <div class="fade" aria-hidden="true"></div>
-        <div class="strapline">
-          ${logoHtml}
-          <h1 class="main-title">${createPartsHtml(mainTitleParts, 'title-part', index === 0 ? breakFirstSlideTitle : undefined)}</h1>
-        </div>
-        ${strapline2Html}
+        ${isStaticSlide ? `<div class="text-stack">${textHtml}</div>` : textHtml}
       </div>
     </div>
   `;
@@ -430,11 +428,8 @@ const initParallaxCover = (gsap) => {
     subtitleStartVh,
     subtitleMiddleVh,
     centeredSlides,
-    centeredAnchorVh,
-    centeredAnchorOverrides,
     lastSlideAnchorVh,
     staticSlideIndex,
-    slide2Anchors,
   } = CONFIG.text;
 
   const isLastSlide = (index) => sections[index]?.classList.contains(CLASSES.lastSlide);
@@ -442,13 +437,6 @@ const initParallaxCover = (gsap) => {
   // A slide is centred if it's in the config list OR it's the last slide,
   // which is also locked centred (like slide 2).
   const isCentered = (index) => centeredSlides.includes(index) || isLastSlide(index);
-
-  // Vertical anchor for a centred slide. The last slide is controlled
-  // separately; otherwise use a per-index override, else the default.
-  const anchorFor = (index) => {
-    if (isLastSlide(index)) return lastSlideAnchorVh;
-    return centeredAnchorOverrides[index] ?? centeredAnchorVh;
-  };
 
   // Bottom resting anchor for a non-centred slide's title. Per-index override
   // (e.g. slide 0 sits 10% higher) falls back to the shared default.
@@ -474,18 +462,14 @@ const initParallaxCover = (gsap) => {
     const overlay = section.querySelector(SELECTORS.scrollOverlay);
 
     if (isCentered(i)) {
-      // Slide 2 only: title and each strapline-2 block get their own anchor.
-      if (i === staticSlideIndex) {
-        const { title: titleVh, strapline2Start, strapline2Step } = slide2Anchors;
-        setAt(title, titleVh, 1);
-        subtitleBlocks.forEach((block, blockIndex) => {
-          setAt(block, strapline2Start + blockIndex * strapline2Step, 1);
-        });
-      } else {
-        // Other centred slides (e.g. last): shared anchor behaviour unchanged.
+      // Slide 2 only: title and subtitle blocks are laid out by CSS flow
+      // (.text-stack), not vh anchors, so they can never overlap regardless
+      // of viewport height. Nothing to set here.
+      if (i !== staticSlideIndex) {
+        // Other centred slides (currently just the last one): shared anchor.
         const subtitle = subtitleBlocks[0];
-        setAt(title, anchorFor(i), 1);
-        setAt(subtitle, anchorFor(i), 1);
+        setAt(title, lastSlideAnchorVh, 1);
+        setAt(subtitle, lastSlideAnchorVh, 1);
       }
     } else {
       const subtitle = subtitleBlocks[0];

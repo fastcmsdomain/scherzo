@@ -205,3 +205,14 @@ footer .button-container a.button {
     text-align: center;
     margin: 0;
 }
+
+.parBtn {
+  display: flex;
+  align-items: center;
+  gap: var(--space-8);
+}
+
+.icon.icon-map {
+  width: 16px;
+  height: 16px;
+}

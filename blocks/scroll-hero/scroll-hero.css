@@ -164,10 +164,34 @@ main .section .scroll-hero-wrapper {
   font-size: clamp(1rem, 4vw + 1rem, 1.8rem); /* ~30px mobile, ~60px desktop above 920px */
 }
 
-/* Slide 2 only: each strapline-2 block is positioned individually via GSAP */
 .screen-section:nth-child(2) .strapline-2 .subtitle {
   max-width: 50%;
   margin: 0 auto;
+}
+
+/* Slide 2 (static/centred slide): title + subtitle are stacked with normal
+   document flow inside a flex column instead of independent vh-anchored
+   absolute positions. Vh anchors don't scale with actual text height, so on
+   short viewports (short browser windows, landscape tablets/phones) the gap
+   between anchors can end up smaller than the rendered text, causing the
+   title and subtitle to overlap. Flow layout can't overlap regardless of
+   viewport height, on desktop, tablet, or mobile. Applies with or without
+   GSAP (see the .no-gsap rules further down, which this overrides). */
+.screen-section:nth-child(2) .text-stack {
+  position: absolute;
+  inset: 0;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(0.5rem, 2vh, 1.5rem);
+}
+
+.screen-section:nth-child(2) .text-stack .strapline,
+.screen-section:nth-child(2) .text-stack .strapline-2 {
+  position: static;
+  transform: none;
 }
 
 .screen-section:nth-child(8) .strapline {
@@ -511,13 +535,7 @@ main .section .scroll-hero-wrapper {
     top: 60%;
   }
 
-  /* Slide 2 only: separate title and subtitle when GSAP is unavailable */
-  .no-gsap .screen-section:nth-child(2) .strapline {
-    top: 35%;
-  }
-
-  .no-gsap .screen-section:nth-child(2) .strapline-2 {
-    top: 65%;
-  }
+  /* Slide 2 is excluded: its .text-stack flow layout (above) positions its
+     title/subtitle regardless of GSAP availability. */
 }
 

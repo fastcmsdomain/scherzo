@@ -407,7 +407,7 @@ main .section .scroll-hero-wrapper {
   opacity: 0.9;
 
   @media (max-width: 920px) {
-    font-size: clamp(1.2rem, 1.5vw, 1.5rem); /* ~16px mobile, ~24px max below 920px */
+    font-size: clamp(1.35rem, 1.8vw, 1.75rem); /* ~21.6px mobile, ~28px max below 920px */
   }
 }
 
@@ -445,7 +445,7 @@ main .section .scroll-hero-wrapper {
   }
 
   .strapline .main-title .title-part-0 {
-    font-size: clamp(1.5rem, 4vw, 2rem); /* ~24-32px, sized to fit short/narrow mobile viewports */
+    font-size: clamp(1.75rem, 4.5vw, 2.5rem); /* ~28-40px */
   }
 
   .strapline-2 .subtitle {
@@ -459,7 +459,7 @@ main .section .scroll-hero-wrapper {
   }
 
   .strapline .main-title .title-part-0 {
-    font-size: clamp(1.25rem, 5vw, 1.75rem); /* ~20-28px, sized to fit small phone screens */
+    font-size: clamp(1.5rem, 5.5vw, 2rem); /* ~24-32px */
   }
 
   .strapline-2 .subtitle {

@@ -1,6 +1,31 @@
 import { getMetadata } from '../../scripts/aem.js';
 import { loadFragment } from '../fragment/fragment.js';
 
+const FOOTER_BG_IMAGE = '/images/bg.jpg';
+const FOOTER_LOGO_IMAGE = '/images/logo.png';
+
+/**
+ * Builds the full-viewport photo panel above the footer links: same
+ * background/logo/tagline treatment as the hero's first slide, authored here
+ * (not in the footer fragment) since it's a fixed brand element, not editable
+ * per-page content.
+ * @returns {HTMLElement}
+ */
+const createFooterLogo = () => {
+  const wrapper = document.createElement('div');
+  wrapper.className = 'footer-logo';
+  wrapper.innerHTML = `
+    <div class="footer-logo-bg" style="background-image: url('${FOOTER_BG_IMAGE}')" aria-hidden="true"></div>
+    <div class="footer-logo-overlay" aria-hidden="true"></div>
+    <div class="footer-logo-content">
+      <img class="footer-logo-image" src="${FOOTER_LOGO_IMAGE}" alt="Scherzo" loading="lazy" width="188" height="125">
+      <p class="footer-logo-caption">Prywatna Szkoła Podstawowa i Przedszkole</p>
+      <p class="footer-logo-title">Edukacja w Scherzo<br>to fundament<br><span class="footer-logo-title-light">na całe życie</span></p>
+    </div>
+  `;
+  return wrapper;
+};
+
 /**
  * loads and decorates the footer
  * @param {Element} block The footer block element
@@ -18,6 +43,10 @@ export default async function decorate(block) {
 
   block.append(footer);
 
+  // Insert the hero panel as a sibling before the (padded, grid-based)
+  // footer block, so it renders edge-to-edge and isn't sized as a grid item.
+  block.parentElement.insertBefore(createFooterLogo(), block);
+
   const iconPar = block.querySelectorAll('p');
   iconPar.forEach((p) => {
     if (p.querySelector('span.icon-map')) {
@@ -28,20 +57,5 @@ export default async function decorate(block) {
   const buttonEmail = document.querySelector('.button-container');
   if (buttonEmail) {
     buttonEmail.classList.remove('.button-container');
-  }
-
-  const footerLogo = document.querySelector('.footer-logo');
-  if (footerLogo) {
-    const h3 = footerLogo.querySelector('h3');
-    if (h3) {
-      // Split innerHTML on <br> (as HTML, not just \n) and trim
-      const lines = h3.innerHTML.split(/<br\s*\/?>/i).map((line) => line.trim());
-      h3.innerHTML = lines
-        .map((line) => line
-          .split(' ')
-          .map((word) => `<span>${word}</span>`)
-          .join(' '))
-        .join('<br>');
-    }
   }
 }

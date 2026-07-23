@@ -162,48 +162,85 @@ footer .button-container a.button {
     }
 }
 
+/* Footer hero panel: full-viewport photo backdrop with logo + tagline,
+   sitting above the address/links footer (same background/logo/tagline
+   treatment as the site's first slide). */
 .footer-logo {
-    position: absolute;
-    margin: 0 auto;
-    width: 300px;
-    left: 0;
-    right: 0;
-    bottom: 50%;
-    text-align: center;
-    height: 500px;
+  align-items: center;
+  color: var(--color-white);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 100vh;
+  overflow: hidden;
+  padding: var(--space-16) var(--space-8);
+  position: relative;
+  text-align: center;
+  width: 100%;
 }
 
-.footer-logo picture img {
-    width: 128px;
-    height: auto;
+.footer-logo-bg {
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  inset: 0;
+  position: absolute;
+  z-index: 0;
 }
 
-.footer-logo p:has(picture) {
-    margin: 0 0 10rem;
+.footer-logo-overlay {
+  background: rgb(0 32 62 / 60%);
+  inset: 0;
+  position: absolute;
+  z-index: 1;
 }
 
-.footer-logo h3 span {
- font-size: 80px;
- line-height: 0.5;
+.footer-logo-content {
+  position: relative;
+  z-index: 2;
 }
 
-.footer-logo h3 span:first-child   {
-   font-size: 26px;
-   font-family: var(--body-font-family);
+.footer-logo-image {
+  height: auto;
+  margin: 0 auto var(--space-16);
+  width: 100px;
 }
 
-.footer-logo h3 span:last-child {
-    top: -15px;
-    position: relative;
-    font-family: var(--body-font-family);
-    font-size: 20px;
+.footer-logo-caption {
+  font-family: var(--body-font-family);
+  font-size: var(--font-size-xs);
+  letter-spacing: 0.05em;
+  margin: 0 0 var(--space-16);
+  text-transform: uppercase;
+
+  @media (width >= 600px) {
+    font-size: var(--font-size-sm);
+  }
 }
 
-.footer-logo h3 {
-    color: var(--color-white);
-    font-family: var(--body-bold-family);
-    text-align: center;
-    margin: 0;
+.footer-logo-title {
+  font-family: var(--semi-bold-font-family);
+  font-size: clamp(1.75rem, 4.5vw, 2.5rem);
+  line-height: 1.2;
+  margin: 0;
+  text-shadow: 0 0 18px rgb(0 0 0 / 25%);
+
+  @media (width >= 920px) {
+    font-size: var(--heading-font-size-xxxl);
+  }
+}
+
+.footer-logo-title-light {
+  display: inline-block;
+  font-family: var(--body-font-family);
+  font-size: clamp(1.35rem, 1.8vw, 1.75rem);
+  font-weight: 300;
+  margin-top: var(--space-8);
+  opacity: 0.9;
+
+  @media (width >= 920px) {
+    font-size: clamp(1.25rem, 1.5vw + 1rem, 2rem);
+  }
 }
 
 .parBtn {
@@ -213,6 +250,5 @@ footer .button-container a.button {
 }
 
 .icon.icon-map {
-  width: 16px;
-  height: 16px;
+display: none
 }

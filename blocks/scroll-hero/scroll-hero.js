@@ -577,19 +577,95 @@ const initParallaxCover = (gsap, ScrollTrigger) => {
   }
 
   // The last slide owns one full viewport of "resting" scroll (the `+ 1` in
-  // the container height above) so its title/subtitle stay fully readable
-  // before the footer takes over. But every slide is position:fixed, and
-  // nothing ever un-fixes them — earlier slides rely on later ones (higher
-  // z-index) to visually cover them, and nothing covers the last one. Left
-  // alone, whichever slide is topmost would stay permanently pinned over the
-  // footer forever instead of handing off to it. Release ALL slides to a
-  // normal, in-flow position exactly when the resting screen ends, so the
-  // whole group scrolls away together with the page and the footer becomes
-  // reachable underneath.
+  // the container height above). Every other slide's text-reveal (title
+  // rising to the top, subtitle fading in) is driven by the *next* slide's
+  // transition above — there is no such transition for the last slide, so
+  // left alone it would just sit at its initial resting state (title low,
+  // subtitle invisible) forever. The release point is clamped to the page's
+  // actual max scroll: if whatever follows the hero (e.g. a short footer) is
+  // less than one viewport tall, the unclamped point would sit past the
+  // bottom of the page and the browser could never scroll far enough to
+  // reach it.
+  const maxScroll = () => document.documentElement.scrollHeight - window.innerHeight;
+  const restStart = () => (total - 1) * segment();
+  const restEnd = () => Math.min(restStart() + window.innerHeight, maxScroll());
+
+  const lastIndex = total - 1;
+  const lastSection = sections[lastIndex];
+  const lastTitle = lastSection.querySelector(SELECTORS.strapline);
+  const lastSubtitle = lastSection.querySelector(SELECTORS.strapline2);
+  const lastOverlay = lastSection.querySelector(SELECTORS.scrollOverlay);
+
+  const closingTl = gsap.timeline({
+    scrollTrigger: {
+      trigger: 'body',
+      start: restStart,
+      end: restEnd,
+      scrub: 1,
+      invalidateOnRefresh: true,
+    },
+  });
+
+  // Play the same title/subtitle choreography every other slide gets, just
+  // driven by the last slide's own resting screen instead of a next slide's
+  // transition. Centred slides (none in the current content, but supported
+  // for a future dedicated closing slide) keep their text locked in place.
+  if (!isCentered(lastIndex)) {
+    if (lastTitle) {
+      closingTl.fromTo(
+        lastTitle,
+        { top: `${titleBottomFor(lastIndex)}vh`, scale: 1 },
+        {
+          top: `${titleTopVh}vh`,
+          scale: titleShiftScale,
+          ease: 'power1.inOut',
+          duration: textPortion,
+        },
+        0,
+      );
+    }
+    if (lastSubtitle) {
+      closingTl.fromTo(
+        lastSubtitle,
+        { top: `${subtitleStartVh}vh`, opacity: 0 },
+        {
+          top: `${subtitleMiddleVh}vh`,
+          opacity: 1,
+          ease: 'power1.inOut',
+          duration: textPortion,
+        },
+        0,
+      );
+    }
+    if (lastOverlay) {
+      closingTl.fromTo(
+        lastOverlay,
+        { opacity: 0 },
+        { opacity: 1, ease: 'power1.inOut', duration: textPortion },
+        0,
+      );
+    }
+  }
+
+  // Fade the whole slide out over the remaining portion of the resting
+  // window, so the footer dissolves into view instead of popping in
+  // instantly once the slide is hidden below.
+  closingTl.to(lastSection, { opacity: 0, ease: 'power1.in', duration: imagePortion }, textPortion);
+
+  // But every slide is position:fixed, and nothing ever un-fixes them —
+  // earlier slides rely on later ones (higher z-index) to visually cover
+  // them, and nothing covers the last one. Left alone, whichever slide is
+  // topmost would stay permanently pinned over the footer forever instead of
+  // handing off to it. Hide every slide outright once the resting screen
+  // ends; the last one has already faded to invisible by then (above), so
+  // this causes no visible jump. (A section can't instead be repositioned to
+  // "scroll away" normally, because that needs at least one more viewport of
+  // scroll room after the release point — a short footer might not have it,
+  // leaving the section stuck part-way forever.)
   ScrollTrigger.create({
     trigger: 'body',
-    start: () => (total - 1) * segment(),
-    end: () => (total - 1) * segment() + window.innerHeight,
+    start: restStart,
+    end: restEnd,
     onLeave: () => sections.forEach((s) => s.classList.add(CLASSES.released)),
     onEnterBack: () => sections.forEach((s) => s.classList.remove(CLASSES.released)),
   });
@@ -647,6 +723,15 @@ const initScrollAnimations = () => {
     clearTimeout(resizeTimer);
     resizeTimer = setTimeout(() => ScrollTrigger.refresh(), 200);
   });
+
+  // Other blocks (e.g. the footer) fetch and append their own content
+  // asynchronously, independently of this block, and can finish after GSAP's
+  // own auto-refresh has already run — leaving scroll-distance calculations
+  // (like the last slide's release/max-scroll clamp) built on a stale,
+  // too-short page height. Re-check once the page's other resources have
+  // settled, and again shortly after as a fallback for later-finishing fetches.
+  window.addEventListener('load', () => ScrollTrigger.refresh());
+  setTimeout(() => ScrollTrigger.refresh(), 1000);
 };
 
 // =============================================================================

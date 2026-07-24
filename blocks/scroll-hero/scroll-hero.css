@@ -137,15 +137,13 @@ main .section .scroll-hero-wrapper {
   background-color: #00203e;
 }
 
-/* The last slide is released from position:fixed (see scroll-hero.js) once
-   its dedicated resting screen has been scrolled past, so it settles into
-   normal document flow instead of staying pinned over the footer forever.
-   Anchoring to the bottom of .scroll-hero-container (which reserves exactly
-   one viewport for this resting screen) keeps the handoff visually seamless. */
+/* Every slide is hidden outright (see scroll-hero.js) once the last one's
+   dedicated resting screen has been scrolled past, instead of staying
+   pinned over the footer forever. They can't instead be repositioned to
+   scroll away normally, since that needs a full extra viewport of scroll
+   room after release, which a short footer might not have. */
 .screen-section.is-released {
-  position: absolute;
-  top: auto;
-  bottom: 0;
+  display: none;
 }
 
 /* .screen contains the actual content */

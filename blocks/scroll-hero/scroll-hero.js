@@ -62,6 +62,7 @@ const SELECTORS = {
 const CLASSES = {
   active: 'isActive',
   lastSlide: 'section-last-slide',
+  released: 'is-released',
 };
 
 // =============================================================================
@@ -414,8 +415,9 @@ const setBackgrounds = (sections) => {
  * Distinct top/middle/bottom anchors guarantee the lines never overlap.
  * Everything is scrubbed, so scroll-up plays the exact reverse.
  * @param {Object} gsap - GSAP instance
+ * @param {Object} ScrollTrigger - GSAP ScrollTrigger plugin
  */
-const initParallaxCover = (gsap) => {
+const initParallaxCover = (gsap, ScrollTrigger) => {
   const sections = getSections();
   const container = document.querySelector(SELECTORS.container);
   const total = sections.length;
@@ -573,6 +575,24 @@ const initParallaxCover = (gsap) => {
       textPortion,
     );
   }
+
+  // The last slide owns one full viewport of "resting" scroll (the `+ 1` in
+  // the container height above) so its title/subtitle stay fully readable
+  // before the footer takes over. But every slide is position:fixed, and
+  // nothing ever un-fixes them — earlier slides rely on later ones (higher
+  // z-index) to visually cover them, and nothing covers the last one. Left
+  // alone, whichever slide is topmost would stay permanently pinned over the
+  // footer forever instead of handing off to it. Release ALL slides to a
+  // normal, in-flow position exactly when the resting screen ends, so the
+  // whole group scrolls away together with the page and the footer becomes
+  // reachable underneath.
+  ScrollTrigger.create({
+    trigger: 'body',
+    start: () => (total - 1) * segment(),
+    end: () => (total - 1) * segment() + window.innerHeight,
+    onLeave: () => sections.forEach((s) => s.classList.add(CLASSES.released)),
+    onEnterBack: () => sections.forEach((s) => s.classList.remove(CLASSES.released)),
+  });
 };
 
 /**
@@ -618,7 +638,7 @@ const initScrollAnimations = () => {
 
   gsap.registerPlugin(ScrollTrigger);
 
-  initParallaxCover(gsap);
+  initParallaxCover(gsap, ScrollTrigger);
   initNavControls(gsap);
 
   // Keep distances correct on resize/orientation change

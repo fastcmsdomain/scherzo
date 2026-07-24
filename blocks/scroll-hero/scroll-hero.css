@@ -127,7 +127,8 @@ main .section .scroll-hero-wrapper {
    GSAP translates each later section up from below (yPercent 100 -> 0)
    to cover the static previous one. No clip-path. */
 .screen-section {
-  height: 100vh;
+  height: 100vh; /* fallback for browsers without dvh support */
+  height: 100dvh; /* tracks the real visible viewport as mobile browser toolbars show/hide, avoiding a gap or overflow */
   width: 100%;
   position: fixed;
   top: 0;
@@ -136,9 +137,21 @@ main .section .scroll-hero-wrapper {
   background-color: #00203e;
 }
 
+/* The last slide is released from position:fixed (see scroll-hero.js) once
+   its dedicated resting screen has been scrolled past, so it settles into
+   normal document flow instead of staying pinned over the footer forever.
+   Anchoring to the bottom of .scroll-hero-container (which reserves exactly
+   one viewport for this resting screen) keeps the handoff visually seamless. */
+.screen-section.is-released {
+  position: absolute;
+  top: auto;
+  bottom: 0;
+}
+
 /* .screen contains the actual content */
 .screen-section .screen {
   height: 100vh;
+  height: 100dvh;
   width: 100%;
   position: relative;
   background-color: #00203e;
@@ -245,6 +258,7 @@ main .section .scroll-hero-wrapper {
 
 .screen-inner {
   height: 100vh;
+  height: 100dvh;
   width: 100%;
   position: relative;
   top: 0;
@@ -267,6 +281,7 @@ main .section .scroll-hero-wrapper {
   left: 0;
   width: 100%;
   height: 100vh;
+  height: 100dvh;
   z-index: 1; /* above .background (0), below .strapline-2 (9) / .strapline (10) */
   background: rgba(0, 32, 62, 0.5);
   opacity: 0;
@@ -277,6 +292,7 @@ main .section .scroll-hero-wrapper {
 /* Background image setup - full viewport cover */
 .background {
   height: 100vh;
+  height: 100dvh;
   width: 100%;
   position: absolute;
   top: 0;
@@ -302,6 +318,7 @@ main .section .scroll-hero-wrapper {
   background-size: cover;
   display: block;
   height: 100vh;
+  height: 100dvh;
   width: 100%;
   position: absolute;
   top: 0;

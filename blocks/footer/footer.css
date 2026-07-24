@@ -14,11 +14,19 @@ body.show-footer .footer-wrapper {
   pointer-events: auto;
 }
 
+/* z-index 0 (not 1): every block-wrapping .section is position:relative;
+   z-index:1 (styles.css), which is its own stacking context — so the scroll
+   hero's pinned slides (however high their own internal z-index climbs) are
+   compared against footer as a single z-index:1 unit. Tying with footer's
+   z-index would let footer win on DOM order and paint over the still-pinned
+   hero regardless of scroll position; z-index:0 keeps that comparison
+   unambiguous (section 1 > footer 0) without touching the header's fixed
+   nav (z-index:2), which must stay above the section either way. */
 footer {
   background-color: hsl(225deg 29% 22%);
   color: var(--color-white);
   position: relative;
-  z-index: 1;
+  z-index: 0;
 }
 
 footer .footer {
@@ -172,6 +180,7 @@ footer .button-container a.button {
   flex-direction: column;
   justify-content: center;
   min-height: 100vh;
+  min-height: 100dvh;
   overflow: hidden;
   padding: var(--space-16) var(--space-8);
   position: relative;

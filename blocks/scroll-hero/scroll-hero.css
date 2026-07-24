@@ -169,6 +169,12 @@ main .section .scroll-hero-wrapper {
   margin: 0 auto;
 }
 
+@media (max-width: 920px) {
+  .screen-section:nth-child(2) .strapline-2 .subtitle {
+    max-width: 90%;
+  }
+}
+
 /* Slide 2 (static/centred slide): title + subtitle are stacked with normal
    document flow inside a flex column instead of independent vh-anchored
    absolute positions. Vh anchors don't scale with actual text height, so on
@@ -436,7 +442,7 @@ main .section .scroll-hero-wrapper {
 /* Responsive font sizes */
 @media (max-width: 992px) {
   .strapline {
-    width: 80%;
+    width: 90%;
   }
 
   .strapline .main-title {
@@ -459,7 +465,7 @@ main .section .scroll-hero-wrapper {
   }
 
   .strapline .main-title .title-part-0 {
-    font-size: clamp(1.5rem, 5.5vw, 2rem); /* ~24-32px */
+    font-size: clamp(2.2rem, 5.5vw, 2rem); /* ~24-32px */
   }
 
   .strapline-2 .subtitle {

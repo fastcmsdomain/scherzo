@@ -652,22 +652,36 @@ const initParallaxCover = (gsap, ScrollTrigger) => {
   // instantly once the slide is hidden below.
   closingTl.to(lastSection, { opacity: 0, ease: 'power1.in', duration: imagePortion }, textPortion);
 
-  // But every slide is position:fixed, and nothing ever un-fixes them —
-  // earlier slides rely on later ones (higher z-index) to visually cover
-  // them, and nothing covers the last one. Left alone, whichever slide is
-  // topmost would stay permanently pinned over the footer forever instead of
-  // handing off to it. Hide every slide outright once the resting screen
-  // ends; the last one has already faded to invisible by then (above), so
-  // this causes no visible jump. (A section can't instead be repositioned to
-  // "scroll away" normally, because that needs at least one more viewport of
-  // scroll room after the release point — a short footer might not have it,
-  // leaving the section stuck part-way forever.)
+  // Every earlier slide is still position:fixed and fully opaque throughout
+  // the resting screen — normally invisible only because the last slide's
+  // higher z-index covers them. Once the last slide starts fading out above,
+  // whichever earlier slide is now topmost would show through instead of the
+  // footer. Hide them outright for the whole resting screen (harmless: the
+  // last slide is fully opaque through its first half regardless), so fading
+  // the last slide reveals the footer directly.
+  const earlierSections = Array.from(sections).slice(0, lastIndex);
   ScrollTrigger.create({
     trigger: 'body',
     start: restStart,
     end: restEnd,
-    onLeave: () => sections.forEach((s) => s.classList.add(CLASSES.released)),
-    onEnterBack: () => sections.forEach((s) => s.classList.remove(CLASSES.released)),
+    onEnter: () => earlierSections.forEach((s) => s.classList.add(CLASSES.released)),
+    onLeaveBack: () => earlierSections.forEach((s) => s.classList.remove(CLASSES.released)),
+  });
+
+  // But nothing ever un-fixes the last slide either. Left alone it would
+  // stay permanently pinned over the footer forever instead of handing off
+  // to it. Hide it outright once the resting screen ends; it has already
+  // faded to invisible by then (above), so this causes no visible jump.
+  // (A section can't instead be repositioned to "scroll away" normally,
+  // because that needs at least one more viewport of scroll room after the
+  // release point — a short footer might not have it, leaving the section
+  // stuck part-way forever.)
+  ScrollTrigger.create({
+    trigger: 'body',
+    start: restStart,
+    end: restEnd,
+    onLeave: () => lastSection.classList.add(CLASSES.released),
+    onEnterBack: () => lastSection.classList.remove(CLASSES.released),
   });
 };
 

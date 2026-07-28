@@ -38,7 +38,7 @@ header nav[aria-expanded="true"] {
 }
 
 header .nav-brand p {
-  line-height: 1.2;
+  line-height: 1.4;
   margin: 0;
   text-align: center;
   font-family: var( --body-font-family);
@@ -49,6 +49,10 @@ header .nav-brand p {
   @media (width >= 600px) {
     font-size: var(--font-size-sm); 
   }
+}
+
+header nav .nav-brand a img {
+  padding-bottom: 0.5rem;
 }
 
 header nav a:any-link {
@@ -168,8 +172,8 @@ header .nav-brand {
   transition: opacity .3s ease;
   z-index: 0;
   background: transparent;
-  width: 230px;
-  margin: 5rem auto 0;
+  width: 200px;
+  margin: 7rem auto 0;
 
   @media (width >= 900px) {
     margin: 7rem auto 0;

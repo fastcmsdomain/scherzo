@@ -122,17 +122,18 @@
   --border-darker-blue: 1px solid var(--color-darker-blue);
 
   /* Spaces */
-  --space-88: 86px;
-  --space-66: 66px;
-  --space-56: 56px;
-  --space-46: 46px;
-  --space-36: 36px;
-  --space-26: 26px;
-  --space-20: 20px;
-  --space-16: 16px;
-  --space-12: 12px;
-  --space-8: 8px;
-  --space-4: 4px;
+  --space-88: 86px; /* 7rem */
+  --space-66: 66px; /* 5.5rem */
+  --space-56: 56px; /* 4.67rem */
+  --space-46: 46px; /* 3.83rem */
+  --space-36: 36px; /* 3rem */
+  --space-26: 26px; /* 2.17rem */
+  --space-20: 20px; /* 1.67rem */
+  --space-16: 16px; /* 1.33rem */
+  --space-12: 12px; /* 1rem */
+  --space-8: 8px; /* 0.67rem */
+  --space-4: 4px; /* 0.33rem */
+  --space-2: 2px; /* 0.17rem */
 }
 
 @font-face {

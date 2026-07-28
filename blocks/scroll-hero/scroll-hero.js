@@ -28,9 +28,9 @@ const CONFIG = {
   // MIDDLE. They never overlap: distinct top/middle/bottom anchors keep a gap.
   // Positions are `top` values in vh (relative to the viewport).
   text: {
-    titleBottomVh: 90, // title resting anchor at the very bottom of the slide
+    titleBottomVh: 80, // title resting anchor at the very bottom of the slide
     // First slide only: sits 5% (of viewport height) higher than the rest.
-    titleBottomVhOverrides: { 0: 85 },
+    titleBottomVhOverrides: { 0: 80 },
     titleTopVh: 14, // title destination near the top of the page
     titleShiftScale: 0.8, // shifting title scales to half size as it reaches top
     subtitleStartVh: 140, // subtitle starts just below the fold (off-screen)

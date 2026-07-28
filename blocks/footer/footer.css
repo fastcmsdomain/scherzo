@@ -14,19 +14,21 @@ body.show-footer .footer-wrapper {
   pointer-events: auto;
 }
 
-/* z-index 0 (not 1): every block-wrapping .section is position:relative;
-   z-index:1 (styles.css), which is its own stacking context — so the scroll
-   hero's pinned slides (however high their own internal z-index climbs) are
-   compared against footer as a single z-index:1 unit. Tying with footer's
-   z-index would let footer win on DOM order and paint over the still-pinned
-   hero regardless of scroll position; z-index:0 keeps that comparison
-   unambiguous (section 1 > footer 0) without touching the header's fixed
-   nav (z-index:2), which must stay above the section either way. */
+/* z-index 2 (above the scroll-hero section at z-index:1, matching the header):
+   The scroll-hero's pinned slides are inside a .section that forms its own
+   stacking context at z-index:1.  Setting the footer to z-index:2 places it
+   above that stacking context, so as the user scrolls to the bottom of the
+   hero the footer physically slides into the viewport from below and overlaps
+   (covers) the last fixed slide — no JS opacity fade required.
+   The footer is in normal document flow and lives far below the viewport
+   during the hero animation, so there is no visual conflict with the slides
+   until the user has actually scrolled far enough for the footer to enter
+   the viewport, which is exactly when we want the overlap. */
 footer {
   background-color: hsl(225deg 29% 22%);
   color: var(--color-white);
   position: relative;
-  z-index: 0;
+  z-index: 2;
 }
 
 footer .footer {

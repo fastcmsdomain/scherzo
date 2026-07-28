@@ -31,7 +31,7 @@ const CONFIG = {
     titleBottomVh: 80, // title resting anchor at the very bottom of the slide
     // First slide only: sits 5% (of viewport height) higher than the rest.
     titleBottomVhOverrides: { 0: 80 },
-    titleTopVh: 16, // title destination near the top of the page
+    titleTopVh: 20, // title destination near the top of the page
     titleShiftScale: 0.8, // shifting title scales to half size as it reaches top
     subtitleStartVh: 140, // subtitle starts just below the fold (off-screen)
     subtitleMiddleVh: 60, // subtitle destination, the middle (below the top title)

@@ -169,10 +169,10 @@ body {
    Logo width mirrors header .nav-brand img (100px mobile / 128px from 900px). */
 html::before {
   background-color: var(--color-dark-blue);
-  background-image: url('/images/logo.png');
-  background-position: center 42%;
+  background-image: url('/images/logo-load.png');
+  background-position: center 50%;
   background-repeat: no-repeat;
-  background-size: 100px auto;
+  background-size: 150px auto;
   content: '';
   height: 100vh;
   left: 0;
@@ -192,7 +192,7 @@ html::before {
 
 /* Page load overlay text - sits below the logo above.
    Font styling mirrors header .nav-brand p (same font-family, size, transform). */
-html::after {
+/* html::after {
   color: var(--color-white);
   content: 'Prywatna Szkoła Podstawowa\A i Przedszkole';
   font-family: var( --body-font-family);
@@ -211,7 +211,7 @@ html::after {
   html::after {
     font-size: var(--font-size-sm);
   }
-}
+} */
 
 /* Hide overlay when body receives 'appear' class */
 html:has(body.appear)::before,

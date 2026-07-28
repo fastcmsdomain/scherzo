@@ -647,12 +647,27 @@ const initParallaxCover = (gsap, ScrollTrigger) => {
     }
   }
 
+  // Footer cover: during phase 2 of the closing window the footer slides in
+  // from below, covering the last slide exactly as each incoming section
+  // covers the previous. A function-based `y` from-value ensures the offset
+  // is recalculated correctly on every ScrollTrigger refresh / resize.
+  // The footer's z-index (2) sits above the scroll-hero section stacking
+  // context (1), set in footer.css.
+  const footerEl = document.querySelector('footer');
+  if (footerEl) {
+    closingTl.fromTo(
+      footerEl,
+      { y: () => window.innerHeight * textPortion },
+      { y: 0, ease: 'power2.inOut', duration: imagePortion },
+      textPortion, // start after the text animation has finished
+    );
+  }
+
   // Every earlier slide is still position:fixed and fully opaque throughout
   // the resting screen — normally invisible only because the last slide's
-  // higher z-index covers them. The footer (z-index:2 in CSS) slides over
-  // the last slide from the bottom as the user scrolls, but earlier slides
-  // sit behind it at lower z-indices and could peek through at the sides.
-  // Hide them outright for the whole resting screen to keep things clean.
+  // higher z-index covers them. The footer slides over the last slide but
+  // earlier slides sit behind it; hide them outright for the whole resting
+  // screen to keep the background clean.
   const earlierSections = Array.from(sections).slice(0, lastIndex);
   ScrollTrigger.create({
     trigger: 'body',

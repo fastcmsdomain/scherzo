@@ -1,29 +1,21 @@
+/* On the home page the footer is non-interactive while the scroll-hero is
+   active. GSAP (in scroll-hero.js) drives the footer's vertical position as
+   a scrubbed animation, so no CSS transform or opacity is needed here.
+   scroll-hero.js adds `show-footer` to <body> once the hero ends. */
 body.home .footer-wrapper {
-  bottom: 0;
-  left: 0;
-  opacity: 1;
   pointer-events: none;
-  position: relative;
-  transition: opacity 0.3s ease-in-out;
-  width: 100%;
-  z-index: 2;
 }
 
+/* Triggered by scroll-hero.js once the last hero slide is released */
 body.show-footer .footer-wrapper {
-  opacity: 1;
   pointer-events: auto;
 }
 
-/* z-index 2 (above the scroll-hero section at z-index:1, matching the header):
-   The scroll-hero's pinned slides are inside a .section that forms its own
-   stacking context at z-index:1.  Setting the footer to z-index:2 places it
-   above that stacking context, so as the user scrolls to the bottom of the
-   hero the footer physically slides into the viewport from below and overlaps
-   (covers) the last fixed slide — no JS opacity fade required.
-   The footer is in normal document flow and lives far below the viewport
-   during the hero animation, so there is no visual conflict with the slides
-   until the user has actually scrolled far enough for the footer to enter
-   the viewport, which is exactly when we want the overlap. */
+/* z-index 2 (above the scroll-hero section at z-index:1):
+   The scroll-hero's pinned slides live inside a .section that forms a
+   stacking context at z-index:1. Setting footer to z-index:2 places it
+   above that context so the GSAP-scrubbed slide-in (scroll-hero.js) can
+   draw the footer on top of the last fixed slide as the user scrolls. */
 footer {
   background-color: hsl(225deg 29% 22%);
   color: var(--color-white);

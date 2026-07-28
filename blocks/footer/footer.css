@@ -15,25 +15,39 @@ body.show-footer .footer-wrapper {
    The scroll-hero's pinned slides live inside a .section that forms a
    stacking context at z-index:1. Setting footer to z-index:2 places it
    above that context so the GSAP-scrubbed slide-in (scroll-hero.js) can
-   draw the footer on top of the last fixed slide as the user scrolls. */
+   draw the footer on top of the last fixed slide as the user scrolls.
+   height: 100dvh keeps the entire footer (logo panel + links) within a
+   single viewport so the scroll-hero handoff is clean. */
 footer {
   background-color: hsl(225deg 29% 22%);
   color: var(--color-white);
+  display: flex;
+  flex-direction: column;
+  height: 100dvh;
+  overflow: hidden;
   position: relative;
   z-index: 2;
 }
 
-footer .footer {
-  margin: auto;
-  padding: var(--space-16) var(--space-8);
+/* Wrapper fills footer height and stacks logo panel + links vertically */
+footer .footer-wrapper {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  min-height: 0;
+}
 
-  @media (width >= 920px) {
-    padding: var(--space-26) var(--space-8);
-  }
+/* Links block: compact bottom slice of the single-viewport footer */
+footer .footer-wrapper > .footer {
+  flex: 1 1 0;
+  min-height: 0;
+  overflow: hidden;
+  padding: clamp(0.75rem, 2vh, 1.25rem) var(--space-8) clamp(0.5rem, 1.5vh, 1rem);
 }
 
 footer .footer .section {
   background: transparent;
+  padding: var(--space-12);
 }
 
 footer .footer > div {
@@ -157,26 +171,26 @@ footer .button-container a.button {
         background-color: var(--color-darker-blue);
         border-bottom: none;
         display: grid;
-        gap: var(--space-36);
+        gap: var(--space-16);
         grid-template-columns: repeat(3, 1fr);
-        padding: 2rem 2rem 0;
+        padding: clamp(0.75rem, 2vh, 1.5rem) 2rem 0;
         z-index: 1;
     }
 }
 
-/* Footer hero panel: full-viewport photo backdrop with logo + tagline,
-   sitting above the address/links footer (same background/logo/tagline
-   treatment as the site's first slide). */
+/* Footer hero panel: shares the single-viewport footer with the links
+   section below. flex: 1 1 0 gives it roughly half the footer height;
+   min-height: 0 removes the old 100dvh override. */
 .footer-logo {
   align-items: center;
   color: var(--color-white);
   display: flex;
+  flex: 1 1 0;
   flex-direction: column;
   justify-content: center;
-  min-height: 100vh;
-  min-height: 100dvh;
+  min-height: 0;
   overflow: hidden;
-  padding: var(--space-16) var(--space-8);
+  padding: clamp(1rem, 3vh, 2rem) var(--space-8);
   position: relative;
   text-align: center;
   width: 100%;
@@ -205,44 +219,44 @@ footer .button-container a.button {
 
 .footer-logo-image {
   height: auto;
-  margin: 0 auto var(--space-16);
-  width: 100px;
+  margin: 0 auto clamp(0.5rem, 1.5vh, 1rem);
+  width: clamp(120px, 7vw, 150px);
 }
 
 .footer-logo-caption {
   font-family: var(--body-font-family);
-  font-size: var(--font-size-xs);
+  padding: 0;
+  font-size: 12px;
   letter-spacing: 0.05em;
-  margin: 0 0 var(--space-16);
   text-transform: uppercase;
 
   @media (width >= 600px) {
-    font-size: var(--font-size-sm);
+    font-size: var(--font-size-xs);
   }
 }
 
 .footer-logo-title {
   font-family: var(--semi-bold-font-family);
-  font-size: clamp(1.75rem, 4.5vw, 2.5rem);
+  font-size: clamp(1.2rem, 3vw, 1.8rem);
   line-height: 1.2;
   margin: 0;
   text-shadow: 0 0 18px rgb(0 0 0 / 25%);
 
   @media (width >= 920px) {
-    font-size: var(--heading-font-size-xxxl);
+    font-size: clamp(1.4rem, 2.5vw, 2.2rem);
   }
 }
 
 .footer-logo-title-light {
   display: inline-block;
   font-family: var(--body-font-family);
-  font-size: clamp(1.35rem, 1.8vw, 1.75rem);
+  font-size: clamp(0.9rem, 1.5vw, 1.3rem);
   font-weight: 300;
-  margin-top: var(--space-8);
+  margin-top: clamp(0.25rem, 0.8vh, 0.5rem);
   opacity: 0.9;
 
   @media (width >= 920px) {
-    font-size: clamp(1.25rem, 1.5vw + 1rem, 2rem);
+    font-size: clamp(1rem, 1.2vw + 0.5rem, 1.5rem);
   }
 }
 

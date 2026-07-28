@@ -170,7 +170,7 @@ body {
 html::before {
   background-color: var(--color-dark-blue);
   background-image: url('/images/logo-load.png');
-  background-position: center 50%;
+  background-position: center 42%;
   background-repeat: no-repeat;
   background-size: 150px auto;
   content: '';

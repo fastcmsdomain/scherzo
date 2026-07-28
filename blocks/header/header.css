@@ -182,9 +182,9 @@ header .nav-brand {
 
 header nav .nav-brand a {
   display: flex;
-  font-size: 0;
+  font-size: 13px;
   justify-content: center;
-  line-height: 0;
+  line-height: 1.4;
   text-align: center;
   transition: transform .2s ease;
 }

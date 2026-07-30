@@ -78,8 +78,6 @@ main .section .columns-wrapper {
 
 .columns-img-col img {
   display: block;
-  width: 100%;
-  height: 100%;
   object-fit: cover; /* Use 'fill' if you want image to stretch/distort to exact dimensions */
   object-position: center; /* Adjust as needed: top, bottom, left, right, etc. */
   aspect-ratio: 3/2;
@@ -89,8 +87,6 @@ main .section .columns-wrapper {
   position: absolute;
   top: 0;
   left: 0;
-  width: 100%;
-  height: 100%;
   object-fit: cover;
   object-position: center;
   z-index: 1;
@@ -116,6 +112,11 @@ main .section .columns-wrapper .columns-content-col {
 }
 
 @media (width >= 900px) {
+  .columns > div > .columns-img-col img {
+      width: 100%;
+      height: 100%;
+  }
+
   .columns > div {
     display: grid;
     align-items: start;

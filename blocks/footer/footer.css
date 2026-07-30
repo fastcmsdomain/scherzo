@@ -210,7 +210,6 @@ footer .button-container a.button {
 }
 
 .footer-logo-overlay {
-  background-image: url('../../images/bg.jpg');
   background-color: rgb(0 32 62 / 60%);
   inset: 0;
   position: absolute;

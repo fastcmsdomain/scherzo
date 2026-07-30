@@ -9,7 +9,7 @@ main .section .social-media-feeds-wrapper {
 }
 
 .social-media-feeds {
-    /* margin-top: 10rem; */
+    margin-top: 4rem;
 }
 
 body.social-media-page::before {
@@ -22,7 +22,7 @@ body.social-media-page::before {
   display: grid;
   gap: var(--space-26);
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  padding: 5rem;
+  padding: 20px;
 }
 
 .social-media-feed-item {

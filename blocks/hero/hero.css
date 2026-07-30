@@ -68,9 +68,7 @@ main .hero-container {
   line-height: 1;
   margin: 0 auto;
   max-width: 900px;
-  padding: var(--space-20) 0;
-  /* Keep titles above Safari's bottom chrome / home-indicator on mobile */
-  padding-bottom: max(var(--space-20), calc(env(safe-area-inset-bottom, 0px) + 1.25rem));
+  padding: var(--space-20) 0 ;
   position: relative;
   text-align: center;
   z-index: 1;

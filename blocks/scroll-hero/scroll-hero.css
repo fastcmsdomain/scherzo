@@ -137,14 +137,6 @@ main .section .scroll-hero-wrapper {
   background-color: #00203e;
 }
 
-/* Safari mobile: size slides to the small viewport so content (and titles)
-   sit above the browser chrome instead of under a blue toolbar strip. */
-@media (max-width: 920px) {
-  .screen-section {
-    height: 100svh;
-  }
-}
-
 /* Every slide is hidden outright (see scroll-hero.js) once the last one's
    dedicated resting screen has been scrolled past, instead of staying
    pinned over the footer forever. They can't instead be repositioned to
@@ -161,12 +153,6 @@ main .section .scroll-hero-wrapper {
   width: 100%;
   position: relative;
   background-color: #00203e;
-}
-
-@media (max-width: 920px) {
-  .screen-section .screen {
-    height: 100svh;
-  }
 }
 
 /* Each section stacks above the previous - higher z-index for later sections */
@@ -278,12 +264,6 @@ main .section .scroll-hero-wrapper {
   background-color: #00203e;
 }
 
-@media (max-width: 920px) {
-  .screen-inner {
-    height: 100svh;
-  }
-}
-
 /* Fade overlay */
 .fade {
   display: none;
@@ -307,12 +287,6 @@ main .section .scroll-hero-wrapper {
   will-change: opacity;
 }
 
-@media (max-width: 920px) {
-  .scroll-overlay {
-    height: 100svh;
-  }
-}
-
 /* Background image setup - full viewport cover */
 .background {
   height: 100vh;
@@ -323,12 +297,6 @@ main .section .scroll-hero-wrapper {
   left: 0;
   z-index: 0;
   overflow: hidden;
-}
-
-@media (max-width: 920px) {
-  .background {
-    height: 100svh;
-  }
 }
 
 /* Second slide only: soft blur on its background image */

@@ -23,15 +23,15 @@ body.show-footer .footer-wrapper {
    stacking context at z-index:1. Setting footer to z-index:2 places it
    above that context so the GSAP-scrubbed slide-in (scroll-hero.js) can
    draw the footer on top of the last fixed slide as the user scrolls.
-   height: 100dvh keeps the entire footer (logo panel + links) within a
-   single viewport so the scroll-hero handoff is clean. */
+   min-height: 100dvh keeps a full-viewport handoff; content may grow taller
+   on small screens so logo, title, and links remain reachable via scroll. */
 footer {
   background-color: hsl(225deg 29% 22%);
   color: var(--color-white);
   display: flex;
   flex-direction: column;
-  height: 100dvh;
-  overflow: hidden;
+  min-height: 100dvh;
+  overflow: visible;
   position: relative;
   z-index: 2;
 }
@@ -41,11 +41,13 @@ footer .footer-wrapper {
   display: flex;
   flex-direction: column;
   flex: 1 1 auto;
-  min-height: 0;
+  min-height: 100%;
+  width: 100%;
 }
 
-/* Links block: compact bottom slice of the single-viewport footer */
-footer.footer-wrapper .footer {
+/* Links block: sits below the logo panel; never shrinks out of view */
+footer .footer {
+  flex: 0 0 auto;
   padding: var(--space-12) 0;
 }
 
@@ -182,55 +184,35 @@ footer .button-container a.button {
     }
 }
 
-/* Footer hero panel: shares the single-viewport footer with the links
-   section below. flex: 1 1 0 gives it roughly half the footer height;
-   min-height: 0 removes the old 100dvh override. */
+/* Brand panel above the links: grows with content so nothing is clipped.
+   flex-grow fills leftover viewport space on tall screens. */
 .footer-logo {
   align-items: center;
   color: var(--color-white);
   display: flex;
-  flex: 1 1 0;
+  flex: 1 0 auto;
   flex-direction: column;
   justify-content: center;
-  min-height: 0;
-  overflow: hidden;
-  padding: clamp(1rem, 3vh, 2rem) var(--space-8);
+  padding: clamp(1.5rem, 4vh, 3rem) var(--space-8);
   position: relative;
   text-align: center;
   width: 100%;
 }
 
-.footer-logo-bg {
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: cover;
-  inset: 0;
-  position: absolute;
-  z-index: 0;
-}
-
-.footer-logo-overlay {
-  background: rgb(0 32 62 / 60%);
-  inset: 0;
-  position: absolute;
-  z-index: 1;
-}
-
 .footer-logo-content {
   position: relative;
-  z-index: 2;
 }
 
 .footer-logo-image {
   height: auto;
-  margin: 0 auto;
+  margin: 0 auto var(--space-8);
   width: clamp(100px, 7vw, 120px);
 }
 
 .footer-logo-caption {
   font-family: var(--body-font-family);
   padding: 0;
-  margin-inline: auto;
+  margin: 0 auto var(--space-8);
   font-size: 12px;
   letter-spacing: 0.05em;
   text-transform: uppercase;
@@ -246,7 +228,6 @@ footer .button-container a.button {
   font-size: clamp(1.2rem, 3vw, 1.8rem);
   line-height: 1.2;
   margin: 0;
-  text-shadow: 0 0 18px rgb(0 0 0 / 25%);
 
   @media (width >= 920px) {
     font-size: clamp(1.4rem, 2.5vw, 2.2rem);

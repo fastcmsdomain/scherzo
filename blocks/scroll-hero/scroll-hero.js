@@ -26,11 +26,15 @@ const CONFIG = {
   // the SUBTITLE (strapline-2) waits off-screen below. As the user scrolls, the
   // title travels to the TOP and the subtitle rises from the bottom to the
   // MIDDLE. They never overlap: distinct top/middle/bottom anchors keep a gap.
-  // Positions are `top` values in vh (relative to the viewport).
+  // Positions are `top` values in vh/svh (see viewportUnit()).
   text: {
     titleBottomVh: 80, // title resting anchor at the very bottom of the slide
     // First slide only: sits 5% (of viewport height) higher than the rest.
     titleBottomVhOverrides: { 0: 80 },
+    // Compact / Safari mobile: keep titles above the browser chrome so wrapped
+    // multi-line titles are fully visible (svh + lower anchors).
+    titleBottomMobileVh: 68,
+    titleBottomMobileVhOverrides: { 0: 62 },
     titleTopVh: 20, // title destination near the top of the page
     titleShiftScale: 0.8, // shifting title scales to half size as it reaches top
     subtitleStartVh: 140, // subtitle starts just below the fold (off-screen)
@@ -47,6 +51,20 @@ const CONFIG = {
   },
   navScrollDuration: 1,
 };
+
+/**
+ * True on phone-sized viewports where Safari's top/bottom chrome eats into
+ * the large (vh) viewport and clips bottom-anchored titles.
+ * @returns {boolean}
+ */
+const isCompactViewport = () => window.matchMedia('(max-width: 920px)').matches;
+
+/**
+ * Viewport unit for text anchors. `svh` matches the visible area when Safari
+ * toolbars are expanded so titles stay clear of the blue chrome "border".
+ * @returns {'svh'|'vh'}
+ */
+const viewportUnit = () => (isCompactViewport() ? 'svh' : 'vh');
 
 const SELECTORS = {
   progressNav: '.progress-nav',
@@ -425,6 +443,8 @@ const initParallaxCover = (gsap, ScrollTrigger) => {
   const {
     titleBottomVh,
     titleBottomVhOverrides,
+    titleBottomMobileVh,
+    titleBottomMobileVhOverrides,
     titleTopVh,
     titleShiftScale,
     subtitleStartVh,
@@ -441,8 +461,14 @@ const initParallaxCover = (gsap, ScrollTrigger) => {
   const isCentered = (index) => centeredSlides.includes(index) || isLastSlide(index);
 
   // Bottom resting anchor for a non-centred slide's title. Per-index override
-  // (e.g. slide 0 sits 10% higher) falls back to the shared default.
-  const titleBottomFor = (index) => titleBottomVhOverrides[index] ?? titleBottomVh;
+  // (e.g. slide 0 sits higher) falls back to the shared default. On compact
+  // viewports the mobile anchors keep multi-line titles above Safari chrome.
+  const titleBottomFor = (index) => {
+    if (isCompactViewport()) {
+      return titleBottomMobileVhOverrides[index] ?? titleBottomMobileVh;
+    }
+    return titleBottomVhOverrides[index] ?? titleBottomVh;
+  };
 
   // Total scroll distance: one segment per transition + a final resting screen
   if (container) {
@@ -452,9 +478,10 @@ const initParallaxCover = (gsap, ScrollTrigger) => {
   // Scroll distance (px) of a single transition; recomputed on refresh
   const segment = () => window.innerHeight * factor;
 
-  // Place a strapline at a given viewport anchor (top in vh, centred on itself)
-  const setAt = (el, vh, opacity = 1) => {
-    if (el) gsap.set(el, { top: `${vh}vh`, yPercent: -50, opacity });
+  // Place a strapline at a given viewport anchor (centred on itself).
+  // Uses svh on mobile so anchors match the visible Safari viewport.
+  const setAt = (el, value, opacity = 1) => {
+    if (el) gsap.set(el, { top: `${value}${viewportUnit()}`, yPercent: -50, opacity });
   };
 
   // Initialize base states: each slide's title rests low, subtitle off-screen.
@@ -527,9 +554,9 @@ const initParallaxCover = (gsap, ScrollTrigger) => {
       if (activeTitle) {
         tl.fromTo(
           activeTitle,
-          { top: `${titleBottomFor(t - 1)}vh`, scale: 1 },
+          { top: `${titleBottomFor(t - 1)}${viewportUnit()}`, scale: 1 },
           {
-            top: `${titleTopVh}vh`,
+            top: `${titleTopVh}${viewportUnit()}`,
             scale: titleShiftScale,
             ease: 'power1.inOut',
             duration: textPortion,
@@ -543,9 +570,9 @@ const initParallaxCover = (gsap, ScrollTrigger) => {
       if (activeSubtitle) {
         tl.fromTo(
           activeSubtitle,
-          { top: `${subtitleStartVh}vh`, opacity: 0 },
+          { top: `${subtitleStartVh}${viewportUnit()}`, opacity: 0 },
           {
-            top: `${subtitleMiddleVh}vh`,
+            top: `${subtitleMiddleVh}${viewportUnit()}`,
             opacity: 1,
             ease: 'power1.inOut',
             duration: textPortion,
@@ -614,9 +641,9 @@ const initParallaxCover = (gsap, ScrollTrigger) => {
     if (lastTitle) {
       closingTl.fromTo(
         lastTitle,
-        { top: `${titleBottomFor(lastIndex)}vh`, scale: 1 },
+        { top: `${titleBottomFor(lastIndex)}${viewportUnit()}`, scale: 1 },
         {
-          top: `${titleTopVh}vh`,
+          top: `${titleTopVh}${viewportUnit()}`,
           scale: titleShiftScale,
           ease: 'power1.inOut',
           duration: textPortion,
@@ -627,9 +654,9 @@ const initParallaxCover = (gsap, ScrollTrigger) => {
     if (lastSubtitle) {
       closingTl.fromTo(
         lastSubtitle,
-        { top: `${subtitleStartVh}vh`, opacity: 0 },
+        { top: `${subtitleStartVh}${viewportUnit()}`, opacity: 0 },
         {
-          top: `${subtitleMiddleVh}vh`,
+          top: `${subtitleMiddleVh}${viewportUnit()}`,
           opacity: 1,
           ease: 'power1.inOut',
           duration: textPortion,

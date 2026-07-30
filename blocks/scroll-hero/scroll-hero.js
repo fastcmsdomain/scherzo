@@ -655,10 +655,15 @@ const initParallaxCover = (gsap, ScrollTrigger) => {
   // context (1), set in footer.css.
   const footerEl = document.querySelector('footer');
   if (footerEl) {
+    // autoAlpha: 0 in the from-state means GSAP keeps the footer at
+    // visibility:hidden + opacity:0 for ALL scroll positions before the
+    // trigger (i.e. every slide up to the resting window). It fades in as
+    // the footer slides up during phase 2, so no blue strip bleeds through
+    // on mobile or before the animation has initialised.
     closingTl.fromTo(
       footerEl,
-      { y: () => window.innerHeight * textPortion },
-      { y: 0, ease: 'power2.inOut', duration: imagePortion },
+      { y: () => window.innerHeight * textPortion, autoAlpha: 0 },
+      { y: 0, autoAlpha: 1, ease: 'power2.inOut', duration: imagePortion },
       textPortion, // start after the text animation has finished
     );
   }

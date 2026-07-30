@@ -1,7 +1,14 @@
 /* On the home page the footer is non-interactive while the scroll-hero is
-   active. GSAP (in scroll-hero.js) drives the footer's vertical position as
-   a scrubbed animation, so no CSS transform or opacity is needed here.
+   active. GSAP (scroll-hero.js) drives position + opacity via autoAlpha.
+   The visibility:hidden fallback below covers the brief moment between
+   first paint and GSAP initialisation so the footer never bleeds into
+   view at the bottom of the hero slides. GSAP's inline visibility:visible
+   overrides this as soon as the footer's slide-in animation begins.
    scroll-hero.js adds `show-footer` to <body> once the hero ends. */
+body.home footer {
+  visibility: hidden;
+}
+
 body.home .footer-wrapper {
   pointer-events: none;
 }

@@ -1029,19 +1029,27 @@ export default async function decorate(block) {
   // Reserve scroll height early so layout is stable (CLS)
   container.style.height = `${((totalHint - 1) * CONFIG.cover.factor + 1) * 100}vh`;
 
-  // Preserve the early LCP <h1> node (from head bootstrap) so Chrome does not
-  // reset LCP when the preview is swapped for the real first slide.
-  const lcpTitle = block.querySelector('.scroll-hero-lcp-preview h1.main-title');
+  // Preserve the early LCP <h1> node (from head bootstrap) without ever
+  // removing it from the document — detaching resets Chrome's LCP candidate.
+  const preview = block.querySelector('.scroll-hero-lcp-preview');
+  const lcpTitle = preview?.querySelector('h1.main-title');
+
   const firstSlideEl = createSection(firstSection, 0, totalHint);
-  if (lcpTitle) {
-    firstSlideEl.querySelector('h1.main-title')?.replaceWith(lcpTitle);
-  }
   container.appendChild(firstSlideEl);
 
-  block.textContent = '';
+  // Drop authored placeholders but keep the LCP preview until the title is moved
+  [...block.children].forEach((child) => {
+    if (child !== preview) child.remove();
+  });
+
   const navPlaceholder = document.createElement('div');
   block.appendChild(navPlaceholder);
   block.appendChild(container);
+
+  if (lcpTitle) {
+    firstSlideEl.querySelector('h1.main-title')?.replaceWith(lcpTitle);
+  }
+  preview?.remove();
 
   setBackgrounds([firstSection]);
   await waitForPaint();

@@ -572,6 +572,8 @@ const initParallaxCover = (gsap, ScrollTrigger) => {
 
     // First section visible; the rest wait below the fold
     gsap.set(section, { yPercent: i === 0 ? 0 : 100 });
+    // Reveal only after off-screen position is applied (avoids LCP theft)
+    section.classList.remove(CLASSES.lcpDeferred);
   });
 
   updateProgressNav(0);
@@ -840,9 +842,6 @@ const initScrollAnimations = () => {
   }
 
   gsap.registerPlugin(ScrollTrigger);
-
-  // Reveal slides that were deferred for LCP before positioning
-  getSections().forEach((section) => section.classList.remove(CLASSES.lcpDeferred));
 
   initParallaxCover(gsap, ScrollTrigger);
   initNavControls(gsap);

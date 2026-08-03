@@ -265,30 +265,65 @@ html:has(body.appear)::after {
   visibility: hidden;
 }
 
-/* Early LCP title preview (painted from head bootstrap before scroll-hero.js).
-   Sized to match mobile first-slide title; replaced when the block decorates. */
-.scroll-hero-lcp-preview {
-  align-items: flex-end;
-  box-sizing: border-box;
-  color: var(--color-white, #fff);
-  display: flex;
-  justify-content: center;
+/* Critical first-slide LCP shell (painted from head before scroll-hero.css).
+   Must match GSAP resting state (title at 80vh) so later decorate/GSAP does
+   not resize the LCP node. */
+.scroll-hero .scroll-hero-container {
+  background-color: var(--color-dark-blue, #00203e);
   min-height: 100vh;
-  padding: 0 1.25rem 18vh;
-  text-align: center;
+  position: relative;
+  width: 100%;
 }
 
-.scroll-hero-lcp-preview .main-title {
-  font-family: var(--semi-bold-font-family), var(--body-font-family);
-  font-size: clamp(1.75rem, 4.5vw, 2.5rem);
+.scroll-hero .screen-section.is-lcp-first {
+  background-color: var(--color-dark-blue, #00203e);
+  height: 100vh;
+  height: 100dvh;
+  left: 0;
+  overflow: hidden;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 1;
+}
+
+.scroll-hero .screen-section.is-lcp-first .screen,
+.scroll-hero .screen-section.is-lcp-first .screen-inner {
+  height: 100%;
+  position: relative;
+  width: 100%;
+}
+
+.scroll-hero .screen-section.is-lcp-first .strapline {
+  color: var(--color-white, #fff);
+  left: 0;
+  margin: 0 auto;
+  position: absolute;
+  right: 0;
+  text-align: center;
+  top: 80vh;
+  transform: translateY(-50%);
+  width: 90%;
+  z-index: 10;
+}
+
+.scroll-hero .screen-section.is-lcp-first .main-title {
+  font-family: var(--body-font-family);
+  font-size: 32px;
   font-weight: normal;
   line-height: 1.2;
   margin: 0;
   text-shadow: 0 0 18px rgb(0 0 0 / 25%);
 }
 
-.scroll-hero-lcp-preview .title-part {
+.scroll-hero .screen-section.is-lcp-first .title-part {
   display: block;
+  margin: 5px 0;
+}
+
+.scroll-hero .screen-section.is-lcp-first .title-part-0 {
+  font-family: var(--semi-bold-font-family), var(--body-font-family);
+  font-size: clamp(1.75rem, 4.5vw, 2.5rem);
 }
 
 /* body::before {

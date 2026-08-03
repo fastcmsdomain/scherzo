@@ -365,7 +365,9 @@ main .section:has(.scroll-hero-wrapper) {
   position: absolute;
   right: 0;
   text-align: center;
-  top: 50%;
+  /* Match GSAP first-slide resting anchor (titleBottomVh: 80) so loading
+     this stylesheet does not resize/move the LCP title. */
+  top: 80vh;
   transform: translateY(-50%);
   transform-origin: center center;
   z-index: 10;

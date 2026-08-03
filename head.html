@@ -24,6 +24,10 @@ window.hlx.scrollHeroLcp = (async () => {
     return path === '/' || path === '/index';
   };
 
+  /**
+   * Paint first-slide title using the SAME DOM/CSS shape as scroll-hero so later
+   * decorate/GSAP does not resize the LCP node (which would reset LCP time).
+   */
   const paintPreview = (parts) => {
     const host = document.querySelector('main .scroll-hero');
     if (!host || host.querySelector('.scroll-hero-container')) return;
@@ -34,15 +38,21 @@ window.hlx.scrollHeroLcp = (async () => {
       `<span class="title-part title-part-${i}">${i === 0 ? breakTitle(part) : escapeHtml(part)}</span>`
     )).join('');
 
-    const preview = document.createElement('div');
-    preview.className = 'scroll-hero-lcp-preview';
-    preview.innerHTML = `<h1 class="main-title">${titleHtml}</h1>`;
-    host.replaceChildren(preview);
+    host.innerHTML = `
+      <div class="scroll-hero-container" role="region" aria-label="Prezentacja szkoły">
+        <div class="screen-section is-lcp-first" role="region" aria-label="Section 1">
+          <div class="screen">
+            <div class="screen-inner">
+              <div class="background" aria-hidden="true"></div>
+              <div class="strapline">
+                <h1 class="main-title">${titleHtml}</h1>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>`;
   };
 
-  // Instant homepage LCP: paint known first-slide title with zero network wait.
-  // Hidden under splash for users; Lighthouse can measure it immediately.
-  // Replaced when fetched HTML / scroll-hero decorate runs.
   if (isHome()) {
     paintPreview(['Edukacja w Scherzo to fundament', 'na całe życie']);
   }
@@ -63,7 +73,22 @@ window.hlx.scrollHeroLcp = (async () => {
         .map((el) => el.textContent.trim())
         .filter(Boolean)
         .slice(0, 2);
-      if (parts.length) paintPreview(parts);
+      // Only refresh text content — never replace the LCP h1/span nodes
+      const title = document.querySelector('main .scroll-hero h1.main-title');
+      if (title && parts.length) {
+        const breakTitle = (text) => escapeHtml(text).replace(/(Edukacja w Scherzo)\s+/i, '$1<br>');
+        parts.forEach((part, i) => {
+          let span = title.querySelector(`.title-part-${i}`);
+          if (!span) {
+            span = document.createElement('span');
+            span.className = `title-part title-part-${i}`;
+            title.appendChild(span);
+          }
+          span.innerHTML = i === 0 ? breakTitle(part) : escapeHtml(part);
+        });
+      } else if (parts.length) {
+        paintPreview(parts);
+      }
     } catch {
       // keep instant preview
     }

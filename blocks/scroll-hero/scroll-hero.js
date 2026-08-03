@@ -1015,55 +1015,71 @@ export default async function decorate(block) {
   }
 
   // --- Phase 1: first slide only (LCP) ---
+  // Prefer the head bootstrap shell when present so the LCP <h1> nodes stay put.
+  const existingContainer = block.querySelector('.scroll-hero-container');
+  const existingFirst = existingContainer?.querySelector('.screen-section');
   const firstSection = boot?.firstSection || await fetchSlideData(items[0]);
-  if (!firstSection) {
+  if (!firstSection && !existingFirst) {
     block.innerHTML = '<p role="alert">No scroll hero sections found.</p>';
     return;
   }
 
   const totalHint = items.length;
-  const container = document.createElement('div');
-  container.className = 'scroll-hero-container';
-  container.setAttribute('role', 'region');
-  container.setAttribute('aria-label', 'Prezentacja szkoły');
-  // Reserve scroll height early so layout is stable (CLS)
-  container.style.height = `${((totalHint - 1) * CONFIG.cover.factor + 1) * 100}vh`;
+  let container = existingContainer;
+  let navPlaceholder = block.querySelector(':scope > .progress-nav')?.parentElement;
 
-  // Preserve the early LCP <h1> node (from head bootstrap) without ever
-  // removing it from the document — detaching resets Chrome's LCP candidate.
-  const preview = block.querySelector('.scroll-hero-lcp-preview');
-  const lcpTitle = preview?.querySelector('h1.main-title');
+  if (!container) {
+    container = document.createElement('div');
+    container.className = 'scroll-hero-container';
+    container.setAttribute('role', 'region');
+    container.setAttribute('aria-label', 'Prezentacja szkoły');
+    container.style.height = `${((totalHint - 1) * CONFIG.cover.factor + 1) * 100}vh`;
 
-  const firstSlideEl = createSection(firstSection, 0, totalHint);
-  container.appendChild(firstSlideEl);
+    const firstSlideEl = createSection(firstSection, 0, totalHint);
+    container.appendChild(firstSlideEl);
 
-  // Drop authored placeholders but keep the LCP preview until the title is moved
-  [...block.children].forEach((child) => {
-    if (child !== preview) child.remove();
-  });
+    block.textContent = '';
+    navPlaceholder = document.createElement('div');
+    block.appendChild(navPlaceholder);
+    block.appendChild(container);
+  } else {
+    // Reuse bootstrap DOM: keep LCP title nodes, fill in backgrounds / height
+    container.style.height = `${((totalHint - 1) * CONFIG.cover.factor + 1) * 100}vh`;
+    container.setAttribute('role', 'region');
+    container.setAttribute('aria-label', 'Prezentacja szkoły');
+    existingFirst?.classList.add(`section-${firstSection?.path?.split('/').pop() || 'first'}`);
 
-  const navPlaceholder = document.createElement('div');
-  block.appendChild(navPlaceholder);
-  block.appendChild(container);
+    // Ensure bg element exists for setBackgrounds
+    if (firstSection && !existingFirst?.querySelector(SELECTORS.backgroundImage)) {
+      const { bgImageSrc, bgMobileSrc } = getSectionImages(firstSection);
+      const bgHost = existingFirst?.querySelector('.background');
+      if (bgHost && bgImageSrc) {
+        bgHost.innerHTML = `<div class="img image-bg image-bg-0" data-bg="${escapeHtml(bgImageSrc)}"${bgMobileSrc ? ` data-bg-mobile="${escapeHtml(bgMobileSrc)}"` : ''} role="img" aria-label="${escapeHtml(firstSection.title)}"></div>`;
+      }
+    }
 
-  if (lcpTitle) {
-    firstSlideEl.querySelector('h1.main-title')?.replaceWith(lcpTitle);
+    if (!block.querySelector(':scope > div:not(.scroll-hero-container)')) {
+      navPlaceholder = document.createElement('div');
+      block.insertBefore(navPlaceholder, container);
+    } else {
+      navPlaceholder = block.querySelector(':scope > div:not(.scroll-hero-container)') || document.createElement('div');
+      if (!navPlaceholder.parentElement) block.insertBefore(navPlaceholder, container);
+    }
   }
-  preview?.remove();
 
-  setBackgrounds([firstSection]);
+  if (firstSection) {
+    setBackgrounds([firstSection]);
+  }
   await waitForPaint();
 
   // Phase 2 must NOT block decorate() — waitForLCP / body.appear wait on this
-  // promise, and delaying appear keeps the splash up (body display:none) until
-  // every slide HTML is fetched, which tanks LCP (~4s+ on mobile throttle).
-  // Fire-and-forget: first slide is already painted for LCP measurement.
+  // promise. Fire-and-forget after first slide is ready for LCP.
   // eslint-disable-next-line no-void
   void loadRemainingSlides({
     block,
     container,
     items,
-    firstSection,
+    firstSection: firstSection || { title: 'Section 1', path: '/slides/unknown' },
     navPlaceholder,
   });
 }
@@ -1105,14 +1121,21 @@ async function loadRemainingSlides({
 
     setBackgrounds(sections);
 
-    requestAnimationFrame(async () => {
+    // Delay GSAP until scroll or idle so cover positioning cannot inflate LCP.
+    const startMotion = async () => {
+      if (block.dataset.gsapStarted === 'true') return;
+      block.dataset.gsapStarted = 'true';
       const gsapLoaded = await loadGSAPLibraries();
       if (gsapLoaded && window.gsap && window.ScrollTrigger) {
         initScrollAnimations();
       } else {
         initBasicScroll(block);
       }
-    });
+    };
+
+    window.addEventListener('scroll', startMotion, { once: true, passive: true });
+    window.addEventListener('pointerdown', startMotion, { once: true, passive: true });
+    window.setTimeout(startMotion, 4000);
   } catch (error) {
     // eslint-disable-next-line no-console
     console.error('scroll-hero: failed to load remaining slides', error);

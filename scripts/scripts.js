@@ -31,7 +31,7 @@ const AUDIENCES = {
 
 // Loading splash (logo overlay defined in styles.css) must stay visible at
 // least this long so the page doesn't flash unstyled/unloaded content.
-const MIN_SPLASH_DURATION_MS = 1000;
+const MIN_SPLASH_DURATION_MS = 800;
 const pageLoadStart = Date.now();
 
 /**

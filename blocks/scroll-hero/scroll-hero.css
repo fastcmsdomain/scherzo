@@ -84,8 +84,6 @@ main .section:has(.scroll-hero-wrapper) {
   white-space: nowrap;
   line-clamp: 2;
   -webkit-box-orient: vertical;
-  box-orient: vertical;
-  -webkit-box-orient: vertical;
 }
 
 

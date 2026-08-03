@@ -1,3 +1,30 @@
+/* z-index 2 (above the scroll-hero section at z-index:1):
+   The scroll-hero's pinned slides live inside a .section that forms a
+   stacking context at z-index:1. Setting footer to z-index:2 places it
+   above that context so the GSAP-scrubbed slide-in (scroll-hero.js) can
+   draw the footer on top of the last fixed slide as the user scrolls.
+   Desktop keeps height: 100dvh for a clean scroll-hero handoff.
+   Mobile uses min-height so logo + links can grow past the viewport and
+   remain reachable by page scroll (Android / iOS browser chrome included). */
+footer {
+  background-color: hsl(225deg 29% 22%);
+  color: var(--color-white);
+  display: flex;
+  flex-direction: column;
+  min-height: 100dvh;
+  overflow: visible;
+  position: relative;
+  z-index: 2;
+}
+
+/* Wrapper fills footer height and stacks logo panel + links vertically */
+footer .footer-wrapper {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  min-height: 0;
+}
+
 /* On the home page the footer is non-interactive while the scroll-hero is
    active. GSAP (scroll-hero.js) drives position + opacity via autoAlpha.
    The visibility:hidden fallback below covers the brief moment between
@@ -18,38 +45,11 @@ body.show-footer .footer-wrapper {
   pointer-events: auto;
 }
 
-/* z-index 2 (above the scroll-hero section at z-index:1):
-   The scroll-hero's pinned slides live inside a .section that forms a
-   stacking context at z-index:1. Setting footer to z-index:2 places it
-   above that context so the GSAP-scrubbed slide-in (scroll-hero.js) can
-   draw the footer on top of the last fixed slide as the user scrolls.
-   Desktop keeps height: 100dvh for a clean scroll-hero handoff.
-   Mobile uses min-height so logo + links can grow past the viewport and
-   remain reachable by page scroll (Android / iOS browser chrome included). */
-footer {
-  background-color: hsl(225deg 29% 22%);
-  color: var(--color-white);
-  display: flex;
-  flex-direction: column;
-  min-height: 100dvh;
-  overflow: visible;
-  position: relative;
-  z-index: 2;
-}
-
 @media (width >= 900px) {
   footer {
     height: 100dvh;
     overflow: hidden;
   }
-}
-
-/* Wrapper fills footer height and stacks logo panel + links vertically */
-footer .footer-wrapper {
-  display: flex;
-  flex-direction: column;
-  flex: 1 1 auto;
-  min-height: 0;
 }
 
 /* Links block: sits under the logo panel. On mobile flex-shrink: 0 so
@@ -73,6 +73,7 @@ footer .footer > div {
 footer .section:last-child {
   border-top: 1px solid var(--color-gold);
   grid-column: 1 / -1;
+
   /* min-width: 100%; */
   padding-top: var(--space-12);
 }
@@ -103,12 +104,11 @@ footer ul li:has(a:any-link) {
   margin-bottom: var(--space-8);
 }
 
-
 footer a:any-link {
-    color: var(--color-gold);
-    font-size: var(--body-font-size-xxs);
-    text-decoration: none;
-    font-family: var(--body-regular-family);
+  color: var(--color-gold);
+  font-size: var(--body-font-size-xxs);
+  text-decoration: none;
+  font-family: var(--body-regular-family);
 }
 
 footer a:any-link:hover,
@@ -136,10 +136,14 @@ footer p {
   font-size: var(--font-size-sm);
   margin: 0 0 var(--space-16);
 
-  @media (max-width: 920px) {
+  @media (width <= 920px) {
     font-size: var(--font-size-xs);
     margin-bottom: var(--space-8);
   }
+}
+
+.icon.icon-map {
+  display: none;
 }
 
 .par-btn {
@@ -172,24 +176,24 @@ footer .button-container a.button {
   color: var(--color-gold);
   font-weight: normal;
   margin: 0;
-  padding: 0; 
+  padding: 0;
 }
 
 @media (width >= 900px) {
-    footer .footer {
-        background-color: var(--color-darker-blue);
-        border-top: none;
-        padding: 0;
-    }
+  footer .footer {
+    background-color: var(--color-darker-blue);
+    border-top: none;
+    padding: 0;
+  }
 
-    footer .footer > div {
-        border-bottom: none;
-        display: grid;
-        gap: var(--space-16);
-        grid-template-columns: repeat(3, 1fr);
-        padding: clamp(0.75rem, 2vh, 1.5rem) 2rem 0;
-        z-index: 1;
-    }
+  footer .footer > div {
+    border-bottom: none;
+    display: grid;
+    gap: var(--space-16);
+    grid-template-columns: repeat(3, 1fr);
+    padding: clamp(0.75rem, 2vh, 1.5rem) 2rem 0;
+    z-index: 1;
+  }
 }
 
 /* Footer hero panel: shares the footer with the links section below.
@@ -208,6 +212,7 @@ footer .button-container a.button {
   padding: clamp(1rem, 3vh, 2rem) var(--space-8);
   position: relative;
   text-align: center;
+
   /* width: 100%; */
 }
 
@@ -264,14 +269,4 @@ footer .button-container a.button {
   @media (width >= 920px) {
     font-size: clamp(1rem, 1.2vw + 0.5rem, 1.5rem);
   }
-}
-
-.parBtn {
-  display: flex;
-  align-items: center;
-  gap: var(--space-8);
-}
-
-.icon.icon-map {
-display: none
 }

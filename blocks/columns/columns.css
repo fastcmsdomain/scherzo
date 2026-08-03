@@ -1,22 +1,22 @@
 /* Base elements first */
 img, picture {
-    display: block;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 /* Base wrapper styles */
 .columns-wrapper {
-    margin: var(--space-36) 0;
+  margin: var(--space-36) 0;
 }
 
 /* Main section wrapper - more specific */
 main .section .columns-wrapper {
-    width: 100vw;
-    max-width: 100vw;
-    margin: 0;
-    padding: 0;
+  width: 100vw;
+  max-width: 100vw;
+  margin: 0;
+  padding: 0;
 }
 
 /* Wrapper with has selector - most specific */
@@ -28,7 +28,7 @@ main .section .columns-wrapper {
 /* Base columns */
 .columns {
   padding: var(--space-36) 0;
-  margin:  var(--space-36) 0;
+  margin: var(--space-36) 0;
 }
 
 .columns.pomaranczowe {
@@ -44,19 +44,19 @@ main .section .columns-wrapper {
   order: 1;
 }
 
-.columns > div:has(div > p) div{
+.columns > div:has(div > p) div {
   padding: var(--space-36) 0;
 }
 
 /* Base column classes */
 .columns-img-col {
-    padding: 0;
-    width: 100%;
-    height: 100%;
+  padding: 0;
+  width: 100%;
+  height: 100%;
 }
 
 .columns-content-col {
-    padding:  var(--space-46);
+  padding: var(--space-46);
 }
 
 /* More specific column selectors */
@@ -66,14 +66,14 @@ main .section .columns-wrapper {
 
 .columns-img-col img {
   display: block;
-  object-fit: cover; /* Use 'fill' if you want image to stretch/distort to exact dimensions */
-  object-position: center; /* Adjust as needed: top, bottom, left, right, etc. */
+  object-fit: cover;
+  object-position: center;
 }
 
 /* Main section specific styles */
 main .section .columns-wrapper .columns {
-    padding: 0;
-    margin: 0;
+  padding: 0;
+  margin: 0;
 }
 
 main .section .columns-wrapper .columns-img-col {
@@ -83,14 +83,14 @@ main .section .columns-wrapper .columns-img-col {
 }
 
 main .section .columns-wrapper .columns-content-col {
-    padding: var(--space-26) var(--space-36);
-    align-self: center;
+  padding: var(--space-26) var(--space-36);
+  align-self: center;
 }
 
 @media (width >= 900px) {
-
   main .section .columns-wrapper .columns-img-col {
     min-height: 550px;
+    overflow: hidden;
   }
 
   .columns-img-col picture {
@@ -106,15 +106,15 @@ main .section .columns-wrapper .columns-content-col {
   }
 
   .columns > div > .columns-img-col img {
-      position: absolute;
-      top: 0;
-      left: 0;
-      object-fit: cover;
-      object-position: center;
-      z-index: 1;
-      display: block;
-      width: 100%;
-      height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    object-fit: cover;
+    object-position: center;
+    z-index: 1;
+    display: block;
+    width: 100%;
+    height: 100%;
   }
 
   .columns > div {
@@ -132,16 +132,11 @@ main .section .columns-wrapper .columns-content-col {
   main .section .columns-wrapper .columns-content-col {
     padding: var(--space-26) var(--space-66) var(--space-26) var(--space-36);
   }
-
-  main .section .columns-wrapper .columns-img-col {
-    overflow: hidden;
-  }
 }
 
 main .section .columns-wrapper .columns.dwa-rzedy {
   display: grid;
   margin-inline: auto;
-
 }
 
 .columns.dwa-rzedy > div {
@@ -149,17 +144,17 @@ main .section .columns-wrapper .columns.dwa-rzedy {
   grid-template-columns: 1fr;
 }
 
-main .section .columns-wrapper .columns.dwa-rzedy>div:last-child {
+main .section .columns-wrapper .columns.dwa-rzedy > div:last-child {
   grid-template-columns: 1fr;
   align-self: flex-end;
 }
 
-main .section .columns-wrapper .columns.dwa-rzedy>div:last-child > .columns-content-col {
+main .section .columns-wrapper .columns.dwa-rzedy > div:last-child > .columns-content-col {
   padding: var(--space-16);
   align-self: flex-start;
 }
 
-main .section .columns-wrapper .columns.dwa-rzedy>div:last-child > .columns-content-col p  {
+main .section .columns-wrapper .columns.dwa-rzedy > div:last-child > .columns-content-col p {
   margin: 0;
 }
 
@@ -171,26 +166,26 @@ main .section .columns-wrapper .columns.dwa-rzedy>div:last-child > .columns-cont
   .columns.dwa-rzedy > div {
     grid-template-rows: 1fr;
   }
-  
-  main .section .columns-wrapper .columns.dwa-rzedy>div:last-child {
+
+  main .section .columns-wrapper .columns.dwa-rzedy > div:last-child {
     grid-template-columns: 1fr;
     align-self: flex-start;
-      width: 100%;
+    width: 100%;
   }
-  }
+}
 
-  .columns-wrapper:has(.columns.text-zdjecie) {
-    padding: var(--space-36) 0;
-    max-width: 900px;
-    margin-inline: auto;
-    width: auto;
-  }
+.columns-wrapper:has(.columns.text-zdjecie) {
+  padding: var(--space-36) 0;
+  max-width: 900px;
+  margin-inline: auto;
+  width: auto;
+}
 
-  .columns-wrapper:has(.columns.text-zdjecie) .columns-img-col {
-    padding: 0;
-  }
+.columns-wrapper:has(.columns.text-zdjecie) .columns-img-col {
+  padding: 0;
+}
 
-  .columns-wrapper:has(.columns.text-zdjecie) picture,
-  .columns-wrapper:has(.columns.text-zdjecie) img {
-    position: relative;
-  }
+.columns-wrapper:has(.columns.text-zdjecie) picture,
+.columns-wrapper:has(.columns.text-zdjecie) img {
+  position: relative;
+}

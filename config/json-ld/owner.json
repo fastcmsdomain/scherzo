@@ -7,6 +7,7 @@
       "url": "$company:url$",
       "logo": "$company:logo$",
       "name": "$company:name$",
+      "legalName": "$company:legalname$",
       "description": "$company:longdescription$",
       "email": "$company:email$",
       "telephone": "$company:telephone$",

@@ -341,7 +341,7 @@ const createSection = (section, index, total) => {
 
   // Last slide only: logo sits above the title, layered on top of the background image
   const logoHtml = logoSrc
-    ? `<img class="strapline-logo" src="${escapeHtml(logoSrc)}" alt="" />`
+    ? `<img class="strapline-logo" src="${escapeHtml(logoSrc)}" alt="" loading="lazy" decoding="async" width="90" height="90" />`
     : '';
 
   const sectionDiv = document.createElement('div');
@@ -381,24 +381,67 @@ const createSection = (section, index, total) => {
 // =============================================================================
 
 /**
- * Sets all section background images.
- * Exposes desktop/mobile sources as CSS custom properties; the stylesheet's
- * media query picks the right one, so the browser swaps images on viewport
- * change natively (same idea as the <picture> media attribute in hero).
+ * Applies CSS custom properties for a slide background image element.
+ * @param {HTMLElement} bgElement
+ * @param {string} bgImageSrc
+ * @param {string} [bgMobileSrc]
+ */
+const applyBackgroundVars = (bgElement, bgImageSrc, bgMobileSrc = '') => {
+  if (!bgElement || !bgImageSrc || bgElement.dataset.bgApplied === 'true') return;
+  bgElement.style.setProperty('--bg-desktop', `url(${bgImageSrc})`);
+  bgElement.style.setProperty('--bg-mobile', `url(${bgMobileSrc || bgImageSrc})`);
+  bgElement.style.display = 'block';
+  bgElement.dataset.bgApplied = 'true';
+};
+
+/**
+ * Sets section background images.
+ * First two slides load immediately (LCP / next-slide cover). Remaining slides
+ * lazy-load via IntersectionObserver so offscreen media does not compete with LCP.
+ * Look/feel is unchanged — images still appear before the user reaches them.
  * @param {Object[]} sections - Section data array
  */
 const setBackgrounds = (sections) => {
+  const EAGER_COUNT = 2;
   const elements = getSections();
+
   sections.forEach((section, index) => {
     const bgElement = elements[index]?.querySelector(SELECTORS.backgroundImage);
-    if (bgElement) {
-      const { bgImageSrc, bgMobileSrc } = getSectionImages(section);
-      if (bgImageSrc) {
-        bgElement.style.setProperty('--bg-desktop', `url(${bgImageSrc})`);
-        bgElement.style.setProperty('--bg-mobile', `url(${bgMobileSrc || bgImageSrc})`);
-        bgElement.style.display = 'block';
-      }
+    if (!bgElement) return;
+
+    const { bgImageSrc, bgMobileSrc } = getSectionImages(section);
+    if (!bgImageSrc) return;
+
+    // Keep data attrs for lazy path / debugging (createSection already sets them)
+    if (!bgElement.getAttribute('data-bg')) {
+      bgElement.setAttribute('data-bg', bgImageSrc);
+      if (bgMobileSrc) bgElement.setAttribute('data-bg-mobile', bgMobileSrc);
     }
+
+    if (index < EAGER_COUNT) {
+      applyBackgroundVars(bgElement, bgImageSrc, bgMobileSrc);
+      return;
+    }
+
+    const sectionEl = elements[index];
+    if (!sectionEl || !('IntersectionObserver' in window)) {
+      applyBackgroundVars(bgElement, bgImageSrc, bgMobileSrc);
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            applyBackgroundVars(bgElement, bgImageSrc, bgMobileSrc);
+            observer.disconnect();
+          }
+        });
+      },
+      // Preload ~2 viewports ahead so scrubbing never shows an empty slide
+      { rootMargin: '200% 0px', threshold: 0 },
+    );
+    observer.observe(sectionEl);
   });
 };
 
@@ -662,8 +705,16 @@ const initParallaxCover = (gsap, ScrollTrigger) => {
     // on mobile or before the animation has initialised.
     closingTl.fromTo(
       footerEl,
-      { y: () => window.innerHeight * textPortion, autoAlpha: 0 },
-      { y: 0, autoAlpha: 1, ease: 'power2.inOut', duration: imagePortion },
+      {
+        y: () => window.innerHeight * textPortion,
+        autoAlpha: 0,
+      },
+      {
+        y: 0,
+        autoAlpha: 1,
+        ease: 'power2.inOut',
+        duration: imagePortion,
+      },
       textPortion, // start after the text animation has finished
     );
   }
@@ -881,7 +932,9 @@ export default async function decorate(block) {
 
   const container = document.createElement('div');
   container.className = 'scroll-hero-container';
-  container.setAttribute('role', 'main');
+  // region (not main) — <main> is already the page landmark
+  container.setAttribute('role', 'region');
+  container.setAttribute('aria-label', 'Prezentacja szkoły');
 
   const total = sections.length;
   sections.forEach((section, index) => {

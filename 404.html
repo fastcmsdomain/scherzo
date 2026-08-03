@@ -1,68 +1,278 @@
 <!DOCTYPE html>
-<html>
+<html lang="pl">
 
 <head>
-  <title>Page not found</title>
+  <meta charset="utf-8">
+  <title>Nie znaleziono strony – Scherzo</title>
   <script type="text/javascript">
     window.isErrorPage = true;
     window.errorCode = '404';
   </script>
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta property="og:title" content="Page not found">
+  <meta name="theme-color" content="#00203e">
+  <meta name="robots" content="noindex">
+  <meta name="description" content="Strona nie została znaleziona. Wróć do strony głównej Scherzo.">
+  <meta property="og:title" content="Nie znaleziono strony – Scherzo">
   <script src="/scripts/scripts.js" type="module" crossorigin="use-credentials"></script>
-  <script type="module">
-    window.addEventListener('load', () => {
-      if (document.referrer) {
-        const { origin, pathname } = new URL(document.referrer);
-        if (origin === window.location.origin) {
-          const backBtn = document.createElement('a');
-          backBtn.classList.add('button', 'error-button-back');
-          backBtn.href = pathname;
-          backBtn.textContent = 'Go back';
-          backBtn.title = 'Go back';
-          const btnContainer = document.querySelector('.button-container');
-          btnContainer.append(backBtn);
-        }
-      }
-    });
-  </script>
   <script type="module">
     import { sampleRUM } from '/scripts/aem.js';
     sampleRUM('404', { source: document.referrer });
   </script>
+  <link rel="stylesheet" href="/styles/fonts.css">
   <link rel="stylesheet" href="/styles/styles.css">
   <style>
+    /* Scherzo 404 — brand-matched full-viewport composition */
+    :root {
+      --error-blue: #00203e;
+      --error-blue-deep: #00152a;
+      --error-gold: #f7d117;
+      --error-mint: rgb(166 214 201);
+      --error-white: #fff;
+    }
+
+    body.appear {
+      background-color: var(--error-blue);
+    }
+
+    body > header,
+    body > footer {
+      display: none;
+    }
+
     main.error {
-      min-height: calc(100vh - var(--nav-height));
-      display: flex;
       align-items: center;
+      background:
+        radial-gradient(ellipse 80% 60% at 50% 0%, rgb(39 169 222 / 18%) 0%, transparent 55%),
+        radial-gradient(ellipse 70% 50% at 80% 100%, rgb(247 209 23 / 10%) 0%, transparent 50%),
+        linear-gradient(165deg, var(--error-blue) 0%, var(--error-blue-deep) 100%);
+      color: var(--error-white);
+      display: flex;
+      justify-content: center;
+      min-height: 100dvh;
+      min-height: 100vh;
+      overflow: hidden;
+      padding: clamp(1.5rem, 4vw, 3rem);
+      position: relative;
     }
 
-    main.error .error-number {
+    main.error::before {
+      background-image:
+        linear-gradient(rgb(255 255 255 / 4%) 1px, transparent 1px),
+        linear-gradient(90deg, rgb(255 255 255 / 4%) 1px, transparent 1px);
+      background-size: 48px 48px;
+      content: '';
+      inset: 0;
+      mask-image: radial-gradient(ellipse 70% 70% at 50% 40%, #000 20%, transparent 75%);
+      opacity: 0.5;
+      pointer-events: none;
+      position: absolute;
+    }
+
+    main.error .section {
+      background: transparent;
+      margin: 0;
+      max-width: 40rem;
+      padding: 0;
+      position: relative;
+      text-align: center;
       width: 100%;
+      z-index: 1;
     }
 
-    main.error .error-number text {
-      font-family: monospace;
+    main.error .section > div {
+      margin: 0;
+      max-width: none;
+    }
+
+    .error-panel {
+      animation: error-rise 0.9s cubic-bezier(0.22, 1, 0.36, 1) both;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: clamp(1rem, 2.5vh, 1.75rem);
+    }
+
+    .error-brand {
+      animation: error-rise 0.9s cubic-bezier(0.22, 1, 0.36, 1) 0.05s both;
+      display: block;
+      text-decoration: none;
+    }
+
+    .error-brand:focus-visible {
+      outline: 2px solid var(--error-gold);
+      outline-offset: 6px;
+      border-radius: 4px;
+    }
+
+    .error-logo {
+      display: block;
+      height: auto;
+      margin: 0 auto;
+      width: clamp(88px, 18vw, 120px);
+    }
+
+    .error-brand-caption {
+      color: rgb(255 255 255 / 75%);
+      font-family: var(--body-font-family, 'Montserrat-Regular', sans-serif);
+      font-size: clamp(0.65rem, 1.5vw, 0.75rem);
+      letter-spacing: 0.12em;
+      margin: 0.75rem 0 0;
+      text-transform: uppercase;
+    }
+
+    .error-message {
+      animation: error-rise 0.9s cubic-bezier(0.22, 1, 0.36, 1) 0.12s both;
+      color: var(--error-white);
+      font-family: var(--semi-bold-font-family, 'Montserrat-semibold', sans-serif);
+      font-size: clamp(1.35rem, 4vw, 2rem);
+      font-weight: normal;
+      line-height: 1.25;
+      margin: 0;
+    }
+
+    .error-lead {
+      animation: error-rise 0.9s cubic-bezier(0.22, 1, 0.36, 1) 0.2s both;
+      color: rgb(255 255 255 / 78%);
+      font-family: var(--body-font-family, 'Montserrat-Regular', sans-serif);
+      font-size: clamp(0.95rem, 2.2vw, 1.125rem);
+      line-height: 1.55;
+      margin: 0;
+      max-width: 28rem;
+    }
+
+    .error-actions {
+      animation: error-rise 0.9s cubic-bezier(0.22, 1, 0.36, 1) 0.28s both;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem 1rem;
+      justify-content: center;
+      margin: 0.5rem 0 0;
+      padding: 0;
+    }
+
+    .error-actions .button {
+      align-items: center;
+      background-color: var(--error-gold);
+      border: 2px solid var(--error-gold);
+      border-radius: 0;
+      color: var(--error-blue);
+      display: inline-flex;
+      font-family: var(--semi-bold-font-family, 'Montserrat-semibold', sans-serif);
+      font-size: var(--font-size-sm, 0.875rem);
+      letter-spacing: 0.06em;
+      margin: 0;
+      padding: 0.85rem 1.75rem;
+      text-decoration: none;
+      text-transform: uppercase;
+      transition: background-color 0.25s ease, color 0.25s ease, transform 0.25s ease;
+    }
+
+    .error-actions .button:hover,
+    .error-actions .button:focus-visible {
+      background-color: var(--error-white);
+      border-color: var(--error-white);
+      color: var(--error-blue);
+      transform: translateY(-2px);
+    }
+
+    .error-actions .button.secondary {
+      background-color: transparent;
+      border-color: rgb(255 255 255 / 45%);
+      color: var(--error-white);
+    }
+
+    .error-actions .button.secondary:hover,
+    .error-actions .button.secondary:focus-visible {
+      background-color: rgb(255 255 255 / 10%);
+      border-color: var(--error-white);
+      color: var(--error-white);
+    }
+
+    .error-actions .button::after {
+      display: none;
+    }
+
+    @keyframes error-rise {
+      from {
+        opacity: 0;
+        transform: translateY(1.25rem);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .error-panel,
+      .error-brand,
+      .error-message,
+      .error-lead,
+      .error-actions {
+        animation: none;
+      }
+
+      .error-actions .button {
+        transition: none;
+      }
     }
   </style>
-  <link rel="stylesheet" href="/styles/lazy-styles.css">
 </head>
 
 <body>
   <header></header>
-  <main class="error">
+  <main class="error" id="main">
     <div class="section">
-      <svg viewBox="1 0 38 18" class="error-number">
-        <text x="0" y="17">404</text>
-      </svg>
-      <h2 class="error-message">Page Not Found</h2>
-      <p class="button-container">
-        <a href="/" class="button secondary error-button-home">Go home</a>
-      </p>
+      <div class="error-panel">
+        <a class="error-brand" href="/" aria-label="Scherzo – strona główna">
+          <img
+            class="error-logo"
+            src="/images/logo.png"
+            alt="Scherzo"
+            width="120"
+            height="80"
+            decoding="async"
+            fetchpriority="high"
+          >
+          <p class="error-brand-caption">Prywatna Szkoła Podstawowa i Przedszkole</p>
+        </a>
+
+        <h1 class="error-message">Nie znaleziono strony</h1>
+        <p class="error-lead">
+          Ta strona nie istnieje albo została przeniesiona.
+          Wróć na stronę główną i kontynuuj zwiedzanie Scherzo.
+        </p>
+
+        <p class="button-container error-actions">
+          <a href="/" class="button error-button-home">Strona główna</a>
+        </p>
+      </div>
     </div>
   </main>
   <footer></footer>
+  <script type="module">
+    window.addEventListener('load', () => {
+      if (!document.referrer) return;
+
+      try {
+        const { origin, pathname } = new URL(document.referrer);
+        if (origin !== window.location.origin) return;
+
+        const btnContainer = document.querySelector('.error-actions');
+        if (!btnContainer) return;
+
+        const backBtn = document.createElement('a');
+        backBtn.className = 'button secondary error-button-back';
+        backBtn.href = pathname;
+        backBtn.textContent = 'Wróć';
+        backBtn.title = 'Wróć do poprzedniej strony';
+        btnContainer.append(backBtn);
+      } catch {
+        // ignore invalid referrer
+      }
+    });
+  </script>
 </body>
 
 </html>

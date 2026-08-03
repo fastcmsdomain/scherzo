@@ -79,7 +79,12 @@ function createFilterButton(type, onClick) {
   if (type !== 'all') {
     const logo = document.createElement('img');
     logo.src = `/blocks/social-media-feeds/${type}-logo.png`;
-    logo.alt = `${type} logo`;
+    logo.alt = '';
+    logo.setAttribute('aria-hidden', 'true');
+    logo.loading = 'lazy';
+    logo.decoding = 'async';
+    logo.width = 20;
+    logo.height = 20;
     logo.classList.add('filter-logo');
     button.appendChild(logo);
   }
@@ -108,15 +113,22 @@ function createFeedItem(item) {
 
   const image = document.createElement('img');
   image.src = item.image;
-  image.alt = item.title;
+  image.alt = item.title || '';
   image.loading = 'lazy';
+  image.decoding = 'async';
   image.width = config.itemWidth;
+  image.height = Math.round(config.itemWidth * 0.75);
   imageWrapper.appendChild(image);
 
   const logo = document.createElement('img');
   logo.classList.add('social-media-logo');
   logo.src = `/blocks/social-media-feeds/${item.type}-logo.png`;
-  logo.alt = `${item.type} logo`;
+  logo.alt = '';
+  logo.setAttribute('aria-hidden', 'true');
+  logo.loading = 'lazy';
+  logo.decoding = 'async';
+  logo.width = 24;
+  logo.height = 24;
   imageWrapper.appendChild(logo);
 
   feedItem.appendChild(imageWrapper);

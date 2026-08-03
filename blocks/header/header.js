@@ -56,7 +56,7 @@ function toggleMenu(nav, navSections, forceExpanded = null) {
   document.body.style.overflowY = expanded ? '' : 'hidden';
   nav.setAttribute('aria-expanded', expanded ? 'false' : 'true');
   toggleAllNavSections(navSections, expanded ? 'false' : 'true');
-  button.setAttribute('aria-label', expanded ? 'Open navigation' : 'Close navigation');
+  button.setAttribute('aria-label', expanded ? 'Otwórz menu' : 'Zamknij menu');
   // enable nav dropdown keyboard accessibility
   const navDrops = navSections.querySelectorAll('.nav-drop');
   navDrops.forEach((drop) => {
@@ -300,11 +300,27 @@ export default async function decorate(block) {
     brandLink.closest('.button-container').className = '';
   }
 
+  // Logo-only home link needs an accessible name (no visual change)
+  const brandAnchor = navBrand.querySelector('a[href]');
+  if (brandAnchor) {
+    const hasText = (brandAnchor.textContent || '').trim().length > 0;
+    const hasAlt = [...brandAnchor.querySelectorAll('img')].some((img) => (img.getAttribute('alt') || '').trim());
+    if (!hasText && !hasAlt) {
+      brandAnchor.setAttribute('aria-label', 'Scherzo – strona główna');
+    }
+    // Prefer meaningful alt on brand logo when missing
+    const brandLogo = brandAnchor.querySelector('img');
+    if (brandLogo && !(brandLogo.getAttribute('alt') || '').trim()) {
+      brandLogo.setAttribute('alt', 'Scherzo');
+    }
+  }
+
   // Optimize LCP: add fetchpriority="high" to brand logo
   const brandImg = navBrand.querySelector('img');
   if (brandImg) {
     brandImg.setAttribute('fetchpriority', 'high');
     brandImg.setAttribute('loading', 'eager');
+    brandImg.setAttribute('decoding', 'async');
   }
 
   // Insert <br> before "i Przedszkole" in the brand text so each line renders separately
@@ -363,7 +379,7 @@ export default async function decorate(block) {
   // hamburger for all viewports
   const hamburger = document.createElement('div');
   hamburger.classList.add('nav-hamburger');
-  hamburger.innerHTML = `<button type="button" aria-controls="nav" aria-label="Open navigation">
+  hamburger.innerHTML = `<button type="button" aria-controls="nav" aria-label="Otwórz menu">
       <span class="nav-hamburger-icon"></span>
     </button>`;
   hamburger.addEventListener('click', () => toggleMenu(nav, navSections));

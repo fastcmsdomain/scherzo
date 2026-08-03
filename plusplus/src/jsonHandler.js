@@ -41,6 +41,8 @@ export async function createJSON() {
   metaTags.forEach((metaTag) => {
     let key = metaTag.getAttribute('name') || metaTag.getAttribute('property');
     let value = metaTag.getAttribute('content');
+    // Skip charset / http-equiv metas that have neither name nor property
+    if (!key) return;
     key = key.replaceAll(' ', '');
     if (key.includes('date')) {
       value = convertToISODate(value);
@@ -118,13 +120,12 @@ export async function createJSON() {
     window.siteConfig['$meta:category$'] = 'none';
   }
 
-  // decode the language
+  // decode the language — default pl (Polish school site), not browser/en
   const lang = window.siteConfig['$system:language$']
     || window.siteConfig?.['$meta:lang$']
     || window.siteConfig?.['$meta:language$']
     || window.siteConfig?.['$meta:dc-language$']
-    || window.navigator.language
-    || 'en';
+    || 'pl';
   window.siteConfig['$system:language$'] = lang;
   document.querySelector('html').setAttribute('lang', lang);
   if (lang === 'ar') {
@@ -222,6 +223,14 @@ export async function handleMetadataJsonLd() {
   }
 
   try {
+    // Remove broken publish-time JSON-LD stubs (e.g. data-error when meta was "owner")
+    document.querySelectorAll('script[type="application/ld+json"][data-error]').forEach((el) => {
+      el.remove();
+    });
+    document.querySelectorAll('script[type="application/ld+json"]:not([data-role]):not([id])').forEach((el) => {
+      if (!el.textContent?.trim()) el.remove();
+    });
+
     // Check if content is a URL
     let jsonLdUrl;
     try {
@@ -255,6 +264,9 @@ export async function handleMetadataJsonLd() {
     }
     let jsonString = JSON.stringify(json, null, '\t');
     jsonString = replaceTokens(window.siteConfig, jsonString);
+
+    // Avoid duplicate #ldMeta on soft navigations / re-init
+    document.getElementById('ldMeta')?.remove();
 
     const script = document.createElement('script');
     script.type = 'application/ld+json';

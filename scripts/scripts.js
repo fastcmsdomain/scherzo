@@ -22,16 +22,21 @@ import {
 
 import { } from '/plusplus/src/siteConfig.js';
 
-const LCP_BLOCKS = ['hero']; // add your LCP blocks to the list
+import {
+  enhanceDocument,
+  decorateImages,
+  hardenExternalLinks,
+} from '/scripts/optimize.js';
+
+const LCP_BLOCKS = ['hero', 'scroll-hero']; // LCP candidates: classic hero or home scroll-hero
 const AUDIENCES = {
   mobile: () => window.innerWidth < 600,
   desktop: () => window.innerWidth >= 600,
   // define your custom audiences here as needed
 };
 
-// Loading splash (logo overlay defined in styles.css) must stay visible at
-// least this long so the page doesn't flash unstyled/unloaded content.
-const MIN_SPLASH_DURATION_MS = 800;
+// Keep splash brief so LCP is not delayed; decorateMain still gates first paint.
+const MIN_SPLASH_DURATION_MS = 300;
 const pageLoadStart = Date.now();
 
 /**
@@ -179,6 +184,8 @@ export function decorateMain(main) {
   buildAutoBlocks(main);
   decorateSections(main);
   decorateBlocks(main);
+  decorateImages(main);
+  hardenExternalLinks(main);
 
   // Add global Enter key handling for blocks
   addGlobalEnterKeyHandling(main);
@@ -190,7 +197,7 @@ export function decorateMain(main) {
  */
 async function loadEager(doc) {
   window.cmsplus.debug('loadEager');
-  document.documentElement.lang = 'en';
+  enhanceDocument();
   decorateTemplateAndTheme();
   if (getMetadata('breadcrumbs').toLowerCase() === 'true') {
     document.body.classList.add('breadcrumbs-enabled');
@@ -231,13 +238,19 @@ async function loadLazy(doc) {
   window.cmsplus.debug('loadLazy');
   const main = doc.querySelector('main');
   await loadBlocks(main);
+  decorateImages(doc);
+  hardenExternalLinks(doc);
   autolinkModals(doc); // added for modal handling, see adobe docs
   const { hash } = window.location;
   const element = hash ? doc.getElementById(hash.substring(1)) : false;
   if (hash && element) element.scrollIntoView();
   if (!window.hlx.suppressFrame) { // added for sidekick library - see block party
-    loadHeader(doc.querySelector('header'));
-    loadFooter(doc.querySelector('footer'));
+    await Promise.all([
+      loadHeader(doc.querySelector('header')),
+      loadFooter(doc.querySelector('footer')),
+    ]);
+    decorateImages(doc);
+    hardenExternalLinks(doc);
   }
 
   loadCSS(`${window.hlx.codeBasePath}/styles/lazy-styles.css`);

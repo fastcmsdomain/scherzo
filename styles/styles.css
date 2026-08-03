@@ -166,6 +166,41 @@ body {
   position: relative;
 }
 
+/* Skip link: visually hidden until keyboard focus — no layout change at rest */
+.skip-link {
+  background: var(--color-dark-blue, #00203e);
+  border: 2px solid var(--color-gold, #c9a227);
+  color: var(--color-white, #fff);
+  font-family: var(--body-font-family);
+  font-size: var(--font-size-sm, 0.875rem);
+  left: var(--space-8, 0.5rem);
+  padding: var(--space-8, 0.5rem) var(--space-16, 1rem);
+  position: absolute;
+  text-decoration: none;
+  top: -100px;
+  z-index: 10001;
+}
+
+.skip-link:focus,
+.skip-link:focus-visible {
+  outline: 2px solid var(--color-gold, #c9a227);
+  outline-offset: 2px;
+  top: var(--space-8, 0.5rem);
+}
+
+/* Clear keyboard focus without changing mouse hover look */
+:focus-visible {
+  outline: 2px solid var(--color-gold, #c9a227);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html:has(body.appear)::before,
+  html:has(body.appear)::after {
+    transition: none;
+  }
+}
+
 /* Page load overlay with logo - shows until body receives 'appear' class.
    Logo width mirrors header .nav-brand img (100px mobile / 128px from 900px). */
 html::before {
@@ -193,6 +228,7 @@ html::before {
 
 /* Page load overlay text - sits below the logo above.
    Font styling mirrors header .nav-brand p (same font-family, size, transform). */
+
 /* html::after {
   color: var(--color-white);
   content: 'Prywatna Szkoła Podstawowa\A i Przedszkole';

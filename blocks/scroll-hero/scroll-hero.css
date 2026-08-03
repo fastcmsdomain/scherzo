@@ -7,6 +7,14 @@ main .section .scroll-hero-wrapper {
   min-width: 100vw;
 }
 
+/* The shared .section rule paints white. Once the last slide is released
+   (display:none) — and again while scrolling back up as the footer
+   scrub-reveals this section — that white shows through as a flash behind
+   the slider. Keep the hero section on the same blue as the slides. */
+main .section:has(.scroll-hero-wrapper) {
+  background: var(--color-dark-blue, #00203e);
+}
+
 /* Progress Navigation (floating left side) */
 .progress-nav {
   display: block;
@@ -117,6 +125,7 @@ main .section .scroll-hero-wrapper {
 
 /* Main container - provides scroll height for fixed sections */
 .scroll-hero-container {
+  background-color: var(--color-dark-blue, #00203e);
   position: relative;
   width: 100%;
   padding: 0;

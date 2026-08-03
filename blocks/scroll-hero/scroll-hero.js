@@ -668,8 +668,8 @@ const initParallaxCover = (gsap, ScrollTrigger) => {
     );
   }
 
-  // Every earlier slide is still position:fixed and fully opaque throughout
-  // the resting screen — normally invisible only because the last slide's
+  // Earlier slides stay position:fixed and fully opaque throughout the
+  // resting screen — normally invisible only because the last slide's
   // higher z-index covers them. The footer slides over the last slide but
   // earlier slides sit behind it; hide them outright for the whole resting
   // screen to keep the background clean.
@@ -682,27 +682,22 @@ const initParallaxCover = (gsap, ScrollTrigger) => {
     onLeaveBack: () => earlierSections.forEach((s) => s.classList.remove(CLASSES.released)),
   });
 
-  // But nothing ever un-fixes the last slide either. Left alone it would
-  // stay permanently pinned behind the footer forever instead of handing off
-  // to it. Hide it outright once the resting screen ends; the footer has
-  // already scrolled fully into view by then (covering the slide), so this
-  // causes no visible jump.
-  // (A section can't instead be repositioned to "scroll away" normally,
-  // because that needs at least one more viewport of scroll room after the
-  // release point — a short footer might not have it, leaving the section
-  // stuck part-way forever.)
-  // Also toggle `show-footer` on <body> so footer links become interactive
+  // Do NOT display:none the last slide after the resting screen. Hiding it
+  // left a hole that showed the parent .section's white background when
+  // scrolling back up from the footer (especially on mobile, where the
+  // taller footer makes that handoff easy to hit). The last slide stays
+  // position:fixed behind the footer (footer z-index is higher), so the
+  // image + text remain ready the moment the footer scrubs away.
+  // Toggle `show-footer` on <body> so footer links become interactive
   // once the hero has fully handed off to the footer.
   ScrollTrigger.create({
     trigger: 'body',
     start: restStart,
     end: restEnd,
     onLeave: () => {
-      lastSection.classList.add(CLASSES.released);
       document.body.classList.add('show-footer');
     },
     onEnterBack: () => {
-      lastSection.classList.remove(CLASSES.released);
       document.body.classList.remove('show-footer');
     },
   });

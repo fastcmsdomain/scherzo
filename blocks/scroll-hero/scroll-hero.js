@@ -902,8 +902,8 @@ const fetchSlideData = async (item) => {
 };
 
 /**
- * Fetches all scroll hero section data
- * @returns {Promise<{ items: Object[], sections: Object[] }>}
+ * Fetches the slides query-index entries (paths only).
+ * @returns {Promise<Object[]>}
  */
 const fetchScrollHeroIndex = async () => {
   try {
@@ -914,16 +914,6 @@ const fetchScrollHeroIndex = async () => {
   } catch {
     return [];
   }
-};
-
-/**
- * Fetches every slide (legacy full-load helper)
- * @returns {Promise<Object[]>}
- */
-const fetchScrollHeroData = async () => {
-  const data = await fetchScrollHeroIndex();
-  const sections = await Promise.all(data.map(fetchSlideData));
-  return sections.filter(Boolean);
 };
 
 // =============================================================================

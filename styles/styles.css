@@ -205,7 +205,12 @@ body {
    Logo width mirrors header .nav-brand img (100px mobile / 128px from 900px). */
 html::before {
   background-color: var(--color-dark-blue);
+  /* WebP splash logo (~4.7KB) with PNG fallback for older browsers */
   background-image: url('/images/logo-load.png');
+  background-image: image-set(
+    url('/images/logo-load.webp') type('image/webp'),
+    url('/images/logo-load.png') type('image/png')
+  );
   background-position: center 42%;
   background-repeat: no-repeat;
   background-size: 150px auto;

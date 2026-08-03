@@ -448,18 +448,21 @@ const setBackgrounds = (sections) => {
     applyAt(i);
   }
 
-  // Preload the first (LCP) background so the browser fetches it ASAP
+  // Warm first background after the LCP title text has a chance to paint.
+  // LCP on homepage is the h1 text, not the CSS background — high-priority
+  // image preload here would compete with fonts on the critical path.
   const first = sources[0];
   if (first?.bgImageSrc) {
-    const preload = document.createElement('link');
-    preload.rel = 'preload';
-    preload.as = 'image';
-    preload.href = optimizeMediaUrl(
-      first.bgMobileSrc || first.bgImageSrc,
-      window.innerWidth < 600 ? 750 : 2000,
-    );
-    preload.setAttribute('fetchpriority', 'high');
-    document.head.append(preload);
+    window.setTimeout(() => {
+      const preload = document.createElement('link');
+      preload.rel = 'preload';
+      preload.as = 'image';
+      preload.href = optimizeMediaUrl(
+        first.bgMobileSrc || first.bgImageSrc,
+        window.innerWidth < 600 ? 750 : 2000,
+      );
+      document.head.append(preload);
+    }, 0);
   }
 
   const { factor } = CONFIG.cover;
@@ -858,8 +861,39 @@ const initScrollAnimations = () => {
 // =============================================================================
 
 /**
- * Fetches and processes a single slide's data
+ * Parses slide HTML into section data.
  * @param {Object} item - Slide index item
+ * @param {string} html - Slide plain HTML
+ * @returns {Object} - Processed section data
+ */
+const parseSlideHtml = (item, html) => {
+  const doc = new DOMParser().parseFromString(html, 'text/html');
+
+  const textParts = extractTextParts(doc, '.tytul-zdjecia > div > div');
+  const backgroundImages = extractImages(doc);
+
+  const firstSource = doc.querySelector('picture source[media="(min-width: 600px)"]');
+  const fallbackImage = firstSource
+    ? new URL(firstSource.getAttribute('srcset').split('?')[0], window.location.origin).href
+    : '';
+
+  const mainTitleParts = textParts.slice(0, 2);
+  const subtitleParts = textParts.slice(2, 6);
+
+  return {
+    ...item,
+    id: `section-${item.path.split('/').pop()}`,
+    mainTitleParts,
+    subtitleParts,
+    title: textParts[0] || item.title,
+    subtitle: subtitleParts.join(' '),
+    backgroundImages: backgroundImages.length > 0 ? backgroundImages : [fallbackImage],
+    image: fallbackImage,
+  };
+};
+
+/**
+ * Fetches and processes a single slide's data
  * @param {Object} item - Slide index item
  * @returns {Promise<Object|null>} - Processed section data or null
  */
@@ -871,31 +905,31 @@ const fetchSlideData = async (item) => {
   try {
     const response = await fetch(`${item.path}.plain.html`);
     if (!response.ok) return null;
+    return parseSlideHtml(item, await response.text());
+  } catch {
+    return null;
+  }
+};
 
-    const html = await response.text();
-    const doc = new DOMParser().parseFromString(html, 'text/html');
+/**
+ * Uses head.html early-fetch bootstrap when available to skip the LCP waterfall.
+ * @returns {Promise<{items: Object[], firstSection: Object|null}|null>}
+ */
+const consumeLcpBootstrap = async () => {
+  const bootPromise = window.hlx?.scrollHeroLcp;
+  if (!bootPromise) return null;
 
-    const textParts = extractTextParts(doc, '.tytul-zdjecia > div > div');
-    const backgroundImages = extractImages(doc);
+  try {
+    const boot = await bootPromise;
+    if (!boot?.items?.length) return null;
 
-    const firstSource = doc.querySelector('picture source[media="(min-width: 600px)"]');
-    const fallbackImage = firstSource
-      ? new URL(firstSource.getAttribute('srcset').split('?')[0], window.location.origin).href
-      : '';
+    const firstItem = boot.items[0];
+    let firstSection = null;
+    if (boot.firstHtml && firstItem?.path?.startsWith('/slides/')) {
+      firstSection = parseSlideHtml(firstItem, boot.firstHtml);
+    }
 
-    const mainTitleParts = textParts.slice(0, 2);
-    const subtitleParts = textParts.slice(2, 6);
-
-    return {
-      ...item,
-      id: `section-${item.path.split('/').pop()}`,
-      mainTitleParts,
-      subtitleParts,
-      title: textParts[0] || item.title,
-      subtitle: subtitleParts.join(' '),
-      backgroundImages: backgroundImages.length > 0 ? backgroundImages : [fallbackImage],
-      image: fallbackImage,
-    };
+    return { items: boot.items, firstSection };
   } catch {
     return null;
   }
@@ -965,14 +999,16 @@ const waitForPaint = () => new Promise((resolve) => {
 export default async function decorate(block) {
   clearDOMCache();
 
-  const items = await fetchScrollHeroIndex();
+  // Prefer head.html early bootstrap (fetch started before scripts.js ran)
+  const boot = await consumeLcpBootstrap();
+  const items = boot?.items?.length ? boot.items : await fetchScrollHeroIndex();
   if (!items.length) {
     block.innerHTML = '<p role="alert">No scroll hero sections found.</p>';
     return;
   }
 
   // --- Phase 1: first slide only (LCP) ---
-  const firstSection = await fetchSlideData(items[0]);
+  const firstSection = boot?.firstSection || await fetchSlideData(items[0]);
   if (!firstSection) {
     block.innerHTML = '<p role="alert">No scroll hero sections found.</p>';
     return;
@@ -996,27 +1032,65 @@ export default async function decorate(block) {
   setBackgrounds([firstSection]);
   await waitForPaint();
 
-  // --- Phase 2: remaining slides + GSAP (does not block LCP further) ---
-  const rest = (await Promise.all(items.slice(1).map(fetchSlideData))).filter(Boolean);
-  const sections = [firstSection, ...rest];
-  const total = sections.length;
-
-  sections.slice(1).forEach((section, i) => {
-    container.appendChild(createSection(section, i + 1, total));
+  // Phase 2 must NOT block decorate() — waitForLCP / body.appear wait on this
+  // promise, and delaying appear keeps the splash up (body display:none) until
+  // every slide HTML is fetched, which tanks LCP (~4s+ on mobile throttle).
+  // Fire-and-forget: first slide is already painted for LCP measurement.
+  // eslint-disable-next-line no-void
+  void loadRemainingSlides({
+    block,
+    container,
+    items,
+    firstSection,
+    navPlaceholder,
   });
+}
 
-  clearDOMCache();
-  const nav = createProgressNav(sections);
-  navPlaceholder.replaceWith(nav);
+/**
+ * Fetches remaining slides, builds nav, and boots GSAP — after first paint.
+ * @param {Object} ctx
+ * @param {HTMLElement} ctx.block
+ * @param {HTMLElement} ctx.container
+ * @param {Object[]} ctx.items
+ * @param {Object} ctx.firstSection
+ * @param {HTMLElement} ctx.navPlaceholder
+ */
+async function loadRemainingSlides({
+  block,
+  container,
+  items,
+  firstSection,
+  navPlaceholder,
+}) {
+  try {
+    const rest = (await Promise.all(items.slice(1).map(fetchSlideData))).filter(Boolean);
+    const sections = [firstSection, ...rest];
+    const total = sections.length;
 
-  setBackgrounds(sections);
+    sections.slice(1).forEach((section, i) => {
+      container.appendChild(createSection(section, i + 1, total));
+    });
 
-  requestAnimationFrame(async () => {
-    const gsapLoaded = await loadGSAPLibraries();
-    if (gsapLoaded && window.gsap && window.ScrollTrigger) {
-      initScrollAnimations();
-    } else {
-      initBasicScroll(block);
-    }
-  });
+    // Correct reserved height now that we know the real slide count
+    container.style.height = `${((total - 1) * CONFIG.cover.factor + 1) * 100}vh`;
+
+    clearDOMCache();
+    const nav = createProgressNav(sections);
+    navPlaceholder.replaceWith(nav);
+
+    setBackgrounds(sections);
+
+    requestAnimationFrame(async () => {
+      const gsapLoaded = await loadGSAPLibraries();
+      if (gsapLoaded && window.gsap && window.ScrollTrigger) {
+        initScrollAnimations();
+      } else {
+        initBasicScroll(block);
+      }
+    });
+  } catch (error) {
+    // eslint-disable-next-line no-console
+    console.error('scroll-hero: failed to load remaining slides', error);
+    initBasicScroll(block);
+  }
 }

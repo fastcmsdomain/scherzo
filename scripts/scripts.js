@@ -222,9 +222,11 @@ async function loadEager(doc) {
       // do nothing
     }
     decorateMain(main);
+    // Load LCP block (first scroll-hero slide) WHILE splash still covers the page,
+    // then reveal — so LCP paints immediately on appear instead of after a blank gap.
+    await waitForLCP(LCP_BLOCKS);
     await waitForMinDuration(pageLoadStart, MIN_SPLASH_DURATION_MS);
     document.body.classList.add('appear');
-    await waitForLCP(LCP_BLOCKS);
   }
 }
 

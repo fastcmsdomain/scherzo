@@ -63,6 +63,8 @@ const CLASSES = {
   active: 'isActive',
   lastSlide: 'section-last-slide',
   released: 'is-released',
+  /** Hidden until GSAP/fallback positions slides — prevents later slides stealing LCP */
+  lcpDeferred: 'is-lcp-deferred',
 };
 
 // =============================================================================
@@ -253,6 +255,9 @@ const loadGSAPLibraries = async () => {
  */
 const initBasicScroll = (block) => {
   if (block) block.classList.add('no-gsap');
+
+  // Reveal slides that were deferred for LCP
+  getSections().forEach((section) => section.classList.remove(CLASSES.lcpDeferred));
 
   const sections = getSections();
 
@@ -836,6 +841,9 @@ const initScrollAnimations = () => {
 
   gsap.registerPlugin(ScrollTrigger);
 
+  // Reveal slides that were deferred for LCP before positioning
+  getSections().forEach((section) => section.classList.remove(CLASSES.lcpDeferred));
+
   initParallaxCover(gsap, ScrollTrigger);
   initNavControls(gsap);
 
@@ -1022,7 +1030,14 @@ export default async function decorate(block) {
   // Reserve scroll height early so layout is stable (CLS)
   container.style.height = `${((totalHint - 1) * CONFIG.cover.factor + 1) * 100}vh`;
 
-  container.appendChild(createSection(firstSection, 0, totalHint));
+  // Preserve the early LCP <h1> node (from head bootstrap) so Chrome does not
+  // reset LCP when the preview is swapped for the real first slide.
+  const lcpTitle = block.querySelector('.scroll-hero-lcp-preview h1.main-title');
+  const firstSlideEl = createSection(firstSection, 0, totalHint);
+  if (lcpTitle) {
+    firstSlideEl.querySelector('h1.main-title')?.replaceWith(lcpTitle);
+  }
+  container.appendChild(firstSlideEl);
 
   block.textContent = '';
   const navPlaceholder = document.createElement('div');
@@ -1068,7 +1083,10 @@ async function loadRemainingSlides({
     const total = sections.length;
 
     sections.slice(1).forEach((section, i) => {
-      container.appendChild(createSection(section, i + 1, total));
+      const el = createSection(section, i + 1, total);
+      // Keep off LCP until GSAP/fallback positions the cover stack
+      el.classList.add(CLASSES.lcpDeferred);
+      container.appendChild(el);
     });
 
     // Correct reserved height now that we know the real slide count

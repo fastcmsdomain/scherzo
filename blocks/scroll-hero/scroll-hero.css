@@ -15,6 +15,11 @@ main .section:has(.scroll-hero-wrapper) {
   background: var(--color-dark-blue, #00203e);
 }
 
+/* Later slides stay out of LCP until GSAP/fallback positions the cover stack */
+.screen-section.is-lcp-deferred {
+  visibility: hidden;
+}
+
 /* Progress Navigation (floating left side) */
 .progress-nav {
   display: block;

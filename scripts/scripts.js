@@ -215,17 +215,16 @@ async function loadEager(doc) {
   decorateTemplateAndTheme();
   const main = doc.querySelector('main');
   if (main) {
+    // Fonts first — homepage LCP is often the hero title text
+    try {
+      loadFonts();
+    } catch (e) {
+      // do nothing
+    }
     decorateMain(main);
     await waitForMinDuration(pageLoadStart, MIN_SPLASH_DURATION_MS);
     document.body.classList.add('appear');
     await waitForLCP(LCP_BLOCKS);
-  }
-
-  try {
-    /* Load fonts as early as possible — homepage LCP is often title text */
-    loadFonts();
-  } catch (e) {
-    // do nothing
   }
 }
 

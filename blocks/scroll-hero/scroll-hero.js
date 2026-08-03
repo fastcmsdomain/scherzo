@@ -903,21 +903,27 @@ const fetchSlideData = async (item) => {
 
 /**
  * Fetches all scroll hero section data
- * @returns {Promise<Object[]>} - Array of section data
+ * @returns {Promise<{ items: Object[], sections: Object[] }>}
  */
-const fetchScrollHeroData = async () => {
+const fetchScrollHeroIndex = async () => {
   try {
     const response = await fetch('/slides/query-index.json');
     if (!response.ok) return [];
-
     const { data } = await response.json();
-    if (!Array.isArray(data)) return [];
-
-    const sections = await Promise.all(data.map(fetchSlideData));
-    return sections.filter(Boolean);
+    return Array.isArray(data) ? data : [];
   } catch {
     return [];
   }
+};
+
+/**
+ * Fetches every slide (legacy full-load helper)
+ * @returns {Promise<Object[]>}
+ */
+const fetchScrollHeroData = async () => {
+  const data = await fetchScrollHeroIndex();
+  const sections = await Promise.all(data.map(fetchSlideData));
+  return sections.filter(Boolean);
 };
 
 // =============================================================================
@@ -953,38 +959,68 @@ const createProgressNav = (sections) => {
 };
 
 /**
- * Main block decorator
+ * Waits for the next paint (double rAF) so LCP can capture the first slide.
+ * @returns {Promise<void>}
+ */
+const waitForPaint = () => new Promise((resolve) => {
+  requestAnimationFrame(() => {
+    requestAnimationFrame(() => resolve());
+  });
+});
+
+/**
+ * Main block decorator — paints the first slide ASAP for LCP, then loads the rest.
  * @param {HTMLElement} block - Block element to decorate
  */
 export default async function decorate(block) {
   clearDOMCache();
 
-  const sections = await fetchScrollHeroData();
-
-  if (!sections.length) {
+  const items = await fetchScrollHeroIndex();
+  if (!items.length) {
     block.innerHTML = '<p role="alert">No scroll hero sections found.</p>';
     return;
   }
 
+  // --- Phase 1: first slide only (LCP) ---
+  const firstSection = await fetchSlideData(items[0]);
+  if (!firstSection) {
+    block.innerHTML = '<p role="alert">No scroll hero sections found.</p>';
+    return;
+  }
+
+  const totalHint = items.length;
   const container = document.createElement('div');
   container.className = 'scroll-hero-container';
-  // region (not main) — <main> is already the page landmark
   container.setAttribute('role', 'region');
   container.setAttribute('aria-label', 'Prezentacja szkoły');
+  // Reserve scroll height early so layout is stable (CLS)
+  container.style.height = `${((totalHint - 1) * CONFIG.cover.factor + 1) * 100}vh`;
 
-  const total = sections.length;
-  sections.forEach((section, index) => {
-    container.appendChild(createSection(section, index, total));
-  });
+  container.appendChild(createSection(firstSection, 0, totalHint));
 
-  block.innerHTML = '';
-  block.appendChild(createProgressNav(sections));
+  block.textContent = '';
+  const navPlaceholder = document.createElement('div');
+  block.appendChild(navPlaceholder);
   block.appendChild(container);
 
-  // Always set background images (works for both GSAP and fallback paths)
+  setBackgrounds([firstSection]);
+  await waitForPaint();
+
+  // --- Phase 2: remaining slides + GSAP (does not block LCP further) ---
+  const rest = (await Promise.all(items.slice(1).map(fetchSlideData))).filter(Boolean);
+  const sections = [firstSection, ...rest];
+  const total = sections.length;
+
+  sections.slice(1).forEach((section, i) => {
+    container.appendChild(createSection(section, i + 1, total));
+  });
+
+  clearDOMCache();
+  const nav = createProgressNav(sections);
+  navPlaceholder.replaceWith(nav);
+
   setBackgrounds(sections);
 
-  // Initialize after paint so layout/measurements are stable
   requestAnimationFrame(async () => {
     const gsapLoaded = await loadGSAPLibraries();
     if (gsapLoaded && window.gsap && window.ScrollTrigger) {

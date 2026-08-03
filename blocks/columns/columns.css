@@ -68,17 +68,6 @@ main .section .columns-wrapper {
   display: block;
   object-fit: cover; /* Use 'fill' if you want image to stretch/distort to exact dimensions */
   object-position: center; /* Adjust as needed: top, bottom, left, right, etc. */
-  aspect-ratio: 3/2;
-}
-
-.columns > div > .columns-img-col img {
-  /* position: absolute;
-  top: 0;
-  left: 0;
-  object-fit: cover;
-  object-position: center;
-  z-index: 1;
-  display: block; */
 }
 
 /* Main section specific styles */

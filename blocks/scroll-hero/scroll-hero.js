@@ -381,6 +381,26 @@ const createSection = (section, index, total) => {
 // =============================================================================
 
 /**
+ * Appends EDS media optimization params (webp delivery + width) without
+ * changing the authored path. Keeps look identical at far smaller bytes.
+ * @param {string} src
+ * @param {number} width
+ * @returns {string}
+ */
+const optimizeMediaUrl = (src, width) => {
+  if (!src) return '';
+  try {
+    const url = new URL(src, window.location.href);
+    url.searchParams.set('width', String(width));
+    url.searchParams.set('format', 'webply');
+    url.searchParams.set('optimize', 'medium');
+    return url.href;
+  } catch {
+    return src;
+  }
+};
+
+/**
  * Applies CSS custom properties for a slide background image element.
  * @param {HTMLElement} bgElement
  * @param {string} bgImageSrc
@@ -396,53 +416,69 @@ const applyBackgroundVars = (bgElement, bgImageSrc, bgMobileSrc = '') => {
 
 /**
  * Sets section background images.
- * First two slides load immediately (LCP / next-slide cover). Remaining slides
- * lazy-load via IntersectionObserver so offscreen media does not compete with LCP.
- * Look/feel is unchanged — images still appear before the user reaches them.
+ * Only the first slide is eager (LCP). Later slides load from scroll position —
+ * IntersectionObserver cannot be used because all slides are position:fixed and
+ * would report as intersecting at once (loading every image up front).
  * @param {Object[]} sections - Section data array
  */
 const setBackgrounds = (sections) => {
-  const EAGER_COUNT = 2;
+  const EAGER_COUNT = 1;
+  const PRELOAD_AHEAD = 1;
   const elements = getSections();
+  const sources = sections.map((section) => getSectionImages(section));
 
-  sections.forEach((section, index) => {
+  const applyAt = (index) => {
+    if (index < 0 || index >= sections.length) return;
     const bgElement = elements[index]?.querySelector(SELECTORS.backgroundImage);
-    if (!bgElement) return;
+    const { bgImageSrc, bgMobileSrc } = sources[index] || {};
+    if (!bgElement || !bgImageSrc) return;
 
-    const { bgImageSrc, bgMobileSrc } = getSectionImages(section);
-    if (!bgImageSrc) return;
+    const desktop = optimizeMediaUrl(bgImageSrc, 2000);
+    const mobile = optimizeMediaUrl(bgMobileSrc || bgImageSrc, 750);
 
-    // Keep data attrs for lazy path / debugging (createSection already sets them)
     if (!bgElement.getAttribute('data-bg')) {
-      bgElement.setAttribute('data-bg', bgImageSrc);
-      if (bgMobileSrc) bgElement.setAttribute('data-bg-mobile', bgMobileSrc);
+      bgElement.setAttribute('data-bg', desktop);
+      bgElement.setAttribute('data-bg-mobile', mobile);
     }
 
-    if (index < EAGER_COUNT) {
-      applyBackgroundVars(bgElement, bgImageSrc, bgMobileSrc);
-      return;
-    }
+    applyBackgroundVars(bgElement, desktop, mobile);
+  };
 
-    const sectionEl = elements[index];
-    if (!sectionEl || !('IntersectionObserver' in window)) {
-      applyBackgroundVars(bgElement, bgImageSrc, bgMobileSrc);
-      return;
-    }
+  for (let i = 0; i < Math.min(EAGER_COUNT, sections.length); i += 1) {
+    applyAt(i);
+  }
 
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            applyBackgroundVars(bgElement, bgImageSrc, bgMobileSrc);
-            observer.disconnect();
-          }
-        });
-      },
-      // Preload ~2 viewports ahead so scrubbing never shows an empty slide
-      { rootMargin: '200% 0px', threshold: 0 },
+  // Preload the first (LCP) background so the browser fetches it ASAP
+  const first = sources[0];
+  if (first?.bgImageSrc) {
+    const preload = document.createElement('link');
+    preload.rel = 'preload';
+    preload.as = 'image';
+    preload.href = optimizeMediaUrl(
+      first.bgMobileSrc || first.bgImageSrc,
+      window.innerWidth < 600 ? 750 : 2000,
     );
-    observer.observe(sectionEl);
-  });
+    preload.setAttribute('fetchpriority', 'high');
+    document.head.append(preload);
+  }
+
+  const { factor } = CONFIG.cover;
+  const loadForScroll = () => {
+    const segment = Math.max(1, window.innerHeight * factor);
+    const idx = Math.min(
+      sections.length - 1,
+      Math.max(0, Math.floor(window.scrollY / segment)),
+    );
+    const until = Math.min(sections.length - 1, idx + PRELOAD_AHEAD);
+    for (let i = 0; i <= until; i += 1) {
+      applyAt(i);
+    }
+  };
+
+  window.addEventListener('scroll', loadForScroll, { passive: true });
+  // Also warm the next slide shortly after first paint (cover animation needs it)
+  window.setTimeout(() => applyAt(1), 400);
+  loadForScroll();
 };
 
 /**

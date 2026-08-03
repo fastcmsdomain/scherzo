@@ -20,8 +20,6 @@ import {
   loadCSS,
 } from '/scripts/aem.js';
 
-import { } from '/plusplus/src/siteConfig.js';
-
 import {
   enhanceDocument,
   decorateImages,
@@ -35,9 +33,12 @@ const AUDIENCES = {
   // define your custom audiences here as needed
 };
 
-// Keep splash brief so LCP is not delayed; decorateMain still gates first paint.
-const MIN_SPLASH_DURATION_MS = 300;
+// No artificial splash delay — first paint / LCP should not wait on a timer.
+const MIN_SPLASH_DURATION_MS = 0;
 const pageLoadStart = Date.now();
+
+// Stub until siteConfig finishes (loaded after first paint so it never blocks LCP)
+window.cmsplus = window.cmsplus || { debug: () => {} };
 
 /**
  * Resolves once at least `minMs` have elapsed since `start`.
@@ -221,10 +222,8 @@ async function loadEager(doc) {
   }
 
   try {
-    /* if desktop (proxy for fast connection) or fonts already loaded, load fonts.css */
-    if (window.innerWidth >= 900 || sessionStorage.getItem('fonts-loaded')) {
-      loadFonts();
-    }
+    /* Load fonts as early as possible — homepage LCP is often title text */
+    loadFonts();
   } catch (e) {
     // do nothing
   }
@@ -288,7 +287,9 @@ async function loadPage() {
     document.body.querySelector('header').remove();
     document.body.querySelector('footer').remove();
   }
+  // Paint the page first — siteConfig (variables, JSON-LD) must not block LCP
   await loadEager(document);
+  await import('/plusplus/src/siteConfig.js');
   await loadLazy(document);
   loadDelayed();
 }

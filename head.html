@@ -9,10 +9,43 @@
 <link rel="preload" href="/fonts/Montserrat-SemiBold.woff" as="font" type="font/woff" crossorigin/>
 <link rel="preload" href="/fonts/Montserrat-Regular.woff" as="font" type="font/woff" crossorigin/>
 <link rel="stylesheet" href="/styles/fonts.css"/>
-<!-- Warm scroll-hero LCP data in parallel with aem.js / scripts.js (homepage). -->
+<!-- Warm + paint scroll-hero LCP title in parallel with aem.js / scripts.js. -->
 <script type="module">
 window.hlx = window.hlx || {};
 window.hlx.scrollHeroLcp = (async () => {
+  const escapeHtml = (str) => String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
+
+  const paintLcpPreview = (html) => {
+    try {
+      const doc = new DOMParser().parseFromString(html, 'text/html');
+      const parts = [...doc.querySelectorAll('.tytul-zdjecia > div > div')]
+        .map((el) => el.textContent.trim())
+        .filter(Boolean)
+        .slice(0, 2);
+      if (!parts.length) return;
+
+      const host = document.querySelector('main .scroll-hero');
+      if (!host || host.querySelector('.scroll-hero-lcp-preview, .scroll-hero-container')) return;
+
+      // Match first-slide line break after "Scherzo"
+      const breakTitle = (text) => escapeHtml(text).replace(/(Edukacja w Scherzo)\s+/i, '$1<br>');
+      const titleHtml = parts.map((part, i) => (
+        `<span class="title-part title-part-${i}">${i === 0 ? breakTitle(part) : escapeHtml(part)}</span>`
+      )).join('');
+
+      const preview = document.createElement('div');
+      preview.className = 'scroll-hero-lcp-preview';
+      preview.innerHTML = `<h1 class="main-title">${titleHtml}</h1>`;
+      host.replaceChildren(preview);
+    } catch {
+      // Preview is best-effort; scroll-hero.js still paints the real slide.
+    }
+  };
+
   try {
     const indexRes = await fetch('/slides/query-index.json');
     if (!indexRes.ok) return null;
@@ -21,7 +54,14 @@ window.hlx.scrollHeroLcp = (async () => {
     const firstPath = data[0].path;
     const slideRes = await fetch(`${firstPath}.plain.html`);
     if (!slideRes.ok) return { items: data, firstHtml: null, firstPath };
-    return { items: data, firstHtml: await slideRes.text(), firstPath };
+    const firstHtml = await slideRes.text();
+    // Paint as soon as DOM has <main> (module may run before or after body parse)
+    if (document.querySelector('main .scroll-hero')) {
+      paintLcpPreview(firstHtml);
+    } else {
+      document.addEventListener('DOMContentLoaded', () => paintLcpPreview(firstHtml), { once: true });
+    }
+    return { items: data, firstHtml, firstPath };
   } catch {
     return null;
   }

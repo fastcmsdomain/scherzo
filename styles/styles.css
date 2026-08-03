@@ -158,7 +158,9 @@
 body {
   background-color: var(--color-dark-blue);
   color: var(--color-dark-blue);
-  display: none;
+  /* Keep body painted under the splash overlay so LCP can measure the early
+     hero title. FOUC is still covered by html::before until .appear. */
+  display: block;
   font-family: var(--body-font-family);
   font-size: var(--font-size-base);
   line-height: 1.6;
@@ -263,6 +265,32 @@ html:has(body.appear)::after {
   visibility: hidden;
 }
 
+/* Early LCP title preview (painted from head bootstrap before scroll-hero.js).
+   Sized to match mobile first-slide title; replaced when the block decorates. */
+.scroll-hero-lcp-preview {
+  align-items: flex-end;
+  box-sizing: border-box;
+  color: var(--color-white, #fff);
+  display: flex;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 0 1.25rem 18vh;
+  text-align: center;
+}
+
+.scroll-hero-lcp-preview .main-title {
+  font-family: var(--semi-bold-font-family), var(--body-font-family);
+  font-size: clamp(1.75rem, 4.5vw, 2.5rem);
+  font-weight: normal;
+  line-height: 1.2;
+  margin: 0;
+  text-shadow: 0 0 18px rgb(0 0 0 / 25%);
+}
+
+.scroll-hero-lcp-preview .title-part {
+  display: block;
+}
+
 /* body::before {
   background: linear-gradient(
     180deg,
@@ -278,9 +306,7 @@ html:has(body.appear)::after {
   z-index: 2;
   } */
 
-body.appear {
-  display: block;
-}
+/* Splash dismissal is handled by html:has(body.appear)::before */
 
 /* header {
   height: var(--nav-height);

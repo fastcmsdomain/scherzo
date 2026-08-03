@@ -142,6 +142,50 @@ export const hardenExternalLinks = (root = document) => {
   });
 };
 
+const SOCIAL_LINK_LABELS = [
+  { test: /facebook\.com/i, label: 'Facebook' },
+  { test: /youtube\.com|youtu\.be/i, label: 'YouTube' },
+  { test: /instagram\.com/i, label: 'Instagram' },
+  { test: /linkedin\.com/i, label: 'LinkedIn' },
+  { test: /twitter\.com|x\.com/i, label: 'X' },
+];
+
+/**
+ * Footer a11y: name icon-only social links; normalize heading levels after main h1.
+ * Visual styles stay the same (footer CSS targets h2 + h4).
+ * @param {ParentNode} [root=document]
+ */
+export const enhanceFooterA11y = (root = document) => {
+  const footer = root.querySelector?.('footer') || (root.nodeName === 'FOOTER' ? root : null);
+  if (!footer?.querySelectorAll) return;
+
+  footer.querySelectorAll('h3, h4, h5, h6').forEach((heading) => {
+    if (heading.tagName === 'H2') return;
+    const replacement = document.createElement('h2');
+    [...heading.attributes].forEach((attr) => {
+      replacement.setAttribute(attr.name, attr.value);
+    });
+    replacement.innerHTML = heading.innerHTML;
+    heading.replaceWith(replacement);
+  });
+
+  footer.querySelectorAll('a[href]').forEach((anchor) => {
+    const text = (anchor.textContent || '').trim();
+    const aria = (anchor.getAttribute('aria-label') || '').trim();
+    if (text || aria) return;
+
+    const href = anchor.getAttribute('href') || '';
+    const match = SOCIAL_LINK_LABELS.find(({ test }) => test.test(href));
+    if (match) {
+      anchor.setAttribute('aria-label', match.label);
+      return;
+    }
+    if (anchor.querySelector('img, span.icon, svg')) {
+      anchor.setAttribute('aria-label', 'Link zewnętrzny');
+    }
+  });
+};
+
 /**
  * Runs page-level a11y / SEO / performance decorations once DOM is ready.
  */

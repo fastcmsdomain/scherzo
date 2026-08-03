@@ -24,6 +24,7 @@ import {
   enhanceDocument,
   decorateImages,
   hardenExternalLinks,
+  enhanceFooterA11y,
 } from '/scripts/optimize.js';
 
 const LCP_BLOCKS = ['hero', 'scroll-hero']; // LCP candidates: classic hero or home scroll-hero
@@ -251,6 +252,7 @@ async function loadLazy(doc) {
     ]);
     decorateImages(doc);
     hardenExternalLinks(doc);
+    enhanceFooterA11y(doc);
   }
 
   loadCSS(`${window.hlx.codeBasePath}/styles/lazy-styles.css`);

@@ -78,6 +78,7 @@ footer .section:last-child {
   padding-top: var(--space-12);
 }
 
+footer h2,
 footer h4 {
   margin: 0 0 var(--space-8);
   font-size: var(--body-font-size-xs);

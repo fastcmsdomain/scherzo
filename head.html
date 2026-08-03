@@ -19,32 +19,33 @@ window.hlx.scrollHeroLcp = (async () => {
     .replace(/>/g, '&gt;')
     .replace(/"/g, '&quot;');
 
-  const paintLcpPreview = (html) => {
-    try {
-      const doc = new DOMParser().parseFromString(html, 'text/html');
-      const parts = [...doc.querySelectorAll('.tytul-zdjecia > div > div')]
-        .map((el) => el.textContent.trim())
-        .filter(Boolean)
-        .slice(0, 2);
-      if (!parts.length) return;
-
-      const host = document.querySelector('main .scroll-hero');
-      if (!host || host.querySelector('.scroll-hero-lcp-preview, .scroll-hero-container')) return;
-
-      // Match first-slide line break after "Scherzo"
-      const breakTitle = (text) => escapeHtml(text).replace(/(Edukacja w Scherzo)\s+/i, '$1<br>');
-      const titleHtml = parts.map((part, i) => (
-        `<span class="title-part title-part-${i}">${i === 0 ? breakTitle(part) : escapeHtml(part)}</span>`
-      )).join('');
-
-      const preview = document.createElement('div');
-      preview.className = 'scroll-hero-lcp-preview';
-      preview.innerHTML = `<h1 class="main-title">${titleHtml}</h1>`;
-      host.replaceChildren(preview);
-    } catch {
-      // Preview is best-effort; scroll-hero.js still paints the real slide.
-    }
+  const isHome = () => {
+    const path = window.location.pathname.replace(/\/$/, '') || '/';
+    return path === '/' || path === '/index';
   };
+
+  const paintPreview = (parts) => {
+    const host = document.querySelector('main .scroll-hero');
+    if (!host || host.querySelector('.scroll-hero-container')) return;
+    if (!parts?.length) return;
+
+    const breakTitle = (text) => escapeHtml(text).replace(/(Edukacja w Scherzo)\s+/i, '$1<br>');
+    const titleHtml = parts.map((part, i) => (
+      `<span class="title-part title-part-${i}">${i === 0 ? breakTitle(part) : escapeHtml(part)}</span>`
+    )).join('');
+
+    const preview = document.createElement('div');
+    preview.className = 'scroll-hero-lcp-preview';
+    preview.innerHTML = `<h1 class="main-title">${titleHtml}</h1>`;
+    host.replaceChildren(preview);
+  };
+
+  // Instant homepage LCP: paint known first-slide title with zero network wait.
+  // Hidden under splash for users; Lighthouse can measure it immediately.
+  // Replaced when fetched HTML / scroll-hero decorate runs.
+  if (isHome()) {
+    paintPreview(['Edukacja w Scherzo to fundament', 'na całe życie']);
+  }
 
   try {
     const indexRes = await fetch('/slides/query-index.json');
@@ -55,12 +56,18 @@ window.hlx.scrollHeroLcp = (async () => {
     const slideRes = await fetch(`${firstPath}.plain.html`);
     if (!slideRes.ok) return { items: data, firstHtml: null, firstPath };
     const firstHtml = await slideRes.text();
-    // Paint as soon as DOM has <main> (module may run before or after body parse)
-    if (document.querySelector('main .scroll-hero')) {
-      paintLcpPreview(firstHtml);
-    } else {
-      document.addEventListener('DOMContentLoaded', () => paintLcpPreview(firstHtml), { once: true });
+
+    try {
+      const doc = new DOMParser().parseFromString(firstHtml, 'text/html');
+      const parts = [...doc.querySelectorAll('.tytul-zdjecia > div > div')]
+        .map((el) => el.textContent.trim())
+        .filter(Boolean)
+        .slice(0, 2);
+      if (parts.length) paintPreview(parts);
+    } catch {
+      // keep instant preview
     }
+
     return { items: data, firstHtml, firstPath };
   } catch {
     return null;

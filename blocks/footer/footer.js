@@ -1,22 +1,17 @@
 import { getMetadata } from '../../scripts/aem.js';
 import { loadFragment } from '../fragment/fragment.js';
 
-const FOOTER_BG_IMAGE = '/images/bg.jpg';
 const FOOTER_LOGO_IMAGE = '/images/logo.png';
 
 /**
- * Builds the full-viewport photo panel above the footer links: same
- * background/logo/tagline treatment as the hero's first slide, authored here
- * (not in the footer fragment) since it's a fixed brand element, not editable
- * per-page content.
+ * Builds the brand panel above the footer links (logo + tagline).
+ * Uses the footer's solid blue background — no photo panel.
  * @returns {HTMLElement}
  */
 const createFooterLogo = () => {
   const wrapper = document.createElement('div');
   wrapper.className = 'footer-logo';
   wrapper.innerHTML = `
-    <div class="footer-logo-bg" style="background-image: url('${FOOTER_BG_IMAGE}')" aria-hidden="true"></div>
-    <div class="footer-logo-overlay" aria-hidden="true"></div>
     <div class="footer-logo-content">
       <img class="footer-logo-image" src="${FOOTER_LOGO_IMAGE}" alt="Scherzo" loading="lazy" width="188" height="125">
       <p class="footer-logo-caption">Prywatna Szkoła Podstawowa i Przedszkole</p>

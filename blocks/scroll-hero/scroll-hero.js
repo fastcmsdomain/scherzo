@@ -1000,6 +1000,65 @@ const waitForPaint = () => new Promise((resolve) => {
 });
 
 /**
+ * Fetches remaining slides, builds nav, and boots GSAP — after first paint.
+ * @param {Object} ctx
+ * @param {HTMLElement} ctx.block
+ * @param {HTMLElement} ctx.container
+ * @param {Object[]} ctx.items
+ * @param {Object} ctx.firstSection
+ * @param {HTMLElement} ctx.navPlaceholder
+ */
+async function loadRemainingSlides({
+  block,
+  container,
+  items,
+  firstSection,
+  navPlaceholder,
+}) {
+  try {
+    const rest = (await Promise.all(items.slice(1).map(fetchSlideData))).filter(Boolean);
+    const sections = [firstSection, ...rest];
+    const total = sections.length;
+
+    sections.slice(1).forEach((section, i) => {
+      const el = createSection(section, i + 1, total);
+      // Keep off LCP until GSAP/fallback positions the cover stack
+      el.classList.add(CLASSES.lcpDeferred);
+      container.appendChild(el);
+    });
+
+    // Correct reserved height now that we know the real slide count
+    container.style.height = `${((total - 1) * CONFIG.cover.factor + 1) * 100}vh`;
+
+    clearDOMCache();
+    const nav = createProgressNav(sections);
+    navPlaceholder.replaceWith(nav);
+
+    setBackgrounds(sections);
+
+    // Delay GSAP until scroll or idle so cover positioning cannot inflate LCP.
+    const startMotion = async () => {
+      if (block.dataset.gsapStarted === 'true') return;
+      block.dataset.gsapStarted = 'true';
+      const gsapLoaded = await loadGSAPLibraries();
+      if (gsapLoaded && window.gsap && window.ScrollTrigger) {
+        initScrollAnimations();
+      } else {
+        initBasicScroll(block);
+      }
+    };
+
+    window.addEventListener('scroll', startMotion, { once: true, passive: true });
+    window.addEventListener('pointerdown', startMotion, { once: true, passive: true });
+    window.setTimeout(startMotion, 4000);
+  } catch (error) {
+    // eslint-disable-next-line no-console
+    console.error('scroll-hero: failed to load remaining slides', error);
+    initBasicScroll(block);
+  }
+}
+
+/**
  * Main block decorator — paints the first slide ASAP for LCP, then loads the rest.
  * @param {HTMLElement} block - Block element to decorate
  */
@@ -1082,63 +1141,4 @@ export default async function decorate(block) {
     firstSection: firstSection || { title: 'Section 1', path: '/slides/unknown' },
     navPlaceholder,
   });
-}
-
-/**
- * Fetches remaining slides, builds nav, and boots GSAP — after first paint.
- * @param {Object} ctx
- * @param {HTMLElement} ctx.block
- * @param {HTMLElement} ctx.container
- * @param {Object[]} ctx.items
- * @param {Object} ctx.firstSection
- * @param {HTMLElement} ctx.navPlaceholder
- */
-async function loadRemainingSlides({
-  block,
-  container,
-  items,
-  firstSection,
-  navPlaceholder,
-}) {
-  try {
-    const rest = (await Promise.all(items.slice(1).map(fetchSlideData))).filter(Boolean);
-    const sections = [firstSection, ...rest];
-    const total = sections.length;
-
-    sections.slice(1).forEach((section, i) => {
-      const el = createSection(section, i + 1, total);
-      // Keep off LCP until GSAP/fallback positions the cover stack
-      el.classList.add(CLASSES.lcpDeferred);
-      container.appendChild(el);
-    });
-
-    // Correct reserved height now that we know the real slide count
-    container.style.height = `${((total - 1) * CONFIG.cover.factor + 1) * 100}vh`;
-
-    clearDOMCache();
-    const nav = createProgressNav(sections);
-    navPlaceholder.replaceWith(nav);
-
-    setBackgrounds(sections);
-
-    // Delay GSAP until scroll or idle so cover positioning cannot inflate LCP.
-    const startMotion = async () => {
-      if (block.dataset.gsapStarted === 'true') return;
-      block.dataset.gsapStarted = 'true';
-      const gsapLoaded = await loadGSAPLibraries();
-      if (gsapLoaded && window.gsap && window.ScrollTrigger) {
-        initScrollAnimations();
-      } else {
-        initBasicScroll(block);
-      }
-    };
-
-    window.addEventListener('scroll', startMotion, { once: true, passive: true });
-    window.addEventListener('pointerdown', startMotion, { once: true, passive: true });
-    window.setTimeout(startMotion, 4000);
-  } catch (error) {
-    // eslint-disable-next-line no-console
-    console.error('scroll-hero: failed to load remaining slides', error);
-    initBasicScroll(block);
-  }
 }

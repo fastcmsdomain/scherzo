@@ -15,6 +15,11 @@ main .section:has(.scroll-hero-wrapper) {
   background: var(--color-dark-blue, #00203e);
 }
 
+/* Later slides stay out of LCP until GSAP/fallback positions the cover stack */
+.screen-section.is-lcp-deferred {
+  visibility: hidden;
+}
+
 /* Progress Navigation (floating left side) */
 .progress-nav {
   display: block;
@@ -83,8 +88,6 @@ main .section:has(.scroll-hero-wrapper) {
   -webkit-line-clamp: 2;
   white-space: nowrap;
   line-clamp: 2;
-  -webkit-box-orient: vertical;
-  box-orient: vertical;
   -webkit-box-orient: vertical;
 }
 
@@ -362,7 +365,9 @@ main .section:has(.scroll-hero-wrapper) {
   position: absolute;
   right: 0;
   text-align: center;
-  top: 50%;
+  /* Match GSAP first-slide resting anchor (titleBottomVh: 80) so loading
+     this stylesheet does not resize/move the LCP title. */
+  top: 80vh;
   transform: translateY(-50%);
   transform-origin: center center;
   z-index: 10;

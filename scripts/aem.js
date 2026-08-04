@@ -348,10 +348,15 @@ function createOptimizedPicture(
     } else {
       const img = document.createElement('img');
       img.setAttribute('loading', eager ? 'eager' : 'lazy');
+      img.setAttribute('decoding', 'async');
       if (eager) img.setAttribute('fetchpriority', 'high');
       img.setAttribute('alt', alt);
       picture.appendChild(img);
       img.setAttribute('src', `${pathname}?width=${br.width}&format=${ext}&optimize=medium`);
+      // Hint intrinsic size from the requested width to reduce CLS
+      if (br.width) {
+        img.setAttribute('width', br.width);
+      }
     }
   });
 
@@ -468,6 +473,11 @@ function decorateIcon(span, prefix = '', alt = '') {
   img.src = `${window.hlx.codeBasePath}${prefix}/icons/${iconName}.svg`;
   img.alt = alt;
   img.loading = 'lazy';
+  img.decoding = 'async';
+  // Decorative by default — callers pass alt when the icon conveys meaning
+  if (!alt) {
+    img.setAttribute('aria-hidden', 'true');
+  }
   span.append(img);
 }
 

@@ -198,8 +198,9 @@ function createCard(item) {
   const img = document.createElement('img');
   img.className = 'social-media-board-image';
   img.src = item.image;
-  img.alt = item.title;
+  img.alt = item.title || '';
   img.loading = 'lazy';
+  img.decoding = 'async';
   imageWrap.append(img);
 
   const logo = document.createElement('img');
@@ -207,6 +208,10 @@ function createCard(item) {
   logo.src = `/blocks/social-media-feeds/${item.source}-logo.png`;
   logo.alt = '';
   logo.setAttribute('aria-hidden', 'true');
+  logo.loading = 'lazy';
+  logo.decoding = 'async';
+  logo.width = 24;
+  logo.height = 24;
   imageWrap.append(logo);
 
   card.append(imageWrap);

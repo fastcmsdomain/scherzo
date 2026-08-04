@@ -1,12 +1,61 @@
 {
-    "total": 1,
-    "offset": 0,
-    "limit": 1,
-    "data": [
-      {
-        "Item": "$system:myname$",
-        "Value": "dev"
-      }
-    ],
-    ":type": "fallback"
-  }
+  "total": 13,
+  "offset": 0,
+  "limit": 13,
+  "data": [
+    {
+      "Item": "$company:name$",
+      "Value": "Zespół Placówek Oświatowych „Scherzo”"
+    },
+    {
+      "Item": "$company:legalname$",
+      "Value": "„Scherzo” - Prywatna Szkoła Podstawowa i Przedszkola w Krakowie - Olszanica."
+    },
+    {
+      "Item": "$company:email$",
+      "Value": "sekretariat@scherzo.krakow.pl"
+    },
+    {
+      "Item": "$company:telephone$",
+      "Value": "+48126238146"
+    },
+    {
+      "Item": "$company:url$",
+      "Value": "https://scherzo.krakow.pl/"
+    },
+    {
+      "Item": "$company:logo$",
+      "Value": "https://main--scherzo--fastcmsdomain.aem.live/media_1d3691d9326e03abcfed0640961934f514617ec72.png"
+    },
+    {
+      "Item": "$company:locality$",
+      "Value": "Kraków"
+    },
+    {
+      "Item": "$company:country$",
+      "Value": "PL"
+    },
+    {
+      "Item": "$company:postalcode$",
+      "Value": "30-298"
+    },
+    {
+      "Item": "$company:address$",
+      "Value": "ul. Korzeniaka 14, Olszanica"
+    },
+    {
+      "Item": "$system:version$",
+      "Value": "PlusPlus v 1.0.0.0"
+    },
+    {
+      "Item": "$system:projectname$",
+      "Value": "Scherzo"
+    },
+    {
+      "Item": "$company:longdescription$",
+      "Value": "Zespół Placówek Oświatowych „Scherzo” - Prywatna Szkoła Podstawowa i Przedszkola w Krakowie - Olszanica."
+    }
+  ],
+  "columns": ["Item", "Value"],
+  ":type": "sheet"
+}

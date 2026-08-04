@@ -158,7 +158,10 @@
 body {
   background-color: var(--color-dark-blue);
   color: var(--color-dark-blue);
-  display: none;
+
+  /* Keep body painted under the splash overlay so LCP can measure the early
+     hero title. FOUC is still covered by html::before until .appear. */
+  display: block;
   font-family: var(--body-font-family);
   font-size: var(--font-size-base);
   line-height: 1.6;
@@ -166,11 +169,52 @@ body {
   position: relative;
 }
 
+/* Skip link: visually hidden until keyboard focus — no layout change at rest */
+.skip-link {
+  background: var(--color-dark-blue, #00203e);
+  border: 2px solid var(--color-gold, #c9a227);
+  color: var(--color-white, #fff);
+  font-family: var(--body-font-family);
+  font-size: var(--font-size-sm, 0.875rem);
+  left: var(--space-8, 0.5rem);
+  padding: var(--space-8, 0.5rem) var(--space-16, 1rem);
+  position: absolute;
+  text-decoration: none;
+  top: -100px;
+  z-index: 10001;
+}
+
+.skip-link:focus,
+.skip-link:focus-visible {
+  outline: 2px solid var(--color-gold, #c9a227);
+  outline-offset: 2px;
+  top: var(--space-8, 0.5rem);
+}
+
+/* Clear keyboard focus without changing mouse hover look */
+:focus-visible {
+  outline: 2px solid var(--color-gold, #c9a227);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html:has(body.appear)::before,
+  html:has(body.appear)::after {
+    transition: none;
+  }
+}
+
 /* Page load overlay with logo - shows until body receives 'appear' class.
    Logo width mirrors header .nav-brand img (100px mobile / 128px from 900px). */
 html::before {
   background-color: var(--color-dark-blue);
+
+  /* WebP splash logo (~4.7KB) with PNG fallback for older browsers */
   background-image: url('/images/logo-load.png');
+  background-image: image-set(
+    url('/images/logo-load.webp') type('image/webp'),
+    url('/images/logo-load.png') type('image/png')
+  );
   background-position: center 42%;
   background-repeat: no-repeat;
   background-size: 150px auto;
@@ -193,6 +237,7 @@ html::before {
 
 /* Page load overlay text - sits below the logo above.
    Font styling mirrors header .nav-brand p (same font-family, size, transform). */
+
 /* html::after {
   color: var(--color-white);
   content: 'Prywatna Szkoła Podstawowa\A i Przedszkole';
@@ -222,6 +267,67 @@ html:has(body.appear)::after {
   visibility: hidden;
 }
 
+/* Critical first-slide LCP shell (painted from head before scroll-hero.css).
+   Must match GSAP resting state (title at 80vh) so later decorate/GSAP does
+   not resize the LCP node. */
+.scroll-hero .scroll-hero-container {
+  background-color: var(--color-dark-blue, #00203e);
+  min-height: 100vh;
+  position: relative;
+  width: 100%;
+}
+
+.scroll-hero .screen-section.is-lcp-first {
+  background-color: var(--color-dark-blue, #00203e);
+  height: 100vh;
+  height: 100dvh;
+  left: 0;
+  overflow: hidden;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 1;
+}
+
+.scroll-hero .screen-section.is-lcp-first .screen,
+.scroll-hero .screen-section.is-lcp-first .screen-inner {
+  height: 100%;
+  position: relative;
+  width: 100%;
+}
+
+.scroll-hero .screen-section.is-lcp-first .strapline {
+  color: var(--color-white, #fff);
+  left: 0;
+  margin: 0 auto;
+  position: absolute;
+  right: 0;
+  text-align: center;
+  top: 80vh;
+  transform: translateY(-50%);
+  width: 90%;
+  z-index: 10;
+}
+
+.scroll-hero .screen-section.is-lcp-first .main-title {
+  font-family: var(--body-font-family);
+  font-size: 32px;
+  font-weight: normal;
+  line-height: 1.2;
+  margin: 0;
+  text-shadow: 0 0 18px rgb(0 0 0 / 25%);
+}
+
+.scroll-hero .screen-section.is-lcp-first .title-part {
+  display: block;
+  margin: 5px 0;
+}
+
+.scroll-hero .screen-section.is-lcp-first .title-part-0 {
+  font-family: var(--semi-bold-font-family), var(--body-font-family);
+  font-size: clamp(1.75rem, 4.5vw, 2.5rem);
+}
+
 /* body::before {
   background: linear-gradient(
     180deg,
@@ -237,9 +343,7 @@ html:has(body.appear)::after {
   z-index: 2;
   } */
 
-body.appear {
-  display: block;
-}
+/* Splash dismissal is handled by html:has(body.appear)::before */
 
 /* header {
   height: var(--nav-height);

@@ -1,1 +1,15 @@
-/* add global styles that can be loaded post LCP here */
+/* Post-LCP global styles — a11y helpers that do not change resting visuals */
+
+/* Ensure images never overflow their containers (CLS / layout stability) */
+img,
+picture {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Prefer reduced motion: tame infinite nav progress animation */
+@media (prefers-reduced-motion: reduce) {
+  .progress-nav li[class]::after {
+    animation: none;
+  }
+}

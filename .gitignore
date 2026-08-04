@@ -14,3 +14,7 @@ query-index.json
 # Playwright output
 test-results/
 playwright-report/
+
+# Local Lighthouse runs
+lighthouse-report.json
+lighthouse-report.html

@@ -20,19 +20,26 @@ import {
   loadCSS,
 } from '/scripts/aem.js';
 
-import { } from '/plusplus/src/siteConfig.js';
+import {
+  enhanceDocument,
+  decorateImages,
+  hardenExternalLinks,
+  enhanceFooterA11y,
+} from '/scripts/optimize.js';
 
-const LCP_BLOCKS = ['hero']; // add your LCP blocks to the list
+const LCP_BLOCKS = ['hero', 'scroll-hero']; // LCP candidates: classic hero or home scroll-hero
 const AUDIENCES = {
   mobile: () => window.innerWidth < 600,
   desktop: () => window.innerWidth >= 600,
   // define your custom audiences here as needed
 };
 
-// Loading splash (logo overlay defined in styles.css) must stay visible at
-// least this long so the page doesn't flash unstyled/unloaded content.
-const MIN_SPLASH_DURATION_MS = 800;
+// No artificial splash delay — first paint / LCP should not wait on a timer.
+const MIN_SPLASH_DURATION_MS = 0;
 const pageLoadStart = Date.now();
+
+// Stub until siteConfig finishes (loaded after first paint so it never blocks LCP)
+window.cmsplus = window.cmsplus || { debug: () => {} };
 
 /**
  * Resolves once at least `minMs` have elapsed since `start`.
@@ -179,6 +186,8 @@ export function decorateMain(main) {
   buildAutoBlocks(main);
   decorateSections(main);
   decorateBlocks(main);
+  decorateImages(main);
+  hardenExternalLinks(main);
 
   // Add global Enter key handling for blocks
   addGlobalEnterKeyHandling(main);
@@ -190,7 +199,7 @@ export function decorateMain(main) {
  */
 async function loadEager(doc) {
   window.cmsplus.debug('loadEager');
-  document.documentElement.lang = 'en';
+  enhanceDocument();
   decorateTemplateAndTheme();
   if (getMetadata('breadcrumbs').toLowerCase() === 'true') {
     document.body.classList.add('breadcrumbs-enabled');
@@ -207,19 +216,18 @@ async function loadEager(doc) {
   decorateTemplateAndTheme();
   const main = doc.querySelector('main');
   if (main) {
+    // Fonts first — homepage LCP is often the hero title text
+    try {
+      loadFonts();
+    } catch (e) {
+      // do nothing
+    }
     decorateMain(main);
+    // Load LCP block (first scroll-hero slide) WHILE splash still covers the page,
+    // then reveal — so LCP paints immediately on appear instead of after a blank gap.
+    await waitForLCP(LCP_BLOCKS);
     await waitForMinDuration(pageLoadStart, MIN_SPLASH_DURATION_MS);
     document.body.classList.add('appear');
-    await waitForLCP(LCP_BLOCKS);
-  }
-
-  try {
-    /* if desktop (proxy for fast connection) or fonts already loaded, load fonts.css */
-    if (window.innerWidth >= 900 || sessionStorage.getItem('fonts-loaded')) {
-      loadFonts();
-    }
-  } catch (e) {
-    // do nothing
   }
 }
 
@@ -231,13 +239,20 @@ async function loadLazy(doc) {
   window.cmsplus.debug('loadLazy');
   const main = doc.querySelector('main');
   await loadBlocks(main);
+  decorateImages(doc);
+  hardenExternalLinks(doc);
   autolinkModals(doc); // added for modal handling, see adobe docs
   const { hash } = window.location;
   const element = hash ? doc.getElementById(hash.substring(1)) : false;
   if (hash && element) element.scrollIntoView();
   if (!window.hlx.suppressFrame) { // added for sidekick library - see block party
-    loadHeader(doc.querySelector('header'));
-    loadFooter(doc.querySelector('footer'));
+    await Promise.all([
+      loadHeader(doc.querySelector('header')),
+      loadFooter(doc.querySelector('footer')),
+    ]);
+    decorateImages(doc);
+    hardenExternalLinks(doc);
+    enhanceFooterA11y(doc);
   }
 
   loadCSS(`${window.hlx.codeBasePath}/styles/lazy-styles.css`);
@@ -275,7 +290,9 @@ async function loadPage() {
     document.body.querySelector('header').remove();
     document.body.querySelector('footer').remove();
   }
+  // Paint the page first — siteConfig (variables, JSON-LD) must not block LCP
   await loadEager(document);
+  await import('/plusplus/src/siteConfig.js');
   await loadLazy(document);
   loadDelayed();
 }

@@ -1,4 +1,104 @@
+<meta charset="utf-8"/>
+<script>document.documentElement.lang=document.documentElement.lang||'pl';</script>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
+<meta name="theme-color" content="#00203e"/>
+<meta name="color-scheme" content="light"/>
+<meta name="format-detection" content="telephone=no"/>
+<link rel="icon" href="/favicon.ico" sizes="any"/>
+<link rel="preload" href="/images/logo-load.webp" as="image" type="image/webp"/>
+<link rel="preload" href="/fonts/Montserrat-SemiBold.woff" as="font" type="font/woff" crossorigin/>
+<link rel="preload" href="/fonts/Montserrat-Regular.woff" as="font" type="font/woff" crossorigin/>
+<link rel="stylesheet" href="/styles/fonts.css"/>
+<!-- Warm + paint scroll-hero LCP title in parallel with aem.js / scripts.js. -->
+<script type="module">
+window.hlx = window.hlx || {};
+window.hlx.scrollHeroLcp = (async () => {
+  const escapeHtml = (str) => String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
+
+  const isHome = () => {
+    const path = window.location.pathname.replace(/\/$/, '') || '/';
+    return path === '/' || path === '/index';
+  };
+
+  /**
+   * Paint first-slide title using the SAME DOM/CSS shape as scroll-hero so later
+   * decorate/GSAP does not resize the LCP node (which would reset LCP time).
+   */
+  const paintPreview = (parts) => {
+    const host = document.querySelector('main .scroll-hero');
+    if (!host || host.querySelector('.scroll-hero-container')) return;
+    if (!parts?.length) return;
+
+    const breakTitle = (text) => escapeHtml(text).replace(/(Edukacja w Scherzo)\s+/i, '$1<br>');
+    const titleHtml = parts.map((part, i) => (
+      `<span class="title-part title-part-${i}">${i === 0 ? breakTitle(part) : escapeHtml(part)}</span>`
+    )).join('');
+
+    host.innerHTML = `
+      <div class="scroll-hero-container" role="region" aria-label="Prezentacja szkoły">
+        <div class="screen-section is-lcp-first" role="region" aria-label="Section 1">
+          <div class="screen">
+            <div class="screen-inner">
+              <div class="background" aria-hidden="true"></div>
+              <div class="strapline">
+                <h1 class="main-title">${titleHtml}</h1>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>`;
+  };
+
+  if (isHome()) {
+    paintPreview(['Edukacja w Scherzo to fundament', 'na całe życie']);
+  }
+
+  try {
+    const indexRes = await fetch('/slides/query-index.json');
+    if (!indexRes.ok) return null;
+    const { data } = await indexRes.json();
+    if (!Array.isArray(data) || !data[0]?.path) return null;
+    const firstPath = data[0].path;
+    const slideRes = await fetch(`${firstPath}.plain.html`);
+    if (!slideRes.ok) return { items: data, firstHtml: null, firstPath };
+    const firstHtml = await slideRes.text();
+
+    try {
+      const doc = new DOMParser().parseFromString(firstHtml, 'text/html');
+      const parts = [...doc.querySelectorAll('.tytul-zdjecia > div > div')]
+        .map((el) => el.textContent.trim())
+        .filter(Boolean)
+        .slice(0, 2);
+      // Only refresh text content — never replace the LCP h1/span nodes
+      const title = document.querySelector('main .scroll-hero h1.main-title');
+      if (title && parts.length) {
+        const breakTitle = (text) => escapeHtml(text).replace(/(Edukacja w Scherzo)\s+/i, '$1<br>');
+        parts.forEach((part, i) => {
+          let span = title.querySelector(`.title-part-${i}`);
+          if (!span) {
+            span = document.createElement('span');
+            span.className = `title-part title-part-${i}`;
+            title.appendChild(span);
+          }
+          span.innerHTML = i === 0 ? breakTitle(part) : escapeHtml(part);
+        });
+      } else if (parts.length) {
+        paintPreview(parts);
+      }
+    } catch {
+      // keep instant preview
+    }
+
+    return { items: data, firstHtml, firstPath };
+  } catch {
+    return null;
+  }
+})();
+</script>
 <script src="/scripts/aem.js" type="module"></script>
 <script src="/scripts/scripts.js" type="module"></script>
 <link rel="stylesheet" href="/styles/styles.css"/>

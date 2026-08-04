@@ -158,6 +158,7 @@
 body {
   background-color: var(--color-dark-blue);
   color: var(--color-dark-blue);
+
   /* Keep body painted under the splash overlay so LCP can measure the early
      hero title. FOUC is still covered by html::before until .appear. */
   display: block;
@@ -207,6 +208,7 @@ body {
    Logo width mirrors header .nav-brand img (100px mobile / 128px from 900px). */
 html::before {
   background-color: var(--color-dark-blue);
+
   /* WebP splash logo (~4.7KB) with PNG fallback for older browsers */
   background-image: url('/images/logo-load.png');
   background-image: image-set(

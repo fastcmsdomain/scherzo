@@ -17,6 +17,7 @@
 .contact-info {
   padding: 1rem;
   text-align: center;
+  color: var(--color-white);
 }
 
 .contact-info h2 {
@@ -27,6 +28,19 @@
 .contact-info p {
   line-height: 1.6;
   margin-bottom: 1rem;
+}
+
+.contact-info p > a,
+.contact-info p > a.button:any-link {
+  all: unset;
+  color: var(--color-gold);
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.contact-info p > a:hover,
+.contact-info p > a.button:any-link:hover {
+  color: var(--color-gold-hover);
 }
 
 .contact-map {

@@ -5,7 +5,7 @@ const FOOTER_LOGO_IMAGE = '/images/logo.png';
 
 /**
  * Builds the brand panel above the footer links (logo + tagline).
- * Uses the footer's solid blue background — no photo panel.
+ * Brand panel with background image and logo/tagline content.
  * @returns {HTMLElement}
  */
 const createFooterLogo = () => {

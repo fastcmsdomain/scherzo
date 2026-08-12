@@ -203,6 +203,10 @@ footer .button-container a.button {
    links section can extend below the fold and stay scrollable. */
 .footer-logo {
   align-items: center;
+  background-image: url('/images/bg.jpg');
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
   color: var(--color-white);
   display: flex;
   flex: 1 1 auto;

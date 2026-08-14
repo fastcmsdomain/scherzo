@@ -1,286 +1,148 @@
 {
-  "generatedAt": "2026-08-14T10:51:20.262Z",
-  "errors": [],
+  "generatedAt": "2026-08-14T11:38:49.490Z",
+  "errors": [
+    "YouTube: fetch failed"
+  ],
   "items": [
     {
       "type": "facebook",
       "title": "🌿☀️ Wakacje w pełni! ☀️🌿\n\nChoć w naszej szkole i przedszkolu jest teraz nieco ciszej, nasz ogród w",
-      "image": "https://scontent-iad3-1.xx.fbcdn.net/v/t39.30808-6/766890179_2120875892084677_5082226676116394693_n.jpg?stp=cp1_dst-jpg_p720x720_tt6&_nc_cat=108&ccb=1-7&_nc_sid=833d8c&_nc_ohc=gGgSvVvclmgQ7kNvwGbcsE4&_nc_oc=Adog3BYMpadnYJM6TzQ1s9nf4fyNkENAQWP1FdQHwBPhG3oPeIrE0vF9wjnplShXFJo&_nc_zt=23&_nc_ht=scontent-iad3-1.xx&edm=AKIiGfEEAAAA&_nc_gid=xmkQeEjceDoia2CQs0V32w&_nc_tpa=Q5bMBQLU78qeebgDmnXnrBntqRcSGnf7Bl1YXi2z1JgE42L04viOaJAPhVQrvIrYs6dixpzQ7yPSJwgb&oh=00_AQE8zhuIlpSHt-7XdKD7bLTN_6KO6pQ75AcbbNejAdDogw&oe=6A84BF3C",
+      "image": "https://scontent-lga3-3.xx.fbcdn.net/v/t39.30808-6/766890179_2120875892084677_5082226676116394693_n.jpg?stp=cp1_dst-jpg_p720x720_tt6&_nc_cat=108&ccb=1-7&_nc_sid=833d8c&_nc_ohc=gGgSvVvclmgQ7kNvwGZa7W5&_nc_oc=Adox8f2TD5pmY-IUua_-A9VuKD9MAnnwdjAn4SB5uGW1lXuBX_2PG5PAcUPYlF-ldnE&_nc_zt=23&_nc_ht=scontent-lga3-3.xx&edm=AKIiGfEEAAAA&_nc_gid=9vXzdshY21HnRWYaiT5nPA&_nc_tpa=Q5bMBQLxB69-qwJGloVKinUb9EaL4pLOcqpMaW9zohwb-PsFMZ5w4pl5DsTJ9j1oegjMogWw-Yu-C6EW&oh=00_AQHU4mtjAJjXJU78zWkhLQAoLIDNEJIaz_D2_9gy4Vo9LQ&oe=6A84BF3C",
       "date": "2026-08-04T11:30:15.000Z",
       "link": "https://www.facebook.com/433485486688506/posts/433485486688506_2120906885414911"
     },
     {
       "type": "facebook",
       "title": "🌞 Wakacyjne wspomnienia z Gorców! 🏔️\n\nZa nami niezapomniany wyjazd wakacyjny dla uczniów klas 2–4 ",
-      "image": "https://scontent-iad3-1.xx.fbcdn.net/v/t39.30808-6/747753146_2101325337373066_2468500971053137260_n.jpg?stp=cp1_dst-jpg_s960x960_tt6&_nc_cat=108&ccb=1-7&_nc_sid=833d8c&_nc_ohc=TqoFeD3K-kgQ7kNvwGswvsE&_nc_oc=Ado4oMpev56aJ6HkuYuiAIaxgzCSJP4U2lsGpZZl3D470E1wFk1RISPDRNIXcliUJiY&_nc_zt=23&_nc_ht=scontent-iad3-1.xx&edm=AKIiGfEEAAAA&_nc_gid=xmkQeEjceDoia2CQs0V32w&_nc_tpa=Q5bMBQIEUT-1iTnlcqtLwvzWR-_U078zMGmVJxKsYrGCPoYi_G5YyBAYF6AnqXvkpAKiquS8lqlI1WxS&oh=00_AQGkwaj6X70HOaYPS5JO_dyb11lutenoytXyQQPyj4BA6w&oe=6A84E15D",
+      "image": "https://scontent-lga3-3.xx.fbcdn.net/v/t39.30808-6/747753146_2101325337373066_2468500971053137260_n.jpg?stp=cp1_dst-jpg_s960x960_tt6&_nc_cat=108&ccb=1-7&_nc_sid=833d8c&_nc_ohc=TqoFeD3K-kgQ7kNvwHK7CRE&_nc_oc=AdrDM5nI8t9R92uIrGEr2LL2uDENvgAunYW3H4MowXtQ5ymZtKyfSKTGBJ-OKqFcp8Q&_nc_zt=23&_nc_ht=scontent-lga3-3.xx&edm=AKIiGfEEAAAA&_nc_gid=9vXzdshY21HnRWYaiT5nPA&_nc_tpa=Q5bMBQLv0iElVX_CsLNnI5pZDUcj0JpxOxoXsuRsmn0zwSSl-ZGtQzNU2Jm4F9vWmeaeiXcdHN4zTe7p&oh=00_AQFiG6D0WOMjxyrv_SWABPzKnBgAZOaSnPkBbU8L4mMqPQ&oe=6A84E15D",
       "date": "2026-07-13T11:02:22.000Z",
       "link": "https://www.facebook.com/433485486688506/posts/433485486688506_2101325627373037"
     },
     {
       "type": "facebook",
       "title": "☀️ Wakacje w Scherzo trwają w najlepsze! 💙\n\nChoć rok szkolny już się zakończył, u nas nadal nie bra",
-      "image": "https://scontent-iad3-1.xx.fbcdn.net/v/t39.30808-6/743294505_2099073890931544_6254970522864648415_n.jpg?stp=dst-jpg_p720x720_tt6&_nc_cat=104&ccb=1-7&_nc_sid=833d8c&_nc_ohc=aAf5md-FSGYQ7kNvwFalewU&_nc_oc=AdqhV8wiM55RpmKfwLLK6L3-crRD3H2Bih5Of48zxrTADXFZBdaYbG2Ie-Cx5nkVhXw&_nc_zt=23&_nc_ht=scontent-iad3-1.xx&edm=AKIiGfEEAAAA&_nc_gid=xmkQeEjceDoia2CQs0V32w&_nc_tpa=Q5bMBQIFvSps69NZn2_Avq4225t_xTxupJRY-fvYsdthEXl1YckXCBYfRf16lDZCPHgptnintzsbeeIX&oh=00_AQFF9A4sWc5pcZFx9zFBOVvh1HvLQZtkG8arRdm4KNOAeg&oe=6A84C551",
+      "image": "https://scontent-lga3-3.xx.fbcdn.net/v/t39.30808-6/743294505_2099073890931544_6254970522864648415_n.jpg?stp=dst-jpg_p720x720_tt6&_nc_cat=104&ccb=1-7&_nc_sid=833d8c&_nc_ohc=aAf5md-FSGYQ7kNvwH3ow7_&_nc_oc=AdplNMcRgEtjCOFUD5vk_n543H7tqdVdyTTqWEQJrx5rsofzXyUiajcpLmrJMI7QKMs&_nc_zt=23&_nc_ht=scontent-lga3-3.xx&edm=AKIiGfEEAAAA&_nc_gid=9vXzdshY21HnRWYaiT5nPA&_nc_tpa=Q5bMBQIh5zwuLHd1_dHKAngsB8PxjEWalwZ5qaDo5msyFd-95tn0uduBT6-hP5iMTG3SnK9jl78hAwF8&oh=00_AQESZKov_6fwZiAL2XSu95h-4oECMtEbbf_kynpouGFTvQ&oe=6A84C551",
       "date": "2026-07-10T17:30:09.000Z",
       "link": "https://www.facebook.com/433485486688506/posts/433485486688506_2099090827596517"
     },
     {
       "type": "facebook",
       "title": "Pisze o nas Gazeta Krakowska - jesteśmy wśród najlepszych szkół podstawowych Krakowie! 💪👍",
-      "image": "https://scontent-iad3-1.xx.fbcdn.net/v/t39.30808-6/739578693_2096044621234471_2233529472975050377_n.jpg?stp=dst-jpg_p720x720_tt6&_nc_cat=104&ccb=1-7&_nc_sid=833d8c&_nc_ohc=v_d1Sp7ihFYQ7kNvwHZLjSZ&_nc_oc=AdoeyYat_TKrABpmHWpaAY7dIG8w_0suQozixs7z10MTKf2G6b2gLRmNJSnHs8tD2Us&_nc_zt=23&_nc_ht=scontent-iad3-1.xx&edm=AKIiGfEEAAAA&_nc_gid=xmkQeEjceDoia2CQs0V32w&_nc_tpa=Q5bMBQJjBoFPkty5mZGRlsbLQTVvjJqkoAwOa-t1P_7s3GPMiDXZL-OTmOheLGOSxB4StL6LEM2uCJFW&oh=00_AQHI6i6GCqCMqCs6VMqybspwbUSaoakO-Xl0iRDadv8HxQ&oe=6A84B1C6",
+      "image": "https://scontent-lga3-3.xx.fbcdn.net/v/t39.30808-6/739578693_2096044621234471_2233529472975050377_n.jpg?stp=dst-jpg_p720x720_tt6&_nc_cat=104&ccb=1-7&_nc_sid=833d8c&_nc_ohc=v_d1Sp7ihFYQ7kNvwGgJpx2&_nc_oc=Ado-35IxU9cLpGIDmCLEPBUMWhn5NRnKNTbkkE2ZPIffCks1iwp44bf_n6Uoa6JrUvQ&_nc_zt=23&_nc_ht=scontent-lga3-3.xx&edm=AKIiGfEEAAAA&_nc_gid=9vXzdshY21HnRWYaiT5nPA&_nc_tpa=Q5bMBQLMvnJwGwQHJ_b1vzT70GDCH0ZwMyRPPzxGO5gXMJOE6Umh6omLNiuNytsVLtVnhMZKZkjtdcVD&oh=00_AQHnzi_RGbTVqiaPdiiVG_MQfZSiZ7-TMnvf1_Bww2zxzA&oe=6A84EA06",
       "date": "2026-07-07T09:12:04.000Z",
       "link": "https://www.facebook.com/433485486688506/posts/433485486688506_2096044691234464"
     },
     {
       "type": "facebook",
       "title": "✨ Zakończenie roku przedszkolnego za nami! ✨🌼\n\nTo był kolejny piękny dzień pełen uśmiechów, wzrusze",
-      "image": "https://scontent-iad6-1.xx.fbcdn.net/v/t15.5256-10/741693588_1595402252234815_7122386635221443611_n.jpg?_nc_cat=102&ccb=1-7&_nc_sid=5fad0e&_nc_ohc=lqPeVw8yi2oQ7kNvwFMIB1F&_nc_oc=Adrj4kEWItZMNUf0SzToV3GXB8lu1T17AclcOT9izPqnWUfk2w-G2CDpD_lmGgsQB_0&_nc_zt=23&_nc_ht=scontent-iad6-1.xx&edm=AKIiGfEEAAAA&_nc_gid=xmkQeEjceDoia2CQs0V32w&_nc_tpa=Q5bMBQJHvbYPKtVlGI_gSzGEyBW1YAEvf1xc8BuqtTCFgufdFcWDj6tYE1zt0P78rxS_lIuBNU7KzwZi&oh=00_AQHCJ4ljO7V4ezjYc4Y6phdPimLzeCmQl5CbAvPKz1nI3A&oe=6A84DAAF",
+      "image": "https://scontent-lga3-3.xx.fbcdn.net/v/t15.5256-10/741693588_1595402252234815_7122386635221443611_n.jpg?_nc_cat=102&ccb=1-7&_nc_sid=5fad0e&_nc_ohc=lqPeVw8yi2oQ7kNvwHuPLo2&_nc_oc=AdrM-O6Kq0V_3ZvL1DKwubbvAzxGEMiZbfm4l1fi91NxakfMIyIFzCXxxXlueLjHG-k&_nc_zt=23&_nc_ht=scontent-lga3-3.xx&edm=AKIiGfEEAAAA&_nc_gid=9vXzdshY21HnRWYaiT5nPA&_nc_tpa=Q5bMBQIw2dfHbbeP9Hla1zTR0VFnUBcyX7DXIR8JUO9rPl3ed3V_YOaU6mD657mVJj5vOrqqpdfoh77X&oh=00_AQEuxhCnAl9DIyENNmCqXvH7jZ_QVYTw_gb54YCoil6pXw&oe=6A84DAAF",
       "date": "2026-07-06T19:31:10.000Z",
       "link": "https://www.facebook.com/433485486688506/posts/433485486688506_2095550231283910"
     },
     {
       "type": "facebook",
       "title": "🎉 Mamy powody do dumy!\n\nNasi ósmoklasiści osiągnęli bardzo wysokie wyniki egzaminu ósmoklasisty 202",
-      "image": "https://scontent-iad3-1.xx.fbcdn.net/v/t39.30808-6/736044925_2092309784941288_2570999457863638659_n.jpg?stp=dst-jpg_s720x720_tt6&_nc_cat=101&ccb=1-7&_nc_sid=833d8c&_nc_ohc=yRSRmRQ2IjMQ7kNvwE0mwIK&_nc_oc=Adr2bbVGD2KiiW1HC-1HWDcmzhFz4GpXL_9-MeKUFwvHhdItmeUuPgN3hzArmXXaxis&_nc_zt=23&_nc_ht=scontent-iad3-1.xx&edm=AKIiGfEEAAAA&_nc_gid=xmkQeEjceDoia2CQs0V32w&_nc_tpa=Q5bMBQKCjjP8VeyybyoXZRWt-4Pyt8qzJYEhda01o7JdWVDqXMjdxbTlPH4Om0Tq89-Ih9fIxFIf7Gbz&oh=00_AQHZ44dRSsOMDzgJGJquNDRF8xLXX86_GgeJ2WOCpVSKiA&oe=6A84DC59",
+      "image": "https://scontent-lga3-2.xx.fbcdn.net/v/t39.30808-6/736044925_2092309784941288_2570999457863638659_n.jpg?stp=dst-jpg_s720x720_tt6&_nc_cat=101&ccb=1-7&_nc_sid=833d8c&_nc_ohc=yRSRmRQ2IjMQ7kNvwEVjQkU&_nc_oc=AdoZhi5qIW0LqrqkkBh09V1L9EGrbzGQICwc1a96EuiTZIJmh098wb4PBSYCWs6pV8E&_nc_zt=23&_nc_ht=scontent-lga3-2.xx&edm=AKIiGfEEAAAA&_nc_gid=9vXzdshY21HnRWYaiT5nPA&_nc_tpa=Q5bMBQLDJS3WRr2YoUxIzvlSPaXpWz1e-kcQBz6cTy9Vlflzc3Pta7upxHJEgmRRimSG3ak_--C3IMac&oh=00_AQFGUe6gVafQX8xVeQHBmVtHAJ29nGnKJkbd5efyDyTfVA&oe=6A84DC59",
       "date": "2026-07-03T10:02:36.000Z",
       "link": "https://www.facebook.com/433485486688506/posts/433485486688506_2092309891607944"
     },
     {
       "type": "facebook",
       "title": "W piątek wspólnie zakończyliśmy kolejny rok pełen nauki, wyzwań i pięknych chwil. ❤️🎓\n\nGratulujemy ",
-      "image": "https://scontent-iad3-2.xx.fbcdn.net/v/t51.82787-10/730381806_18029332652824181_6351098373925711028_n.jpg?_nc_cat=111&ccb=1-7&_nc_sid=5fad0e&_nc_ohc=lv_JA0VWRcEQ7kNvwGt8OXw&_nc_oc=AdqitkouqE3ZsygXkzpHxgYxwSisVwmSYcZQV_HV5SQyzAM8rqxKnyWJ2r9CNhWQQ7E&_nc_zt=23&_nc_ht=scontent-iad3-2.xx&edm=AKIiGfEEAAAA&_nc_gid=xmkQeEjceDoia2CQs0V32w&_nc_tpa=Q5bMBQKpqWArrld6vM9rIXSIflp98HyNCSZK_Oh44VLVnBwQqJ0izYZO6s_ZLo8amDXT11Vn82H4uSLs&oh=00_AQEJf7X7YKRC5Aew9RyRxjskZZEJZa_zm-z5XcO2fgL9Tg&oe=6A84D827",
+      "image": "https://scontent-lga3-1.xx.fbcdn.net/v/t51.82787-10/730381806_18029332652824181_6351098373925711028_n.jpg?_nc_cat=111&ccb=1-7&_nc_sid=5fad0e&_nc_ohc=lv_JA0VWRcEQ7kNvwFYxDKq&_nc_oc=AdpUAqmbdZglo0pOYotfiuDE2eLGo7BthK50BBlYQm4hwUV99igcGhhgBmZ1CSyKzVk&_nc_zt=23&_nc_ht=scontent-lga3-1.xx&edm=AKIiGfEEAAAA&_nc_gid=9vXzdshY21HnRWYaiT5nPA&_nc_tpa=Q5bMBQL0nNLyyW5x4plJoQrN6oa052FVIDH3l05-Jzwxz984BJeuSbKBr_EOXgD8HB0VKI8Z__tePHx0&oh=00_AQHphFBAK0uKYsWVq5JbaFyoSJ8rMnUhfDA9o89uK4Xo_A&oe=6A84D827",
       "date": "2026-06-29T15:39:07.000Z",
       "link": "https://www.facebook.com/433485486688506/posts/433485486688506_2088788695293397"
     },
     {
       "type": "facebook",
       "title": "🥾⛰️ Przed zakończeniem roku szkolnego nie mogło zabraknąć naszych tradycyjnych rajdów! 💚\n\nSzkoła M",
-      "image": "https://scontent-iad6-1.xx.fbcdn.net/v/t39.30808-6/730420889_2086205238885076_1624299310959529883_n.jpg?stp=dst-jpg_p720x720_tt6&_nc_cat=102&ccb=1-7&_nc_sid=833d8c&_nc_ohc=qjJALYXLfaIQ7kNvwEOwkZh&_nc_oc=AdrglKbuyxOM_Kut5rGIY_lBlsEQWoC00z0-9sl0vVPXWfu4YiqSefGPvGbm6Ri7Pj4&_nc_zt=23&_nc_ht=scontent-iad6-1.xx&edm=AKIiGfEEAAAA&_nc_gid=xmkQeEjceDoia2CQs0V32w&_nc_tpa=Q5bMBQLFYatGeRQQgIn-60sNGzIQuy0PnsTNMEHZWoKdYqDbNiUTsamtVdrSpKoaULGduNGLrZHr8RvF&oh=00_AQGeraJU9gmD_uHjtA6LiRzdHMCICR9aamZbych8rooM9Q&oe=6A84E06F",
+      "image": "https://scontent-lga3-3.xx.fbcdn.net/v/t39.30808-6/730420889_2086205238885076_1624299310959529883_n.jpg?stp=dst-jpg_p720x720_tt6&_nc_cat=102&ccb=1-7&_nc_sid=833d8c&_nc_ohc=qjJALYXLfaIQ7kNvwHGBQH6&_nc_oc=AdrVAchTL-DTZ_E19MANPIDSQHTjSpdXZ8P9a1KFEQwQ3yMMaKM7pC6XeViW2TBSipQ&_nc_zt=23&_nc_ht=scontent-lga3-3.xx&edm=AKIiGfEEAAAA&_nc_gid=9vXzdshY21HnRWYaiT5nPA&_nc_tpa=Q5bMBQIaNawC8FnHlIHAJWmgHKphqlC4mtTfvaUosSW6217OStdwSdTSGAQkTMPpLuCm84e20nrc5Q5b&oh=00_AQH-f__MTxQXcVL05h8VvHbnd2p5_7VjV1wrY1majq02Dw&oe=6A84E06F",
       "date": "2026-06-26T19:01:24.000Z",
       "link": "https://www.facebook.com/433485486688506/posts/433485486688506_2086205345551732"
     },
     {
       "type": "facebook",
       "title": "Za nami intensywny czas pełen projektów, wycieczek i inspirujących doświadczeń! 🚍📚✨\n\nNasi uczniowi",
-      "image": "https://scontent-iad3-1.xx.fbcdn.net/v/t15.5256-10/731702616_1560898498807218_5390666746191041364_n.jpg?_nc_cat=104&ccb=1-7&_nc_sid=5fad0e&_nc_ohc=vw0pr0ihWysQ7kNvwFB1XLW&_nc_oc=AdpwhdlXKMjOsBO0Pul6VCPy0XlHrbo96ioTu3DLrFg0KFIIWhwkZht5G2d6RkBiOxc&_nc_zt=23&_nc_ht=scontent-iad3-1.xx&edm=AKIiGfEEAAAA&_nc_gid=xmkQeEjceDoia2CQs0V32w&_nc_tpa=Q5bMBQKMDK3PlwfqDiZptQitTtMv4AyLwuQmradeHVdA3sOCVno9yPUUqdt_s5x3cjDWIEe1KjI2v4z8&oh=00_AQGHXrxb7-oJfAesdlajDcKPVuFqQtC95uXGz9QbFO0PAw&oe=6A84CD5F",
+      "image": "https://scontent-lga3-3.xx.fbcdn.net/v/t15.5256-10/731702616_1560898498807218_5390666746191041364_n.jpg?_nc_cat=104&ccb=1-7&_nc_sid=5fad0e&_nc_ohc=vw0pr0ihWysQ7kNvwG4biiP&_nc_oc=Adr_2x-3-aaNIRB5HFfAyeQSOqvzE5-h6FbiQzh7V2FDHJhDAOBbiCFkeFjgY1kCCpI&_nc_zt=23&_nc_ht=scontent-lga3-3.xx&edm=AKIiGfEEAAAA&_nc_gid=9vXzdshY21HnRWYaiT5nPA&_nc_tpa=Q5bMBQLSWQzBij1O1t2qYxqTcwovmeeT9yPvfAr5KuqPnirS6bIcwELEhjPUoTvabv46xT9Ss304WKdB&oh=00_AQGjzOcc9YpEkzG2X9_zLPbgtXuRgUoe0xHCz8Q5gULWow&oe=6A84CD5F",
       "date": "2026-06-25T18:30:41.000Z",
       "link": "https://www.facebook.com/433485486688506/posts/433485486688506_2085267872312146"
     },
     {
       "type": "facebook",
       "title": "🙏🏻 Tradycyjnie, przed zakończeniem roku szkolnego, cała nasza społeczność spotkała się na wspólnej",
-      "image": "https://scontent-iad3-1.xx.fbcdn.net/v/t39.30808-6/728912926_2084838372355096_3560922929812310641_n.jpg?stp=cp1_dst-jpg_p720x720_tt6&_nc_cat=110&ccb=1-7&_nc_sid=833d8c&_nc_ohc=P0nM8bnEjbQQ7kNvwFAaV-l&_nc_oc=AdrHE5YRvnQ279hFvIXyooEEWEtjhkf1XiLZKIUstDu_j_IcA1TJZyXQ1gfS73MS-Jk&_nc_zt=23&_nc_ht=scontent-iad3-1.xx&edm=AKIiGfEEAAAA&_nc_gid=xmkQeEjceDoia2CQs0V32w&_nc_tpa=Q5bMBQKT8iXx7LRGD1RaSXPUsZpZA_9tIPlQenZZzvvLW-VGkBp2raBvN2thcpBigRRDToP59J7WjE0e&oh=00_AQFQ3bfoP8dlbG4pB4h1fJY1u3ljTHeOS9w6MeOOfxR2wg&oe=6A84B483",
+      "image": "https://scontent-lga3-1.xx.fbcdn.net/v/t39.30808-6/728912926_2084838372355096_3560922929812310641_n.jpg?stp=cp1_dst-jpg_p720x720_tt6&_nc_cat=110&ccb=1-7&_nc_sid=833d8c&_nc_ohc=P0nM8bnEjbQQ7kNvwFTmGuM&_nc_oc=Adr4d5EJsQ5DVkfw0EvpXRz5X9MHs9ziri0k_n2zzHSHXYIuXmS-F6vhe_wFp6VyOlI&_nc_zt=23&_nc_ht=scontent-lga3-1.xx&edm=AKIiGfEEAAAA&_nc_gid=9vXzdshY21HnRWYaiT5nPA&_nc_tpa=Q5bMBQJLvNKaM5sq8QegZIOLvhe9PtBXg3qteCFd28PmaO3HCODm-BVoinG5gg-gtQa9FxbZVjskUKe_&oh=00_AQFO9AbEyrz1DMhG8reEknvROvH7u0JFMl1-3ZJIozjbzg&oe=6A84ECC3",
       "date": "2026-06-25T08:24:19.000Z",
       "link": "https://www.facebook.com/433485486688506/posts/433485486688506_2084838425688424"
     },
     {
       "type": "facebook",
       "title": "❤️ Dziś świętujemy wyjątkowych bohaterów codzienności – naszych Kochanych Tatusiów! ❤️\n\nDziękujemy z",
-      "image": "https://scontent-iad6-1.xx.fbcdn.net/v/t39.30808-6/730451324_2083443815827885_5593284317594152438_n.jpg?stp=cp1_dst-jpg_p720x720_tt6&_nc_cat=102&ccb=1-7&_nc_sid=833d8c&_nc_ohc=x4dHW7CaSOgQ7kNvwF3qVaw&_nc_oc=AdobbJ7rcSXgidGQg-KzZhKoovR5EiZkG9Ad_UtMd1EbH4mTktFWHFKRoKklJqSYMEc&_nc_zt=23&_nc_ht=scontent-iad6-1.xx&edm=AKIiGfEEAAAA&_nc_gid=xmkQeEjceDoia2CQs0V32w&_nc_tpa=Q5bMBQKwnXmqLQvWzQfuAqH7Ov0MmjAXk8hsY3wrUH-jBRV2_vXaiQKrfmgDH0Ca_dmDBRW9jtatilYj&oh=00_AQEwlMe58-e71KC9E-IV9t2WI4rlsZisatr3psAj4eyTpQ&oe=6A84D54B",
+      "image": "https://scontent-lga3-3.xx.fbcdn.net/v/t39.30808-6/730451324_2083443815827885_5593284317594152438_n.jpg?stp=cp1_dst-jpg_p720x720_tt6&_nc_cat=102&ccb=1-7&_nc_sid=833d8c&_nc_ohc=x4dHW7CaSOgQ7kNvwHmbRAz&_nc_oc=AdqYtKoWmubfUA56i8AzwnNhzaM8sGAmhaFLes3BMAwvOFPirtJXX6TcbSuMXPBJ5KE&_nc_zt=23&_nc_ht=scontent-lga3-3.xx&edm=AKIiGfEEAAAA&_nc_gid=9vXzdshY21HnRWYaiT5nPA&_nc_tpa=Q5bMBQLOjHh4v4pNtlHh_SE5sjLlm7DbRhFQIFrWz3Etpyp8nKnX1KLorCwj_VQ9Ot3MhI0K7u7BnIGa&oh=00_AQHdQ22F9-r9RE9wDlM-_4SDBc06uHgbIC6wXbpTMAMqCw&oe=6A84D54B",
       "date": "2026-06-23T17:58:06.000Z",
       "link": "https://www.facebook.com/433485486688506/posts/433485486688506_2083443945827872"
     },
     {
       "type": "facebook",
       "title": "💙🏆 Nagroda za zwycięstwo smakuje najlepiej!\n\nZwycięska drużyna Niebieskich ze Szkoły Młodszej, któ",
-      "image": "https://scontent-iad3-1.xx.fbcdn.net/v/t39.30808-6/728400443_2081643766007890_3834391470256595098_n.jpg?stp=dst-jpg_p720x720_tt6&_nc_cat=101&ccb=1-7&_nc_sid=833d8c&_nc_ohc=H56NH9OdpJIQ7kNvwFTIkkW&_nc_oc=AdqPnPMvjVO1teW_gP8R7Q4vj4zwjCjLGRkYpS9syKOCaltTQxaYinDLQ94T9a7CWF4&_nc_zt=23&_nc_ht=scontent-iad3-1.xx&edm=AKIiGfEEAAAA&_nc_gid=xmkQeEjceDoia2CQs0V32w&_nc_tpa=Q5bMBQLmyoyGsXcPwwTzKlqkgHpNEmG70f0DgOW1C6w_OgyeKmjqcPZjFQjM8CVblLDv1XjJ2IcCc7Io&oh=00_AQE0SnwiJq06yKqZCBrzTZnfbzEh3g6aBK-djWruLKbckA&oe=6A84B29F",
+      "image": "https://scontent-lga3-2.xx.fbcdn.net/v/t39.30808-6/728400443_2081643766007890_3834391470256595098_n.jpg?stp=dst-jpg_p720x720_tt6&_nc_cat=101&ccb=1-7&_nc_sid=833d8c&_nc_ohc=H56NH9OdpJIQ7kNvwFYvDKa&_nc_oc=AdpSi2FrlWrLaRgWmnWwiBAaVWq2SwpFlcU2ABwcx1-T5u3aAkoKcOdNfVnDR75-D7s&_nc_zt=23&_nc_ht=scontent-lga3-2.xx&edm=AKIiGfEEAAAA&_nc_gid=9vXzdshY21HnRWYaiT5nPA&_nc_tpa=Q5bMBQIcYIMFX3b-f2--DU_H3M5KcNNjNHHOZWb7djUiFg7FMUn827kw98kU8q_Y48ISMDCNrG7yzZfM&oh=00_AQF_NvCijD7BD65gHyANvsnlmKm9Au_bgq-vL5as-HU0GA&oe=6A84EADF",
       "date": "2026-06-21T18:53:57.000Z",
       "link": "https://www.facebook.com/433485486688506/posts/433485486688506_2081643812674552"
     },
     {
       "type": "facebook",
       "title": "🎭🎶 Za nami kolejne wyjątkowe z\nakończenie Topiku! 🎶🎭\n\nJak co trymestr, mieliśmy ogromną przyjemn",
-      "image": "https://scontent-iad3-2.xx.fbcdn.net/v/t15.5256-10/727979501_26642631898748090_2784831702444616731_n.jpg?_nc_cat=103&ccb=1-7&_nc_sid=5fad0e&_nc_ohc=D23oGBpf1uwQ7kNvwEnMm0v&_nc_oc=AdqLPFX5HR7WpmkGK8Tp2k3MLVcr79FQ7xhLa3xmREvcB8HWcFemwrtzZYFL088B0ps&_nc_zt=23&_nc_ht=scontent-iad3-2.xx&edm=AKIiGfEEAAAA&_nc_gid=xmkQeEjceDoia2CQs0V32w&_nc_tpa=Q5bMBQKf0pSTun89vGS4YcgZwlA8YhcNMKPS9YPh-WYoCYgJIKSmvcoe3xWZ-triHmvRNugYZqfDJYX0&oh=00_AQHY1CkUrabsCMeQ83f5x2GpyYQa-AJOGoFfWD0UVfi97Q&oe=6A84CBB1",
+      "image": "https://scontent-lga3-1.xx.fbcdn.net/v/t15.5256-10/727979501_26642631898748090_2784831702444616731_n.jpg?_nc_cat=103&ccb=1-7&_nc_sid=5fad0e&_nc_ohc=D23oGBpf1uwQ7kNvwE8BOBs&_nc_oc=AdpshNCFQTcRv3E43x82sZTpI6pRAVuEVr0aTVpFBKVQBIzOW8dB2ZDCGFwUMsHvufo&_nc_zt=23&_nc_ht=scontent-lga3-1.xx&edm=AKIiGfEEAAAA&_nc_gid=9vXzdshY21HnRWYaiT5nPA&_nc_tpa=Q5bMBQJeGaKz-QiePyx-1eMn87F2_tgvAAGni613A0o2wAiR84lBuVAcQhpjGeJncwBMeDLKVfGIGMZ7&oh=00_AQEndzbBgbMCE1shFlq4Q7jTQRtXatoqDPCICPC98zxN8w&oe=6A84CBB1",
       "date": "2026-06-20T13:20:08.000Z",
       "link": "https://www.facebook.com/433485486688506/posts/433485486688506_2080464246125842"
     },
     {
       "type": "facebook",
       "title": "W szkolnym Klubie Ogrodnika nie brakuje pracy, uśmiechu i satysfakcji. Siejemy, podlewamy, pielimy i",
-      "image": "https://scontent-iad3-1.xx.fbcdn.net/v/t15.5256-10/725050152_1021470886942819_2511780584590258120_n.jpg?_nc_cat=110&ccb=1-7&_nc_sid=5fad0e&_nc_ohc=eTXleSD_NHwQ7kNvwF7Sm_U&_nc_oc=AdrgHS1Mpo1Y6yUI1botxPI9FrXSLZQJLUvVoOy3onVzWJt3vplMrce4S-SZGoN8_hg&_nc_zt=23&_nc_ht=scontent-iad3-1.xx&edm=AKIiGfEEAAAA&_nc_gid=xmkQeEjceDoia2CQs0V32w&_nc_tpa=Q5bMBQIqBI1a7Zc6hLXdmdEo33ehlEUNoMpp96XZhHdWfbdt4o6BNXutgAtnOdflNVMyA8UNUsQsHJ0n&oh=00_AQFwjKo6NrmSroBAHsoBaSOwfuM4zTmeg2hdCUh_dW9w3Q&oe=6A84BBDF",
+      "image": "https://scontent-lga3-1.xx.fbcdn.net/v/t15.5256-10/725050152_1021470886942819_2511780584590258120_n.jpg?_nc_cat=110&ccb=1-7&_nc_sid=5fad0e&_nc_ohc=eTXleSD_NHwQ7kNvwFBqfTX&_nc_oc=AdpSdVcOYEpdwBFF8ukdEATfLR7uKvYkUb0u7cC86-UxWPvmVpcxY1xkT5R2obdY91g&_nc_zt=23&_nc_ht=scontent-lga3-1.xx&edm=AKIiGfEEAAAA&_nc_gid=9vXzdshY21HnRWYaiT5nPA&_nc_tpa=Q5bMBQIRcIupQKHD5wUszAAswuqafu8YxMhETfSJy8K0L3icekSdScS3T7qWOTOGHaXrslogBMFE9YZb&oh=00_AQEngTjSHaDJGotv7DWXKeweorGYd1YrmxwbTMxES4qxlQ&oe=6A84BBDF",
       "date": "2026-06-18T19:54:32.000Z",
       "link": "https://www.facebook.com/433485486688506/posts/433485486688506_2078972892941644"
     },
     {
       "type": "facebook",
       "title": "🏆 Dziś swoją nagrodę odebrała zwycięska drużyna III trymestru Starszej Szkoły!\nW ramach wygranej cz",
-      "image": "https://scontent-iad3-2.xx.fbcdn.net/v/t15.5256-10/726925129_1544416573837732_2484953485480415303_n.jpg?_nc_cat=103&ccb=1-7&_nc_sid=5fad0e&_nc_ohc=-4BiNwOvsa4Q7kNvwE9riSr&_nc_oc=AdqS_X8y0ppL7rH7nHGi-UKFXzGvYjy4U27gG1u3_NSict3_5RKtTlqQ1XQxMXGjlXY&_nc_zt=23&_nc_ht=scontent-iad3-2.xx&edm=AKIiGfEEAAAA&_nc_gid=xmkQeEjceDoia2CQs0V32w&_nc_tpa=Q5bMBQKk_rmPjAkkvGXJ5CRTW63NBkGNqw-3tuklBAZ4fEuyN7ppHkhZrShmjvZEsRsicnniE1fMZfjr&oh=00_AQHRBuXci2xDihD4b0vYToKt5vkLBOMHU9Yqas0zcoftqQ&oe=6A84D3F3",
+      "image": "https://scontent-lga3-1.xx.fbcdn.net/v/t15.5256-10/726925129_1544416573837732_2484953485480415303_n.jpg?_nc_cat=103&ccb=1-7&_nc_sid=5fad0e&_nc_ohc=-4BiNwOvsa4Q7kNvwH6eFqq&_nc_oc=AdqUGYLTGRKX88i2snPX5v06XAEjJx4a2BhbXHx8m_-WsJMSX9_5--cTXkc7kT5_Isg&_nc_zt=23&_nc_ht=scontent-lga3-1.xx&edm=AKIiGfEEAAAA&_nc_gid=9vXzdshY21HnRWYaiT5nPA&_nc_tpa=Q5bMBQKGrDNm8H2PyJet2bpa1HWTKebl8K2uNyaxVhIGnD1nfUWv2b7CIc9K2wh4YKKT2fl_v45zt2-k&oh=00_AQErRjuAkRB4hge7QvpkPwPDS_ZjCtetZ0LSfGtgOpgVNA&oe=6A84D3F3",
       "date": "2026-06-17T17:30:06.000Z",
       "link": "https://www.facebook.com/433485486688506/posts/433485486688506_2077949583043975"
     },
     {
       "type": "facebook",
       "title": "🐄🌾🚜 Nasze dzielne 5-latki wybrały się na wyjątkową wycieczkę do Agroturystyka u Misia w Porębie W",
-      "image": "https://scontent-iad3-1.xx.fbcdn.net/v/t51.71878-10/723040903_1988586918684321_3857712846314056720_n.jpg?_nc_cat=101&ccb=1-7&_nc_sid=5fad0e&_nc_ohc=Omx31XtvJO0Q7kNvwE_w6Wb&_nc_oc=AdobfuxV3PzhtkuT3vgFQBk028lpNsq5y4TgoX5Cmpgd12BtlXLeb2CwrZHat5V48lE&_nc_zt=23&_nc_ht=scontent-iad3-1.xx&edm=AKIiGfEEAAAA&_nc_gid=xmkQeEjceDoia2CQs0V32w&_nc_tpa=Q5bMBQKA8cGVnsaFSz_IIrA2jb5F9CAMZZNnCkHNE7Qnv_qmP2H7lT9ipOoeTQooEeBpluj6KGHx11ey&oh=00_AQFMbLRHoALm_aDZSCM2pmyQLUB-DQF0YN5l-VFUxfUWrw&oe=6A84C82F",
+      "image": "https://scontent-lga3-2.xx.fbcdn.net/v/t51.71878-10/723040903_1988586918684321_3857712846314056720_n.jpg?_nc_cat=101&ccb=1-7&_nc_sid=5fad0e&_nc_ohc=Omx31XtvJO0Q7kNvwHNu14C&_nc_oc=AdoZNi_uwY0Ee5vin15K3ItmysyV4D6rqbcUptFCEPX5jdbAQY-HOr8Wq1zJISlL4AI&_nc_zt=23&_nc_ht=scontent-lga3-2.xx&edm=AKIiGfEEAAAA&_nc_gid=9vXzdshY21HnRWYaiT5nPA&_nc_tpa=Q5bMBQL0RvbTRB5BfxlDN5PzPmpKPdHUJtBB94uht48KUXxx9KthvYc2VDNiloOqhnvj8WY9e1nz6Yui&oh=00_AQFcuZaDispnc8vJiljw06P41vRe1a7MeccN-6lvE-4zgQ&oe=6A84C82F",
       "date": "2026-06-16T19:53:57.000Z",
       "link": "https://www.facebook.com/433485486688506/posts/433485486688506_2077131116459155"
     },
     {
       "type": "facebook",
       "title": "🎹✨ Artyści z naszego Przedszkola Scherzo mieli okazję zaprezentować swoje umiejętności podczas wyją",
-      "image": "https://scontent-iad6-1.xx.fbcdn.net/v/t39.30808-6/724534354_2076104873228446_2970029534721936570_n.jpg?stp=cp1_dst-jpg_p720x720_tt6&_nc_cat=100&ccb=1-7&_nc_sid=833d8c&_nc_ohc=0vQF8lIt_OEQ7kNvwHNdRb0&_nc_oc=AdrGMrmDM5cy1xTyd8nFwS3oIJkX8DRsaz3Nnf_whkeMmgng9Hlfo2M3ynwrHC2ooP4&_nc_zt=23&_nc_ht=scontent-iad6-1.xx&edm=AKIiGfEEAAAA&_nc_gid=xmkQeEjceDoia2CQs0V32w&_nc_tpa=Q5bMBQKWBwTUwd1ETWHLubw7lqcTFYMz1E2QJ5xIUYmGO_Pmgn54D7ZbFkyWZtC6K04HDFuK851T1bt-&oh=00_AQEQk8bA_SMLVaQ6Uv370ACkqvw6IVRsuc5j1eD1rI7P_w&oe=6A84C9AE",
+      "image": "https://scontent-lga3-2.xx.fbcdn.net/v/t39.30808-6/724534354_2076104873228446_2970029534721936570_n.jpg?stp=cp1_dst-jpg_p720x720_tt6&_nc_cat=100&ccb=1-7&_nc_sid=833d8c&_nc_ohc=0vQF8lIt_OEQ7kNvwE5UgUW&_nc_oc=AdpEWynWEVAG3-80AasTzmJPZasqFzDJS_lW0GmTvi6rq90yRswnFvMqslItPX7jZMo&_nc_zt=23&_nc_ht=scontent-lga3-2.xx&edm=AKIiGfEEAAAA&_nc_gid=9vXzdshY21HnRWYaiT5nPA&_nc_tpa=Q5bMBQK8tk3hMZWL3OhDfIR96gNXYOJyFkSBXn8Fyg72ezz3jQLLDs8hQKgF0n2xxMB0GnfD3d-5Bbp6&oh=00_AQH9rg5p7Re7SbBwm3sPYSvlHtkBHoDU8_NgE_X-Zc2I2g&oe=6A84C9AE",
       "date": "2026-06-15T18:14:01.000Z",
       "link": "https://www.facebook.com/433485486688506/posts/433485486688506_2076105033228430"
     },
     {
       "type": "facebook",
       "title": "🎂💐 W ubiegły piątek świętowaliśmy urodziny naszej Pani Dyrektor!\n\nTo już tradycja w Scherzo, że wa",
-      "image": "https://scontent-iad3-1.xx.fbcdn.net/v/t51.71878-10/719873446_1528156705564591_6887286510341656659_n.jpg?_nc_cat=110&ccb=1-7&_nc_sid=5fad0e&_nc_ohc=JNyEzvWtr0UQ7kNvwEdHGFw&_nc_oc=AdqrHj13YY6bAUig1KE42eGiPoADz-yV54m-rYiySeKAWVX_oaftaGZGapFc-zAGqHw&_nc_zt=23&_nc_ht=scontent-iad3-1.xx&edm=AKIiGfEEAAAA&_nc_gid=xmkQeEjceDoia2CQs0V32w&_nc_tpa=Q5bMBQKNzn-HVrBcGZvjCGFbMmBwNAmuCBpOTYnFagX8bnQYXwyiGOvLRgbh-QYfSnGv426XnMlnoUh2&oh=00_AQFb2BNhzgd54zIm8PTQbOEZlanzu2Ul6jEw74DiWsLcDA&oe=6A84C403",
+      "image": "https://scontent-lga3-1.xx.fbcdn.net/v/t51.71878-10/719873446_1528156705564591_6887286510341656659_n.jpg?_nc_cat=110&ccb=1-7&_nc_sid=5fad0e&_nc_ohc=JNyEzvWtr0UQ7kNvwHDAiW6&_nc_oc=Adpz7FsIl2SpgQh9DI4b1yFu21GqSt-XNZOml_odpSo5fuh0-kZ-5PcA7S8fp2vlqvs&_nc_zt=23&_nc_ht=scontent-lga3-1.xx&edm=AKIiGfEEAAAA&_nc_gid=9vXzdshY21HnRWYaiT5nPA&_nc_tpa=Q5bMBQIsBWArYBLeQQeZtORtHY8Ca_SO3jU2QeX8w2fENVGFiTEPEIwwpUFLJQBafVKh_A4Gc8hLv58h&oh=00_AQE2xeGa3QzmKMBQ3VD4Mi_LrjywPXT9DQ-FLp-7pzRgPw&oe=6A84C403",
       "date": "2026-06-14T22:36:23.000Z",
       "link": "https://www.facebook.com/433485486688506/posts/433485486688506_2075332793305654"
     },
     {
       "type": "facebook",
       "title": "🎭✨ Szkoła Starsza po raz kolejny miała okazję uczestniczyć w trymestralnym wyjściu artystycznym. Ty",
-      "image": "https://scontent-iad3-1.xx.fbcdn.net/v/t39.30808-6/721266323_2071686733670260_2811465263453733757_n.jpg?stp=cp1_dst-jpg_p720x720_tt6&_nc_cat=108&ccb=1-7&_nc_sid=833d8c&_nc_ohc=BSnKR1rdxqsQ7kNvwH4Uvud&_nc_oc=AdofOqz1tqGjkROyfQxp3ykCZ0MdPwnDU_rxTWum51pDUm9QS16Q3QOlMfElz5PrhYs&_nc_zt=23&_nc_ht=scontent-iad3-1.xx&edm=AKIiGfEEAAAA&_nc_gid=xmkQeEjceDoia2CQs0V32w&_nc_tpa=Q5bMBQLs0Sk1jBRK-GarOIFxqyE1eJ4zQ-4KrAzB_9dVd43ZK5hv2ehVXAObBOSRhtUv72eg5a3CCFA1&oh=00_AQHlxndYV3UZXex8KA7Nn09e9V6DwxGZkwFvRmVMCfNqsA&oe=6A84E0CE",
+      "image": "https://scontent-lga3-3.xx.fbcdn.net/v/t39.30808-6/721266323_2071686733670260_2811465263453733757_n.jpg?stp=cp1_dst-jpg_p720x720_tt6&_nc_cat=108&ccb=1-7&_nc_sid=833d8c&_nc_ohc=BSnKR1rdxqsQ7kNvwHLLE9C&_nc_oc=AdqRwQd6Rd-nvd4gcUsXZ_5cKq52w23TP375CfEH40hDZJCgcOgiltUHZscLmLvtXPE&_nc_zt=23&_nc_ht=scontent-lga3-3.xx&edm=AKIiGfEEAAAA&_nc_gid=9vXzdshY21HnRWYaiT5nPA&_nc_tpa=Q5bMBQICVsXmuHwbo3e06i2jEsTaEMD_lnHnXL1rYa_idcHuQqLATo2hHWBa0egsXISEvwiV8ZS5m1BT&oh=00_AQFR1Q8OVzVslWNwuwIPqZCeQDZIEf_Ky3-1ghYvuxh6rQ&oe=6A84E0CE",
       "date": "2026-06-10T19:49:28.000Z",
       "link": "https://www.facebook.com/433485486688506/posts/433485486688506_2071686843670249"
     },
     {
       "type": "facebook",
       "title": "🐉✨ W minioną niedzielę Kraków ponownie opanowały smoki!\n\nJako Scherzo z dumą wzięliśmy udział w Par",
-      "image": "https://scontent-iad6-1.xx.fbcdn.net/v/t51.82787-10/722521027_18026668619824181_5150163497346419067_n.jpg?_nc_cat=100&ccb=1-7&_nc_sid=5fad0e&_nc_ohc=gLNTNX4Tr1MQ7kNvwGurxo8&_nc_oc=AdovI-tvbWiZsS5m1Z-Lh58czJbUUf9HHv94FVyrO6Q6NpJyI8Or0NymwZQjoAyqz4w&_nc_zt=23&_nc_ht=scontent-iad6-1.xx&edm=AKIiGfEEAAAA&_nc_gid=xmkQeEjceDoia2CQs0V32w&_nc_tpa=Q5bMBQJmsZDxejTBCC6H-CuGi2-YoWRNNSMsT-LFJxXtlaKVk5wI_zkImNQd1jVb8O2pFH8FeNbhLc5D&oh=00_AQGZKGYFCLsC9fmjY3qnA7HmYZ4mKQuB7QMtQ-v-jLcjfw&oe=6A84BF60",
+      "image": "https://scontent-lga3-2.xx.fbcdn.net/v/t51.82787-10/722521027_18026668619824181_5150163497346419067_n.jpg?_nc_cat=100&ccb=1-7&_nc_sid=5fad0e&_nc_ohc=gLNTNX4Tr1MQ7kNvwHPiAog&_nc_oc=AdqYrzxmKwXFaOtOo_1m4gYHTQOZ_exgZUP5ehFC_la6PG-3w3-VTAO7cmxvaUJ1I20&_nc_zt=23&_nc_ht=scontent-lga3-2.xx&edm=AKIiGfEEAAAA&_nc_gid=9vXzdshY21HnRWYaiT5nPA&_nc_tpa=Q5bMBQLfdPWVINOgBjqrlpFygTyZiZkAw8LTWGJK2-YtZ2yBvAa-IXeKxW0GnBs-42YyYqhABCMRYDda&oh=00_AQEmh0e6GJMwcSLdKDFICJke-s62lFyjJgAh68tqOFVOhQ&oe=6A84BF60",
       "date": "2026-06-10T17:50:47.000Z",
       "link": "https://www.facebook.com/433485486688506/posts/433485486688506_2071610630344537"
-    },
-    {
-      "type": "youtube",
-      "title": "Szkoła i Przedszkole Scherzo - &quot;Święty czas&quot; -Teledysk świąteczny 2025 r.",
-      "image": "https://i.ytimg.com/vi/m5A9GtpYo0w/mqdefault.jpg",
-      "date": "2025-12-19T16:00:06.000Z",
-      "link": "https://www.youtube.com/watch?v=m5A9GtpYo0w"
-    },
-    {
-      "type": "youtube",
-      "title": "Szkoła i Przedszkole Scherzo - &quot;Wysyłam prośbę swą&quot; Teledysk świąteczny 2024r.",
-      "image": "https://i.ytimg.com/vi/MSOmZL7Z1pY/mqdefault.jpg",
-      "date": "2024-12-20T18:01:21.000Z",
-      "link": "https://www.youtube.com/watch?v=MSOmZL7Z1pY"
-    },
-    {
-      "type": "youtube",
-      "title": "Nasz dzień w Przedszkolu SCHERZO",
-      "image": "https://i.ytimg.com/vi/C2jXCyJoqco/mqdefault.jpg",
-      "date": "2024-05-20T14:02:31.000Z",
-      "link": "https://www.youtube.com/watch?v=C2jXCyJoqco"
-    },
-    {
-      "type": "youtube",
-      "title": "Szkoła Scherzo - &quot;Zaśnieżone Miasta&quot; Teledysk świąteczny 2023",
-      "image": "https://i.ytimg.com/vi/AJUUJUIv5D4/mqdefault.jpg",
-      "date": "2023-12-22T12:30:08.000Z",
-      "link": "https://www.youtube.com/watch?v=AJUUJUIv5D4"
-    },
-    {
-      "type": "youtube",
-      "title": "Charytatywny kiermasz wielkanocny 2023",
-      "image": "https://i.ytimg.com/vi/jvK8rBzFGBg/mqdefault.jpg",
-      "date": "2023-04-07T14:34:30.000Z",
-      "link": "https://www.youtube.com/watch?v=jvK8rBzFGBg"
-    },
-    {
-      "type": "youtube",
-      "title": "Warsztaty Wielkanocne 2022",
-      "image": "https://i.ytimg.com/vi/xyV2XCYbVe8/mqdefault.jpg",
-      "date": "2022-04-13T19:48:03.000Z",
-      "link": "https://www.youtube.com/watch?v=xyV2XCYbVe8"
-    },
-    {
-      "type": "youtube",
-      "title": "Szkoła Scherzo - życzenia świąteczne",
-      "image": "https://i.ytimg.com/vi/aql_CnobH_I/mqdefault.jpg",
-      "date": "2021-12-22T14:08:23.000Z",
-      "link": "https://www.youtube.com/watch?v=aql_CnobH_I"
-    },
-    {
-      "type": "youtube",
-      "title": "Szkoła Scherzo - pokaz korelacyjny na zakończenie I trymestru w Szkole Starszej",
-      "image": "https://i.ytimg.com/vi/OdSOoVDHNF4/mqdefault.jpg",
-      "date": "2021-12-15T13:34:45.000Z",
-      "link": "https://www.youtube.com/watch?v=OdSOoVDHNF4"
-    },
-    {
-      "type": "youtube",
-      "title": "Szkoła Scherzo - poznaj nasze przedszkole",
-      "image": "https://i.ytimg.com/vi/FtrWRj-NYOU/mqdefault.jpg",
-      "date": "2021-05-18T08:36:43.000Z",
-      "link": "https://www.youtube.com/watch?v=FtrWRj-NYOU"
-    },
-    {
-      "type": "youtube",
-      "title": "Szkoła Scherzo - spektakl &quot;Paweł i Gaweł&quot; w wykonaniu klasy 1",
-      "image": "https://i.ytimg.com/vi/b6NFAAU_Dmk/mqdefault.jpg",
-      "date": "2021-04-14T09:01:26.000Z",
-      "link": "https://www.youtube.com/watch?v=b6NFAAU_Dmk"
-    },
-    {
-      "type": "youtube",
-      "title": "Szkoła Scherzo - Życzenia Wielkanocne",
-      "image": "https://i.ytimg.com/vi/M1KcLSLaeNY/mqdefault.jpg",
-      "date": "2021-03-31T09:28:19.000Z",
-      "link": "https://www.youtube.com/watch?v=M1KcLSLaeNY"
-    },
-    {
-      "type": "youtube",
-      "title": "Szkoła Scherzo - Jajko i kura, czyli awantura",
-      "image": "https://i.ytimg.com/vi/YDXwfiygq6E/mqdefault.jpg",
-      "date": "2021-03-09T13:20:11.000Z",
-      "link": "https://www.youtube.com/watch?v=YDXwfiygq6E"
-    },
-    {
-      "type": "youtube",
-      "title": "Szkoła Scherzo - Nasz dzień w klasie 0",
-      "image": "https://i.ytimg.com/vi/y8AvZfX_5Uw/mqdefault.jpg",
-      "date": "2020-12-08T10:34:29.000Z",
-      "link": "https://www.youtube.com/watch?v=y8AvZfX_5Uw"
-    },
-    {
-      "type": "youtube",
-      "title": "Szkoła Scherzo - świętowanie zakończenia topiku klasy 4",
-      "image": "https://i.ytimg.com/vi/qzCID7BkOXA/mqdefault.jpg",
-      "date": "2020-11-30T14:50:10.000Z",
-      "link": "https://www.youtube.com/watch?v=qzCID7BkOXA"
-    },
-    {
-      "type": "youtube",
-      "title": "Szkoła Scherzo - świętowanie zakończenia topiku klasy 3",
-      "image": "https://i.ytimg.com/vi/I4ZvaT4ZDLk/mqdefault.jpg",
-      "date": "2020-11-30T14:48:07.000Z",
-      "link": "https://www.youtube.com/watch?v=I4ZvaT4ZDLk"
-    },
-    {
-      "type": "youtube",
-      "title": "Szkoła Scherzo - świętowanie zakończenia topiku klasy 2",
-      "image": "https://i.ytimg.com/vi/tPAOH9YleDw/mqdefault.jpg",
-      "date": "2020-11-30T14:46:28.000Z",
-      "link": "https://www.youtube.com/watch?v=tPAOH9YleDw"
-    },
-    {
-      "type": "youtube",
-      "title": "Szkoła Scherzo - świętowanie zakończenia topiku w klasie 1",
-      "image": "https://i.ytimg.com/vi/qzwfAkd5i7E/mqdefault.jpg",
-      "date": "2020-11-30T14:37:01.000Z",
-      "link": "https://www.youtube.com/watch?v=qzwfAkd5i7E"
-    },
-    {
-      "type": "youtube",
-      "title": "Szkoła SCHERZO Świętowanie zakończenia topiku - klasa 0",
-      "image": "https://i.ytimg.com/vi/__t2-dztTb0/mqdefault.jpg",
-      "date": "2020-11-30T14:34:14.000Z",
-      "link": "https://www.youtube.com/watch?v=__t2-dztTb0"
-    },
-    {
-      "type": "youtube",
-      "title": "Szkoła Scherzo - Wirtualny Spacer",
-      "image": "https://i.ytimg.com/vi/SPAJ4v706BE/mqdefault.jpg",
-      "date": "2020-10-20T12:26:54.000Z",
-      "link": "https://www.youtube.com/watch?v=SPAJ4v706BE"
-    },
-    {
-      "type": "youtube",
-      "title": "Szkoła Scherzo - Dzień Otwarty 25.08.2020",
-      "image": "https://i.ytimg.com/vi/aMNEjR1y9bs/mqdefault.jpg",
-      "date": "2020-08-20T18:14:45.000Z",
-      "link": "https://www.youtube.com/watch?v=aMNEjR1y9bs"
     }
   ]
 }

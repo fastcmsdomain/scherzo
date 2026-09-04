@@ -60,6 +60,18 @@
 }
 
 /* Links in the accordion body render as plain links, like the pobierz block */
+.accordion .accordion-item-body .accordion-item-link-row {
+  align-items: center;
+  display: flex;
+  gap: var(--space-8);
+  margin: var(--space-8) 0;
+}
+
+.accordion .accordion-item-body .accordion-item-link-icon {
+  color: var(--link-color, #2558ef);
+  flex-shrink: 0;
+}
+
 .accordion .accordion-item-body a.accordion-item-link:any-link {
   background: none;
   border: none;

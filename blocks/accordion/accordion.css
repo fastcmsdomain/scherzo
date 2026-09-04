@@ -58,3 +58,31 @@
   background-color: var(--color-accordion-title);
   border:none;
 }
+
+/* Links in the accordion body render as plain links, like the pobierz block */
+.accordion .accordion-item-body a.accordion-item-link:any-link {
+  background: none;
+  border: none;
+  box-sizing: border-box;
+  color: var(--link-color, #2558ef);
+  cursor: pointer;
+  display: inline;
+  font: inherit;
+  font-weight: 500;
+  margin: 0;
+  padding: 0;
+  text-align: left;
+  text-decoration: underline;
+  text-overflow: clip;
+  white-space: normal;
+  transition: color 0.3s ease;
+}
+
+.accordion .accordion-item-body a.accordion-item-link:hover,
+.accordion .accordion-item-body a.accordion-item-link:focus {
+  color: var(--link-hover-color, var(--color-dark-blue));
+}
+
+.accordion .accordion-item-body a.accordion-item-link::after {
+  content: none;
+}

@@ -24,6 +24,15 @@ export default function decorate(block) {
     if (!hasWrapper(body)) {
       body.innerHTML = `<p>${body.innerHTML}</p>`;
     }
+    // render links as plain links (not buttons), matching the pobierz block
+    body.querySelectorAll('a.button').forEach((link) => {
+      link.classList.remove('button', 'primary', 'secondary');
+      link.classList.add('accordion-item-link');
+      const wrapper = link.closest('.button-container');
+      if (wrapper) {
+        wrapper.classList.remove('button-container');
+      }
+    });
     // decorate accordion item
     const details = document.createElement('details');
     details.className = 'accordion-item';

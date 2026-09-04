@@ -1,3 +1,7 @@
+.accordion-wrapper {
+  margin: var(--space-26) 0;
+}
+
 .accordion details + details {
   margin-top: var(--space-16);
 }

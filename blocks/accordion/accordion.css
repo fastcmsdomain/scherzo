@@ -1,5 +1,6 @@
 .accordion {
-  margin: var(--space-26) 0;
+  background: var(--color-white);
+  padding: var(--space-26) 0;
 }
 
 .accordion details + details {

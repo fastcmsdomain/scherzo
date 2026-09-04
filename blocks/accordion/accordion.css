@@ -60,11 +60,12 @@
 }
 
 /* Links in the accordion body render as plain links, like the pobierz block */
-.accordion .accordion-item-body .accordion-item-link-row {
+.accordion .accordion-item-body p.accordion-item-link-row,
+.accordion details[open] .accordion-item-body p.accordion-item-link-row {
   align-items: center;
   display: flex;
   gap: var(--space-8);
-  margin: var(--space-8) 0;
+  margin: var(--space-8) 0 1rem;
 }
 
 .accordion .accordion-item-body .accordion-item-link-icon {

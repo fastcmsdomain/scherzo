@@ -17,13 +17,13 @@
   transition: background-color 0.2s;
 }
 
-/* .accordion details[open] summary {
-  background-color: var(--color-accordion-background);
-} */
+.accordion details[open]{
+  background-color: var(--color-orange);
+}
 
 .accordion details summary:focus,
 .accordion details summary:hover {
-  background-color: var(--color-accordion-hover);
+  background-color: var(--color-orange);
 }
 
 .accordion details summary::-webkit-details-marker {
@@ -43,6 +43,10 @@
   width: 9px;
 }
 
+.accordion .accordion-item .accordion-item-label> p{
+  font-family: var(--body-bold-family);
+} 
+
 .accordion details[open] summary::after {
   transform: translateY(-50%) rotate(-45deg);
 }
@@ -60,7 +64,7 @@
 }
 
 .accordion details.accordion-item {
-  background-color: var(--color-accordion-title);
+  background-color: var(--color-orange);
   border:none;
 }
 

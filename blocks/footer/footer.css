@@ -14,7 +14,7 @@ footer {
   min-height: 100dvh;
   overflow: visible;
   position: relative;
-  z-index: 2;
+  z-index: 1;
 }
 
 /* Wrapper fills footer height and stacks logo panel + links vertically */

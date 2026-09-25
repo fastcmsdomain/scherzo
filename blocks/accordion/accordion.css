@@ -1,3 +1,8 @@
+.accordion {
+  background: var(--color-white);
+  padding: var(--space-26) 0;
+}
+
 .accordion details + details {
   margin-top: var(--space-16);
 }
@@ -12,13 +17,13 @@
   transition: background-color 0.2s;
 }
 
-/* .accordion details[open] summary {
-  background-color: var(--color-accordion-background);
-} */
+.accordion details[open]{
+  background-color: var(--color-orange);
+}
 
 .accordion details summary:focus,
 .accordion details summary:hover {
-  background-color: var(--color-accordion-hover);
+  background-color: var(--color-orange);
 }
 
 .accordion details summary::-webkit-details-marker {
@@ -38,6 +43,10 @@
   width: 9px;
 }
 
+.accordion .accordion-item .accordion-item-label> p{
+  font-family: var(--body-bold-family);
+} 
+
 .accordion details[open] summary::after {
   transform: translateY(-50%) rotate(-45deg);
 }
@@ -55,6 +64,47 @@
 }
 
 .accordion details.accordion-item {
-  background-color: var(--color-accordion-title);
+  background-color: var(--color-orange);
   border:none;
+}
+
+/* Links in the accordion body render as plain links, like the pobierz block */
+.accordion .accordion-item-body p.accordion-item-link-row,
+.accordion details[open] .accordion-item-body p.accordion-item-link-row {
+  align-items: center;
+  display: flex;
+  gap: var(--space-8);
+  margin: var(--space-8) 0 1rem;
+}
+
+.accordion .accordion-item-body .accordion-item-link-icon {
+  color: var(--link-color, #2558ef);
+  flex-shrink: 0;
+}
+
+.accordion .accordion-item-body a.accordion-item-link:any-link {
+  background: none;
+  border: none;
+  box-sizing: border-box;
+  color: var(--link-color, #2558ef);
+  cursor: pointer;
+  display: inline;
+  font: inherit;
+  font-weight: 500;
+  margin: 0;
+  padding: 0;
+  text-align: left;
+  text-decoration: underline;
+  text-overflow: clip;
+  white-space: normal;
+  transition: color 0.3s ease;
+}
+
+.accordion .accordion-item-body a.accordion-item-link:hover,
+.accordion .accordion-item-body a.accordion-item-link:focus {
+  color: var(--link-hover-color, var(--color-dark-blue));
+}
+
+.accordion .accordion-item-body a.accordion-item-link::after {
+  content: none;
 }

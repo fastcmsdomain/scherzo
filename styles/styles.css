@@ -289,6 +289,10 @@ html:has(body.appear)::after {
   z-index: 1;
 }
 
+.scroll-hero .screen-section.is-lcp-first > p {
+  margin: 0;
+}
+
 .scroll-hero .screen-section.is-lcp-first .screen,
 .scroll-hero .screen-section.is-lcp-first .screen-inner {
   height: 100%;

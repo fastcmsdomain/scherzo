@@ -13,3 +13,46 @@ picture {
     animation: none;
   }
 }
+
+/* Cookiebot consent banner — simple bottom bar matching site styling.
+   Cookiebot renders #CybotCookiebotDialog itself; we only restyle it here. */
+#CybotCookiebotDialog {
+  font-family: var(--body-font-family);
+  border-top: 1px solid var(--color-mint);
+  box-shadow: 0 -2px 12px rgb(0 0 0 / 8%);
+}
+
+#CybotCookiebotDialogBodyContentTitle,
+#CybotCookiebotDialogPoweredByText,
+#CybotCookiebotDialogBodyContentText,
+#CybotCookiebotDialogBodyContentTextAbout {
+  color: var(--color-dark-blue);
+}
+
+#CybotCookiebotDialogBodyButtonDecline,
+#CybotCookiebotDialogBodyLevelButtonCustomize,
+#CybotCookiebotDialogBodyButtonAccept {
+  background-color: var(--color-darker-blue);
+  border-color: var(--color-darker-blue);
+  color: var(--color-white);
+  border-radius: 4px;
+  font-family: var(--body-bold-family);
+}
+
+#CybotCookiebotDialogBodyButtonDecline:hover,
+#CybotCookiebotDialogBodyLevelButtonCustomize:hover,
+#CybotCookiebotDialogBodyButtonAccept:hover {
+  background-color: var(--color-blue);
+  border-color: var(--color-blue);
+}
+
+#CybotCookiebotDialogBodyContentTextAbout,
+#CybotCookiebotDialogBodyContentText {
+  a {
+    color: var(--link-color);
+  }
+
+  a:hover {
+    color: var(--link-hover-color);
+  }
+}

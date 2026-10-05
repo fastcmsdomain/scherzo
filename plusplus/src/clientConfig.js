@@ -46,9 +46,16 @@ export default async function enableTracking() {
     loadScript(`${window.siteConfig['$system:abtastyscript$']}`, {});
   }
   // if tracking, you only get here if enabletracking is set to true
-  await loadScript(`${window.siteConfig['$system:trackingscript$']}`, {});
+  // guard defensively: no analytics script (e.g. GA4) is configured for this site,
+  // Cookiebot alone (consent banner for Google Maps / Google Forms cookies) is enough
+  const trackingScript = window.siteConfig?.['$system:trackingscript$'];
+  if (!trackingScript) {
+    window.cmsplus.debug('no trackingscript configured, skipping analytics load');
+    return;
+  }
+  await loadScript(trackingScript, {});
   window.cmsplus.debug('tracking script loaded');
-  if ((window.siteConfig?.['$system:trackingscript$']).includes('.adobe')) {
+  if (trackingScript.includes('.adobe')) {
     window.adobeDataLayer = window.adobeDataLayer || [];
     try {
       if (window.cmsplus?.track) {
@@ -64,7 +71,7 @@ export default async function enableTracking() {
       console.log('failed to add cmsplus data to adobeDataLayer', e);
     }
   }
-  if ((window.siteConfig?.['$system:trackingscript$']).includes('.googletagmanager')) {
+  if (trackingScript.includes('.googletagmanager')) {
     window.dataLayer = window.dataLayer || [];
     // eslint-disable-next-line no-inner-declarations
     function gtag() {
@@ -85,7 +92,7 @@ export async function initializeClientConfig() {
     }
   }
   if (getConfigTruth('$system:enabletracking$')) {
-    if (getConfigTruth['$system:enableslowtracking$']) {
+    if (getConfigTruth('$system:enableslowtracking$')) {
       window.cmsplus.callbackAfter3SecondsChain.push(enableTracking);
     } else {
       window.cmsplus.callbackPageLoadChain.push(enableTracking);

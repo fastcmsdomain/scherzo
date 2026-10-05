@@ -1,14 +1,23 @@
 {
-    "total": 1,
+    "total": 4,
     "offset": 0,
-    "limit": 1,
+    "limit": 4,
     "data": [
       {
         "Item": "$system:myname$",
         "Value": "live"
-      },{
-        "Item":"$system:allowtracking$",
-        "Value": "n - but make it y to start tracking"
+      },
+      {
+        "Item": "$system:allowtracking$",
+        "Value": "y"
+      },
+      {
+        "Item": "$system:enableslowtracking$",
+        "Value": "y"
+      },
+      {
+        "Item": "$system:cookiebotid$",
+        "Value": "78b07916-911b-4226-bd13-0b8489257f6f"
       }
     ],
     ":type": "fallback"

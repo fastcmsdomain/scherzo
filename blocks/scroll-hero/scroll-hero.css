@@ -341,6 +341,28 @@ main .section:has(.scroll-hero-wrapper) {
   }
 }
 
+/* Phone: a fixed 100dvh slide is shorter than the screen once Safari's
+   toolbars are open, so the navy body shows as bars above and below the
+   photo and the last title line is clipped. The large viewport fills those
+   bars; inner layers follow the slide instead of a second dvh size. */
+@media (max-width: 992px) {
+  .scroll-hero .screen-section,
+  .scroll-hero .screen-section.is-lcp-first {
+    height: 100vh;
+    height: 100lvh;
+  }
+
+  .scroll-hero .screen-section .screen,
+  .scroll-hero .screen-section .screen-inner,
+  .scroll-hero .screen-section .background,
+  .scroll-hero .screen-section .background .img,
+  .scroll-hero .screen-section .scroll-overlay,
+  .scroll-hero .screen-section.is-lcp-first .screen,
+  .scroll-hero .screen-section.is-lcp-first .screen-inner {
+    height: 100%;
+  }
+}
+
 /* .background .img:after {
   background: linear-gradient(180deg, transparent 0%, rgba(0, 0, 0, 0.6) 100%);
   bottom: 0;
@@ -472,6 +494,19 @@ main .section:has(.scroll-hero-wrapper) {
 @media (max-width: 992px) {
   .strapline {
     width: 90%;
+  }
+
+  /* Bottom edge of the title, above the toolbar. -100% matches the resting
+     shift (the line sits on this edge). Centred slides keep their own transform.
+     GSAP then takes over with a pixel y and .is-bottom-anchored. */
+  .screen-section:not(.section-last-slide) .strapline {
+    top: min(80vh, calc(100svh - 1.5rem));
+    transform: translateY(-100%);
+  }
+
+  .scroll-hero .screen-section.is-lcp-first .strapline.is-bottom-anchored,
+  .strapline.is-bottom-anchored {
+    transform: none;
   }
 
   .strapline .main-title {

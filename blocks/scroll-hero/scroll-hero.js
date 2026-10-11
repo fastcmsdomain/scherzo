@@ -46,6 +46,12 @@ const CONFIG = {
     lastSlideAnchorVh: 25,
   },
   navScrollDuration: 1,
+  // Phones: 80vh is the large viewport, so the last title line falls under the
+  // browser toolbar and the navy body color shows as bars around a short slide.
+  viewport: {
+    compactQuery: '(max-width: 992px)',
+    titleClearance: 24,
+  },
 };
 
 const SELECTORS = {
@@ -65,6 +71,99 @@ const CLASSES = {
   released: 'is-released',
   /** Hidden until GSAP/fallback positions slides — prevents later slides stealing LCP */
   lcpDeferred: 'is-lcp-deferred',
+};
+
+// CSS `vh` on mobile Safari is the large viewport (toolbars hidden). The visible
+// area is shorter, so a title parked at 80vh is clipped and the slide leaves
+// navy bars above and below the photo.
+let cachedCssVh = 0;
+
+const isCompactViewport = () => window.matchMedia(CONFIG.viewport.compactQuery).matches;
+
+const readVisibleHeroBox = () => {
+  const viewport = window.visualViewport;
+  return {
+    height: Math.round(viewport?.height || window.innerHeight),
+    offsetTop: Math.round(viewport?.offsetTop || 0),
+  };
+};
+
+const readCssVh = () => {
+  if (cachedCssVh > 0) return cachedCssVh;
+  if (!document.body) return window.innerHeight / 100;
+
+  const probe = document.createElement('div');
+  probe.style.cssText = 'position:absolute;height:100vh;width:0;overflow:hidden;visibility:hidden;pointer-events:none;';
+  document.body.append(probe);
+  cachedCssVh = probe.getBoundingClientRect().height / 100;
+  probe.remove();
+  return cachedCssVh || (window.innerHeight / 100);
+};
+
+const resetViewportCache = () => {
+  cachedCssVh = 0;
+};
+
+/**
+ * Size every pinned slide so it covers the visible viewport, including the
+ * strip above it when the mobile browser toolbar has offset the visual
+ * viewport. A fixed 100dvh box is shorter than that area and leaves navy
+ * bars above and below the photo.
+ */
+const syncVisibleHeroFrame = () => {
+  const sections = document.querySelectorAll(SELECTORS.screenSection);
+  if (!isCompactViewport()) {
+    sections.forEach((section) => {
+      section.style.removeProperty('height');
+    });
+    return;
+  }
+
+  const { height, offsetTop } = readVisibleHeroBox();
+  const frame = offsetTop + height;
+  sections.forEach((section) => {
+    section.style.height = `${frame}px`;
+  });
+};
+
+/**
+ * Bottom edge of a resting title, as a CSS top value.
+ * The strapline is shifted up by its own height, so `top` is that bottom edge.
+ * On a phone, cap it inside the visible viewport so the last line stays on screen.
+ * @param {number} index - Slide index
+ * @returns {string}
+ */
+const titleRestTop = (index) => {
+  const { titleBottomVh, titleBottomVhOverrides } = CONFIG.text;
+  const base = titleBottomVhOverrides[index] ?? titleBottomVh;
+  if (!isCompactViewport()) return `${base}vh`;
+
+  const { height, offsetTop } = readVisibleHeroBox();
+  const desired = base * readCssVh();
+  // Bottom of the visible area, in the same coordinates as `top` on the slide.
+  const visibleBottom = offsetTop + height - CONFIG.viewport.titleClearance;
+  const maxBottom = Math.max(visibleBottom, height * 0.55);
+  return `${Math.round(Math.min(desired, maxBottom))}px`;
+};
+
+/**
+ * Park non-centred titles before GSAP so the last line is on screen immediately.
+ * Centred slides (text-stack, last slide) keep their own layout.
+ */
+const placeCompactTitles = () => {
+  if (!isCompactViewport()) return;
+
+  document.querySelectorAll(SELECTORS.screenSection).forEach((section, index) => {
+    const centred = section.querySelector('.text-stack') || section.classList.contains(CLASSES.lastSlide);
+    if (centred) return;
+
+    const title = section.querySelector(SELECTORS.strapline);
+    if (!title || title.dataset.heroAnchored === 'true') return;
+
+    title.classList.add('is-bottom-anchored');
+    title.style.top = titleRestTop(index);
+    title.style.transform = 'translateY(-100%)';
+  });
 };
 
 // =============================================================================
@@ -510,8 +609,6 @@ const initParallaxCover = (gsap, ScrollTrigger) => {
   const total = sections.length;
   const { factor, dwell, textPortion } = CONFIG.cover;
   const {
-    titleBottomVh,
-    titleBottomVhOverrides,
     titleTopVh,
     titleShiftScale,
     subtitleStartVh,
@@ -527,10 +624,6 @@ const initParallaxCover = (gsap, ScrollTrigger) => {
   // which is also locked centred (like slide 2).
   const isCentered = (index) => centeredSlides.includes(index) || isLastSlide(index);
 
-  // Bottom resting anchor for a non-centred slide's title. Per-index override
-  // (e.g. slide 0 sits 10% higher) falls back to the shared default.
-  const titleBottomFor = (index) => titleBottomVhOverrides[index] ?? titleBottomVh;
-
   // Total scroll distance: one segment per transition + a final resting screen
   if (container) {
     container.style.height = `${((total - 1) * factor + 1) * 100}vh`;
@@ -539,9 +632,42 @@ const initParallaxCover = (gsap, ScrollTrigger) => {
   // Scroll distance (px) of a single transition; recomputed on refresh
   const segment = () => window.innerHeight * factor;
 
-  // Place a strapline at a given viewport anchor (top in vh, centred on itself)
-  const setAt = (el, vh, opacity = 1) => {
-    if (el) gsap.set(el, { top: `${vh}vh`, yPercent: -50, opacity });
+  // From-state for a title that rests on its bottom edge. On a phone the shift is
+  // a pixel `y` (stylesheet translate is cleared); desktop keeps yPercent -50.
+  const restingTitleFrom = (index, el) => {
+    const top = () => titleRestTop(index);
+    if (!isCompactViewport()) return { top, scale: 1 };
+    return {
+      top,
+      y: () => -(el?.offsetHeight || 0),
+      yPercent: 0,
+      scale: 1,
+    };
+  };
+
+  // Place a strapline. Numbers are vh anchors (desktop, plus subtitles).
+  // A px string is a mobile title cap: shift the title up by its own height so
+  // `top` is the bottom edge. Don't also apply yPercent -50 — together with the
+  // stylesheet translate that doubles the shift and hides the last line.
+  const setAt = (el, top, opacity = 1) => {
+    if (!el) return;
+    const topValue = typeof top === 'number' ? `${top}vh` : top;
+    const anchorBottom = typeof topValue === 'string' && topValue.endsWith('px');
+    if (!anchorBottom) {
+      gsap.set(el, { top: topValue, yPercent: -50, opacity });
+      return;
+    }
+
+    el.classList.add('is-bottom-anchored');
+    el.dataset.heroAnchored = 'true';
+    el.style.transform = '';
+    const shift = el.offsetHeight ? -el.offsetHeight : 0;
+    gsap.set(el, {
+      top: topValue,
+      yPercent: shift ? 0 : -100,
+      y: shift,
+      opacity,
+    });
   };
 
   // Initialize base states: each slide's title rests low, subtitle off-screen.
@@ -562,7 +688,7 @@ const initParallaxCover = (gsap, ScrollTrigger) => {
       }
     } else {
       const subtitle = subtitleBlocks[0];
-      setAt(title, titleBottomFor(i), 1);
+      setAt(title, titleRestTop(i), 1);
       // Subtitle waits below the fold until its segment begins
       setAt(subtitle, subtitleStartVh, 0);
     }
@@ -616,7 +742,7 @@ const initParallaxCover = (gsap, ScrollTrigger) => {
       if (activeTitle) {
         tl.fromTo(
           activeTitle,
-          { top: `${titleBottomFor(t - 1)}vh`, scale: 1 },
+          restingTitleFrom(t - 1, activeTitle),
           {
             top: `${titleTopVh}vh`,
             scale: titleShiftScale,
@@ -703,7 +829,7 @@ const initParallaxCover = (gsap, ScrollTrigger) => {
     if (lastTitle) {
       closingTl.fromTo(
         lastTitle,
-        { top: `${titleBottomFor(lastIndex)}vh`, scale: 1 },
+        restingTitleFrom(lastIndex, lastTitle),
         {
           top: `${titleTopVh}vh`,
           scale: titleShiftScale,
@@ -846,12 +972,18 @@ const initScrollAnimations = () => {
   initParallaxCover(gsap, ScrollTrigger);
   initNavControls(gsap);
 
-  // Keep distances correct on resize/orientation change
+  // Keep distances correct on resize/orientation change, and when the mobile
+  // browser toolbar shows or hides (that changes visualViewport, not always resize).
   let resizeTimer;
-  window.addEventListener('resize', () => {
+  const refreshAfterViewportChange = () => {
+    resetViewportCache();
+    syncVisibleHeroFrame();
+    placeCompactTitles();
     clearTimeout(resizeTimer);
     resizeTimer = setTimeout(() => ScrollTrigger.refresh(), 200);
-  });
+  };
+  window.addEventListener('resize', refreshAfterViewportChange);
+  window.visualViewport?.addEventListener('resize', refreshAfterViewportChange);
 
   // Other blocks (e.g. the footer) fetch and append their own content
   // asynchronously, independently of this block, and can finish after GSAP's
@@ -1035,6 +1167,8 @@ async function loadRemainingSlides({
     navPlaceholder.replaceWith(nav);
 
     setBackgrounds(sections);
+    syncVisibleHeroFrame();
+    placeCompactTitles();
 
     // Delay GSAP until scroll or idle so cover positioning cannot inflate LCP.
     const startMotion = async () => {
@@ -1129,6 +1263,8 @@ export default async function decorate(block) {
   if (firstSection) {
     setBackgrounds([firstSection]);
   }
+  syncVisibleHeroFrame();
+  placeCompactTitles();
   await waitForPaint();
 
   // Phase 2 must NOT block decorate() — waitForLCP / body.appear wait on this

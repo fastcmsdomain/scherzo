@@ -332,6 +332,25 @@ html:has(body.appear)::after {
   font-size: clamp(1.75rem, 4.5vw, 2.5rem);
 }
 
+/* Phone: fill the large viewport so the navy page color does not letterbox
+   the first slide, and keep the title above the browser toolbar. */
+@media (width <= 992px) {
+  .scroll-hero .screen-section.is-lcp-first {
+    height: 100vh;
+    height: 100lvh;
+  }
+
+  .scroll-hero .screen-section.is-lcp-first .screen,
+  .scroll-hero .screen-section.is-lcp-first .screen-inner {
+    height: 100%;
+  }
+
+  .scroll-hero .screen-section.is-lcp-first .strapline {
+    top: min(80vh, calc(100svh - 1.5rem));
+    transform: translateY(-100%);
+  }
+}
+
 /* body::before {
   background: linear-gradient(
     180deg,
